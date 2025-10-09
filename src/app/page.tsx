@@ -11,6 +11,7 @@ import { WellsMap } from "@/components/Map";
 //  import { useWellsStore } from "@/store/wells";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { ArrowRight, Rows } from "lucide-react";
 export default function HomePage() {
   useEffect(() => {
     ensureSeed();
@@ -67,6 +68,25 @@ export default function HomePage() {
           {/* <MonitoringMapPage /> */}
           <WellsMap wells={filtered} />
         </div>
+        <section>
+          <div className="flex flex-col gap-4 items-center sm:flex-row  md:flex-row justify-around md:p-6">
+            <div className="flex flex-col gap-4 items-center justify-center">
+              <h1 className="font-bold">Impact</h1>
+              <p className="text-xl font-semibold lg:text-4xl">900,900</p>
+              <span className="text-lg lg:text-xl">Population</span>
+            </div>
+            <div className="flex flex-col gap-4 items-center justify-center">
+              <h1 className="font-bold">Actuellement en surveillance</h1>
+              <p className="text-xl font-semibold lg:text-4xl">2630</p>
+              <span>Infrastructures</span>
+            </div>
+            <div className="flex flex-col gap-4 items-center justify-center">
+              <h1 className="font-bold">Status</h1>
+              <p className="text-xl font-semibold lg:text-4xl">90 %</p>
+              <span>L'eau qui coule</span>
+            </div>
+          </div>
+        </section>
         <section className="px-6 ">
           <div className="w-full min-h-screen grid grid-cols-1  lg:grid-cols-2  grid-rows-2">
             {/* Ligne 1, Colonne 1 : Image */}
@@ -126,38 +146,53 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className=" bg-gradient-to-br from-green-100 via-white to-blue-50 border-0 shadow-lg h-96">
-          <div className="flex flex-col justify-center items-center w-full p-4 md:p-8 gap-6 md:gap-10">
-            {/* <div className="w-full flex items-center text-center "> */}
-            <Image
-              src="/logo.jpg"
-              alt="logo"
-              width={40}
-              height={40}
-              className="w-16 h-16 md:w-24 md:h-24 object-cover rounded-full flex items-center"
-            />
-            {/* </div> */}
-            <h1 className="max-w-4xl text-center">
-              You can help end the water crisis and restore hope. Together we'll
-              provide access to clean, safe and reliable water across
-              sub-Saharan Africa - one community at a time.
-            </h1>
-            <button className="px-6 py-2 rounded-lg bg-gradient-to-tr from-green-500 to-green-700 via-blue-700 text-white">
-              {" "}
-              Donate
-            </button>
-          </div>
-        </section>
-        <section className="z-0">
-          <div className=" relative w-full h-[600px]">
-            <Image
-              src="/frontreview.jpg"
-              alt="logo"
-              fill
-              className="w-ful md:w-full md:h-[600px] object-cover"
-            />
-          </div>
-        </section>
+        <div>
+          <section className=" bg-gradient-to-br from-green-100 via-white to-blue-50 border-0 shadow-lg h-96">
+            <div className="flex flex-col justify-center items-center w-full p-4 md:p-8 gap-6 md:gap-10">
+              {/* <div className="w-full flex items-center text-center "> */}
+              <Image
+                src="/logo.jpg"
+                alt="logo"
+                width={40}
+                height={40}
+                className="w-16 h-16 md:w-24 md:h-24 object-cover rounded-full flex items-center"
+              />
+              {/* </div> */}
+              <h1 className="max-w-4xl text-center">
+                You can help end the water crisis and restore hope. Together
+                we'll provide access to clean, safe and reliable water across
+                sub-Saharan Africa - one community at a time.
+              </h1>
+              <button className="px-6 py-2 rounded-lg bg-gradient-to-tr from-green-500 to-green-700 via-blue-700 text-white">
+                {" "}
+                Donate
+              </button>
+            </div>
+          </section>
+          <section className="z-0">
+            <div className=" relative w-full h-[600px]">
+              <Image
+                src="/frontreview.jpg"
+                alt="logo"
+                fill
+                className="w-ful md:w-full md:h-[600px] object-cover"
+              />
+              <div className="bg-black/50 h-40 absolute w-full bottom-0">
+                <p className="text-white max-w-2xl px-24 py-8">
+                  Je n'ai jamais été témoin d'une organisation caritative qui en
+                  offre plus pour chaque dollar que The Water Project.
+                </p>
+                <Link
+                  href="#"
+                  className="px-24 text-white flex items-center gap-1 text-lg hover:underline transition-all duration-200"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                  Reverend ong
+                </Link>
+              </div>
+            </div>
+          </section>
+        </div>
       </main>
     </div>
   );
