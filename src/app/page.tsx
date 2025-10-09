@@ -71,19 +71,33 @@ export default function HomePage() {
         <section>
           <div className="flex flex-col gap-4 items-center sm:flex-row  md:flex-row justify-around md:p-6">
             <div className="flex flex-col gap-4 items-center justify-center">
-              <h1 className="font-bold">Impact</h1>
-              <p className="text-xl font-semibold lg:text-4xl">900,900</p>
-              <span className="text-lg lg:text-xl">Population</span>
+              <h1 className="font-bold text-green-800 lg:text-xl">Impact</h1>
+              <p className="text-xl font-semibold lg:text-4xl text-green-800">
+                900,900
+              </p>
+              <span className="text-lg lg:text-base text-green-800">
+                Population
+              </span>
             </div>
             <div className="flex flex-col gap-4 items-center justify-center">
-              <h1 className="font-bold">Actuellement en surveillance</h1>
-              <p className="text-xl font-semibold lg:text-4xl">2630</p>
-              <span>Infrastructures</span>
+              <h1 className="font-bold lg:text-xl text-green-800 ">
+                Actuellement en surveillance
+              </h1>
+              <p className="text-xl font-semibold lg:text-4xl text-green-800">
+                2630
+              </p>
+              <span className="text-lg lg:text-base text-green-800">
+                Infrastructures
+              </span>
             </div>
             <div className="flex flex-col gap-4 items-center justify-center">
-              <h1 className="font-bold">Status</h1>
-              <p className="text-xl font-semibold lg:text-4xl">90 %</p>
-              <span>L'eau qui coule</span>
+              <h1 className="font-bold lg:text-xl text-green-800">Status</h1>
+              <p className="text-xl font-semibold lg:text-4xl text-green-800">
+                90 %
+              </p>
+              <span className="text-lg lg:text-base text-green-800">
+                L'eau qui coule
+              </span>
             </div>
           </div>
         </section>
