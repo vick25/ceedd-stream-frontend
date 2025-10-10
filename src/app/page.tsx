@@ -1,17 +1,16 @@
 "use client";
-import MonitoringPage from "@/components/Monitoring";
-import MonitoringMapPage from "@/components/MonitoringMap";
-import { Nav } from "@/components/Nav";
+
 import { ensureSeed } from "@/lib/seed";
 import { hydrateWells, useWellsStore } from "@/store/wells";
 import Image from "next/image";
 // import Link from "next/link";
-import { useEffect } from "react";
 import { WellsMap } from "@/components/Map";
+import { useEffect } from "react";
 //  import { useWellsStore } from "@/store/wells";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowRight, Rows } from "lucide-react";
+
 export default function HomePage() {
   useEffect(() => {
     ensureSeed();
@@ -23,6 +22,7 @@ export default function HomePage() {
   const [commune, setCommune] = useState("");
   const [year, setYear] = useState("");
   const [trim, setTrim] = useState("");
+
   const communes = useMemo(
     () => Array.from(new Set(wells.map((w) => w.commune))).sort(),
     [wells]
@@ -57,7 +57,7 @@ export default function HomePage() {
     <div>
       {/* <Nav /> */}
       <main className="space-y-4 lg:space-y-6 min-h-screen">
-        <div className="z-0">
+        <section className="z-0">
           {/* <Image
             src="/bg.png"
             alt="bg"
@@ -67,7 +67,7 @@ export default function HomePage() {
           /> */}
           {/* <MonitoringMapPage /> */}
           <WellsMap wells={filtered} />
-        </div>
+        </section>
         <section>
           <div className="flex flex-col gap-4 items-center sm:flex-row  md:flex-row justify-around md:p-6">
             <div className="flex flex-col gap-4 items-center justify-center">
