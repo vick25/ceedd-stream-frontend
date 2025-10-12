@@ -65,8 +65,8 @@ export default function HomePage() {
             width={1000}
             height={792}
           /> */}
-          {/* <MonitoringMapPage /> */}
-          <WellsMap wells={filtered} />
+          <MonitoringMapPage />
+          {/* <WellsMap wells={filtered} /> */}
         </div>
         <section>
           <div className="flex flex-col gap-4 items-center sm:flex-row  md:flex-row justify-around md:p-6">
