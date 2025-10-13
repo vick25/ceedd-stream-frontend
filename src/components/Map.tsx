@@ -1,8 +1,9 @@
 "use client";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L, { type LatLngTuple } from "leaflet";
+
 import { Well } from "@/types/well";
+import L, { type LatLngTuple } from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 // Exemple à placer dans ton composant parent
 
 
@@ -17,7 +18,7 @@ import { Well } from "@/types/well";
 
 export function WellsMap({
   wells,
-  height = 520,
+  height = 790,
 }: {
   wells: Well[];
   height?: number;

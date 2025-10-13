@@ -1,8 +1,10 @@
 "use client";
-import { useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useState } from "react";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+
 // Icône personnalisée pour les marqueurs
 const markerIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -174,11 +176,12 @@ export default function MonitoringMapPage() {
     <div className="w-full h-[692px] flex bg-[#e7eaf6] overflow-hidden rounded-lg shadow-lg ">
       {/* Sidebar */}
       <aside className="w-80 hidden lg:block bg-white border-r p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
-        <div className="mb-6 pt-6">
-          <div className="font-semibold mb-2">Types</div>
+        <div className="mb-6">
+          <div className="font-semibold mb-2">Filter by</div>
           <div className="flex flex-wrap gap-2">
             {Object.entries(typeLabels).map(([type, label]) => (
               <button
+                type="button"
                 key={type}
                 className={`px-3 py-1 rounded-full border ${
                   selectedTypes.includes(type)
