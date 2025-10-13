@@ -4,9 +4,9 @@ import { ensureSeed } from "@/lib/seed";
 import { hydrateWells, useWellsStore } from "@/store/wells";
 import Image from "next/image";
 // import Link from "next/link";
-import { WellsMap } from "@/components/Map";
 import { useEffect } from "react";
 //  import { useWellsStore } from "@/store/wells";
+import MonitoringMapPage from "@/components/MonitoringMap";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -65,8 +65,8 @@ export default function HomePage() {
             width={1000}
             height={792}
           /> */}
-          {/* <MonitoringMapPage /> */}
-          <WellsMap wells={filtered} />
+          <MonitoringMapPage />
+          {/* <WellsMap wells={filtered} /> */}
         </section>
         <section>
           <div className="flex flex-col gap-4 items-center sm:flex-row  md:flex-row justify-around md:p-6">
