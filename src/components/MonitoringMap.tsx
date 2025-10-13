@@ -174,7 +174,7 @@ export default function MonitoringMapPage() {
     <div className="w-full h-[692px] flex bg-[#e7eaf6] overflow-hidden rounded-lg shadow-lg ">
       {/* Sidebar */}
       <aside className="w-80 hidden lg:block bg-white border-r p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
-        <div className="mb-6">
+        <div className="mb-6 pt-6">
           <div className="font-semibold mb-2">Types</div>
           <div className="flex flex-wrap gap-2">
             {Object.entries(typeLabels).map(([type, label]) => (
