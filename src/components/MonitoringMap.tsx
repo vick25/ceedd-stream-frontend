@@ -183,10 +183,11 @@ export default function MonitoringMapPage() {
               <button
                 type="button"
                 key={type}
-                className={`px-3 py-1 rounded-full border ${selectedTypes.includes(type)
-                  ? typeColors[type] + " border-transparent"
-                  : "bg-gray-100 text-gray-700 border-gray-300"
-                  }`}
+                className={`px-3 py-1 rounded-full border ${
+                  selectedTypes.includes(type)
+                    ? typeColors[type] + " border-transparent"
+                    : "bg-gray-100 text-gray-700 border-gray-300"
+                }`}
                 onClick={() => handleTypeToggle(type)}
               >
                 {label}
