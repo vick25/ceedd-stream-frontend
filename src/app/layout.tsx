@@ -1,4 +1,5 @@
 // "use client";
+import { fetchInfrastructure } from "@/actions/streamData";
 import Footer from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import type { Metadata } from "next";
@@ -19,11 +20,14 @@ export const metadata: Metadata = {
     "CEEDD est une Organisation Non Gouvernementale de droit Congolais qui œuvre dans le secteur de la gestion durable des ressources environnementales pour le développement durable de la RDC",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const infrastructures = await fetchInfrastructure();
+  console.log(infrastructures.results);
+
   return (
     <html lang="fr" className={poppins.className} suppressHydrationWarning>
       <body className="min-h-screen bg-gray-50 text-gray-900">

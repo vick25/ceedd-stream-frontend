@@ -183,11 +183,10 @@ export default function MonitoringMapPage() {
               <button
                 type="button"
                 key={type}
-                className={`px-3 py-1 rounded-full border ${
-                  selectedTypes.includes(type)
+                className={`px-3 py-1 rounded-full border ${selectedTypes.includes(type)
                     ? typeColors[type] + " border-transparent"
                     : "bg-gray-100 text-gray-700 border-gray-300"
-                }`}
+                  }`}
                 onClick={() => handleTypeToggle(type)}
               >
                 {label}
@@ -205,7 +204,6 @@ export default function MonitoringMapPage() {
             center={[-4.44, 15.31]}
             zoom={13}
             style={{ height: "100%", width: "100%" }}
-            className="rounded-r-lg"
           >
             <TileLayer
               attribution="&copy; OpenStreetMap"
