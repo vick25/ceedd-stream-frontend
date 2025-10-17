@@ -1,8 +1,11 @@
+// "use client";
 import Footer from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+
+import QueryProvider from "@/components/QueryProvider";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -11,8 +14,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "GeoApp - Gestion des puits",
-  description: "Gestion des puits de parcelle pour éviter les érosions",
+  title: "CEEDD- Kinshasa",
+  description:
+    "CEEDD est une Organisation Non Gouvernementale de droit Congolais qui œuvre dans le secteur de la gestion durable des ressources environnementales pour le développement durable de la RDC",
 };
 
 export default function RootLayout({
@@ -23,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="fr" className={poppins.className} suppressHydrationWarning>
       <body className="min-h-screen bg-gray-50 text-gray-900">
-        <Nav />
-        {children}
-        <Footer />
+        <QueryProvider>
+          <Nav />
+          {children}
+          <Footer />
+        </QueryProvider>
       </body>
     </html>
   );

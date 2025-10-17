@@ -44,6 +44,83 @@ export interface Infrastructure {
   createdAt: string;
   updatedAt: string;
 }
+export interface InfrastructureTypes {
+  id: string;
+  nom: string;
+  type_infrastructure_id: string;
+  date_construction: string;
+  latitude: number;
+  longitude: number;
+  capacite: number;
+  unite: string;
+  zone_id: string;
+  client_id: string;
+}
+export interface zone_contributive {
+  id: string;
+  nom: string;
+  superficie: number;
+  etat_ravin: string;
+  geom: string;
+  shapefile_id: string;
+}
+export interface bailleur {
+  id: string;
+  nom: string;
+}
+export interface finance {
+  id: string;
+  infrastructure_id: string;
+  date_financement: string;
+  montant: String;
+}
+export interface type_infrastructure {
+  id: string;
+  nom: string;
+  symbole: string;
+}
+export interface inspection {
+  id: string;
+  infrastructure_id: string;
+  date: string;
+  etat: string;
+  inspecteur: string;
+  commentaire: string;
+}
+export interface photo {
+  id: string;
+  entite_type: string;
+  entite_id: string;
+  url: string;
+  description: string;
+  date_prise: string;
+}
+export interface client {
+  id: string;
+  nom: string;
+  prenom: string;
+  sexe: string;
+  avenue: string;
+  quartier: string;
+  commune: string;
+}
+export interface utilisateur {
+  id: string;
+  nom: string;
+  email: string;
+  mot_de_passe: string;
+  role_id: string;
+}
+export interface role {
+  id: string;
+  role: Role_enum;
+}
+export enum Role_enum {
+  admin,
+  contributeur,
+  lecteur,
+}
+
 export interface Donation {
   id: string;
   infrastructureId: string;
