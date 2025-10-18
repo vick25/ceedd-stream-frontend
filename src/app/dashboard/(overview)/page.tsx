@@ -80,12 +80,12 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">{t.navigation.dashboard}</h1>
           <div className="flex gap-2">
-            <button
+            {/* <button
               onClick={() => setLocale(locale === "fr" ? "en" : "fr")}
               className="bg-gray-200 px-3 py-2 rounded"
             >
               {locale === "fr" ? "EN" : "FR"}
-            </button>
+            </button> */}
             <button className="bg-blue-600 text-white px-3 py-2 rounded">
               Nouvelle infrastructure
             </button>

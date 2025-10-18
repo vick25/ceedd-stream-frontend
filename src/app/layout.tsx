@@ -1,5 +1,5 @@
 // "use client";
-import { fetchInfrastructure } from "@/actions/streamData";
+// import { fetchInfrastructure } from "@/actions/streamData";
 import Footer from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import type { Metadata } from "next";
@@ -25,8 +25,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const infrastructures = await fetchInfrastructure();
-  console.log(infrastructures.results);
+  // const infrastructures = await fetchInfrastructure();
+  // console.log(infrastructures.results);
 
   return (
     <html lang="fr" className={poppins.className} suppressHydrationWarning>
