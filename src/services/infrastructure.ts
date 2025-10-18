@@ -14,16 +14,18 @@ interface InfrastructureData {
   zone_id: string;
   client_id: string;
 }
-export const infrastructureService = {
+export const serviceinfrastructure = {
   async getInfrastructure(): Promise<any> {
     const response = await API.get<InfrastructureType[]>(
       `${API_ENDPOINTS.api}${ceedd.infrastructure}`
     );
+
     return response.data;
   },
   async createInfrastructure(data: InfrastructureData) {
     const response = await API.post(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}`
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}`,
+      data
     );
   },
 };
