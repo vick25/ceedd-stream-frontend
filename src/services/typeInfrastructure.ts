@@ -10,4 +10,10 @@ export const serviceTypeInfrastructure = {
     );
     return response.data;
   },
+  async getTypeInfrastructureAll(): Promise<any> {
+    const response = await API.get<type_infrastructure[]>(
+      `${API_ENDPOINTS.api}${ceedd.typeinfrastructure}`
+    );
+    return response.data;
+  },
 };

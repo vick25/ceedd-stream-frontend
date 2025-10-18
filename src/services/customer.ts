@@ -11,4 +11,10 @@ export const serviceCustomer = {
 
     return response.data;
   },
+  async getCustomerAll(): Promise<any> {
+    const response = await API.get<client[]>(
+      `${API_ENDPOINTS.api}${ceedd.client}`
+    );
+    return response.data;
+  },
 };

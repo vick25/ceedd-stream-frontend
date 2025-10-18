@@ -10,3 +10,12 @@ export const useTypeInfrastructure = () => {
     },
   });
 };
+
+export const useAllTypeInfrastructure = () => {
+  return useMutation({
+    mutationFn: serviceTypeInfrastructure.getTypeInfrastructureAll,
+    onSuccess: (response) => {
+      console.log(response);
+    },
+  });
+};

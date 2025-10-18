@@ -12,47 +12,6 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 export default function HomePage() {
-  useEffect(() => {
-    ensureSeed();
-    hydrateWells();
-  }, []);
-  const wells = useWellsStore((s) => s.wells);
-
-  const [q, setQ] = useState("");
-  const [commune, setCommune] = useState("");
-  const [year, setYear] = useState("");
-  const [trim, setTrim] = useState("");
-
-  const communes = useMemo(
-    () => Array.from(new Set(wells.map((w) => w.commune))).sort(),
-    [wells]
-  );
-  const years = useMemo(
-    () =>
-      Array.from(
-        new Set(wells.map((w) => w.constructionYear).filter(Boolean))
-      ) as number[],
-    [wells]
-  );
-  const filtered = useMemo(() => {
-    return wells.filter((w) => {
-      const matchesText = [
-        w.lastName,
-        w.firstName,
-        w.commune,
-        w.avenue,
-        w.quartier,
-      ]
-        .filter(Boolean)
-        .some((v) => v!.toLowerCase().includes(q.toLowerCase()));
-      const matchesCommune = commune ? w.commune === commune : true;
-      const matchesYear = year
-        ? String(w.constructionYear ?? "") === year
-        : true;
-      const matchesTrim = trim ? (w.trimester ?? "") === trim : true;
-      return matchesText && matchesCommune && matchesYear && matchesTrim;
-    });
-  }, [wells, q, commune, year, trim]);
   return (
     <main className="space-y-4 lg:space-y-6 min-h-screen">
       <section className="z-0 mt-20">
@@ -110,9 +69,8 @@ export default function HomePage() {
               Clean water is a whole family concern.
             </h2>
             <p className="mb-4 text-gray-700 max-w-lg">
-              Finding water is a daily challenge for young girls, moms and
-              sons. With a charitable donation today, you can lift this
-              burden.
+              Finding water is a daily challenge for young girls, moms and sons.
+              With a charitable donation today, you can lift this burden.
               <br />
               <br />
               Providing a reliable and safe water source will unlock potential
@@ -164,8 +122,8 @@ export default function HomePage() {
             />
             {/* </div> */}
             <h1 className="max-w-4xl text-center">
-              You can help end the water crisis and restore hope. Together
-              we'll provide access to clean, safe and reliable water across
+              You can help end the water crisis and restore hope. Together we'll
+              provide access to clean, safe and reliable water across
               sub-Saharan Africa - one community at a time.
             </h1>
             <button className="px-6 py-2 rounded-lg bg-gradient-to-tr from-green-500 to-green-700 via-blue-700 text-white">
