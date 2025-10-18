@@ -1,20 +1,16 @@
 "use client";
 
-// src/app/page.tsx (or the component where you render the map)
 import dynamic from "next/dynamic";
 
-//  Dynamically import the map component and disable SSR
 const MonitoringMap = dynamic(() => import("../components/MonitoringMap"), {
-  // This is the crucial line: it ensures the component is
-  // only rendered after the browser is ready (client-side).
   ssr: false,
 });
 import { ensureSeed } from "@/lib/seed";
 import { hydrateWells, useWellsStore } from "@/store/wells";
 import Image from "next/image";
-// import Link from "next/link";
+
 import { useEffect } from "react";
-//  import { useWellsStore } from "@/store/wells";
+
 import MonitoringMapPage from "@/components/MonitoringMap";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -25,7 +21,6 @@ export default function HomePage() {
     <main className="space-y-4 lg:space-y-6 min-h-screen">
       <section className="z-0 mt-20">
         <MonitoringMapPage />
-        {/* <WellsMap wells={filtered} /> */}
       </section>
       <section>
         <div className="flex flex-col gap-4 items-center sm:flex-row  md:flex-row justify-around md:p-6">
