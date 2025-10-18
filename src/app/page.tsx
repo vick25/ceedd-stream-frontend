@@ -1,5 +1,14 @@
 "use client";
 
+// src/app/page.tsx (or the component where you render the map)
+import dynamic from "next/dynamic";
+
+//  Dynamically import the map component and disable SSR
+const MonitoringMap = dynamic(() => import("../components/MonitoringMap"), {
+  // This is the crucial line: it ensures the component is
+  // only rendered after the browser is ready (client-side).
+  ssr: false,
+});
 import { ensureSeed } from "@/lib/seed";
 import { hydrateWells, useWellsStore } from "@/store/wells";
 import Image from "next/image";
