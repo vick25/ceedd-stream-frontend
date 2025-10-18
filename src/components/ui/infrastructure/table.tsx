@@ -1,6 +1,10 @@
-import DeleteInfrastructure from "@/components/deleteButton/deleteInfrastructure";
+import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
 import EditInfrastructure from "@/components/editButton/EditInfrastructure";
+import { useCustomer } from "@/components/hooks/useCustomer";
 import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
+import { useTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
+
+import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
 import { useEffect, useState } from "react";
@@ -10,18 +14,70 @@ export default function InfrastructureTable() {
   const [getInfastructure, setGetInfrastructure] = useState<
     InfrastructureTypes[]
   >([]);
+
+  const [clientName, setClientName] = useState<string | null>(null);
+  const [typeInfra, setTypeInfra] = useState<string | null>(null);
+  const [zone, setZone] = useState<string | null>(null);
+
+  // initialize mutation
+
   const mutationInfranstructure = useGetInfrastructure();
+  const mutationCustomer = useCustomer();
+  const mutationTypeInfrastructure = useTypeInfrastructure();
+  const mutationZone = useZoneContributive();
+
+  //useEffect
 
   useEffect(() => {
     mutationInfranstructure.mutate();
   }, []);
 
+  // get infrastructure,customer,type_infrastructure,zone
+
   useEffect(() => {
-    if (mutationInfranstructure.data) {
-      setGetInfrastructure(mutationInfranstructure.data.results);
-      console.log(getInfastructure);
+    if (
+      mutationInfranstructure.data &&
+      mutationInfranstructure.data.results.length > 0
+    ) {
+      const infrastructureArray = mutationInfranstructure.data.results;
+      setGetInfrastructure(infrastructureArray);
+
+      const client_id = infrastructureArray[0].client;
+      const type_infrastructure_id = infrastructureArray[0].type_infrastructure;
+      // const zoneContributive_id = infrastructureArray[0].zone;
+      // && zoneContributive_id
+      if (client_id && type_infrastructure_id) {
+        mutationCustomer.mutate(client_id);
+        mutationTypeInfrastructure.mutate(type_infrastructure_id);
+        // mutationZone.mutate(zoneContributive_id);
+      }
     }
-  }, [mutationInfranstructure.data]);
+  }, [
+    mutationInfranstructure.data,
+    mutationCustomer.mutate,
+    mutationTypeInfrastructure.mutate,
+  ]);
+  // mutationZone.mutate,
+  useEffect(() => {
+    if (mutationCustomer.data) {
+      const name = mutationCustomer.data.nom;
+      setClientName(name);
+    }
+  }, [mutationCustomer.data]);
+
+  useEffect(() => {
+    if (mutationTypeInfrastructure.data) {
+      const nomTypeInfra = mutationTypeInfrastructure.data.nom;
+      setTypeInfra(nomTypeInfra);
+    }
+  });
+
+  useEffect(() => {
+    if (mutationZone.data) {
+      const zoneC = mutationZone.data.zone;
+      setZone(zoneC);
+    }
+  }, []);
 
   if (mutationInfranstructure.isPending) {
     return <Loader />;
@@ -85,14 +141,18 @@ export default function InfrastructureTable() {
                   Latitude
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
+                  Longitude
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Capacite{" "}
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
                   unite
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Zone
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Longitude
-                </th>
+
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -117,19 +177,25 @@ export default function InfrastructureTable() {
                         {infra.nom}
                       </div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3"></td>
-                    <td className="whitespace-nowrap px-3 py-3"></td>
+                    <td className="whitespace-nowrap px-3 py-3">
+                      {clientName}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3">{typeInfra}</td>
                     <td className="whitespace-nowrap px-3 py-3">
                       {" "}
                       {infra.latitude}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3"></td>
-                    <td className="whitespace-nowrap px-3 py-3">
-                      {/* <InvoiceStatus status={invoice.status} /> */}
-                    </td>
                     <td className="whitespace-nowrap px-3 py-3">
                       {infra.longitude}
                     </td>
+                    <td className="whitespace-nowrap px-3 py-3">
+                      {infra.capacite}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3">
+                      {infra.unite}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3">{zone}</td>
+
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
                         <EditInfrastructure id={infra.id} />

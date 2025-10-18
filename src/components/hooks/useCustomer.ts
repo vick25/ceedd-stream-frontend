@@ -3,9 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export const useCustomer = () => {
   return useMutation({
-    mutationFn: serviceCustomer.getCustomerId,
-    onSuccess: (response) => {
-      console.log("client", response.results);
-    },
+    mutationFn: (id: string) => serviceCustomer.getCustomerId(id),
+    onSuccess: (response) => {},
   });
 };
