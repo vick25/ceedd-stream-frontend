@@ -31,7 +31,7 @@ export const serviceinfrastructure = {
   },
   async updateInfrastructure(data: any, id: string): Promise<any> {
     const response = await API.patch(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}/${id}`,
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}`,
       data
     );
     return response.data;

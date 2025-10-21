@@ -1,5 +1,6 @@
 import { serviceinfrastructure } from "@/services/infrastructure";
 import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export const useGetInfrastructure = () => {
   return useMutation({
@@ -13,6 +14,10 @@ export const useUpdateInfrastructure = () => {
       serviceinfrastructure.updateInfrastructure(data, id),
     onSuccess: (response) => {
       console.log(response);
+      toast.success("Mise à jour de l'infrastructure reussi");
+    },
+    onError: (error) => {
+      toast.error("Impossible de modifier l'infrastructures");
     },
   });
 };

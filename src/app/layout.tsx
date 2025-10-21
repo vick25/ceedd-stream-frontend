@@ -7,6 +7,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 
 import QueryProvider from "@/components/QueryProvider";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -35,6 +36,18 @@ export default async function RootLayout({
           <Nav />
           {children}
           <Footer />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: "linear-gradient(135deg, #f97316 0%, #eab308 100%)",
+                color: "#fff",
+                borderRadius: "12px",
+                boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
+              },
+            }}
+          />
         </QueryProvider>
       </body>
     </html>

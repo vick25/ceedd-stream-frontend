@@ -49,9 +49,9 @@ export interface InfrastructureTypes {
   nom: string;
   type_infrastructure: string;
   date_construction: string;
-  latitude: number;
-  longitude: number;
-  capacite: number;
+  latitude: string;
+  longitude: string;
+  capacite: string;
   unite: string;
   zone: string;
   client: string;

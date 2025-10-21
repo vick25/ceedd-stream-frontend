@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +11,12 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { InfrastructureTypes } from "@/types/infrastructure";
 import { Button } from "../ui/button";
+import {
+  useGetInfrastructure,
+  useUpdateInfrastructure,
+} from "../hooks/useInfrastructure";
+import { useGetCustomer } from "../hooks/useCustomer";
+import { useAllTypeInfrastructure } from "../hooks/useTypeInfrastructure";
 
 const EditInfrastructure = ({
   id,
@@ -36,6 +42,11 @@ const EditInfrastructure = ({
     client: "",
   });
 
+  const updateMutationInfrastructure = useUpdateInfrastructure();
+  const mutationInfrastructure = useGetInfrastructure();
+  const mutationCustomer = useGetCustomer();
+  const mutationTypeInfrastructure = useAllTypeInfrastructure();
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -45,6 +56,60 @@ const EditInfrastructure = ({
       [name]: value,
     }));
   };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // const dataToSend = {
+    //   ...formData,
+
+    // };
+    if (id) {
+      await updateMutationInfrastructure.mutateAsync({ data: formData, id });
+    }
+  };
+  useEffect(() => {
+    mutationInfrastructure.mutate();
+    mutationCustomer.mutate();
+    mutationTypeInfrastructure.mutate();
+  }, []);
+
+  // useEffect(() => {
+  //   if (
+  //     mutationInfrastructure.data.results &&
+  //     mutationCustomer.data.results &&
+  //     mutationTypeInfrastructure.data.results
+  //   ) {
+  //   }
+  // }, [
+  //   mutationInfrastructure.mutate,
+  //   mutationCustomer.mutate,
+  //   mutationTypeInfrastructure.mutate,
+  // ]);
+  useEffect(() => {
+    if (id) {
+      setFormData({
+        nom,
+        type_infrastructure,
+        date_construction,
+        latitude,
+        longitude,
+        capacite,
+        unite,
+        zone,
+        client,
+      });
+    }
+  }, [
+    id,
+    nom,
+    type_infrastructure,
+    date_construction,
+    latitude,
+    longitude,
+    capacite,
+    unite,
+    zone,
+    client,
+  ]);
 
   return (
     <Dialog>
@@ -61,7 +126,7 @@ const EditInfrastructure = ({
         <DialogTitle>Modifier l'infrastructure</DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}
-          <form className="space-y-3 ">
+          <form className="space-y-3 " onSubmit={handleSubmit}>
             <div>
               <Label htmlFor="nom">Nom Infrastructure:</Label>
               <Input
@@ -83,7 +148,10 @@ const EditInfrastructure = ({
                 className=" flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <option value="">Selectionnez </option>
-                <option value="">Citerne</option>
+                {mutationInfrastructure?.data?.results.length > 0 &&
+                  mutationInfrastructure?.data?.results.map((type: any) => (
+                    <option value={type.id}>{type.nom}</option>
+                  ))}
               </select>
             </div>
             <div>
@@ -150,6 +218,7 @@ const EditInfrastructure = ({
                 className=" flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <option value="">Selectionnez </option>
+
                 <option value="">Citerne</option>
               </select>
             </div>
