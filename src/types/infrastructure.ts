@@ -47,14 +47,14 @@ export interface Infrastructure {
 export interface InfrastructureTypes {
   id: string;
   nom: string;
-  type_infrastructure_id: string;
+  type_infrastructure: string;
   date_construction: string;
   latitude: number;
   longitude: number;
   capacite: number;
   unite: string;
-  zone_id: string;
-  client_id: string;
+  zone: string;
+  client: string;
 }
 export interface zone_contributive {
   id: string;

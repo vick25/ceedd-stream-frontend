@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 
 const MonitoringMap = dynamic(() => import("../components/MonitoringMap"), {
-  ssr: false,
+  ssr: true,
 });
 import { ensureSeed } from "@/lib/seed";
 import { hydrateWells, useWellsStore } from "@/store/wells";

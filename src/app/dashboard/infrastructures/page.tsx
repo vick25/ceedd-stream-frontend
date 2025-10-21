@@ -1,4 +1,5 @@
 "use client";
+
 import { Locale, useTranslations } from "@/lib/i18n";
 import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
@@ -40,7 +41,7 @@ const page = (props: Props) => {
                 <PlusCircle /> Nouvelle infrastructure
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[80vw] md:max-w-[60vw] bg-white z-[9999] ">
+            <DialogContent className=" bg-white z-[9999] ">
               <DialogHeader>
                 <DialogTitle>Ajouter une Nouvelle Infrastructure </DialogTitle>
                 <DialogDescription>Voici les détails.</DialogDescription>

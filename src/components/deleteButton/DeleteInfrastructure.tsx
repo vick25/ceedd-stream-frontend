@@ -14,7 +14,7 @@ const DeleteInfrastructure = ({ id, nom }: props) => {
         <IconButton
           variant="surface"
           color="red"
-          className="px-2 py-1 rounded-md"
+          className="px-3 py-2 rounded-md border border-gray-200  "
         >
           <Trash size={20} className="text-red-600" />
         </IconButton>

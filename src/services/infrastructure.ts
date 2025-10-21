@@ -1,22 +1,22 @@
-import { InfrastructureType } from "@/types/infrastructure";
+import { InfrastructureTypes } from "@/types/infrastructure";
 import API from "./api";
 import { API_ENDPOINTS } from "@/utils/constants";
 import { ceedd } from "@/utils/apiRoutes";
 
 interface InfrastructureData {
   nom: string;
-  type_infrastructure_id: string;
+  type_infrastructure: string;
   date_construction: string;
   latitude: number;
   longitude: number;
   capacite: number;
   unite: string;
-  zone_id: string;
-  client_id: string;
+  zone: string;
+  client: string;
 }
 export const serviceinfrastructure = {
   async getInfrastructure(): Promise<any> {
-    const response = await API.get<InfrastructureType[]>(
+    const response = await API.get<InfrastructureTypes[]>(
       `${API_ENDPOINTS.api}${ceedd.infrastructure}`
     );
 
@@ -27,5 +27,13 @@ export const serviceinfrastructure = {
       `${API_ENDPOINTS.api}${ceedd.infrastructure}`,
       data
     );
+    return response.data;
+  },
+  async updateInfrastructure(data: any, id: string): Promise<any> {
+    const response = await API.patch(
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}/${id}`,
+      data
+    );
+    return response.data;
   },
 };
