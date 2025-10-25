@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,8 +11,59 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 import { Button } from "@/components/ui/button";
+import { useCreateInfrastructure } from "@/components/hooks/useInfrastructure";
 
+interface FormData {
+  nom: string;
+  type_infrastructure: string;
+  date_construction: string;
+  latitude: string;
+  longitude: string;
+  capacite: string;
+  unite: string;
+  zone: string;
+  client: string;
+}
 const CreateformInfrastructure = () => {
+  const [formData, setFormData] = useState<FormData>({
+    nom: "",
+    type_infrastructure: "",
+    date_construction: "",
+    latitude: "",
+    longitude: "",
+    capacite: "",
+    unite: "",
+    zone: "",
+    client: "",
+  });
+
+  const mutationCreateInfrastructure = useCreateInfrastructure();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    const payload = {
+      nom: formData.nom,
+      type_infrastructure: formData.type_infrastructure,
+      date_construction: formData.date_construction,
+      latitude: Number(formData.latitude),
+      longitude: Number(formData.longitude),
+      capacite: Number(formData.capacite),
+      unite: formData.unite,
+      zone: formData.zone,
+      client: formData.client,
+    };
+    await mutationCreateInfrastructure.mutateAsync(payload);
+  };
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
   return (
     <div>
       <form>
@@ -24,7 +75,7 @@ const CreateformInfrastructure = () => {
               type="text"
               name="nom"
               placeholder="nom"
-              //   onChange={handleChange}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -43,7 +94,7 @@ const CreateformInfrastructure = () => {
               type="date_construction"
               name="date_construction"
               placeholder="date_construction"
-              //   onChange={handleChange}
+              onChange={handleChange}
             />
           </div>
           <div>
@@ -53,7 +104,7 @@ const CreateformInfrastructure = () => {
               type="latitude"
               name="latitude"
               placeholder="latitude"
-              //   onChange={handleChange}
+              onChange={handleChange}
             />
           </div>
           <div>
@@ -63,7 +114,7 @@ const CreateformInfrastructure = () => {
               type="longitude"
               name="longitude"
               placeholder="longitude"
-              //   onChange={handleChange}
+              onChange={handleChange}
             />
           </div>
           <div>
@@ -73,7 +124,7 @@ const CreateformInfrastructure = () => {
               type="capacite"
               name="capacite"
               placeholder="capacite"
-              //   onChange={handleChange}
+              onChange={handleChange}
             />
           </div>
           <div>
@@ -83,7 +134,7 @@ const CreateformInfrastructure = () => {
               type="unite"
               name="unite"
               placeholder="unite"
-              //   onChange={handleChange}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -103,10 +154,12 @@ const CreateformInfrastructure = () => {
           <Button
             type="submit"
             size="lg"
-            //   disabled={createDeliveryMutation.isPending}
+            disabled={mutationCreateInfrastructure.isPending}
             className="w-full bg-orange-600 text-gray-200"
           >
-            Ajouter Infrastructure
+            {mutationCreateInfrastructure.isPending
+              ? "Chargement..."
+              : " Ajouter Infrastructure"}
           </Button>
         </div>
       </form>

@@ -1,5 +1,5 @@
 import { serviceCustomer } from "@/services/customer";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { error } from "console";
 
 export const useCustomer = () => {
@@ -17,5 +17,12 @@ export const useGetCustomer = () => {
     onError: (error) => {
       console.log(error);
     },
+  });
+};
+
+export const useCustomers = () => {
+  return useQuery({
+    queryKey: ["customers"],
+    queryFn: () => serviceCustomer.getCustomerAll(),
   });
 };

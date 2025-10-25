@@ -53,7 +53,7 @@ export interface InfrastructureTypes {
   longitude: string;
   capacite: string;
   unite: string;
-  zone: string;
+  // zone: string;
   client: string;
 }
 export interface zone_contributive {

@@ -21,6 +21,8 @@ export default function InfrastructureTable() {
   const [clientNames, setClientNames] = useState<Record<string, string>>({});
   const [typeInfras, setTypeInfras] = useState<Record<string, string>>({});
   const [zones, setZones] = useState<Record<string, string>>({});
+  const [infrastructureDeleted, setInfrastructureDeleted] =
+    useState<string>("");
 
   // initialize mutation
 
@@ -143,12 +145,13 @@ export default function InfrastructureTable() {
                         longitude={infrastructure.longitude}
                         capacite={infrastructure.capacite}
                         unite={infrastructure.unite}
-                        zone={infrastructure.zone}
+                        // zone={infrastructure.zone}
                         client={infrastructure.client}
                       />
                       <DeleteInfrastructure
                         id={infrastructure.id}
                         nom={infrastructure.nom}
+                        setInfrastructureDeleted={setInfrastructureDeleted}
                       />
                     </div>
                   </div>
@@ -197,7 +200,7 @@ export default function InfrastructureTable() {
                   const clientName = clientNames[infra?.client?.toString()];
                   const typeInfra =
                     typeInfras[infra?.type_infrastructure?.toString()];
-                  const zone = zones[infra?.zone?.toString()];
+                  // const zone = zones[infra?.zone?.toString()];
                   return (
                     <tr
                       key={infra.id}
@@ -234,7 +237,7 @@ export default function InfrastructureTable() {
                       <td className="whitespace-nowrap px-3 py-3">
                         {infra.unite}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-3">{zone}</td>
+                      <td className="whitespace-nowrap px-3 py-3"></td>
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
@@ -247,10 +250,14 @@ export default function InfrastructureTable() {
                             longitude={infra.longitude}
                             capacite={infra.capacite}
                             unite={infra.unite}
-                            zone={infra.zone}
+                            // zone={infra.zone}
                             client={infra.client}
                           />
-                          <DeleteInfrastructure id={infra.id} nom={infra.nom} />
+                          <DeleteInfrastructure
+                            id={infra.id}
+                            nom={infra.nom}
+                            setInfrastructureDeleted={setInfrastructureDeleted}
+                          />
                         </div>
                       </td>
                     </tr>

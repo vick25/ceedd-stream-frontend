@@ -1,11 +1,23 @@
 import { serviceinfrastructure } from "@/services/infrastructure";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 export const useGetInfrastructure = () => {
   return useMutation({
     mutationFn: serviceinfrastructure.getInfrastructure,
     onSuccess: (response: any) => {},
+  });
+};
+
+export const useCreateInfrastructure = () => {
+  return useMutation({
+    mutationFn: (data: any) => serviceinfrastructure.createInfrastructure(data),
+    onSuccess: (response) => {
+      toast.success("Infrastructure créée avec succès");
+    },
+    onError: (error) => {
+      toast.success("Impossible de créer l'infrastructure");
+    },
   });
 };
 export const useUpdateInfrastructure = () => {
@@ -18,6 +30,21 @@ export const useUpdateInfrastructure = () => {
     },
     onError: (error) => {
       toast.error("Impossible de modifier l'infrastructures");
+    },
+  });
+};
+export const useInfrastructures = () => {
+  return useQuery({
+    queryKey: ["infrastructures"],
+    queryFn: () => serviceinfrastructure.getInfrastructure(),
+  });
+};
+
+export const useInfrastructureDeleted = () => {
+  return useMutation({
+    mutationFn: (id: string) => serviceinfrastructure.deleteInfrastructure(id),
+    onSuccess: (response) => {
+      toast.success("Infrastructure supprimée avec succès");
     },
   });
 };

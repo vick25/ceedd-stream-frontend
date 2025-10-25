@@ -24,15 +24,22 @@ export const serviceinfrastructure = {
   },
   async createInfrastructure(data: InfrastructureData) {
     const response = await API.post(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}`,
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}/`,
       data
     );
     return response.data;
   },
   async updateInfrastructure(data: any, id: string): Promise<any> {
-    const response = await API.patch(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}`,
+    const response = await API.put(
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`,
       data
+    );
+    console.log(response);
+    return response.data;
+  },
+  async deleteInfrastructure(id: string): Promise<any> {
+    const response = await API.delete(
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`
     );
     return response.data;
   },

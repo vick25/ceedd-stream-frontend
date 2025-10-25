@@ -9,14 +9,19 @@ import { IconButton } from "@radix-ui/themes";
 import { PencilLine } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { InfrastructureTypes } from "@/types/infrastructure";
+import {
+  client,
+  InfrastructureTypes,
+  zone_contributive,
+} from "@/types/infrastructure";
 import { Button } from "../ui/button";
 import {
   useGetInfrastructure,
   useUpdateInfrastructure,
 } from "../hooks/useInfrastructure";
-import { useGetCustomer } from "../hooks/useCustomer";
-import { useAllTypeInfrastructure } from "../hooks/useTypeInfrastructure";
+import { useCustomers, useGetCustomer } from "../hooks/useCustomer";
+import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
+import { Skeleton } from "../ui/skeleton";
 
 const EditInfrastructure = ({
   id,
@@ -27,7 +32,7 @@ const EditInfrastructure = ({
   longitude,
   capacite,
   unite,
-  zone,
+  // zone,
   client,
 }: InfrastructureTypes) => {
   const [formData, setFormData] = useState({
@@ -38,15 +43,21 @@ const EditInfrastructure = ({
     longitude: "",
     capacite: "",
     unite: "",
-    zone: "",
     client: "",
   });
+  const [customers, setCustomers] = useState<client[]>([]);
+  const [zones, setZones] = useState<zone_contributive[]>([]);
 
-  const updateMutationInfrastructure = useUpdateInfrastructure();
   const mutationInfrastructure = useGetInfrastructure();
-  const mutationCustomer = useGetCustomer();
-  const mutationTypeInfrastructure = useAllTypeInfrastructure();
+  // const mutationCustomer = useGetCustomer();
+  // const mutationTypeInfrastructure = useAllTypeInfrastructure();
+  const updateMutationInfrastructure = useUpdateInfrastructure();
 
+  const { data: CustomerData, isLoading } = useCustomers();
+  const {
+    data: typeInfrastructureData,
+    isLoading: IsTypeInfrastructureLoading,
+  } = useTypeInfradtructures();
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -68,22 +79,8 @@ const EditInfrastructure = ({
   };
   useEffect(() => {
     mutationInfrastructure.mutate();
-    mutationCustomer.mutate();
-    mutationTypeInfrastructure.mutate();
   }, []);
 
-  // useEffect(() => {
-  //   if (
-  //     mutationInfrastructure.data.results &&
-  //     mutationCustomer.data.results &&
-  //     mutationTypeInfrastructure.data.results
-  //   ) {
-  //   }
-  // }, [
-  //   mutationInfrastructure.mutate,
-  //   mutationCustomer.mutate,
-  //   mutationTypeInfrastructure.mutate,
-  // ]);
   useEffect(() => {
     if (id) {
       setFormData({
@@ -94,7 +91,6 @@ const EditInfrastructure = ({
         longitude,
         capacite,
         unite,
-        zone,
         client,
       });
     }
@@ -107,10 +103,9 @@ const EditInfrastructure = ({
     longitude,
     capacite,
     unite,
-    zone,
+
     client,
   ]);
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -140,19 +135,24 @@ const EditInfrastructure = ({
             </div>
             <div>
               <Label htmlFor="type_infrastructure">Type Infrastructure:</Label>
-              <select
-                name="type_infrastructure"
-                value={formData.type_infrastructure}
-                onChange={handleChange}
-                id="type_infrastructure"
-                className=" flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="">Selectionnez </option>
-                {mutationInfrastructure?.data?.results.length > 0 &&
-                  mutationInfrastructure?.data?.results.map((type: any) => (
-                    <option value={type.id}>{type.nom}</option>
+              {IsTypeInfrastructureLoading ? (
+                <Skeleton className=" flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" />
+              ) : (
+                <select
+                  name="type_infrastructure"
+                  value={formData.type_infrastructure}
+                  onChange={handleChange}
+                  id="type_infrastructure"
+                  className=" flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option value="">Selectionnez </option>
+                  {typeInfrastructureData?.results.map((type: any) => (
+                    <option key={type.id} value={type.id}>
+                      {type.nom}
+                    </option>
                   ))}
-              </select>
+                </select>
+              )}
             </div>
             <div>
               <Label htmlFor="date_construction">Date construction:</Label>
@@ -209,7 +209,7 @@ const EditInfrastructure = ({
                 required
               />
             </div>
-            <div>
+            {/* <div>
               <Label htmlFor="zone">Zone contrubitive:</Label>
               <select
                 name="zone"
@@ -221,17 +221,27 @@ const EditInfrastructure = ({
 
                 <option value="">Citerne</option>
               </select>
-            </div>
+            </div> */}
             <div>
               <Label htmlFor="client">Proprietaire:</Label>
-              <select
-                name="client"
-                id="client"
-                className=" flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="">Selectionnez </option>
-                <option value="">Citerne</option>
-              </select>
+              {isLoading ? (
+                <Skeleton className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 " />
+              ) : (
+                <select
+                  name="client"
+                  id="client"
+                  value={formData.client}
+                  onChange={handleChange}
+                  className=" flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option value="">Selectionnez </option>
+                  {CustomerData?.results?.map((cust: any) => (
+                    <option key={cust.id} value={cust.id}>
+                      {cust.nom}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
             <div>
               <Button
@@ -239,8 +249,11 @@ const EditInfrastructure = ({
                 size="lg"
                 //   disabled={createDeliveryMutation.isPending}
                 className="w-full bg-orange-600 text-gray-200"
+                disabled={updateMutationInfrastructure.isPending}
               >
-                Ajouter Infrastructure
+                {updateMutationInfrastructure.isPending
+                  ? "Chargement ..."
+                  : "Mettre à jour Infrastructure"}
               </Button>{" "}
             </div>
           </form>

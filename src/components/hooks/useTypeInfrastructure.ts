@@ -1,5 +1,5 @@
 import { serviceTypeInfrastructure } from "@/services/typeInfrastructure";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useTypeInfrastructure = () => {
   return useMutation({
@@ -17,5 +17,12 @@ export const useAllTypeInfrastructure = () => {
     onSuccess: (response) => {
       console.log(response);
     },
+  });
+};
+
+export const useTypeInfradtructures = () => {
+  return useQuery({
+    queryKey: ["type_infrastructures"],
+    queryFn: () => serviceTypeInfrastructure.getTypeInfrastructureAll(),
   });
 };
