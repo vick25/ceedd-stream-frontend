@@ -12,7 +12,10 @@ import { Input } from "@/components/ui/input";
 
 import { Button } from "@/components/ui/button";
 import { useCreateInfrastructure } from "@/components/hooks/useInfrastructure";
-
+import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 interface FormData {
   nom: string;
   type_infrastructure: string;
@@ -24,67 +27,106 @@ interface FormData {
   zone: string;
   client: string;
 }
+const infrastructureSchema = z.object({
+  nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
+  type_infrastructure: z.string().min(1, "Le type d'infrastructure est requis"),
+  date_construction: z.string().min(1, "La date de construction est requise"),
+  latitude: z.string().min(1, "La latitude est requise"),
+  longitude: z.string().min(1, "La longitude est requise"),
+  capacite: z.string().min(1, "La capacité est requise"),
+  unite: z.string().min(1, "L'unité est requise"),
+  zone: z.string().min(1, "Veuillez sélectionner une zone."),
+  client: z.string().min(1, "Veuillez sélectionner un client."),
+});
+
+type InfrastructureFormData = z.infer<typeof infrastructureSchema>;
+
 const CreateformInfrastructure = () => {
-  const [formData, setFormData] = useState<FormData>({
-    nom: "",
-    type_infrastructure: "",
-    date_construction: "",
-    latitude: "",
-    longitude: "",
-    capacite: "",
-    unite: "",
-    zone: "",
-    client: "",
+  // const [formData, setFormData] = useState<FormData>({
+  //   nom: "",
+  //   type_infrastructure: "",
+  //   date_construction: "",
+  //   latitude: "",
+  //   longitude: "",
+  //   capacite: "",
+  //   unite: "",
+  //   zone: "",
+  //   client: "",
+  // });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InfrastructureFormData>({
+    resolver: zodResolver(infrastructureSchema),
+    defaultValues: {
+      nom: "",
+      type_infrastructure: "",
+      date_construction: "",
+      latitude: "",
+      longitude: "",
+      capacite: "",
+      unite: "",
+      zone: "",
+      client: "",
+    },
   });
 
   const mutationCreateInfrastructure = useCreateInfrastructure();
+  const { data: typeInfrastructure, isLoading } = useTypeInfradtructures();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: InfrastructureFormData) => {
     // Handle form submission logic here
     const payload = {
-      nom: formData.nom,
-      type_infrastructure: formData.type_infrastructure,
-      date_construction: formData.date_construction,
-      latitude: Number(formData.latitude),
-      longitude: Number(formData.longitude),
-      capacite: Number(formData.capacite),
-      unite: formData.unite,
-      zone: formData.zone,
-      client: formData.client,
+      nom: data.nom,
+      type_infrastructure: data.type_infrastructure,
+      date_construction: data.date_construction,
+      latitude: Number(data.latitude),
+      longitude: Number(data.longitude),
+      capacite: Number(data.capacite),
+      unite: data.unite,
+      zone: data.zone,
+      client: data.client,
     };
     await mutationCreateInfrastructure.mutateAsync(payload);
   };
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // const handleChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  // ) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <div>
             <Label htmlFor="nom"> Nom:</Label>
             <Input
               id="nom"
               type="text"
-              name="nom"
               placeholder="nom"
-              onChange={handleChange}
+              {...register("nom")}
             />
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="type_infrastructure_id">
               Type infrastructure :
             </Label>
-            <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50">
+            <select
+              {...register("type_infrastructure")}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
               <option value="">Selectionnez</option>
-              <option value="1">Citerne</option>
+              {typeInfrastructure?.results.map((type: any) => (
+                <option key={type.id} value={type.id}>
+                  {type.nom}
+                </option>
+              ))}
             </select>
           </div>
           <div>
@@ -92,19 +134,18 @@ const CreateformInfrastructure = () => {
             <Input
               id="date_construction"
               type="date_construction"
-              name="date_construction"
               placeholder="date_construction"
-              onChange={handleChange}
+              {...register("date_construction")}
             />
+            {errors.date_construction && <p>{errors.nom?.message}</p>}
           </div>
           <div>
             <Label htmlFor="latitude">Latitude : </Label>
             <Input
               id="latitude"
               type="latitude"
-              name="latitude"
               placeholder="latitude"
-              onChange={handleChange}
+              {...register("latitude")}
             />
           </div>
           <div>
@@ -112,9 +153,8 @@ const CreateformInfrastructure = () => {
             <Input
               id="longitude"
               type="longitude"
-              name="longitude"
               placeholder="longitude"
-              onChange={handleChange}
+              {...register("longitude")}
             />
           </div>
           <div>
@@ -122,9 +162,8 @@ const CreateformInfrastructure = () => {
             <Input
               id="capacite"
               type="capacite"
-              name="capacite"
               placeholder="capacite"
-              onChange={handleChange}
+              {...register("capacite")}
             />
           </div>
           <div>
@@ -132,21 +171,26 @@ const CreateformInfrastructure = () => {
             <Input
               id="unite"
               type="unite"
-              name="unite"
+              {...register("unite")}
               placeholder="unite"
-              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="zone_id">Zone : </Label>
-            <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50">
+            <select
+              {...register("zone")}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
               <option value="">Selectionnez</option>
               <option value="1">Zone</option>
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="client_id">Type infrastructure :</Label>
-            <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50">
+            <Label htmlFor="client_id">Client :</Label>
+            <select
+              {...register("client")}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
               <option value="">Selectionnez</option>
               <option value="1">Test</option>
             </select>
