@@ -16,6 +16,7 @@ import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCustomers } from "@/components/hooks/useCustomer";
 interface FormData {
   nom: string;
   type_infrastructure: string;
@@ -42,18 +43,6 @@ const infrastructureSchema = z.object({
 type InfrastructureFormData = z.infer<typeof infrastructureSchema>;
 
 const CreateformInfrastructure = () => {
-  // const [formData, setFormData] = useState<FormData>({
-  //   nom: "",
-  //   type_infrastructure: "",
-  //   date_construction: "",
-  //   latitude: "",
-  //   longitude: "",
-  //   capacite: "",
-  //   unite: "",
-  //   zone: "",
-  //   client: "",
-  // });
-
   const {
     register,
     handleSubmit,
@@ -75,6 +64,8 @@ const CreateformInfrastructure = () => {
 
   const mutationCreateInfrastructure = useCreateInfrastructure();
   const { data: typeInfrastructure, isLoading } = useTypeInfradtructures();
+  const { data: customersData, isLoading: isCustomersLoading } = useCustomers();
+  // const {data:zonesData,isLoading:isZonesLoading}=useZone()
 
   const onSubmit = async (data: InfrastructureFormData) => {
     // Handle form submission logic here

@@ -6,7 +6,7 @@ export const ceedd = {
   infrastructure: "/infrastructure/",
   finance: "/finance/",
   inspection: "/inspection/",
-  client: "/client",
+  client: "/client/",
   typeinfrastructure: "/typeinfrastructure",
   bailleur: "/bailleur/",
   zonecontributive: "/zonecontributive/",

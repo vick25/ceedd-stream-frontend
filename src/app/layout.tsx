@@ -41,7 +41,7 @@ export default async function RootLayout({
             toastOptions={{
               duration: 4000,
               style: {
-                background: "linear-gradient(135deg, #f97316 0%, #eab308 100%)",
+                background: "linear-gradient(135deg, #16a34a 0%, #22c55e 100%)",
                 color: "#fff",
                 borderRadius: "12px",
                 boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",

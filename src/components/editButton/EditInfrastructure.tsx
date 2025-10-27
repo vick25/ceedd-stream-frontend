@@ -248,7 +248,7 @@ const EditInfrastructure = ({
                 type="submit"
                 size="lg"
                 //   disabled={createDeliveryMutation.isPending}
-                className="w-full bg-orange-600 text-gray-200"
+                className="w-full bg-green-600 text-gray-200"
                 disabled={updateMutationInfrastructure.isPending}
               >
                 {updateMutationInfrastructure.isPending

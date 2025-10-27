@@ -1,5 +1,7 @@
 import { serviceTypeInfrastructure } from "@/services/typeInfrastructure";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { any } from "zod";
 
 export const useTypeInfrastructure = () => {
   return useMutation({
@@ -24,5 +26,14 @@ export const useTypeInfradtructures = () => {
   return useQuery({
     queryKey: ["type_infrastructures"],
     queryFn: () => serviceTypeInfrastructure.getTypeInfrastructureAll(),
+  });
+};
+export const useUpdateTypeInfrastructure = () => {
+  return useMutation({
+    mutationFn: ({ data, id }: { data: any; id: any }) =>
+      serviceTypeInfrastructure.updateTypeInfrastructure(data, id),
+    onSuccess: (response) => {
+      toast.success("Mise à jour du type infrastructure reussi");
+    },
   });
 };

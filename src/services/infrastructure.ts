@@ -34,7 +34,7 @@ export const serviceinfrastructure = {
       `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`,
       data
     );
-    console.log(response);
+
     return response.data;
   },
   async deleteInfrastructure(id: string): Promise<any> {
