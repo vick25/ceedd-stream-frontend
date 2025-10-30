@@ -1,6 +1,6 @@
 import axios from "axios";
-import { error } from "console";
-import { config } from "node_modules/zod/v4/core/core";
+import { ACCESS_TOKEN } from "../utils/constants";
+
 const API = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1",
   timeout: 30000,
@@ -9,13 +9,18 @@ const API = axios.create({
   },
 });
 
-API.interceptors.request.use((config: any) => {
-  const token = localStorage.getItem("ceeAuth-token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+API.interceptors.request.use(
+  (config: any) => {
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error: any) => {
+    return Promise.reject(error);
   }
-  return config;
-});
+);
 
 // API.interceptors.response.use(
 //   (response) => response,
