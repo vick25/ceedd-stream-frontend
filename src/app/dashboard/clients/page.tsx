@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import CreateformInfrastructure from "@/components/ui/infrastructure/CreateformInfrastructure";
+import CreateFormClient from "@/components/ui/clients/CreateFormClient";
 
 type Props = {};
 
@@ -47,7 +48,7 @@ const page = (props: Props) => {
                 <DialogDescription>Voici les détails.</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]">
-                <CreateformInfrastructure />
+                <CreateFormClient />
               </div>
             </DialogContent>
           </Dialog>

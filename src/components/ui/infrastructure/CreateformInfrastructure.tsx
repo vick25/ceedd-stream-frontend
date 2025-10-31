@@ -151,6 +151,9 @@ const CreateformInfrastructure = () => {
               placeholder="latitude"
               {...register("latitude")}
             />
+            {errors.latitude && (
+              <p className="text-red-500 text-sm">{errors.latitude.message}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="longitude">Longitude : </Label>
@@ -160,6 +163,9 @@ const CreateformInfrastructure = () => {
               placeholder="longitude"
               {...register("longitude")}
             />
+            {errors.longitude && (
+              <p className="text-red-500 text-sm">{errors.longitude.message}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="capacite">Capacite : </Label>
@@ -169,6 +175,10 @@ const CreateformInfrastructure = () => {
               placeholder="capacite"
               {...register("capacite")}
             />
+            {errors.capacite && (
+              <p className="text-red-500 text-sm">{errors.capacite.message}</p>
+            )}
+            capacite
           </div>
           <div>
             <Label htmlFor="unite">Unite (L): </Label>
@@ -178,9 +188,12 @@ const CreateformInfrastructure = () => {
               {...register("unite")}
               placeholder="unite"
             />
+            {errors.unite && (
+              <p className="text-red-500 text-sm">{errors.unite.message}</p>
+            )}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="zone_id">Zone : </Label>
+            <Label htmlFor="zone">Zone : </Label>
             <select
               {...register("zone")}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
@@ -188,16 +201,30 @@ const CreateformInfrastructure = () => {
               <option value="">Selectionnez</option>
               <option value="1">Zone</option>
             </select>
+            {errors.zone && (
+              <p className="text-red-500 text-sm">{errors.zone.message}</p>
+            )}
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="client_id">Client :</Label>
             <select
               {...register("client")}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.client
+                  ? "border border-red-500 "
+                  : "border border-green-500"
+              }`}
             >
               <option value="">Selectionnez</option>
-              <option value="1">Test</option>
+              {customersData?.results.map((type: any) => (
+                <option key={type.id} value={type.id}>
+                  {type.nom}
+                </option>
+              ))}
             </select>
+            {errors.client && (
+              <p className="text-red-500 text-sm">{errors.client.message}</p>
+            )}
           </div>
           <Button
             type="submit"

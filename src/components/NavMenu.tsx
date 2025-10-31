@@ -27,7 +27,7 @@ const links = [
   {
     icon: User,
     name: "Client",
-    href: "/dashboard/customer",
+    href: "/dashboard/clients",
   },
   {
     icon: Landmark,
@@ -61,19 +61,17 @@ export default function NavMenu() {
             key={link.name}
             href={link.href}
             className={clsx(
-              "flex md:h-[48px] grow items-center  gap-2 rounded-md bg-white p-3 md:px-6 md:py-6 text-sm font-medium",
+              "flex md:h-[48px] grow items-center  gap-2 rounded-md bg-white p-3 md:px-6 md:py-6 text-sm font-medium hover:bg-green-100 hover:text-green-500 px-3 py-3",
               {
-                "bg-sky-100 text-blue-600": pathName === link.href,
+                "bg-sky-100 text-green-500": pathName === link.href,
               }
             )}
           >
-            <LinkIcon className="w-6" />
-            <span className="hidden md:block"> {link.name}</span>
+            <LinkIcon className="w-4 text-green-400 " />
+            <span className="hidden md:block "> {link.name}</span>
           </Link>
         );
       })}
     </div>
   );
 }
-
-
