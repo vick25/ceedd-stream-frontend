@@ -10,9 +10,9 @@ import { PencilLine } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import {
-  client,
+  Client,
   InfrastructureTypes,
-  zone_contributive,
+  // zone_contributive,
 } from "@/types/infrastructure";
 import { Button } from "../ui/button";
 import {
@@ -45,8 +45,8 @@ const EditInfrastructure = ({
     unite: "",
     client: "",
   });
-  const [customers, setCustomers] = useState<client[]>([]);
-  const [zones, setZones] = useState<zone_contributive[]>([]);
+  const [customers, setCustomers] = useState<Client[]>([]);
+  // const [zones, setZones] = useState<zone_contributive[]>([]);
 
   const mutationInfrastructure = useGetInfrastructure();
   // const mutationCustomer = useGetCustomer();
@@ -85,13 +85,13 @@ const EditInfrastructure = ({
     if (id) {
       setFormData({
         nom,
-        type_infrastructure,
+        type_infrastructure: type_infrastructure.id,
         date_construction,
         latitude,
         longitude,
         capacite,
         unite,
-        client,
+        client: client.id,
       });
     }
   }, [

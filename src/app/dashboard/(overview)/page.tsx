@@ -5,73 +5,106 @@ import { PieChart } from "@/components/charts/PieChart";
 import { BarChart } from "@/components/charts/BarChart";
 import { Heatmap } from "@/components/charts/Heatmap";
 import { InfrastructureMap } from "@/components/InfrastructureMap";
-import { DashboardStats } from "@/types/infrastructure";
+// import { DashboardStats } from "@/types/infrastructure";
 import { useTranslations, Locale } from "@/lib/i18n";
 import { useMemo, useState } from "react";
+import { useInfrastructures } from "@/components/hooks/useInfrastructure";
+import { Building, Building2, User } from "lucide-react";
+import { useCustomers } from "@/components/hooks/useCustomer";
 
 export default function DashboardPage() {
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
-  const infrastructures = useInfrastructureStore((s) => s.infrastructures);
+  // const infrastructures = useInfrastructureStore((s) => s.infrastructures);
+  const { data: infrastructures } = useInfrastructures();
 
-  const stats: DashboardStats = useMemo(() => {
-    const total = infrastructures.length;
-    const byType = infrastructures.reduce((acc, infra) => {
-      acc[infra.type] = (acc[infra.type] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+  const { data: clients } = useCustomers();
 
-    const byStatus = infrastructures.reduce((acc, infra) => {
-      acc[infra.status] = (acc[infra.status] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+  const stats = useMemo(() => {
+    // const total = infrastructures.count;
+    if (!infrastructures || !infrastructures.results) {
+      return {
+        totalInfrastructures: 0,
+        totalCapacity: 0,
+        totalInvestement: 0,
+      };
+    }
+    if (!clients || !clients.results) {
+      return {
+        totalClients: 0,
+      };
+    }
+    const infrastructureList = infrastructures.results;
+    // const testTotal = infrastructureList.length;
 
-    const byCommune = infrastructures.reduce((acc, infra) => {
-      acc[infra.commune] = (acc[infra.commune] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const total = infrastructures.count || infrastructureList.length;
+    const clientList = clients.results;
 
-    const totalCapacity = infrastructures.reduce(
-      (sum, infra) => sum + (infra.capacity || 0),
-      0
-    );
-    const totalInvestment = infrastructures.reduce(
-      (sum, infra) => sum + (infra.totalCost || 0),
-      0
-    );
+    const ClientsCount = clients.count || clients.length;
 
     return {
       totalInfrastructures: total,
-      byType,
-      byStatus,
-      byCommune,
-      coveragePercentage: 75, // Mock data
-      populationImpacted: 125000, // Mock data
-      totalCapacity,
-      totalInvestment,
+      totalClients: ClientsCount,
     };
-  }, [infrastructures]);
+  }, [infrastructures, clients]);
+  // const stats: DashboardStats = useMemo(() => {
+  //   // const total = infrastructures.length;
+  //   const byType = infrastructures.reduce((acc: any, infra: any) => {
+  //     acc[infra.type] = (acc[infra.type] || 0) + 1;
+  //     return acc;
+  //   }, {} as Record<string, number>);
 
-  const typeChartData = Object.entries(stats.byType).map(([type, count]) => ({
-    name: t(`infrastructure.types.${type}`),
-    value: count,
-    color: getTypeColor(type),
-  }));
+  //   const byStatus = infrastructures.reduce((acc: any, infra: any) => {
+  //     acc[infra.status] = (acc[infra.status] || 0) + 1;
+  //     return acc;
+  //   }, {} as Record<string, number>);
 
-  const statusChartData = Object.entries(stats.byStatus).map(
-    ([status, count]) => ({
-      name: t(`infrastructure.status.${status}`),
-      value: count,
-      color: getStatusColor(status),
-    })
-  );
+  //   const byCommune = infrastructures.reduce((acc: any, infra: any) => {
+  //     acc[infra.commune] = (acc[infra.commune] || 0) + 1;
+  //     return acc;
+  //   }, {} as Record<string, number>);
 
-  const communeData = Object.entries(stats.byCommune).map(
-    ([commune, count]) => ({
-      commune,
-      infrastructures: count,
-    })
-  );
+  //   const totalCapacity = infrastructures.reduce(
+  //     (sum: any, infra: any) => sum + (infra.capacity || 0),
+  //     0
+  //   );
+  //   const totalInvestment = infrastructures.reduce(
+  //     (sum: any, infra: any) => sum + (infra.totalCost || 0),
+  //     0
+  //   );
+
+  //   return {
+  //     // totalInfrastructures: total,
+  //     byType,
+  //     byStatus,
+  //     byCommune,
+  //     coveragePercentage: 75, // Mock data
+  //     populationImpacted: 125000, // Mock data
+  //     totalCapacity,
+  //     totalInvestment,
+  //   };
+  // }, [infrastructures]);
+
+  // const typeChartData = Object.entries(stats.byType).map(([type, count]) => ({
+  //   name: t(`infrastructure.types.${type}`),
+  //   value: count,
+  //   color: getTypeColor(type),
+  // }));
+
+  // const statusChartData = Object.entries(stats.byStatus).map(
+  //   ([status, count]) => ({
+  //     name: t(`infrastructure.status.${status}`),
+  //     value: count,
+  //     color: getStatusColor(status),
+  //   })
+  // );
+
+  // const communeData = Object.entries(stats.byCommune).map(
+  //   ([commune, count]) => ({
+  //     commune,
+  //     infrastructures: count,
+  //   })
+  // );
 
   return (
     <div>
@@ -86,44 +119,46 @@ export default function DashboardPage() {
             >
               {locale === "fr" ? "EN" : "FR"}
             </button> */}
-            <button className="bg-blue-600 text-white px-3 py-2 rounded">
+            {/* <button className="bg-blue-600 text-white px-3 py-2 rounded">
               Nouvelle infrastructure
-            </button>
+            </button> */}
           </div>
         </div>
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="p-4 rounded-lg border bg-white">
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-gray-500 flex items-center gap-3">
+              <Building2 className="text-green-800" />{" "}
               {t.dashboard.totalInfrastructures}
             </div>
-            <div className="text-3xl font-bold text-blue-600">
+            <div className="text-3xl font-bold text-green-600 flex items-center justify-center">
               {stats.totalInfrastructures}
             </div>
           </div>
-          <div className="p-4 rounded-lg border bg-white">
+          {/* <div className="p-4 rounded-lg border bg-white">
             <div className="text-sm text-gray-500">
               {t.dashboard.coveragePercentage}
             </div>
             <div className="text-3xl font-bold text-green-600">
-              {stats.coveragePercentage}%
+             {stats.coveragePercentage}%
             </div>
-          </div>
+          </div>  */}
           <div className="p-4 rounded-lg border bg-white">
             <div className="text-sm text-gray-500">
-              {t.dashboard.populationImpacted}
+              {t.dashboard.typeInfrastructures}
             </div>
             <div className="text-3xl font-bold text-purple-600">
-              {stats.populationImpacted.toLocaleString()}
+              {/* {stats.populationImpacted.toLocaleString()} */}
             </div>
           </div>
           <div className="p-4 rounded-lg border bg-white">
-            <div className="text-sm text-gray-500">
-              {t.dashboard.totalCapacity}
+            <div className="text-sm text-gray-500 flex items-center gap-3">
+              <User className="text-orange-600" />
+              {t.dashboard.totalClients}
             </div>
-            <div className="text-3xl font-bold text-orange-600">
-              {stats.totalCapacity.toLocaleString()} m³
+            <div className="text-3xl font-bold text-orange-600 flex items-center justify-center">
+              {stats.totalClients}
             </div>
           </div>
           <div className="p-4 rounded-lg border bg-white">
@@ -131,13 +166,13 @@ export default function DashboardPage() {
               {t.dashboard.totalInvestment}
             </div>
             <div className="text-3xl font-bold text-red-600">
-              ${stats.totalInvestment.toLocaleString()}
+              {/* ${stats.totalInvestment.toLocaleString()} */}
             </div>
           </div>
         </div>
 
         {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <PieChart data={typeChartData} title="Infrastructures par type" />
           <PieChart data={statusChartData} title="État des infrastructures" />
           <BarChart
@@ -156,10 +191,10 @@ export default function DashboardPage() {
             infrastructures={infrastructures}
             title="Carte thermique des statuts"
           />
-        </div>
+        </div> */}
 
         {/* Interactive Map */}
-        <div className="bg-white rounded-lg border p-4">
+        {/* <div className="bg-white rounded-lg border p-4">
           <h3 className="text-lg font-semibold mb-4">
             Carte interactive des infrastructures
           </h3>
@@ -168,7 +203,7 @@ export default function DashboardPage() {
             locale={locale}
             height={400}
           />
-        </div>
+        </div> */}
       </main>
     </div>
   );

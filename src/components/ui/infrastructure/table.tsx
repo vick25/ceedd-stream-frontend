@@ -12,6 +12,7 @@ import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
 import { useEffect, useState } from "react";
 import { tr } from "zod/v4/locales";
+import { Skeleton } from "../skeleton";
 
 export default function InfrastructureTable() {
   const [getInfastructure, setGetInfrastructure] = useState<
@@ -52,36 +53,36 @@ export default function InfrastructureTable() {
       setGetInfrastructure(convertInfrastructure);
     }
   }, [mutationInfranstructure.data]);
-
+  console.log({ getInfastructure });
   // mutationZone.mutate,
-  useEffect(() => {
-    if (mutationCustomer.data && mutationCustomer.data.results.length) {
-      const map = mutationCustomer.data.results.reduce(
-        (acc: Record<string, string>, item: any) => {
-          acc[item.id.toString()] = item.nom;
-          return acc;
-        },
-        {}
-      );
-      setClientNames(map);
-    }
-  }, [mutationCustomer.data]);
-
-  useEffect(() => {
-    if (
-      mutationTypeInfrastructure.data &&
-      mutationTypeInfrastructure.data.results
-    ) {
-      const maps = mutationTypeInfrastructure.data.results.reduce(
-        (acc: Record<string, string>, item: any) => {
-          acc[item.id.toString()] = item.nom;
-          return acc;
-        },
-        {}
-      );
-      setTypeInfras(maps);
-    }
-  }, [mutationTypeInfrastructure.data]);
+  // useEffect(() => {
+  //   if (mutationCustomer.data && mutationCustomer.data.results.length) {
+  //     const map = mutationCustomer.data.results.reduce(
+  //       (acc: Record<string, string>, item: any) => {
+  //         acc[item.id.toString()] = item.nom;
+  //         return acc;
+  //       },
+  //       {}
+  //     );
+  //     setClientNames(map);
+  //   }
+  // }, [mutationCustomer.data]);
+  // console.log("testtlsll", clientNames);
+  // useEffect(() => {
+  //   if (
+  //     mutationTypeInfrastructure.data &&
+  //     mutationTypeInfrastructure.data.results
+  //   ) {
+  //     const maps = mutationTypeInfrastructure.data.results.reduce(
+  //       (acc: Record<string, string>, item: any) => {
+  //         acc[item.id.toString()] = item.nom;
+  //         return acc;
+  //       },
+  //       {}
+  //     );
+  //     setTypeInfras(maps);
+  //   }
+  // }, [mutationTypeInfrastructure.data]);
 
   // useEffect(() => {
   //   if (mutationZone.data) {
@@ -99,7 +100,6 @@ export default function InfrastructureTable() {
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden">
             {getInfastructure?.map((infrastructure: any) => {
-              const clientNom = clientNames[infrastructure.client.toString()];
               return (
                 <div
                   key={infrastructure.id}
@@ -132,7 +132,7 @@ export default function InfrastructureTable() {
                   <div className="flex w-full items-center justify-between pt-4">
                     <div>
                       <p className="text-xl font-medium">
-                        Propriétaire : {clientNom}
+                        Propriétaire : {infrastructure.client.nom}
                       </p>
                     </div>
                     <div className="flex justify-end gap-2">
@@ -197,9 +197,7 @@ export default function InfrastructureTable() {
               {getInfastructure.length > 0 ? (
                 getInfastructure?.map((infra) => {
                   //jointure
-                  const clientName = clientNames[infra?.client?.toString()];
-                  const typeInfra =
-                    typeInfras[infra?.type_infrastructure?.toString()];
+
                   // const zone = zones[infra?.zone?.toString()];
                   return (
                     <tr
@@ -219,10 +217,10 @@ export default function InfrastructureTable() {
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {clientName}
+                        {infra.client.nom}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {typeInfra}
+                        {infra.type_infrastructure.nom}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
                         {" "}

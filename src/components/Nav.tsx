@@ -5,10 +5,13 @@ import { Button } from "@radix-ui/themes";
 import { Heart, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Locale, useTranslations } from "@/lib/i18n";
 
 export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [locale, setLocale] = useState<Locale>("fr");
+  const t = useTranslations(locale);
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -26,7 +29,7 @@ export function Nav() {
   }, [isOpen]);
   return (
     <header
-      // 👇 Change 'sticky' to 'fixed' to take it out of the regular document flow
+      //  Change 'sticky' to 'fixed' to take it out of the regular document flow
       className={`w-full h-[var(--header-hm)]  lg:h-[var(--header-h)] fixed top-0 left-0 right-0  zindex transition-all duration-500 ${
         isScrolled ? "border-b bg-white shadow-lg" : "bg-white py-3 sm:py-4"
       }`}
@@ -65,13 +68,19 @@ export function Nav() {
           </div>
         </div>
         <div className="hidden lg:flex items-center gap-4">
-          <Button className="px-4 py-3  rounded-lg bg-gradient-to-tr from-orange-500 to-orange-600 text-gray-100 flex items-center gap-3">
+          <Button className="px-3 py-2  rounded-lg bg-gradient-to-tr from-green-500 to-green-800 text-gray-100 flex items-center gap-3">
             <Heart className="w-4 h-4" />
             Donate
           </Button>
-          <Button className="px-4 py-3  rounded-lg bg-orange-500 text-gray-100">
+          <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100">
             Se connecter
           </Button>
+          <button
+            onClick={() => setLocale(locale === "fr" ? "en" : "fr")}
+            className="bg-gray-200 px-3 py-2 rounded"
+          >
+            {locale === "fr" ? "EN" : "FR"}
+          </button>
         </div>
         <button
           onClick={() => setIsOpen(!isOpen)}

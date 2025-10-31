@@ -46,7 +46,7 @@ const CreateformInfrastructure = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, touchedFields },
   } = useForm<InfrastructureFormData>({
     resolver: zodResolver(infrastructureSchema),
     defaultValues: {
@@ -82,27 +82,29 @@ const CreateformInfrastructure = () => {
     };
     await mutationCreateInfrastructure.mutateAsync(payload);
   };
-  // const handleChange = (
-  //   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  // ) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-2">
-          <div>
+        <div className="space-y-2 flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
             <Label htmlFor="nom"> Nom:</Label>
             <Input
               id="nom"
               type="text"
               placeholder="nom"
               {...register("nom")}
+              className={`border border-white ${
+                errors.nom
+                  ? "border border-red-500"
+                  : touchedFields.nom
+                  ? "border border-green-600"
+                  : "border border-gray-300"
+              }`}
             />
+            {errors.nom && (
+              <p className="text-red-500 text-sm">{errors.nom.message}</p>
+            )}
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="type_infrastructure_id">
@@ -110,7 +112,11 @@ const CreateformInfrastructure = () => {
             </Label>
             <select
               {...register("type_infrastructure")}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.type_infrastructure
+                  ? "border border-red-500 "
+                  : "border border-green-500"
+              }`}
             >
               <option value="">Selectionnez</option>
               {typeInfrastructure?.results.map((type: any) => (
@@ -119,6 +125,11 @@ const CreateformInfrastructure = () => {
                 </option>
               ))}
             </select>
+            {errors.type_infrastructure && (
+              <p className="text-red-500 text-sm">
+                {errors.type_infrastructure.message}
+              </p>
+            )}
           </div>
           <div>
             <Label htmlFor="date_construction">date Construction:</Label>
@@ -128,7 +139,9 @@ const CreateformInfrastructure = () => {
               placeholder="date_construction"
               {...register("date_construction")}
             />
-            {errors.date_construction && <p>{errors.nom?.message}</p>}
+            {errors.date_construction && (
+              <p>{errors.date_construction?.message}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="latitude">Latitude : </Label>

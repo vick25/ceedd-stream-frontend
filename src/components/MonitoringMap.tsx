@@ -164,7 +164,15 @@ const typeColors: Record<string, string> = {
   drainage: "bg-red-200 text-red-800",
 };
 
-export default function MonitoringMapPage() {
+type MonitoringMapProps = {
+  heightClass?: string; // Tailwind height class to control container height
+  className?: string; // Optional extra classes
+};
+
+export default function MonitoringMapPage({
+  heightClass = "h-[692px]",
+  className = "",
+}: MonitoringMapProps) {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
   const [allInfrastructures, setAllInfrastructures] = useState<any[]>([]);
@@ -278,7 +286,9 @@ export default function MonitoringMapPage() {
   // Rendu JSX
 
   return (
-    <div className="w-full h-[692px] flex bg-[#e7eaf6] overflow-hidden rounded-lg shadow-lg ">
+    <div
+      className={`w-full ${heightClass} flex bg-[#e7eaf6] overflow-hidden rounded-lg shadow-lg ${className}`}
+    >
       {/* Sidebar */}
       <aside className="w-80 hidden lg:block bg-white border-r p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
         <div className="mb-6">
@@ -319,7 +329,7 @@ export default function MonitoringMapPage() {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               {filtered.map((infra) => {
-                // 💡 UTILISATION DES MAPS DE JOINTURE POUR CHAQUE MARQUEUR
+                //  UTILISATION DES MAPS DE JOINTURE POUR CHAQUE MARQUEUR
                 const typeNom =
                   typeLabels[infra.type_infrastructure.toString()] || "N/A";
                 const clientNom =
