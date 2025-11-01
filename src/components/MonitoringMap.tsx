@@ -2,8 +2,13 @@
 
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { useGetInfrastructure } from "./hooks/useInfrastructure";
+import { useGetCustomer } from "./hooks/useCustomer";
+import { useAllTypeInfrastructure } from "./hooks/useTypeInfrastructure";
+import { useZoneContributive } from "./hooks/useZoneContributive";
+import Loader from "./Loader";
 
 // Icône personnalisée pour les marqueurs
 const markerIcon = new L.Icon({
@@ -159,8 +164,97 @@ const typeColors: Record<string, string> = {
   drainage: "bg-red-200 text-red-800",
 };
 
-export default function MonitoringMapPage() {
+type MonitoringMapProps = {
+  heightClass?: string; // Tailwind height class to control container height
+  className?: string; // Optional extra classes
+};
+
+export default function MonitoringMapPage({
+  heightClass = "h-[692px]",
+  className = "",
+}: MonitoringMapProps) {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+
+  const [allInfrastructures, setAllInfrastructures] = useState<any[]>([]);
+
+  //  Nouveaux états pour les tables de correspondance (Maps)
+  const [clientLabels, setClientLabels] = useState<Record<string, string>>({});
+  const [typeLabels, setTypeLabels] = useState<Record<string, string>>({});
+  const [zoneLabels, setZoneLabels] = useState<Record<string, string>>({});
+
+  // Initialisation des mutations
+  const mutationInfrastructure = useGetInfrastructure();
+  const mutationCustomer = useGetCustomer();
+  const mutationTypeInfrastructure = useAllTypeInfrastructure();
+  // const mutationZone = useZoneContributive();
+
+  // Déclenchement de TOUTES les requêtes au montage
+  useEffect(() => {
+    mutationInfrastructure.mutate();
+    mutationCustomer.mutate();
+    mutationTypeInfrastructure.mutate();
+  }, [
+    mutationInfrastructure.mutate,
+    mutationCustomer.mutate,
+    mutationTypeInfrastructure.mutate,
+  ]);
+
+  // ----------------------------------------------------
+  //  Traitement des données de référence (Création des maps)
+  // ----------------------------------------------------
+
+  // Utilisation d'un seul useEffect pour tous les lookups pour la clarté
+  useEffect(() => {
+    // Client Map
+    if (mutationCustomer.data && mutationCustomer.data.results) {
+      const map = mutationCustomer.data.results.reduce(
+        (acc: Record<string, string>, item: any) => {
+          acc[item.id.toString()] = item.nom;
+          return acc;
+        },
+        {}
+      );
+      setClientLabels(map);
+    }
+
+    // Type Infrastructure Map
+    if (
+      mutationTypeInfrastructure.data &&
+      mutationTypeInfrastructure.data.results
+    ) {
+      const map = mutationTypeInfrastructure.data.results.reduce(
+        (acc: Record<string, string>, item: any) => {
+          acc[item.id.toString()] = item.nom;
+          return acc;
+        },
+        {}
+      );
+      setTypeLabels(map);
+    }
+
+    // // Zone Map
+    // if (mutationZone.data && mutationZone.data.results) {
+    //   const map = mutationZone.data.results.reduce(
+    //     (acc: Record<string, string>, item: any) => {
+    //       // 💡 Attention: Le nom de la propriété peut être 'nom' ou 'zone' selon votre API.
+    //       acc[item.id.toString()] = item.nom || item.zone;
+    //       return acc;
+    //     },
+    //     {}
+    //   );
+    //   setZoneLabels(map);
+    // }
+  }, [mutationCustomer.data, mutationTypeInfrastructure.data]);
+
+  // ----------------------------------------------------
+  //  Traitement des données d'Infrastructure
+  // ----------------------------------------------------
+
+  useEffect(() => {
+    if (mutationInfrastructure.data && mutationInfrastructure.data.results) {
+      setAllInfrastructures(mutationInfrastructure.data.results);
+    }
+  }, [mutationInfrastructure.data]);
 
   const handleTypeToggle = (type: string) => {
     setSelectedTypes((prev) =>
@@ -168,12 +262,33 @@ export default function MonitoringMapPage() {
     );
   };
 
+  // filtre
   const filtered = selectedTypes.length
-    ? infrastructures.filter((i) => selectedTypes.includes(i.type))
-    : infrastructures;
+    ? allInfrastructures.filter((i) =>
+        selectedTypes.includes(i.type_infrastructure.toString())
+      )
+    : allInfrastructures;
+
+  //  Loader Combiné
+  const isPending =
+    mutationInfrastructure.isPending ||
+    mutationCustomer.isPending ||
+    mutationTypeInfrastructure.isPending;
+
+  // mutationZone.isPending;
+
+  //Vérifiez que l'infrastructure et au moins une des tables de référence sont prêtes
+  const isReady =
+    !isPending &&
+    allInfrastructures.length > 0 &&
+    Object.keys(clientLabels).length > 0; // Vérifiez qu'au moins une map est remplie
+
+  // Rendu JSX
 
   return (
-    <div className="w-full h-[692px] flex bg-[#e7eaf6] overflow-hidden rounded-lg shadow-lg ">
+    <div
+      className={`w-full ${heightClass} flex bg-[#e7eaf6] overflow-hidden rounded-lg shadow-lg ${className}`}
+    >
       {/* Sidebar */}
       <aside className="w-80 hidden lg:block bg-white border-r p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
         <div className="mb-6">
@@ -183,10 +298,11 @@ export default function MonitoringMapPage() {
               <button
                 type="button"
                 key={type}
-                className={`px-3 py-1 rounded-full border ${selectedTypes.includes(type)
+                className={`px-3 py-1 rounded-full border ${
+                  selectedTypes.includes(type)
                     ? typeColors[type] + " border-transparent"
                     : "bg-gray-100 text-gray-700 border-gray-300"
-                  }`}
+                }`}
                 onClick={() => handleTypeToggle(type)}
               >
                 {label}
@@ -199,50 +315,65 @@ export default function MonitoringMapPage() {
 
       {/* Carte */}
       <main className="flex-1 h-full">
-        <div className="w-full h-full">
-          <MapContainer
-            center={[-4.44, 15.31]}
-            zoom={13}
-            style={{ height: "100%", width: "100%" }}
-          >
-            <TileLayer
-              attribution="&copy; OpenStreetMap"
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {filtered.map((infra) => (
-              <Marker
-                key={infra.id}
-                position={[infra.latitude, infra.longitude]}
-                icon={markerIcon}
-              >
-                <Popup>
-                  <div className="font-bold">{infra.name}</div>
-                  <div className="text-xs mb-1">{typeLabels[infra.type]}</div>
-                  <div className="text-xs text-gray-500">
-                    {infra.owner} <br />
-                    {infra.avenue && (
-                      <span>
-                        {infra.avenue}
-                        <br />
-                      </span>
-                    )}
-                    {infra.quartier && (
-                      <span>
-                        {infra.quartier}
-                        <br />
-                      </span>
-                    )}
-                    {infra.commune}
-                  </div>
-                  <div className="text-xs mt-1">
-                    Capacité: {infra.capacity} <br />
-                    Année: {infra.year}
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
-        </div>
+        {isPending || !isReady ? (
+          <Loader />
+        ) : (
+          <div className="w-full h-full">
+            <MapContainer
+              center={[-4.44, 15.31]}
+              zoom={13}
+              style={{ height: "100%", width: "100%" }}
+            >
+              <TileLayer
+                attribution="&copy; OpenStreetMap"
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {filtered.map((infra) => {
+                //  UTILISATION DES MAPS DE JOINTURE POUR CHAQUE MARQUEUR
+                const typeNom =
+                  typeLabels[infra.type_infrastructure.toString()] || "N/A";
+                const clientNom =
+                  clientLabels[infra.client.toString()] || "N/A";
+                // const zoneNom = zoneLabels[infra.zone.toString()] || "N/A";
+                return (
+                  <Marker
+                    key={infra.id}
+                    position={[infra.latitude, infra.longitude]}
+                    icon={markerIcon}
+                  >
+                    <Popup>
+                      <div className="font-bold">{infra.name}</div>
+                      <div className="text-xs mb-1">
+                        {/* {typeLabels[infra.type]} */} {typeNom}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {/* {infra.owner}   */}
+                        {clientNom} <br />
+                        {/* {infra.avenue && (
+                          <span>
+                            {infra.avenue}
+                            <br />
+                          </span>
+                        )} */}
+                        {/* {infra.quartier && (
+                          <span>
+                            {infra.quartier}
+                            <br />
+                          </span>
+                        )}
+                        {infra.commune} */}
+                      </div>
+                      <div className="text-xs mt-1">
+                        Capacité: {infra.capacity} {infra.unite} <br />
+                        Année:{new Date(infra.date_construction).getFullYear()}
+                      </div>
+                    </Popup>
+                  </Marker>
+                );
+              })}
+            </MapContainer>
+          </div>
+        )}
       </main>
     </div>
   );

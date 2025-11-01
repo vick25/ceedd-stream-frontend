@@ -34,3 +34,21 @@ a {
   width: 602px;
   height: 700px;
 }
+/* select:hover {
+  background-color: #a0aec0;
+} */
+select,
+select::picker(select) {
+  appearance: none;
+}
+select::picker(select) {
+  background-color: whitesmoke;
+  border: 1px solid #a3a3a3;
+  border-radius: 10px;
+  padding: 0.53rem;
+  background-position: left center;
+  background-size: 10px;
+}
+select :hover {
+  background-color: #a0aec0;
+}

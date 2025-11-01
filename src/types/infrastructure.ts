@@ -47,16 +47,16 @@ export interface Infrastructure {
 export interface InfrastructureTypes {
   id: string;
   nom: string;
-  type_infrastructure_id: string;
+  type_infrastructure: Type_infrastructure;
   date_construction: string;
-  latitude: number;
-  longitude: number;
-  capacite: number;
+  latitude: string;
+  longitude: string;
+  capacite: string;
   unite: string;
-  zone_id: string;
-  client_id: string;
+  // zone: string;
+  client: Client;
 }
-export interface zone_contributive {
+export interface Zone_contributive {
   id: string;
   nom: string;
   superficie: number;
@@ -64,22 +64,22 @@ export interface zone_contributive {
   geom: string;
   shapefile_id: string;
 }
-export interface bailleur {
+export interface Bailleur {
   id: string;
   nom: string;
 }
-export interface finance {
+export interface Finance {
   id: string;
   infrastructure_id: string;
   date_financement: string;
   montant: String;
 }
-export interface type_infrastructure {
+export interface Type_infrastructure {
   id: string;
   nom: string;
   symbole: string;
 }
-export interface inspection {
+export interface Inspection {
   id: string;
   infrastructure_id: string;
   date: string;
@@ -87,7 +87,7 @@ export interface inspection {
   inspecteur: string;
   commentaire: string;
 }
-export interface photo {
+export interface Photo {
   id: string;
   entite_type: string;
   entite_id: string;
@@ -95,7 +95,7 @@ export interface photo {
   description: string;
   date_prise: string;
 }
-export interface client {
+export interface Client {
   id: string;
   nom: string;
   prenom: string;
