@@ -15,30 +15,10 @@ import React from "react";
 const page = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
-      {/* <div className="w-full max-w-md">
-        <div>
-          <div>
-            <h1>Connexion</h1>
-            <p>Connectez-vous à votre compte</p>
-          </div>
-          <div className="flex flex-col justify-center">
-            <form className="space-y-4">
-              <div>
-                <label htmlFor="username">Username</label>
-                <Input id="email" />
-              </div>
-              <div>
-                <label htmlFor="password">password:</label>
-                <Input id="password" type="password" placeholder="Saisir votre mon de passe" />
-              </div>
-            </form>
-          </div>
-        </div>
-      </div> */}
       <Card className="w-full max-w-md bg-white shadow-sm">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-left">Ceedd</CardTitle>
-          <CardDescription className="text-left">
+          <CardDescription className="text-left text-sm">
             Connectez-vous à votre compte administrateur
           </CardDescription>
         </CardHeader>

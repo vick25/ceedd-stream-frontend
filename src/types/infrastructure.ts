@@ -18,7 +18,11 @@ export type InfrastructureType =
   | "contributive_zone";
 
 export type InfrastructureStatus = "good" | "medium" | "bad";
-
+export type User = {
+  id: string;
+  username: string;
+  password: string;
+};
 export interface Infrastructure {
   id: string;
   name: string;
