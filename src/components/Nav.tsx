@@ -72,9 +72,11 @@ export function Nav() {
             <Heart className="w-4 h-4" />
             Donate
           </Button>
-          <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100">
-            Se connecter
-          </Button>
+          <Link href="/login">
+            <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100">
+              Se connecter
+            </Button>
+          </Link>
           <button
             onClick={() => setLocale(locale === "fr" ? "en" : "fr")}
             className="bg-gray-200 px-3 py-2 rounded"
