@@ -1,5 +1,4 @@
 import { User } from "@/types/infrastructure";
-import { LogOut } from "lucide-react";
 import { set } from "zod";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";

@@ -1,6 +1,6 @@
 export const auth = {
-  login: "/login",
-  register: "/register",
+  login: "/token/",
+  register: "/register/",
 };
 export const ceedd = {
   infrastructure: "/infrastructure/",
@@ -11,4 +11,5 @@ export const ceedd = {
   bailleur: "/bailleur/",
   zonecontributive: "/zonecontributive/",
   photo: "/photo/",
+  users: "/users",
 };
