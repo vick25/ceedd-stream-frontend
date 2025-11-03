@@ -1,13 +1,14 @@
 "use client";
-import Link from "next/link";
-import { clsx } from "clsx";
-import { Button } from "@radix-ui/themes";
-import { Heart, Menu, X } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+
 import { Locale, useTranslations } from "@/lib/i18n";
 import { useAppStore } from "@/store/appStore";
+import { Button } from "@radix-ui/themes";
+import { clsx } from "clsx";
+import { Heart, Menu, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,16 +45,15 @@ export function Nav() {
   return (
     <header
       //  Change 'sticky' to 'fixed' to take it out of the regular document flow
-      className={`w-full h-[var(--header-hm)]  lg:h-[var(--header-h)] fixed top-0 left-0 right-0  zindex transition-all duration-500 ${
-        isScrolled ? "border-b bg-white shadow-lg" : "bg-white py-3 sm:py-4"
-      }`}
+      className={`w-full h-[var(--header-hm)]  lg:h-[var(--header-h)] fixed top-0 left-0 right-0  zindex transition-all duration-500 ${isScrolled ? "border-b bg-white shadow-lg" : "bg-white py-3 sm:py-4"
+        }`}
     >
       <nav className="section max-w-9xl h-full flex items-center justify-between">
         <div className="flex items-center gap-14">
           <Link href="/" className="font-semibold text-lg no-underline">
             <Image
               src="/logo.jpg"
-              alt="logo"
+              alt="CEEDD logo"
               width={40}
               height={40}
               className="w-10 h-10 md:w-12 md:h-12 object-cover rounded-full"
@@ -126,9 +126,8 @@ export function Nav() {
 
         {/* mobile navigation */}
         <div
-          className={`lg:hidden  fixed z-50 inset-0 top-[56px] h-full sm:top-[64px] bg-white transform transition-transform duration-300 ${
-            isOpen ? "translate-x-0" : "translate-x-full"
-          } `}
+          className={`lg:hidden  fixed z-50 inset-0 top-[56px] h-full sm:top-[64px] bg-white transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
+            } `}
         >
           <div className="h-fit bg-white overflow-auto py-4 px-3 sm:py-6 sm:px-4">
             <div className="flex flex-col gap-2 sm:gap-4">
