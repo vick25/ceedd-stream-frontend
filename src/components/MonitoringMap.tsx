@@ -173,14 +173,18 @@ export default function MonitoringMapPage({
   heightClass = "h-[692px]",
   className = "",
 }: MonitoringMapProps) {
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<any[]>([]);
 
   const [allInfrastructures, setAllInfrastructures] = useState<any[]>([]);
-
+  const [filteredInfrastructures, setFilteredInfrastructures] = useState<any[]>(
+    []
+  );
+  const [typesDisponibles, setTypesDisponibles] = useState<any[]>([]);
+  const [typeSelectionne, setTypeSelectionne] = useState("Tous");
   //  Nouveaux états pour les tables de correspondance (Maps)
-  const [clientLabels, setClientLabels] = useState<Record<string, string>>({});
-  const [typeLabels, setTypeLabels] = useState<Record<string, string>>({});
-  const [zoneLabels, setZoneLabels] = useState<Record<string, string>>({});
+  // const [clientLabels, setClientLabels] = useState<Record<string, string>>({});
+  // const [typeLabels, setTypeLabels] = useState<Record<string, string>>({});
+  // const [zoneLabels, setZoneLabels] = useState<Record<string, string>>({});
 
   // Initialisation des mutations
   const mutationInfrastructure = useGetInfrastructure();
@@ -202,59 +206,92 @@ export default function MonitoringMapPage({
   // ----------------------------------------------------
   //  Traitement des données de référence (Création des maps)
   // ----------------------------------------------------
-
-  // Utilisation d'un seul useEffect pour tous les lookups pour la clarté
   useEffect(() => {
-    // Client Map
-    if (mutationCustomer.data && mutationCustomer.data.results) {
-      const map = mutationCustomer.data.results.reduce(
-        (acc: Record<string, string>, item: any) => {
-          acc[item.id.toString()] = item.nom;
-          return acc;
-        },
-        {}
-      );
-      setClientLabels(map);
-    }
-
-    // Type Infrastructure Map
     if (
-      mutationTypeInfrastructure.data &&
-      mutationTypeInfrastructure.data.results
+      mutationInfrastructure.data &&
+      mutationInfrastructure.data.results.length > 0
     ) {
-      const map = mutationTypeInfrastructure.data.results.reduce(
-        (acc: Record<string, string>, item: any) => {
-          acc[item.id.toString()] = item.nom;
-          return acc;
-        },
-        {}
-      );
-      setTypeLabels(map);
-    }
+      const convertInfrastructure = mutationInfrastructure.data.results;
 
-    // // Zone Map
-    // if (mutationZone.data && mutationZone.data.results) {
-    //   const map = mutationZone.data.results.reduce(
-    //     (acc: Record<string, string>, item: any) => {
-    //       // 💡 Attention: Le nom de la propriété peut être 'nom' ou 'zone' selon votre API.
-    //       acc[item.id.toString()] = item.nom || item.zone;
-    //       return acc;
-    //     },
-    //     {}
-    //   );
-    //   setZoneLabels(map);
-    // }
-  }, [mutationCustomer.data, mutationTypeInfrastructure.data]);
+      setAllInfrastructures(convertInfrastructure);
+      setFilteredInfrastructures(convertInfrastructure);
+      const types = [
+        ...new Set(
+          convertInfrastructure.map((i: any) => i.type_infrastructure.nom)
+        ),
+      ];
+      setTypesDisponibles(types);
+    }
+  }, [mutationInfrastructure.data]);
+  // console.log({ typesDisponibles });
+
+  const handleFilterChange = (e: any) => {
+    const selected = e.target.value;
+    setTypeSelectionne(selected);
+
+    if (selected === "Tous") {
+      setFilteredInfrastructures(allInfrastructures);
+    } else {
+      setFilteredInfrastructures(
+        allInfrastructures.filter(
+          (infra) => infra.type_infrastructure.nom === selected
+        )
+      );
+    }
+  };
+  console.log({ filteredInfrastructures });
+  // Utilisation d'un seul useEffect pour tous les lookups pour la clarté
+  // useEffect(() => {
+  //   // Client Map
+  //   if (mutationCustomer.data && mutationCustomer.data.results) {
+  //     const map = mutationCustomer.data.results.reduce(
+  //       (acc: Record<string, string>, item: any) => {
+  //         acc[item.id.toString()] = item.nom;
+  //         return acc;
+  //       },
+  //       {}
+  //     );
+  //     setClientLabels(map);
+  //   }
+
+  //   // Type Infrastructure Map
+  //   if (
+  //     mutationTypeInfrastructure.data &&
+  //     mutationTypeInfrastructure.data.results
+  //   ) {
+  //     const map = mutationTypeInfrastructure.data.results.reduce(
+  //       (acc: Record<string, string>, item: any) => {
+  //         acc[item.id.toString()] = item.nom;
+  //         return acc;
+  //       },
+  //       {}
+  //     );
+  //     setTypeLabels(map);
+  //   }
+
+  // // Zone Map
+  // if (mutationZone.data && mutationZone.data.results) {
+  //   const map = mutationZone.data.results.reduce(
+  //     (acc: Record<string, string>, item: any) => {
+  //       // 💡 Attention: Le nom de la propriété peut être 'nom' ou 'zone' selon votre API.
+  //       acc[item.id.toString()] = item.nom || item.zone;
+  //       return acc;
+  //     },
+  //     {}
+  //   );
+  //   setZoneLabels(map);
+  // }
+  // }, [mutationCustomer.data, mutationTypeInfrastructure.data]);
 
   // ----------------------------------------------------
   //  Traitement des données d'Infrastructure
   // ----------------------------------------------------
 
-  useEffect(() => {
-    if (mutationInfrastructure.data && mutationInfrastructure.data.results) {
-      setAllInfrastructures(mutationInfrastructure.data.results);
-    }
-  }, [mutationInfrastructure.data]);
+  // useEffect(() => {
+  //   if (mutationInfrastructure.data && mutationInfrastructure.data.results) {
+  //     setAllInfrastructures(mutationInfrastructure.data.results);
+  //   }
+  // }, [mutationInfrastructure.data]);
 
   const handleTypeToggle = (type: string) => {
     setSelectedTypes((prev) =>
@@ -270,18 +307,13 @@ export default function MonitoringMapPage({
     : allInfrastructures;
 
   //  Loader Combiné
-  const isPending =
-    mutationInfrastructure.isPending ||
-    mutationCustomer.isPending ||
-    mutationTypeInfrastructure.isPending;
+  const isPending = mutationInfrastructure.isPending;
 
   // mutationZone.isPending;
 
   //Vérifiez que l'infrastructure et au moins une des tables de référence sont prêtes
-  const isReady =
-    !isPending &&
-    allInfrastructures.length > 0 &&
-    Object.keys(clientLabels).length > 0; // Vérifiez qu'au moins une map est remplie
+  // const isReady = !isPending && allInfrastructures.length > 0;
+  // Object.keys(clientLabels).length > 0; // Vérifiez qu'au moins une map est remplie
 
   // Rendu JSX
 
@@ -292,22 +324,21 @@ export default function MonitoringMapPage({
       {/* Sidebar */}
       <aside className="w-80 hidden lg:block bg-white border-r p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
         <div className="mb-6">
-          <div className="font-semibold mb-2">Filter by</div>
+          <div className="font-semibold mb-2">Filtre par</div>
           <div className="flex flex-wrap gap-2">
-            {Object.entries(typeLabels).map(([type, label]) => (
-              <button
-                type="button"
-                key={type}
-                className={`px-3 py-1 rounded-full border ${
-                  selectedTypes.includes(type)
-                    ? typeColors[type] + " border-transparent"
-                    : "bg-gray-100 text-gray-700 border-gray-300"
-                }`}
-                onClick={() => handleTypeToggle(type)}
-              >
-                {label}
-              </button>
-            ))}
+            <select
+              id="typeSelect"
+              value={typeSelectionne}
+              onChange={handleFilterChange}
+              className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            >
+              <option value="Tous">Tous</option>
+              {typesDisponibles.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         {/* Ajoute d'autres filtres ici si besoin */}
@@ -315,7 +346,7 @@ export default function MonitoringMapPage({
 
       {/* Carte */}
       <main className="flex-1 h-full">
-        {isPending || !isReady ? (
+        {isPending ? (
           <Loader />
         ) : (
           <div className="w-full h-full">
@@ -328,12 +359,11 @@ export default function MonitoringMapPage({
                 attribution="&copy; OpenStreetMap"
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              {filtered.map((infra) => {
+              {filteredInfrastructures.map((infra) => {
                 //  UTILISATION DES MAPS DE JOINTURE POUR CHAQUE MARQUEUR
-                const typeNom =
-                  typeLabels[infra.type_infrastructure.toString()] || "N/A";
-                const clientNom =
-                  clientLabels[infra.client.toString()] || "N/A";
+
+                // const clientNom =
+                // clientLabels[infra.client.toString()] || "N/A";
                 // const zoneNom = zoneLabels[infra.zone.toString()] || "N/A";
                 return (
                   <Marker
@@ -341,14 +371,14 @@ export default function MonitoringMapPage({
                     position={[infra.latitude, infra.longitude]}
                     icon={markerIcon}
                   >
-                    <Popup>
-                      <div className="font-bold">{infra.name}</div>
+                    <Popup className="w-96">
+                      <div className="font-bold text-xl p-3">{infra.nom}</div>
                       <div className="text-xs mb-1">
-                        {/* {typeLabels[infra.type]} */} {typeNom}
+                        Nom du client:{infra.client.nom}
                       </div>
                       <div className="text-xs text-gray-500">
                         {/* {infra.owner}   */}
-                        {clientNom} <br />
+                        {/* {clientNom} <br /> */}
                         {/* {infra.avenue && (
                           <span>
                             {infra.avenue}

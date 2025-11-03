@@ -54,43 +54,6 @@ export default function InfrastructureTable() {
     }
   }, [mutationInfranstructure.data]);
 
-  // mutationZone.mutate,
-  // useEffect(() => {
-  //   if (mutationCustomer.data && mutationCustomer.data.results.length) {
-  //     const map = mutationCustomer.data.results.reduce(
-  //       (acc: Record<string, string>, item: any) => {
-  //         acc[item.id.toString()] = item.nom;
-  //         return acc;
-  //       },
-  //       {}
-  //     );
-  //     setClientNames(map);
-  //   }
-  // }, [mutationCustomer.data]);
-  // console.log("testtlsll", clientNames);
-  // useEffect(() => {
-  //   if (
-  //     mutationTypeInfrastructure.data &&
-  //     mutationTypeInfrastructure.data.results
-  //   ) {
-  //     const maps = mutationTypeInfrastructure.data.results.reduce(
-  //       (acc: Record<string, string>, item: any) => {
-  //         acc[item.id.toString()] = item.nom;
-  //         return acc;
-  //       },
-  //       {}
-  //     );
-  //     setTypeInfras(maps);
-  //   }
-  // }, [mutationTypeInfrastructure.data]);
-
-  // useEffect(() => {
-  //   if (mutationZone.data) {
-  //     const zoneC = mutationZone.data.zone;
-  //     setZone(zoneC);
-  //   }
-  // }, []);
-
   if (mutationInfranstructure.isPending) {
     return <Loader />;
   }
