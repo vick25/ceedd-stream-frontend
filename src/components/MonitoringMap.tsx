@@ -181,10 +181,6 @@ export default function MonitoringMapPage({
   );
   const [typesDisponibles, setTypesDisponibles] = useState<any[]>([]);
   const [typeSelectionne, setTypeSelectionne] = useState("Tous");
-  //  Nouveaux états pour les tables de correspondance (Maps)
-  // const [clientLabels, setClientLabels] = useState<Record<string, string>>({});
-  // const [typeLabels, setTypeLabels] = useState<Record<string, string>>({});
-  // const [zoneLabels, setZoneLabels] = useState<Record<string, string>>({});
 
   // Initialisation des mutations
   const mutationInfrastructure = useGetInfrastructure();
@@ -239,83 +235,13 @@ export default function MonitoringMapPage({
       );
     }
   };
-  console.log({ filteredInfrastructures });
-  // Utilisation d'un seul useEffect pour tous les lookups pour la clarté
-  // useEffect(() => {
-  //   // Client Map
-  //   if (mutationCustomer.data && mutationCustomer.data.results) {
-  //     const map = mutationCustomer.data.results.reduce(
-  //       (acc: Record<string, string>, item: any) => {
-  //         acc[item.id.toString()] = item.nom;
-  //         return acc;
-  //       },
-  //       {}
-  //     );
-  //     setClientLabels(map);
-  //   }
-
-  //   // Type Infrastructure Map
-  //   if (
-  //     mutationTypeInfrastructure.data &&
-  //     mutationTypeInfrastructure.data.results
-  //   ) {
-  //     const map = mutationTypeInfrastructure.data.results.reduce(
-  //       (acc: Record<string, string>, item: any) => {
-  //         acc[item.id.toString()] = item.nom;
-  //         return acc;
-  //       },
-  //       {}
-  //     );
-  //     setTypeLabels(map);
-  //   }
-
-  // // Zone Map
-  // if (mutationZone.data && mutationZone.data.results) {
-  //   const map = mutationZone.data.results.reduce(
-  //     (acc: Record<string, string>, item: any) => {
-  //       // 💡 Attention: Le nom de la propriété peut être 'nom' ou 'zone' selon votre API.
-  //       acc[item.id.toString()] = item.nom || item.zone;
-  //       return acc;
-  //     },
-  //     {}
-  //   );
-  //   setZoneLabels(map);
-  // }
-  // }, [mutationCustomer.data, mutationTypeInfrastructure.data]);
 
   // ----------------------------------------------------
   //  Traitement des données d'Infrastructure
   // ----------------------------------------------------
 
-  // useEffect(() => {
-  //   if (mutationInfrastructure.data && mutationInfrastructure.data.results) {
-  //     setAllInfrastructures(mutationInfrastructure.data.results);
-  //   }
-  // }, [mutationInfrastructure.data]);
-
-  const handleTypeToggle = (type: string) => {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
-  };
-
-  // filtre
-  const filtered = selectedTypes.length
-    ? allInfrastructures.filter((i) =>
-        selectedTypes.includes(i.type_infrastructure.toString())
-      )
-    : allInfrastructures;
-
   //  Loader Combiné
   const isPending = mutationInfrastructure.isPending;
-
-  // mutationZone.isPending;
-
-  //Vérifiez que l'infrastructure et au moins une des tables de référence sont prêtes
-  // const isReady = !isPending && allInfrastructures.length > 0;
-  // Object.keys(clientLabels).length > 0; // Vérifiez qu'au moins une map est remplie
-
-  // Rendu JSX
 
   return (
     <div
