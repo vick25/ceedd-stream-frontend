@@ -16,7 +16,7 @@ export const authService = {
       `${API_ENDPOINTS.apiAuth}${auth.login}`,
       credentials
     );
-    console.log(response);
+
     return response.data;
   },
   async register(data: RegisterData) {

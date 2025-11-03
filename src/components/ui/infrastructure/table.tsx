@@ -53,7 +53,7 @@ export default function InfrastructureTable() {
       setGetInfrastructure(convertInfrastructure);
     }
   }, [mutationInfranstructure.data]);
-  console.log({ getInfastructure });
+
   // mutationZone.mutate,
   // useEffect(() => {
   //   if (mutationCustomer.data && mutationCustomer.data.results.length) {

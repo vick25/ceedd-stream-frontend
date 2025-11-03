@@ -13,10 +13,11 @@ export const useGetCustomer = () => {
   return useMutation({
     mutationFn: serviceCustomer.getCustomerAll,
     onSuccess: (response) => {
-      console.log(response);
+      // console.log(response);
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
+      toast.error("Impossible d'afficher les clients");
     },
   });
 };

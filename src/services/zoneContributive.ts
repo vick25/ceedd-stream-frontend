@@ -1,11 +1,11 @@
-import { zone_contributive } from "@/types/infrastructure";
+import { Zone_contributive } from "@/types/infrastructure";
 import API from "./api";
 import { API_ENDPOINTS } from "@/utils/constants";
 import { ceedd } from "@/utils/apiRoutes";
 
 export const serviceZoneContributive = {
   async getZoneContributiveId(id: string): Promise<any> {
-    const response = await API.get<zone_contributive>(
+    const response = await API.get<Zone_contributive>(
       `${API_ENDPOINTS.api}${ceedd.zonecontributive}${id}/`
     );
     return response.data;
@@ -18,7 +18,7 @@ export const serviceZoneContributive = {
     return response.data;
   },
   async getZoneContributiveAll(): Promise<any> {
-    const response = await API.get<zone_contributive[]>(
+    const response = await API.get<Zone_contributive[]>(
       `${API_ENDPOINTS.api}${ceedd.zonecontributive}/`
     );
     return response.data;

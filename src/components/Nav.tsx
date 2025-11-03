@@ -6,12 +6,19 @@ import { Heart, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Locale, useTranslations } from "@/lib/i18n";
+import { useAppStore } from "@/store/appStore";
+import { useRouter } from "next/navigation";
 
 export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
+  const [token, setToken] = useState<string | null>(null);
+  const { logout } = useAppStore();
+  const router = useRouter();
+  // const token = localStorage.getItem("ceeAuth-token");
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -27,6 +34,13 @@ export function Nav() {
       document.body.style.overflow = "unset";
     }
   }, [isOpen]);
+
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem("ceeAuth-token");
+  //   setToken(storedToken);
+  // }, []);
+  // const isLogined = !!token;
+
   return (
     <header
       //  Change 'sticky' to 'fixed' to take it out of the regular document flow
@@ -72,6 +86,20 @@ export function Nav() {
             <Heart className="w-4 h-4" />
             Donate
           </Button>
+          {/* {isLogined ? (
+            <Button
+              className="px-3 py-2  rounded-lg bg-green-700 text-gray-100"
+              onClick={logout}
+            >
+              Se Deconnecter
+            </Button>
+          ) : (
+            <Link href="/login">
+              <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100">
+                Se connecter
+              </Button>
+            </Link>
+          )} */}
           <Link href="/login">
             <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100">
               Se connecter

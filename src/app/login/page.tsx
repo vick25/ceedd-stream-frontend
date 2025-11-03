@@ -43,7 +43,6 @@ const page = () => {
       ...prev,
       [name]: value,
     }));
-    console.log({ formData });
   };
   return (
     <div className="min-h-screen flex items-center justify-center">
