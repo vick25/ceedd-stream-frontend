@@ -24,6 +24,7 @@
     "next": "15.5.4",
     "next-themes": "^0.4.6",
     "papaparse": "^5.4.1",
+    "postcss": "^8.5.6",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-hook-form": "^7.65.0",
@@ -33,20 +34,19 @@
     "recharts": "^3.2.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.16",
     "zod": "^3.25.76",
     "zustand": "^4.5.7"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.16",
     "@types/leaflet": "^1.9.12",
     "@types/node": "^20.12.12",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.1",
-    "autoprefixer": "^10.4.19",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
-    "typescript": "^5.4.5",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "typescript": "^5.4.5"
   },
   "overrides": {
     "@types/react": "19.2.2",

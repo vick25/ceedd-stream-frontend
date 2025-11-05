@@ -259,7 +259,7 @@ export default function MonitoringMapPage({
       className={`w-full ${heightClass} flex bg-[#e7eaf6] overflow-hidden rounded-lg shadow-lg ${className}`}
     >
       {/* Sidebar */}
-      <aside className="w-80 hidden lg:block bg-white border-r p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
+      <aside className="w-80 hidden lg:block bg-white border-r border-r-gray-300 p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
         <div className="mb-6 flex  flex-col gap-2">
           <div>
             <div className="font-semibold mb-2">Filtre par</div>
@@ -280,7 +280,7 @@ export default function MonitoringMapPage({
             </div>
           </div>
           <div className="grid grid-cols-1  gap-6">
-            <div className="rounded-2xl border bg-white shadow-sm p-4 text-center">
+            <div className="rounded-2xl border border-gray-300 bg-white shadow-sm p-4 text-center">
               <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
                 Impact
               </h2>
@@ -291,7 +291,7 @@ export default function MonitoringMapPage({
                 Population
               </span>
             </div>
-            <div className="rounded-2xl border bg-white shadow-sm p-4 text-center">
+            <div className="rounded-2xl border  border-gray-300 bg-white shadow-sm p-4 text-center">
               <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
                 Actuellement en surveillance
               </h2>
@@ -302,7 +302,7 @@ export default function MonitoringMapPage({
                 Infrastructures
               </span>
             </div>
-            <div className="rounded-2xl border bg-white shadow-sm p-4 text-center">
+            <div className="rounded-2xl border  border-gray-300 bg-white shadow-sm p-4 text-center">
               <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
                 Statut
               </h2>
@@ -352,7 +352,7 @@ export default function MonitoringMapPage({
                   >
                     <Popup className={`w-96 ${poppins.className}`}>
                       <div className="flex flex-col gap-1 text-sm p-2">
-                        <h1 className="font-bold text-lg mb-1 border-b pb-1">
+                        <h1 className="font-bold text-lg mb-1 border-b border-b-gray-300 pb-1">
                           {infra.nom}
                         </h1>
 

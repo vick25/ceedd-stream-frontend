@@ -45,8 +45,10 @@ export function Nav() {
   return (
     <header
       //  Change 'sticky' to 'fixed' to take it out of the regular document flow
-      className={`w-full h-[var(--header-hm)]  lg:h-[var(--header-h)] fixed top-0 left-0 right-0  zindex transition-all duration-500 ${
-        isScrolled ? "border-b bg-white shadow-lg" : "bg-white py-3 sm:py-4"
+      className={`w-full h-(--header-hm)  lg:h-(--header-h) fixed top-0 left-0 right-0  zindex transition-all duration-500 ${
+        isScrolled
+          ? "border-b border-b-gray-100 bg-white shadow-lg"
+          : "bg-white py-3 sm:py-4 border-b border-b-gray-100"
       }`}
     >
       <nav className="section max-w-9xl h-full flex items-center justify-between">
@@ -95,10 +97,6 @@ export function Nav() {
           </div>
         </div>
         <div className="hidden lg:flex items-center gap-4">
-          {/* <Button className="px-3 py-2 md:text-sm rounded-lg bg-gradient-to-tr from-green-500 to-green-800 text-gray-100 flex items-center gap-3">
-            <Heart className="w-4 h-4" />
-            Donate
-          </Button> */}
           {useAuthentificated ? (
             <Button
               className="px-3 py-2  md:text-sm rounded-lg bg-green-700 text-gray-100"
@@ -135,7 +133,7 @@ export function Nav() {
 
         {/* mobile navigation */}
         <div
-          className={`lg:hidden  fixed z-50 inset-0 top-[56px] h-full sm:top-[64px] bg-white transform transition-transform duration-300 ${
+          className={`lg:hidden  fixed z-50 inset-0 top-14 h-full sm:top-16 bg-white transform transition-transform duration-300 ${
             isOpen ? "translate-x-0" : "translate-x-full"
           } `}
         >

@@ -64,7 +64,7 @@ export default function HomePage() {
       <section className="relative z-10 py-12 md:py-16 bg-[#f6f8fa]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Image */}
-          <div className="relative h-[320px] md:h-[520px] overflow-hidden rounded-2xl">
+          <div className="relative h-80 md:h-[520px] overflow-hidden rounded-2xl">
             <Image
               src="/bg.png"
               alt="Enfant récupérant de l'eau"
@@ -88,7 +88,7 @@ export default function HomePage() {
               by returning time for study, work, and imagination.
             </p>
             <div className="mt-6">
-              <button className="inline-flex items-center gap-2 rounded-xl bg-green-700  text-white px-6 py-3 shadow transition-colors">
+              <button className="inline-flex items-center gap-2 rounded-xl bg-green-700 ++ text-white px-6 py-3 shadow transition-colors">
                 <span>💧</span>
                 Learn More
               </button>
@@ -118,7 +118,7 @@ export default function HomePage() {
           </div>
 
           {/* Image */}
-          <div className="relative h-[320px] md:h-[520px] overflow-hidden rounded-2xl order-1 lg:order-2">
+          <div className="relative h-80 md:h-[520px] overflow-hidden rounded-2xl order-1 lg:order-2">
             <Image
               src="/bg.png"
               alt="Ressource en eau sécurisée"
@@ -131,9 +131,9 @@ export default function HomePage() {
       </section>
 
       {/* Appel au don */}
-      <section className="relative z-10 py-16 md:py-20 bg-gradient-to-br from-green-100 via-white to-blue-50">
+      <section className="relative z-10 py-16 md:py-20 bg-linear-to-br from-green-100 via-white to-blue-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border shadow-lg bg-white/60 backdrop-blur p-8 md:p-12 flex flex-col items-center text-center gap-6">
+          <div className="rounded-3xl border  border-gray-300 shadow-lg bg-white/60 backdrop-blur p-8 md:p-12 flex flex-col items-center text-center gap-6">
             <Image
               src="/logo.jpg"
               alt="CEEDD logo"
@@ -146,7 +146,7 @@ export default function HomePage() {
               provide access to clean, safe and reliable water across
               sub-Saharan Africa — one community at a time.
             </h2>
-            <button className="px-6 py-3 rounded-xl bg-gradient-to-tr from-green-500 via-green-600 to-green-700 text-white shadow hover:shadow-md transition-shadow">
+            <button className="px-6 py-3 rounded-xl bg-linear-to-tr from-green-500 via-green-600 to-green-700 text-white shadow hover:shadow-md transition-shadow">
               Donate
             </button>
           </div>
@@ -163,7 +163,7 @@ export default function HomePage() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
               <div className="max-w-3xl">
