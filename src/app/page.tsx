@@ -76,7 +76,7 @@ export default function HomePage() {
 
           {/* Texte */}
           <div className="rounded-2xl bg-white p-8 lg:p-12 shadow-sm flex flex-col justify-center text-center lg:text-left">
-            <h3 className="text-2xl md:text-3xl font-semibold mb-4 text-[#b94a3a]">
+            <h3 className="text-2xl md:text-3xl font-bold mb-4 ">
               Clean water is a whole family concern.
             </h3>
             <p className="text-gray-700 leading-relaxed">
@@ -88,7 +88,7 @@ export default function HomePage() {
               by returning time for study, work, and imagination.
             </p>
             <div className="mt-6">
-              <button className="inline-flex items-center gap-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 shadow transition-colors">
+              <button className="inline-flex items-center gap-2 rounded-xl bg-green-700  text-white px-6 py-3 shadow transition-colors">
                 <span>💧</span>
                 Learn More
               </button>
@@ -101,7 +101,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Texte */}
           <div className="rounded-2xl bg-white p-8 lg:p-12 shadow-sm order-2 lg:order-1 flex flex-col justify-center text-center lg:text-left">
-            <h3 className="text-2xl md:text-3xl font-semibold mb-4 text-[#b94a3a]">
+            <h3 className="text-2xl md:text-3xl font-bold mb-4 ">
               A gift of lasting opportunity.
             </h3>
             <p className="text-gray-700 leading-relaxed">
@@ -110,7 +110,7 @@ export default function HomePage() {
               <br />
               <br />
               Then, together,{" "}
-              <span className="text-blue-700 underline">
+              <span className="text--700 underline">
                 we'll make sure they keep working for years to come
               </span>
               , creating opportunity all along the way.

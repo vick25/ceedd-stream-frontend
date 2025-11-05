@@ -3,16 +3,27 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  CircleMarker,
+} from "react-leaflet";
 import { useGetInfrastructure } from "./hooks/useInfrastructure";
 import { useGetCustomer } from "./hooks/useCustomer";
 import { useAllTypeInfrastructure } from "./hooks/useTypeInfrastructure";
 import { useZoneContributive } from "./hooks/useZoneContributive";
 import Loader from "./Loader";
-
+import { Poppins } from "next/font/google";
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+});
 // Icône personnalisée pour les marqueurs
 const markerIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  // iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
@@ -257,7 +268,7 @@ export default function MonitoringMapPage({
                 id="typeSelect"
                 value={typeSelectionne}
                 onChange={handleFilterChange}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full"
               >
                 <option value="Tous">Tous</option>
                 {typesDisponibles.map((type) => (
@@ -329,25 +340,65 @@ export default function MonitoringMapPage({
                 // clientLabels[infra.client.toString()] || "N/A";
                 // const zoneNom = zoneLabels[infra.zone.toString()] || "N/A";
                 return (
-                  <Marker
+                  <CircleMarker
                     key={infra.id}
-                    position={[infra.latitude, infra.longitude]}
-                    icon={markerIcon}
+                    // position={[infra.latitude, infra.longitude]}
+                    center={[infra.latitude, infra.longitude]}
+                    radius={8}
+                    color="green"
+                    fillColor="skyblue"
+                    fillOpacity={0.8}
+                    // icon={markerIcon}
                   >
-                    <Popup className="w-96">
-                      <div className="font-bold text-xl p-3">{infra.nom}</div>
-                      <div className="text-xs mb-1">
-                        Nom du client:{infra.client.nom}
-                      </div>
-                      {/* <div className="text-xs text-gray-500">
-                        
-                      </div> */}
-                      <div className="text-xs mt-1">
-                        Capacité: {infra.capacity} {infra.unite} <br />
-                        Année:{new Date(infra.date_construction).getFullYear()}
+                    <Popup className={`w-96 ${poppins.className}`}>
+                      <div className="flex flex-col gap-1 text-sm p-2">
+                        <h1 className="font-bold text-lg mb-1 border-b pb-1">
+                          {infra.nom}
+                        </h1>
+
+                        {/* Client */}
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Client:
+                          </span>
+                          <span className="font-semibold text-gray-800">
+                            {infra.client.nom}
+                          </span>
+                        </div>
+
+                        {/* Type d'Infrastructure (Ajout recommandé pour la clarté) */}
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Type:
+                          </span>
+                          {/* Vous pouvez utiliser typeLabels pour traduire le type si nécessaire */}
+                          <span className="font-semibold text-gray-800">
+                            {infra.type_infrastructure?.nom}
+                          </span>
+                        </div>
+
+                        {/* Capacité */}
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Capacité:
+                          </span>
+                          <span className="font-semibold text-gray-800">
+                            {infra.capacity} {infra.unite}
+                          </span>
+                        </div>
+
+                        {/* Année */}
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Année:
+                          </span>
+                          <span className="font-semibold text-gray-800">
+                            {new Date(infra.date_construction).getFullYear()}
+                          </span>
+                        </div>
                       </div>
                     </Popup>
-                  </Marker>
+                  </CircleMarker>
                 );
               })}
             </MapContainer>
