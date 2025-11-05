@@ -2,12 +2,13 @@
 import Link from "next/link";
 import { clsx } from "clsx";
 import { Button } from "@radix-ui/themes";
-import { Heart, Menu, X } from "lucide-react";
+import { Heart, Menu, User, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Locale, useTranslations } from "@/lib/i18n";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
+import { isAUthentificated } from "@/utils/utils";
 
 export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -18,7 +19,7 @@ export function Nav() {
   const { logout } = useAppStore();
   const router = useRouter();
   // const token = localStorage.getItem("ceeAuth-token");
-
+  const useAuthentificated = isAUthentificated();
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -59,52 +60,60 @@ export function Nav() {
               className="w-10 h-10 md:w-12 md:h-12 object-cover rounded-full"
             />
           </Link>
-          <div className="hidden lg:flex items-center gap-4  md:gap-6">
+          <div className="hidden  lg:flex items-center md:gap-4   lg:gap-6">
             <Link
-              href="/donate"
-              className={clsx("hover:underline flex items-center gap-2")}
+              href="#"
+              className={clsx("hover:underline flex items-center gap-2 ")}
             >
               <Heart className="w-3 h-3" />
               Donate
             </Link>
-            <Link href="/waters" className={clsx("hover:underline")}>
+            <Link
+              href="#"
+              className={clsx("hover:underline md:text-sm  lg:text-base")}
+            >
               Pourquoi l'eau
             </Link>
-            <Link href="/services" className={clsx("hover:underline")}>
+            <Link
+              href="#"
+              className={clsx("hover:underline md:text-sm lg:text-base")}
+            >
               Nos services{" "}
             </Link>
-            <Link href="/abouts" className={clsx("hover:underline")}>
+            <Link
+              href="#"
+              className={clsx("hover:underline md:text-sm lg:text-base")}
+            >
               A propos de nous{" "}
             </Link>
-            <Link href="/contacts" className={clsx("hover:underline")}>
+            <Link
+              href="#"
+              className={clsx("hover:underline md:text-sm lg:text-base")}
+            >
               Contact{" "}
             </Link>
           </div>
         </div>
         <div className="hidden lg:flex items-center gap-4">
-          <Button className="px-3 py-2  rounded-lg bg-gradient-to-tr from-green-500 to-green-800 text-gray-100 flex items-center gap-3">
+          {/* <Button className="px-3 py-2 md:text-sm rounded-lg bg-gradient-to-tr from-green-500 to-green-800 text-gray-100 flex items-center gap-3">
             <Heart className="w-4 h-4" />
             Donate
-          </Button>
-          {/* {isLogined ? (
+          </Button> */}
+          {useAuthentificated ? (
             <Button
-              className="px-3 py-2  rounded-lg bg-green-700 text-gray-100"
+              className="px-3 py-2  md:text-sm rounded-lg bg-green-700 text-gray-100"
               onClick={logout}
             >
               Se Deconnecter
             </Button>
           ) : (
             <Link href="/login">
-              <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100">
-                Se connecter
+              <Button className="px-3 py-3  rounded-lg bg-green-700 text-gray-100 flex items-center gap-3">
+                <User /> <span className="font-bold">Connexion</span>
               </Button>
             </Link>
-          )} */}
-          <Link href="/login">
-            <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100">
-              Se connecter
-            </Button>
-          </Link>
+          )}
+
           <button
             onClick={() => setLocale(locale === "fr" ? "en" : "fr")}
             className="bg-gray-200 px-3 py-2 rounded"

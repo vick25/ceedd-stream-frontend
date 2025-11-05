@@ -32,17 +32,17 @@ const links = [
   {
     icon: Landmark,
     name: "bailleur",
-    href: "/dashboard/bailleur",
+    href: "/dashboard/bailleurs",
   },
   {
     icon: BadgeCheck,
     name: "Inspection",
-    href: "/dashboard/inspection",
+    href: "/dashboard/inspections",
   },
   {
     icon: Globe,
     name: "zonecontributive",
-    href: "/dashboard/zonecontributive",
+    href: "/dashboard/zonecontributives",
   },
   {
     icon: Images,

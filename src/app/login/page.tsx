@@ -44,6 +44,7 @@ const page = () => {
       [name]: value,
     }));
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-md bg-white shadow-sm">

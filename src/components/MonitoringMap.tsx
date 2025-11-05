@@ -249,22 +249,59 @@ export default function MonitoringMapPage({
     >
       {/* Sidebar */}
       <aside className="w-80 hidden lg:block bg-white border-r p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
-        <div className="mb-6">
-          <div className="font-semibold mb-2">Filtre par</div>
-          <div className="flex flex-wrap gap-2">
-            <select
-              id="typeSelect"
-              value={typeSelectionne}
-              onChange={handleFilterChange}
-              className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
-            >
-              <option value="Tous">Tous</option>
-              {typesDisponibles.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+        <div className="mb-6 flex  flex-col gap-2">
+          <div>
+            <div className="font-semibold mb-2">Filtre par</div>
+            <div className="flex flex-wrap gap-2">
+              <select
+                id="typeSelect"
+                value={typeSelectionne}
+                onChange={handleFilterChange}
+                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              >
+                <option value="Tous">Tous</option>
+                {typesDisponibles.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="grid grid-cols-1  gap-6">
+            <div className="rounded-2xl border bg-white shadow-sm p-4 text-center">
+              <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
+                Impact
+              </h2>
+              <p className="mt-2 text-xl md:text-xl font-bold text-gray-900">
+                900,900
+              </p>
+              <span className="mt-1 block text-sm text-gray-600">
+                Population
+              </span>
+            </div>
+            <div className="rounded-2xl border bg-white shadow-sm p-4 text-center">
+              <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
+                Actuellement en surveillance
+              </h2>
+              <p className="mt-2 text-xl md:text-xl font-bold text-gray-900">
+                2,630
+              </p>
+              <span className="mt-1 block text-sm text-gray-600">
+                Infrastructures
+              </span>
+            </div>
+            <div className="rounded-2xl border bg-white shadow-sm p-4 text-center">
+              <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
+                Statut
+              </h2>
+              <p className="mt-2 text-xl md:text-xl font-bold text-gray-900">
+                90%
+              </p>
+              <span className="mt-1 block text-sm text-gray-600">
+                Eau fonctionnelle
+              </span>
+            </div>
           </div>
         </div>
         {/* Ajoute d'autres filtres ici si besoin */}
@@ -302,23 +339,9 @@ export default function MonitoringMapPage({
                       <div className="text-xs mb-1">
                         Nom du client:{infra.client.nom}
                       </div>
-                      <div className="text-xs text-gray-500">
-                        {/* {infra.owner}   */}
-                        {/* {clientNom} <br /> */}
-                        {/* {infra.avenue && (
-                          <span>
-                            {infra.avenue}
-                            <br />
-                          </span>
-                        )} */}
-                        {/* {infra.quartier && (
-                          <span>
-                            {infra.quartier}
-                            <br />
-                          </span>
-                        )}
-                        {infra.commune} */}
-                      </div>
+                      {/* <div className="text-xs text-gray-500">
+                        
+                      </div> */}
                       <div className="text-xs mt-1">
                         Capacité: {infra.capacity} {infra.unite} <br />
                         Année:{new Date(infra.date_construction).getFullYear()}
