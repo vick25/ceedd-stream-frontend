@@ -260,7 +260,7 @@ export default function MonitoringMapPage({
     >
       {/* Sidebar */}
       <aside className="w-80 hidden lg:block bg-white border-r border-r-gray-300 p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
-        <div className="mb-6 flex  flex-col gap-2">
+        <div className="mb-6 flex  flex-col gap-2 space-y-4">
           <div>
             <div className="font-semibold mb-2">Filtre par</div>
             <div className="flex flex-wrap gap-2">
@@ -293,7 +293,7 @@ export default function MonitoringMapPage({
             </div>
             <div className="rounded-2xl border  border-gray-300 bg-white shadow-sm p-4 text-center">
               <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
-                Actuellement en surveillance
+                Nombre total
               </h2>
               <p className="mt-2 text-xl md:text-xl font-bold text-gray-900">
                 2,630

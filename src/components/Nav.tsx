@@ -53,14 +53,18 @@ export function Nav() {
     >
       <nav className="section max-w-9xl h-full flex items-center justify-between">
         <div className="flex items-center gap-14">
-          <Link href="/" className="font-semibold text-lg no-underline">
+          <Link
+            href="/"
+            className="font-semibold text-lg no-underline flex items-center gap-3"
+          >
             <Image
               src="/logo.jpg"
               alt="logo"
               width={40}
               height={40}
               className="w-10 h-10 md:w-12 md:h-12 object-cover rounded-full"
-            />
+            />{" "}
+            <span className="font-bold text-xl text-green-700">CEEDD</span>
           </Link>
           <div className="hidden  lg:flex items-center md:gap-4   lg:gap-6">
             <Link
@@ -102,11 +106,12 @@ export function Nav() {
               className="px-3 py-2  md:text-sm rounded-lg bg-green-700 text-gray-100"
               onClick={logout}
             >
+              <User />
               Se Deconnecter
             </Button>
           ) : (
             <Link href="/login">
-              <Button className="px-3 py-3  rounded-lg bg-green-700 text-gray-100 flex items-center gap-3">
+              <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100 flex items-center gap-3">
                 <User /> <span className="font-bold">Connexion</span>
               </Button>
             </Link>
