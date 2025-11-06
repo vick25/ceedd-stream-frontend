@@ -42,7 +42,7 @@ const page = (props: Props) => {
                 <PlusCircle /> Nouveau Client
               </Button>
             </DialogTrigger>
-            <DialogContent className=" bg-white z-[9999] ">
+            <DialogContent className=" bg-white z-9999 ">
               <DialogHeader>
                 <DialogTitle>Ajouter une Nouvelle Infrastructure </DialogTitle>
                 <DialogDescription>Voici les détails.</DialogDescription>

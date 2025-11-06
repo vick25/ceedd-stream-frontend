@@ -34,8 +34,11 @@ export default function RootLayout({
   // console.log(infrastructures.results);
 
   return (
-    <html lang="fr" className={poppins.className} suppressHydrationWarning>
-      <body className="min-h-screen bg-gray-50 text-gray-900">
+    <html lang="fr" className={poppins.className}>
+      <body
+        className="min-h-screen bg-gray-50 text-gray-900"
+        suppressHydrationWarning={true}
+      >
         <QueryProvider>
           {!hideLayout && <Nav />}
           {children}

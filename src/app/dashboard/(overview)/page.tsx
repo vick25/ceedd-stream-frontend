@@ -51,11 +51,11 @@ export default function DashboardPage() {
     };
   }, [infrastructures, clients]);
 
-  useEffect(() => {
-    if (!isAUthentificated()) {
-      router.push("/login");
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   if (!isAUthentificated()) {
+  //     router.push("/login");
+  //   }
+  // }, [router]);
   return (
     <div>
       <Nav />

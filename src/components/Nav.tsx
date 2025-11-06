@@ -19,7 +19,7 @@ export function Nav() {
   const { logout } = useAppStore();
   const router = useRouter();
   // const token = localStorage.getItem("ceeAuth-token");
-  const useAuthentificated = isAUthentificated();
+  // const useAuthentificated = isAUthentificated();
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -101,22 +101,28 @@ export function Nav() {
           </div>
         </div>
         <div className="hidden lg:flex items-center gap-4">
-          {useAuthentificated ? (
+          {/* {useAuthentificated ? (
             <Button
-              className="px-3 py-2  md:text-sm rounded-lg bg-green-700 text-gray-100"
+              className="px-3 py-2  md:text-sm rounded-lg bg-green-700 text-gray-100 flex items-center gap-3"
               onClick={logout}
             >
-              <User />
+              <User className="w-4 h-4" />
               Se Deconnecter
             </Button>
           ) : (
             <Link href="/login">
               <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100 flex items-center gap-3">
-                <User /> <span className="font-bold">Connexion</span>
+                <User className="w-4 h-4" />{" "}
+                <span className="font-bold">Connexion</span>
               </Button>
             </Link>
-          )}
-
+          )} */}
+          <Link href="/login">
+            <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100 flex items-center gap-3">
+              <User className="w-4 h-4" />{" "}
+              <span className="font-bold">Connexion</span>
+            </Button>
+          </Link>
           <button
             onClick={() => setLocale(locale === "fr" ? "en" : "fr")}
             className="bg-gray-200 px-3 py-2 rounded"

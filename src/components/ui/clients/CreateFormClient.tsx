@@ -16,7 +16,10 @@ import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCustomers } from "@/components/hooks/useCustomer";
+import {
+  useCreateCustomers,
+  useCustomers,
+} from "@/components/hooks/useCustomer";
 interface FormData {
   nom: string;
   postnom: string;
@@ -40,7 +43,7 @@ const clientSchema = z.object({
   numero: z.string().min(1, "Le  est requise"),
   telephone: z.string().min(1, "Le numero de telephone est requis"),
   email: z.string().email("Veuillez entrer une adresse e-mail valide."),
-  commune: z.string().min(1, "Veuillez veuillez entrer une addrese email."),
+  commune: z.string().min(1, "Veuillez veuillez entrer une commune."),
 });
 
 type ClientFormData = z.infer<typeof clientSchema>;
@@ -66,9 +69,10 @@ const CreateFormClient = () => {
     },
   });
 
-  const mutationCreateInfrastructure = useCreateInfrastructure();
-  const { data: typeInfrastructure, isLoading } = useTypeInfradtructures();
-  const { data: customersData, isLoading: isCustomersLoading } = useCustomers();
+  const [isClosed, setIsClosed] = useState(false);
+
+  const mutationCreateCustomers = useCreateCustomers();
+
   // const {data:zonesData,isLoading:isZonesLoading}=useZone()
 
   const onSubmit = async (data: ClientFormData) => {
@@ -85,7 +89,8 @@ const CreateFormClient = () => {
       email: data.email,
       commune: data.commune,
     };
-    await mutationCreateInfrastructure.mutateAsync(payload);
+    await mutationCreateCustomers.mutateAsync(payload);
+    setIsClosed(false);
   };
 
   return (
@@ -140,16 +145,21 @@ const CreateFormClient = () => {
             />
             {errors.prenom && <p>{errors.prenom?.message}</p>}
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col gap-4">
             <Label htmlFor="sexe">sexe </Label>
 
-            <input
+            <select
               id="sexe"
-              type="checkbox"
-              placeholder="sexe"
-              className="h-10"
               {...register("sexe")}
-            />
+              className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.sexe
+                  ? "border border-red-500 "
+                  : "border border-green-500"
+              }`}
+            >
+              <option value="M">M</option>
+              <option value="F">F</option>
+            </select>
             {errors.sexe && (
               <p className="text-red-500 text-sm ">{errors.sexe.message}</p>
             )}
@@ -176,6 +186,18 @@ const CreateFormClient = () => {
             />
             {errors.quartier && (
               <p className="text-red-500 text-sm">{errors.quartier.message}</p>
+            )}
+          </div>
+          <div>
+            <Label htmlFor="commune">commune : </Label>
+            <Input
+              id="commune"
+              type="text"
+              placeholder="commune"
+              {...register("commune")}
+            />
+            {errors.commune && (
+              <p className="text-red-500 text-sm">{errors.commune.message}</p>
             )}
           </div>
           <div>
@@ -217,12 +239,12 @@ const CreateFormClient = () => {
           <Button
             type="submit"
             size="lg"
-            disabled={mutationCreateInfrastructure.isPending}
+            disabled={mutationCreateCustomers.isPending}
             className="w-full bg-green-600 text-gray-200"
           >
-            {mutationCreateInfrastructure.isPending
+            {mutationCreateCustomers.isPending
               ? "Chargement..."
-              : " Ajouter Infrastructure"}
+              : " Ajouter Client"}
           </Button>
         </div>
       </form>
