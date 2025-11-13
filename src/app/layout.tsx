@@ -1,14 +1,15 @@
 "use client";
+
 // import { fetchInfrastructure } from "@/actions/streamData";
 import Footer from "@/components/Footer";
 import { Nav } from "@/components/Nav";
-import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 
 import QueryProvider from "@/components/QueryProvider";
-import { Toaster } from "react-hot-toast";
+import type { Metadata } from "next";
 import { usePathname } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -17,24 +18,27 @@ const poppins = Poppins({
 });
 
 // export const metadata: Metadata = {
-//   title: "CEEDD- Kinshasa",
+//   title: "CEEDD-STREAM",
 //   description:
 //     "CEEDD est une Organisation Non Gouvernementale de droit Congolais qui œuvre dans le secteur de la gestion durable des ressources environnementales pour le développement durable de la RDC",
 // };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const pathname = usePathname();
   const hideLayout = pathname === "/login";
   // const infrastructures = await fetchInfrastructure();
   // console.log(infrastructures.results);
 
   return (
-    <html lang="fr" className={poppins.className} suppressHydrationWarning>
-      <body className="min-h-screen bg-gray-50 text-gray-900">
+    <html lang="fr" className={poppins.className}>
+      <body
+        className="min-h-screen bg-gray-50 text-gray-900"
+        suppressHydrationWarning={true}
+      >
         <QueryProvider>
           {!hideLayout && <Nav />}
           {children}

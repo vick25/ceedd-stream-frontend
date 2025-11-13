@@ -3,13 +3,13 @@ export const auth = {
   register: "/register/",
 };
 export const ceedd = {
-  infrastructure: "/infrastructure/",
-  finance: "/finance/",
-  inspection: "/inspection/",
-  client: "/client/",
-  typeinfrastructure: "/typeinfrastructure",
-  bailleur: "/bailleur/",
-  zonecontributive: "/zonecontributive/",
-  photo: "/photo/",
+  infrastructure: "/infrastructures/",
+  finance: "/finances/",
+  inspection: "/inspections/",
+  client: "/clients/",
+  typeinfrastructure: "/types-infrastructure",
+  bailleur: "/bailleurs/",
+  zonecontributive: "/zones/",
+  photo: "/photos/",
   users: "/users",
 };

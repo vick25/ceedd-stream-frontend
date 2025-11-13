@@ -44,19 +44,22 @@ const page = () => {
       [name]: value,
     }));
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-md bg-white shadow-sm">
+      <Card className="w-full max-w-md bg-white shadow-sm border border-gray-300">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-left">Ceedd</CardTitle>
-          <CardDescription className="text-left text-sm">
+          <CardDescription className="text-left text-sm text-gray-700">
             Connectez-vous à votre compte administrateur
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-2">
-              <Label htmlFor="username">Username:</Label>
+              <Label htmlFor="username" className="text-gray-700">
+                Username:
+              </Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -64,7 +67,7 @@ const page = () => {
                   name="username"
                   type="text"
                   placeholder="username"
-                  className="pl-9"
+                  className="pl-9 border border-gray-300"
                   value={formData.username}
                   onChange={handleChange}
                   required
@@ -72,7 +75,9 @@ const page = () => {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Mot de passe</Label>
+              <Label htmlFor="password" className="text-gray-700">
+                Mot de passe
+              </Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -80,7 +85,7 @@ const page = () => {
                   name="password"
                   type="password"
                   placeholder="*******"
-                  className="pl-9"
+                  className="pl-9 border border-gray-300"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -97,14 +102,14 @@ const page = () => {
           </form>
         </CardContent>
         <CardFooter>
-          <Button
+          {/* <Button
             type="button"
             variant="outline"
             className="w-full"
             // onClick={() => router.push("/reset-password")}
           >
             Mot de passe oublié ?
-          </Button>
+          </Button> */}
         </CardFooter>
       </Card>
     </div>

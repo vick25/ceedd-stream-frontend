@@ -1,10 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import "tailwindcss";
 :root {
   --header-h: 74px;
   --header-hm: 64px;
+  --menu-mobile: 56px;
+  --menu-mobil-sm: 64px;
 }
 
 html,

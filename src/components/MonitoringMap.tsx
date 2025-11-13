@@ -3,16 +3,28 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  CircleMarker,
+} from "react-leaflet";
 import { useGetInfrastructure } from "./hooks/useInfrastructure";
 import { useGetCustomer } from "./hooks/useCustomer";
 import { useAllTypeInfrastructure } from "./hooks/useTypeInfrastructure";
 import { useZoneContributive } from "./hooks/useZoneContributive";
 import Loader from "./Loader";
-
+import { Poppins } from "next/font/google";
+import Image from "next/image";
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+});
 // Icône personnalisée pour les marqueurs
 const markerIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  // iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
@@ -173,14 +185,14 @@ export default function MonitoringMapPage({
   heightClass = "h-[692px]",
   className = "",
 }: MonitoringMapProps) {
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<any[]>([]);
 
   const [allInfrastructures, setAllInfrastructures] = useState<any[]>([]);
-
-  //  Nouveaux états pour les tables de correspondance (Maps)
-  const [clientLabels, setClientLabels] = useState<Record<string, string>>({});
-  const [typeLabels, setTypeLabels] = useState<Record<string, string>>({});
-  const [zoneLabels, setZoneLabels] = useState<Record<string, string>>({});
+  const [filteredInfrastructures, setFilteredInfrastructures] = useState<any[]>(
+    []
+  );
+  const [typesDisponibles, setTypesDisponibles] = useState<any[]>([]);
+  const [typeSelectionne, setTypeSelectionne] = useState("Tous");
 
   // Initialisation des mutations
   const mutationInfrastructure = useGetInfrastructure();
@@ -202,112 +214,106 @@ export default function MonitoringMapPage({
   // ----------------------------------------------------
   //  Traitement des données de référence (Création des maps)
   // ----------------------------------------------------
-
-  // Utilisation d'un seul useEffect pour tous les lookups pour la clarté
   useEffect(() => {
-    // Client Map
-    if (mutationCustomer.data && mutationCustomer.data.results) {
-      const map = mutationCustomer.data.results.reduce(
-        (acc: Record<string, string>, item: any) => {
-          acc[item.id.toString()] = item.nom;
-          return acc;
-        },
-        {}
-      );
-      setClientLabels(map);
-    }
-
-    // Type Infrastructure Map
     if (
-      mutationTypeInfrastructure.data &&
-      mutationTypeInfrastructure.data.results
+      mutationInfrastructure.data &&
+      mutationInfrastructure.data.results.length > 0
     ) {
-      const map = mutationTypeInfrastructure.data.results.reduce(
-        (acc: Record<string, string>, item: any) => {
-          acc[item.id.toString()] = item.nom;
-          return acc;
-        },
-        {}
-      );
-      setTypeLabels(map);
-    }
+      const convertInfrastructure = mutationInfrastructure.data.results;
 
-    // // Zone Map
-    // if (mutationZone.data && mutationZone.data.results) {
-    //   const map = mutationZone.data.results.reduce(
-    //     (acc: Record<string, string>, item: any) => {
-    //       // 💡 Attention: Le nom de la propriété peut être 'nom' ou 'zone' selon votre API.
-    //       acc[item.id.toString()] = item.nom || item.zone;
-    //       return acc;
-    //     },
-    //     {}
-    //   );
-    //   setZoneLabels(map);
-    // }
-  }, [mutationCustomer.data, mutationTypeInfrastructure.data]);
+      setAllInfrastructures(convertInfrastructure);
+      setFilteredInfrastructures(convertInfrastructure);
+      const types = [
+        ...new Set(
+          convertInfrastructure.map((i: any) => i.type_infrastructure.nom)
+        ),
+      ];
+      setTypesDisponibles(types);
+    }
+  }, [mutationInfrastructure.data]);
+  // console.log({ typesDisponibles });
+
+  const handleFilterChange = (e: any) => {
+    const selected = e.target.value;
+    setTypeSelectionne(selected);
+
+    if (selected === "Tous") {
+      setFilteredInfrastructures(allInfrastructures);
+    } else {
+      setFilteredInfrastructures(
+        allInfrastructures.filter(
+          (infra) => infra.type_infrastructure.nom === selected
+        )
+      );
+    }
+  };
 
   // ----------------------------------------------------
   //  Traitement des données d'Infrastructure
   // ----------------------------------------------------
 
-  useEffect(() => {
-    if (mutationInfrastructure.data && mutationInfrastructure.data.results) {
-      setAllInfrastructures(mutationInfrastructure.data.results);
-    }
-  }, [mutationInfrastructure.data]);
-
-  const handleTypeToggle = (type: string) => {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
-  };
-
-  // filtre
-  const filtered = selectedTypes.length
-    ? allInfrastructures.filter((i) =>
-        selectedTypes.includes(i.type_infrastructure.toString())
-      )
-    : allInfrastructures;
-
   //  Loader Combiné
-  const isPending =
-    mutationInfrastructure.isPending ||
-    mutationCustomer.isPending ||
-    mutationTypeInfrastructure.isPending;
-
-  // mutationZone.isPending;
-
-  //Vérifiez que l'infrastructure et au moins une des tables de référence sont prêtes
-  const isReady =
-    !isPending &&
-    allInfrastructures.length > 0 &&
-    Object.keys(clientLabels).length > 0; // Vérifiez qu'au moins une map est remplie
-
-  // Rendu JSX
+  const isPending = mutationInfrastructure.isPending;
 
   return (
     <div
       className={`w-full ${heightClass} flex bg-[#e7eaf6] overflow-hidden rounded-lg shadow-lg ${className}`}
     >
       {/* Sidebar */}
-      <aside className="w-80 hidden lg:block bg-white border-r p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
-        <div className="mb-6">
-          <div className="font-semibold mb-2">Filter by</div>
-          <div className="flex flex-wrap gap-2">
-            {Object.entries(typeLabels).map(([type, label]) => (
-              <button
-                type="button"
-                key={type}
-                className={`px-3 py-1 rounded-full border ${
-                  selectedTypes.includes(type)
-                    ? typeColors[type] + " border-transparent"
-                    : "bg-gray-100 text-gray-700 border-gray-300"
-                }`}
-                onClick={() => handleTypeToggle(type)}
+      <aside className="w-80 hidden lg:block bg-white border-r border-r-gray-300 p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
+        <div className="mb-6 flex  flex-col gap-2 space-y-4">
+          <div>
+            <div className="font-semibold mb-2">Filtre par</div>
+            <div className="flex flex-wrap gap-2">
+              <select
+                id="typeSelect"
+                value={typeSelectionne}
+                onChange={handleFilterChange}
+                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full"
               >
-                {label}
-              </button>
-            ))}
+                <option value="Tous">Tous</option>
+                {typesDisponibles.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="grid grid-cols-1  gap-6">
+            <div className="rounded-2xl border border-gray-300 bg-white shadow-sm p-4 text-center">
+              <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
+                Impact
+              </h2>
+              <p className="mt-2 text-xl md:text-xl font-bold text-gray-900">
+                900,900
+              </p>
+              <span className="mt-1 block text-sm text-gray-600">
+                Population
+              </span>
+            </div>
+            <div className="rounded-2xl border  border-gray-300 bg-white shadow-sm p-4 text-center">
+              <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
+                Nombre total
+              </h2>
+              <p className="mt-2 text-xl md:text-xl font-bold text-gray-900">
+                2,630
+              </p>
+              <span className="mt-1 block text-sm text-gray-600">
+                Infrastructures
+              </span>
+            </div>
+            <div className="rounded-2xl border  border-gray-300 bg-white shadow-sm p-4 text-center">
+              <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
+                Statut
+              </h2>
+              <p className="mt-2 text-xl md:text-xl font-bold text-gray-900">
+                90%
+              </p>
+              <span className="mt-1 block text-sm text-gray-600">
+                Eau fonctionnelle
+              </span>
+            </div>
           </div>
         </div>
         {/* Ajoute d'autres filtres ici si besoin */}
@@ -315,7 +321,7 @@ export default function MonitoringMapPage({
 
       {/* Carte */}
       <main className="flex-1 h-full">
-        {isPending || !isReady ? (
+        {isPending ? (
           <Loader />
         ) : (
           <div className="w-full h-full">
@@ -328,47 +334,141 @@ export default function MonitoringMapPage({
                 attribution="&copy; OpenStreetMap"
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              {filtered.map((infra) => {
+              {filteredInfrastructures.map((infra) => {
                 //  UTILISATION DES MAPS DE JOINTURE POUR CHAQUE MARQUEUR
-                const typeNom =
-                  typeLabels[infra.type_infrastructure.toString()] || "N/A";
-                const clientNom =
-                  clientLabels[infra.client.toString()] || "N/A";
+
+                // const clientNom =
+                // clientLabels[infra.client.toString()] || "N/A";
                 // const zoneNom = zoneLabels[infra.zone.toString()] || "N/A";
                 return (
-                  <Marker
+                  <CircleMarker
                     key={infra.id}
-                    position={[infra.latitude, infra.longitude]}
-                    icon={markerIcon}
+                    // position={[infra.latitude, infra.longitude]}
+                    center={[infra.latitude, infra.longitude]}
+                    radius={8}
+                    color="green"
+                    fillColor="skyblue"
+                    fillOpacity={0.8}
+                    // icon={markerIcon}
                   >
-                    <Popup>
-                      <div className="font-bold">{infra.name}</div>
-                      <div className="text-xs mb-1">
-                        {/* {typeLabels[infra.type]} */} {typeNom}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {/* {infra.owner}   */}
-                        {clientNom} <br />
-                        {/* {infra.avenue && (
-                          <span>
-                            {infra.avenue}
-                            <br />
+                    {/* <Popup className={`w-500px ${poppins.className} z-50`}>
+                      <div className="flex flex-col gap-1 text-sm p-2">
+                        <h1 className="font-bold text-lg mb-1 border-b border-b-gray-300 pb-1">
+                          {infra.nom}
+                        </h1>
+
+                      
+                        <div className="flex justify-between">
+                          <Image
+                            src="/1.jpg"
+                            alt="image infrastructure"
+                            width={350}
+                            height={80}
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Adresse:
                           </span>
-                        )} */}
-                        {/* {infra.quartier && (
-                          <span>
-                            {infra.quartier}
-                            <br />
+                          <span className="font-semibold text-gray-800">
+                            {infra.client.avenue},{infra.client.commune}
                           </span>
-                        )}
-                        {infra.commune} */}
+                        </div>
+
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Type:
+                          </span>
+                      
+                          <span className="font-semibold text-gray-800">
+                            {infra.type_infrastructure?.nom}
+                          </span>
+                        </div>
+
+                    
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Capacité:
+                          </span>
+                          <span className="font-semibold text-gray-800">
+                            {infra.capacite} {infra.unite}
+                          </span>
+                        </div>
+
+                      
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Année:
+                          </span>
+                          <span className="font-semibold text-gray-800">
+                            {new Date(infra.date_construction).getFullYear()}
+                          </span>
+                        </div>
                       </div>
-                      <div className="text-xs mt-1">
-                        Capacité: {infra.capacity} {infra.unite} <br />
-                        Année:{new Date(infra.date_construction).getFullYear()}
+                    </Popup> */}
+                    <Popup
+                      offset={[0, -10]} // <-- Ajout de l'offset pour remonter le popup
+                      className={`w-96 ${poppins.className} z-50`} // <-- Ajustement de la largeur
+                    >
+                      <div className="flex flex-col gap-1 text-sm p-2">
+                        <h1 className="font-bold text-lg mb-1 border-b border-b-gray-300 pb-1">
+                          {infra.nom}
+                        </h1>
+
+                        {/* Modification du conteneur Image pour l'affichage Next.js en remplissage */}
+                        <div className="relative w-full h-40 mb-2 rounded-lg overflow-hidden border border-gray-200">
+                          <Image
+                            src="/1.jpg"
+                            alt="image infrastructure"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 600px) 100vw, 350px"
+                          />
+                        </div>
+
+                        {/* Client */}
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Adresse:
+                          </span>
+                          <span className="font-semibold text-gray-800 text-sm">
+                            {infra.client.avenue},{infra.client.commune}
+                          </span>
+                        </div>
+
+                        {/* Type d'Infrastructure */}
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Type:
+                          </span>
+                          <span className="font-semibold text-gray-800 text-sm">
+                            {infra.type_infrastructure?.nom}
+                          </span>
+                        </div>
+
+                        {/* Capacité */}
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Capacité:
+                          </span>
+                          <span className="font-semibold text-gray-800 text-sm">
+                            {infra.capacite} {infra.unite}
+                          </span>
+                        </div>
+
+                        {/* Année */}
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Année:
+                          </span>
+                          <span className="font-semibold text-gray-800 text-sm">
+                            {new Date(infra.date_construction).getFullYear()}
+                          </span>
+                        </div>
                       </div>
                     </Popup>
-                  </Marker>
+                  </CircleMarker>
                 );
               })}
             </MapContainer>

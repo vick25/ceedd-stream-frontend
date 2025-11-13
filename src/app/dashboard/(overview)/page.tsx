@@ -7,16 +7,21 @@ import { Heatmap } from "@/components/charts/Heatmap";
 import { InfrastructureMap } from "@/components/InfrastructureMap";
 // import { DashboardStats } from "@/types/infrastructure";
 import { useTranslations, Locale } from "@/lib/i18n";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useInfrastructures } from "@/components/hooks/useInfrastructure";
 import { Building, Building2, User } from "lucide-react";
 import { useCustomers } from "@/components/hooks/useCustomer";
 
+import { useRouter } from "next/navigation";
+import { useAppStore } from "@/store/appStore";
+
 export default function DashboardPage() {
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
+  const { user, _hasHydrated, isAuthenticated } = useAppStore();
   // const infrastructures = useInfrastructureStore((s) => s.infrastructures);
   const { data: infrastructures } = useInfrastructures();
+  const router = useRouter();
 
   const { data: clients } = useCustomers();
 
@@ -47,64 +52,12 @@ export default function DashboardPage() {
       totalClients: ClientsCount,
     };
   }, [infrastructures, clients]);
-  // const stats: DashboardStats = useMemo(() => {
-  //   // const total = infrastructures.length;
-  //   const byType = infrastructures.reduce((acc: any, infra: any) => {
-  //     acc[infra.type] = (acc[infra.type] || 0) + 1;
-  //     return acc;
-  //   }, {} as Record<string, number>);
 
-  //   const byStatus = infrastructures.reduce((acc: any, infra: any) => {
-  //     acc[infra.status] = (acc[infra.status] || 0) + 1;
-  //     return acc;
-  //   }, {} as Record<string, number>);
-
-  //   const byCommune = infrastructures.reduce((acc: any, infra: any) => {
-  //     acc[infra.commune] = (acc[infra.commune] || 0) + 1;
-  //     return acc;
-  //   }, {} as Record<string, number>);
-
-  //   const totalCapacity = infrastructures.reduce(
-  //     (sum: any, infra: any) => sum + (infra.capacity || 0),
-  //     0
-  //   );
-  //   const totalInvestment = infrastructures.reduce(
-  //     (sum: any, infra: any) => sum + (infra.totalCost || 0),
-  //     0
-  //   );
-
-  //   return {
-  //     // totalInfrastructures: total,
-  //     byType,
-  //     byStatus,
-  //     byCommune,
-  //     coveragePercentage: 75, // Mock data
-  //     populationImpacted: 125000, // Mock data
-  //     totalCapacity,
-  //     totalInvestment,
-  //   };
-  // }, [infrastructures]);
-
-  // const typeChartData = Object.entries(stats.byType).map(([type, count]) => ({
-  //   name: t(`infrastructure.types.${type}`),
-  //   value: count,
-  //   color: getTypeColor(type),
-  // }));
-
-  // const statusChartData = Object.entries(stats.byStatus).map(
-  //   ([status, count]) => ({
-  //     name: t(`infrastructure.status.${status}`),
-  //     value: count,
-  //     color: getStatusColor(status),
-  //   })
-  // );
-
-  // const communeData = Object.entries(stats.byCommune).map(
-  //   ([commune, count]) => ({
-  //     commune,
-  //     infrastructures: count,
-  //   })
-  // );
+  useEffect(() => {
+    if (_hasHydrated && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [_hasHydrated, isAuthenticated, router]);
 
   return (
     <div>

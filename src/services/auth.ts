@@ -25,4 +25,8 @@ export const authService = {
       data
     );
   },
+  async logout() {
+    localStorage.removeItem("ceeAuth-token");
+    return Promise.resolve();
+  },
 };
