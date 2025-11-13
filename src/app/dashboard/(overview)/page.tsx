@@ -13,10 +13,12 @@ import { Building, Building2, User } from "lucide-react";
 import { useCustomers } from "@/components/hooks/useCustomer";
 
 import { useRouter } from "next/navigation";
+import { useAppStore } from "@/store/appStore";
 
 export default function DashboardPage() {
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
+  const { user, _hasHydrated, isAuthenticated } = useAppStore();
   // const infrastructures = useInfrastructureStore((s) => s.infrastructures);
   const { data: infrastructures } = useInfrastructures();
   const router = useRouter();
@@ -51,11 +53,12 @@ export default function DashboardPage() {
     };
   }, [infrastructures, clients]);
 
-  // useEffect(() => {
-  //   if (!isAUthentificated()) {
-  //     router.push("/login");
-  //   }
-  // }, [router]);
+  useEffect(() => {
+    if (_hasHydrated && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [_hasHydrated, isAuthenticated, router]);
+
   return (
     <div>
       <Nav />

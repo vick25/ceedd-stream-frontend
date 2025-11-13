@@ -6,11 +6,12 @@ import toast from "react-hot-toast";
 
 export const useAuth = () => {
   const setUser = useAppStore((state) => state.setUser);
+  // console.log(setUser);
   return useMutation({
     mutationFn: (credentials: any) => authService.login(credentials),
-    onSuccess: ({ access }: any) => {
-      // setUser(response.user);
-      // localStorage.setItem("ceeAuth-token", access);
+    onSuccess: ({ user, access }: any) => {
+      setUser(user);
+      localStorage.setItem("ceeAuth-token", access);
       toast.success("Connexion réussie!");
     },
     onError: (error: any) => {

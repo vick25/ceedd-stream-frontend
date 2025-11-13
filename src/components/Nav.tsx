@@ -15,7 +15,7 @@ export function Nav() {
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
   const [token, setToken] = useState<string | null>(null);
-  const { logout } = useAppStore();
+  const { logout, user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
   // const token = localStorage.getItem("ceeAuth-token");
   // const useAuthentificated = isAUthentificated();
@@ -100,7 +100,7 @@ export function Nav() {
           </div>
         </div>
         <div className="hidden lg:flex items-center gap-4">
-          {/* {useAuthentificated ? (
+          {_hasHydrated && isAuthenticated && user ? (
             <Button
               className="px-3 py-2  md:text-sm rounded-lg bg-green-700 text-gray-100 flex items-center gap-3"
               onClick={logout}
@@ -115,13 +115,8 @@ export function Nav() {
                 <span className="font-bold">Connexion</span>
               </Button>
             </Link>
-          )} */}
-          <Link href="#">
-            <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100 flex items-center gap-3">
-              <User className="w-4 h-4" />{" "}
-              <span className="font-bold">Connexion</span>
-            </Button>
-          </Link>
+          )}
+
           <button
             onClick={() => setLocale(locale === "fr" ? "en" : "fr")}
             className="bg-gray-200 px-3 py-2 rounded"

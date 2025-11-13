@@ -7,7 +7,7 @@ interface AppState {
   isAuthenticated: boolean;
   _hasHydrated: boolean;
 
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
   setHasHydrated: () => void;
   logout: () => void;
 }
@@ -22,7 +22,7 @@ export const useAppStore = create<AppState>()(
         setUser: (user) =>
           set(
             {
-              user: null,
+              user,
               isAuthenticated: !!user,
             },
             false,
