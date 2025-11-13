@@ -101,13 +101,20 @@ export function Nav() {
         </div>
         <div className="hidden lg:flex items-center gap-4">
           {_hasHydrated && isAuthenticated && user ? (
-            <Button
-              className="px-3 py-2  md:text-sm rounded-lg bg-green-700 text-gray-100 flex items-center gap-3"
-              onClick={logout}
-            >
-              <User className="w-4 h-4" />
-              Se Deconnecter
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button
+                className="px-3 py-2 cursor-pointer   md:text-sm rounded-lg bg-green-700 text-gray-100 flex items-center gap-3"
+                onClick={logout}
+              >
+                <User className="w-4 h-4" />
+                Se Deconnecter
+              </Button>
+              <Link href="/dashboard" className="cursor-pointer">
+                <Button className="px-3 py-2 cursor-pointer   md:text-sm rounded-lg bg-green-700 text-gray-100 flex items-center gap-3">
+                  Dashboard
+                </Button>
+              </Link>
+            </div>
           ) : (
             <Link href="/login">
               <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100 flex items-center gap-3">

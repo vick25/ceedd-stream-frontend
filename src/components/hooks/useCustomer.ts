@@ -39,3 +39,15 @@ export const useCreateCustomers = () => {
     },
   });
 };
+export const useUpdateCustomers = () => {
+  return useMutation({
+    mutationFn: ({ data, id }: { data: any; id: any }) =>
+      serviceCustomer.updateCustomer(data, id),
+    onSuccess: (response) => {
+      toast.success("Mise à jour du client réalisé avec success");
+    },
+    onError: (error) => {
+      toast.error("Impossible de mettre à jour un client");
+    },
+  });
+};

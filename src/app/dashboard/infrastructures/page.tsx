@@ -55,7 +55,7 @@ const page = (props: Props) => {
               <Button
                 size="lg"
                 variant="outline"
-                className="hover:bg-blue-50 px-3 py-2 flex gap-4"
+                className="hover:bg-blue-50 px-3 py-2 flex gap-4 border border-gray-300"
               >
                 <PlusCircle /> Nouvelle infrastructure
               </Button>
@@ -65,7 +65,7 @@ const page = (props: Props) => {
                 <DialogTitle>Ajouter une Nouvelle Infrastructure </DialogTitle>
                 <DialogDescription>Voici les détails.</DialogDescription>
               </DialogHeader>
-              <div className="space-y-4 py-4 overflow-y-auto max-h-[70vh]">
+              <div className="space-y-4 py-4  overflow-y-auto max-h-[70vh]">
                 <CreateformInfrastructure />
               </div>
             </DialogContent>
