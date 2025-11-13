@@ -10,7 +10,7 @@ export const useAuth = () => {
     mutationFn: (credentials: any) => authService.login(credentials),
     onSuccess: ({ access }: any) => {
       // setUser(response.user);
-      localStorage.setItem("ceeAuth-token", access);
+      // localStorage.setItem("ceeAuth-token", access);
       toast.success("Connexion réussie!");
     },
     onError: (error: any) => {

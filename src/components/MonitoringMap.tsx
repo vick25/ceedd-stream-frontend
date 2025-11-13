@@ -16,6 +16,7 @@ import { useAllTypeInfrastructure } from "./hooks/useTypeInfrastructure";
 import { useZoneContributive } from "./hooks/useZoneContributive";
 import Loader from "./Loader";
 import { Poppins } from "next/font/google";
+import Image from "next/image";
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
@@ -350,29 +351,98 @@ export default function MonitoringMapPage({
                     fillOpacity={0.8}
                     // icon={markerIcon}
                   >
-                    <Popup className={`w-96 ${poppins.className}`}>
+                    {/* <Popup className={`w-500px ${poppins.className} z-50`}>
                       <div className="flex flex-col gap-1 text-sm p-2">
                         <h1 className="font-bold text-lg mb-1 border-b border-b-gray-300 pb-1">
                           {infra.nom}
                         </h1>
 
-                        {/* Client */}
+                      
+                        <div className="flex justify-between">
+                          <Image
+                            src="/1.jpg"
+                            alt="image infrastructure"
+                            width={350}
+                            height={80}
+                            className="object-cover"
+                          />
+                        </div>
                         <div className="flex justify-between">
                           <span className="font-medium text-gray-600">
-                            Client:
+                            Adresse:
                           </span>
                           <span className="font-semibold text-gray-800">
-                            {infra.client.nom}
+                            {infra.client.avenue},{infra.client.commune}
                           </span>
                         </div>
 
-                        {/* Type d'Infrastructure (Ajout recommandé pour la clarté) */}
                         <div className="flex justify-between">
                           <span className="font-medium text-gray-600">
                             Type:
                           </span>
-                          {/* Vous pouvez utiliser typeLabels pour traduire le type si nécessaire */}
+                      
                           <span className="font-semibold text-gray-800">
+                            {infra.type_infrastructure?.nom}
+                          </span>
+                        </div>
+
+                    
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Capacité:
+                          </span>
+                          <span className="font-semibold text-gray-800">
+                            {infra.capacite} {infra.unite}
+                          </span>
+                        </div>
+
+                      
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Année:
+                          </span>
+                          <span className="font-semibold text-gray-800">
+                            {new Date(infra.date_construction).getFullYear()}
+                          </span>
+                        </div>
+                      </div>
+                    </Popup> */}
+                    <Popup
+                      offset={[0, -10]} // <-- Ajout de l'offset pour remonter le popup
+                      className={`w-96 ${poppins.className} z-50`} // <-- Ajustement de la largeur
+                    >
+                      <div className="flex flex-col gap-1 text-sm p-2">
+                        <h1 className="font-bold text-lg mb-1 border-b border-b-gray-300 pb-1">
+                          {infra.nom}
+                        </h1>
+
+                        {/* Modification du conteneur Image pour l'affichage Next.js en remplissage */}
+                        <div className="relative w-full h-40 mb-2 rounded-lg overflow-hidden border border-gray-200">
+                          <Image
+                            src="/1.jpg"
+                            alt="image infrastructure"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 600px) 100vw, 350px"
+                          />
+                        </div>
+
+                        {/* Client */}
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Adresse:
+                          </span>
+                          <span className="font-semibold text-gray-800 text-sm">
+                            {infra.client.avenue},{infra.client.commune}
+                          </span>
+                        </div>
+
+                        {/* Type d'Infrastructure */}
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">
+                            Type:
+                          </span>
+                          <span className="font-semibold text-gray-800 text-sm">
                             {infra.type_infrastructure?.nom}
                           </span>
                         </div>
@@ -382,8 +452,8 @@ export default function MonitoringMapPage({
                           <span className="font-medium text-gray-600">
                             Capacité:
                           </span>
-                          <span className="font-semibold text-gray-800">
-                            {infra.capacity} {infra.unite}
+                          <span className="font-semibold text-gray-800 text-sm">
+                            {infra.capacite} {infra.unite}
                           </span>
                         </div>
 
@@ -392,7 +462,7 @@ export default function MonitoringMapPage({
                           <span className="font-medium text-gray-600">
                             Année:
                           </span>
-                          <span className="font-semibold text-gray-800">
+                          <span className="font-semibold text-gray-800 text-sm">
                             {new Date(infra.date_construction).getFullYear()}
                           </span>
                         </div>

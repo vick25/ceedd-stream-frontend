@@ -33,6 +33,10 @@ interface FormData {
   commune: string;
 }
 
+interface CreateFormClientProps {
+  onFormSuccess: () => void;
+}
+
 const clientSchema = z.object({
   nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
   postnom: z.string().min(1, "le post nom est requis"),
@@ -48,7 +52,7 @@ const clientSchema = z.object({
 
 type ClientFormData = z.infer<typeof clientSchema>;
 
-const CreateFormClient = () => {
+const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
   const {
     register,
     handleSubmit,
@@ -69,8 +73,6 @@ const CreateFormClient = () => {
     },
   });
 
-  const [isClosed, setIsClosed] = useState(false);
-
   const mutationCreateCustomers = useCreateCustomers();
 
   // const {data:zonesData,isLoading:isZonesLoading}=useZone()
@@ -90,7 +92,7 @@ const CreateFormClient = () => {
       commune: data.commune,
     };
     await mutationCreateCustomers.mutateAsync(payload);
-    setIsClosed(false);
+    onFormSuccess();
   };
 
   return (

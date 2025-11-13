@@ -11,7 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useInfrastructures } from "@/components/hooks/useInfrastructure";
 import { Building, Building2, User } from "lucide-react";
 import { useCustomers } from "@/components/hooks/useCustomer";
-import { isAUthentificated } from "@/utils/utils";
+
 import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {

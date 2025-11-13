@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { Locale, useTranslations } from "@/lib/i18n";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
-import { isAUthentificated } from "@/utils/utils";
 
 export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -117,7 +116,7 @@ export function Nav() {
               </Button>
             </Link>
           )} */}
-          <Link href="/login">
+          <Link href="#">
             <Button className="px-3 py-2  rounded-lg bg-green-700 text-gray-100 flex items-center gap-3">
               <User className="w-4 h-4" />{" "}
               <span className="font-bold">Connexion</span>
