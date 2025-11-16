@@ -2,7 +2,7 @@
 
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   MapContainer,
   Marker,
@@ -182,18 +182,24 @@ type MonitoringMapProps = {
 };
 
 export default function MonitoringMapPage({
-  heightClass = "h-[692px]",
+  heightClass = "h-[792px]",
   className = "",
 }: MonitoringMapProps) {
-  const [selectedTypes, setSelectedTypes] = useState<any[]>([]);
+  const [selectedInfrastructure, setSelectedInfrastructure] = useState<
+    any | null
+  >(null);
 
   const [allInfrastructures, setAllInfrastructures] = useState<any[]>([]);
   const [filteredInfrastructures, setFilteredInfrastructures] = useState<any[]>(
     []
   );
   const [typesDisponibles, setTypesDisponibles] = useState<any[]>([]);
+  const [mapType, setMapType] = useState<"standard" | "satellte">("standard");
   const [typeSelectionne, setTypeSelectionne] = useState("Tous");
 
+  const handleMarkerClick = (infra: any) => {
+    setSelectedInfrastructure(infra);
+  };
   // Initialisation des mutations
   const mutationInfrastructure = useGetInfrastructure();
   const mutationCustomer = useGetCustomer();
@@ -233,7 +239,7 @@ export default function MonitoringMapPage({
   }, [mutationInfrastructure.data]);
   // console.log({ typesDisponibles });
 
-  const handleFilterChange = (e: any) => {
+  const handleFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selected = e.target.value;
     setTypeSelectionne(selected);
 
@@ -254,74 +260,15 @@ export default function MonitoringMapPage({
 
   //  Loader Combiné
   const isPending = mutationInfrastructure.isPending;
+  const hasData = filteredInfrastructures.length > 0 && !isPending;
 
   return (
     <div
       className={`w-full ${heightClass} flex bg-[#e7eaf6] overflow-hidden rounded-lg shadow-lg ${className}`}
     >
-      {/* Sidebar */}
-      <aside className="w-80 hidden lg:block bg-white border-r border-r-gray-300 p-6 overflow-y-auto scrollbar-hidden h-full shadow-lg">
-        <div className="mb-6 flex  flex-col gap-2 space-y-4">
-          <div>
-            <div className="font-semibold mb-2">Filtre par</div>
-            <div className="flex flex-wrap gap-2">
-              <select
-                id="typeSelect"
-                value={typeSelectionne}
-                onChange={handleFilterChange}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full"
-              >
-                <option value="Tous">Tous</option>
-                {typesDisponibles.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="grid grid-cols-1  gap-6">
-            <div className="rounded-2xl border border-gray-300 bg-white shadow-sm p-4 text-center">
-              <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
-                Impact
-              </h2>
-              <p className="mt-2 text-xl md:text-xl font-bold text-gray-900">
-                900,900
-              </p>
-              <span className="mt-1 block text-sm text-gray-600">
-                Population
-              </span>
-            </div>
-            <div className="rounded-2xl border  border-gray-300 bg-white shadow-sm p-4 text-center">
-              <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
-                Nombre total
-              </h2>
-              <p className="mt-2 text-xl md:text-xl font-bold text-gray-900">
-                2,630
-              </p>
-              <span className="mt-1 block text-sm text-gray-600">
-                Infrastructures
-              </span>
-            </div>
-            <div className="rounded-2xl border  border-gray-300 bg-white shadow-sm p-4 text-center">
-              <h2 className="text-sm font-semibold tracking-wide text-green-700 uppercase">
-                Statut
-              </h2>
-              <p className="mt-2 text-xl md:text-xl font-bold text-gray-900">
-                90%
-              </p>
-              <span className="mt-1 block text-sm text-gray-600">
-                Eau fonctionnelle
-              </span>
-            </div>
-          </div>
-        </div>
-        {/* Ajoute d'autres filtres ici si besoin */}
-      </aside>
-
       {/* Carte */}
       <main className="flex-1 h-full">
-        {isPending ? (
+        {isPending || !hasData ? (
           <Loader />
         ) : (
           <div className="w-full h-full">
@@ -335,11 +282,6 @@ export default function MonitoringMapPage({
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               {filteredInfrastructures.map((infra) => {
-                //  UTILISATION DES MAPS DE JOINTURE POUR CHAQUE MARQUEUR
-
-                // const clientNom =
-                // clientLabels[infra.client.toString()] || "N/A";
-                // const zoneNom = zoneLabels[infra.zone.toString()] || "N/A";
                 return (
                   <CircleMarker
                     key={infra.id}
@@ -350,65 +292,14 @@ export default function MonitoringMapPage({
                     fillColor="skyblue"
                     fillOpacity={0.8}
                     // icon={markerIcon}
+                    eventHandlers={{
+                      click: () => {
+                        handleMarkerClick(infra);
+                      },
+                    }}
                   >
-                    {/* <Popup className={`w-500px ${poppins.className} z-50`}>
-                      <div className="flex flex-col gap-1 text-sm p-2">
-                        <h1 className="font-bold text-lg mb-1 border-b border-b-gray-300 pb-1">
-                          {infra.nom}
-                        </h1>
-
-                      
-                        <div className="flex justify-between">
-                          <Image
-                            src="/1.jpg"
-                            alt="image infrastructure"
-                            width={350}
-                            height={80}
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="font-medium text-gray-600">
-                            Adresse:
-                          </span>
-                          <span className="font-semibold text-gray-800">
-                            {infra.client.avenue},{infra.client.commune}
-                          </span>
-                        </div>
-
-                        <div className="flex justify-between">
-                          <span className="font-medium text-gray-600">
-                            Type:
-                          </span>
-                      
-                          <span className="font-semibold text-gray-800">
-                            {infra.type_infrastructure?.nom}
-                          </span>
-                        </div>
-
-                    
-                        <div className="flex justify-between">
-                          <span className="font-medium text-gray-600">
-                            Capacité:
-                          </span>
-                          <span className="font-semibold text-gray-800">
-                            {infra.capacite} {infra.unite}
-                          </span>
-                        </div>
-
-                      
-                        <div className="flex justify-between">
-                          <span className="font-medium text-gray-600">
-                            Année:
-                          </span>
-                          <span className="font-semibold text-gray-800">
-                            {new Date(infra.date_construction).getFullYear()}
-                          </span>
-                        </div>
-                      </div>
-                    </Popup> */}
-                    <Popup
-                      offset={[0, -10]} // <-- Ajout de l'offset pour remonter le popup
+                    {/* <Popup
+                      offset={[0, -10]} 
                       className={`w-96 ${poppins.className} z-50`} // <-- Ajustement de la largeur
                     >
                       <div className="flex flex-col gap-1 text-sm p-2">
@@ -416,7 +307,7 @@ export default function MonitoringMapPage({
                           {infra.nom}
                         </h1>
 
-                        {/* Modification du conteneur Image pour l'affichage Next.js en remplissage */}
+                        
                         <div className="relative w-full h-40 mb-2 rounded-lg overflow-hidden border border-gray-200">
                           <Image
                             src="/1.jpg"
@@ -427,7 +318,7 @@ export default function MonitoringMapPage({
                           />
                         </div>
 
-                        {/* Client */}
+                      
                         <div className="flex justify-between">
                           <span className="font-medium text-gray-600">
                             Adresse:
@@ -437,7 +328,7 @@ export default function MonitoringMapPage({
                           </span>
                         </div>
 
-                        {/* Type d'Infrastructure */}
+                        
                         <div className="flex justify-between">
                           <span className="font-medium text-gray-600">
                             Type:
@@ -447,7 +338,7 @@ export default function MonitoringMapPage({
                           </span>
                         </div>
 
-                        {/* Capacité */}
+                       
                         <div className="flex justify-between">
                           <span className="font-medium text-gray-600">
                             Capacité:
@@ -457,7 +348,7 @@ export default function MonitoringMapPage({
                           </span>
                         </div>
 
-                        {/* Année */}
+                      
                         <div className="flex justify-between">
                           <span className="font-medium text-gray-600">
                             Année:
@@ -467,7 +358,7 @@ export default function MonitoringMapPage({
                           </span>
                         </div>
                       </div>
-                    </Popup>
+                    </Popup> */}
                   </CircleMarker>
                 );
               })}
@@ -475,6 +366,115 @@ export default function MonitoringMapPage({
           </div>
         )}
       </main>
+      {/* Sidebar */}
+      <aside className="w-96 hidden lg:block bg-white border-r border-r-gray-300 p-6  scrollbar-hidden h-full shadow-lg  ">
+        <div className="mb-4 flex  flex-col gap-2 space-y-4 max-h-max">
+          <div>
+            <div className="font-semibold mb-2 text-sm">Filtre par Type</div>
+            <div className="flex flex-wrap gap-2">
+              <select
+                id="typeSelect"
+                value={typeSelectionne}
+                onChange={handleFilterChange}
+                className="border border-gray-300 rounded-lg px-4 py-2 text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full"
+              >
+                <option value="Tous">Tous</option>
+                {typesDisponibles.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <h3 className="font-bold text-md border-b border-b-gray-100 pb-2  text-gray-700 mt-2">
+            Détails de l'Infrastructure
+          </h3>
+
+          {selectedInfrastructure ? (
+            <div
+              className={`flex flex-col gap-6 text-sm p-4 bg-gray-50 rounded-xl border border-blue-200 shadow-lg `}
+            >
+              <h4 className="font-extrabold text-xl mb-1 text-gray-800">
+                {selectedInfrastructure.nom}
+              </h4>
+
+              {/* Image - Remplacement de <Image> par <img> */}
+              <div className="relative w-full h-32 mb-2 rounded-lg overflow-hidden border border-gray-300">
+                {/* Utilisation d'une image placeholder standard */}
+                <Image
+                  src="/1.jpg"
+                  alt="image infrastructure"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 600px) 100vw, 350px"
+                />
+              </div>
+
+              {/* Adresse */}
+              <div className="flex justify-between py-1 border-t border-gray-200">
+                <span className="font-medium text-gray-600">Adresse:</span>
+                <span className="font-semibold text-gray-800 text-right">
+                  {selectedInfrastructure.client.avenue},{" "}
+                  {selectedInfrastructure.client.commune}
+                </span>
+              </div>
+
+              {/* Type */}
+              <div className="flex justify-between py-1">
+                <span className="font-medium text-gray-600">Type:</span>
+                <span className="font-semibold text-gray-800">
+                  {selectedInfrastructure.type_infrastructure?.nom}
+                </span>
+              </div>
+
+              {/* Capacité */}
+              <div className="flex justify-between py-1">
+                <span className="font-medium text-gray-600">Capacité:</span>
+                <span className="font-semibold text-gray-800">
+                  {selectedInfrastructure.capacite}{" "}
+                  {selectedInfrastructure.unite}
+                </span>
+              </div>
+
+              {/* Année */}
+              <div className="flex justify-between py-1 border-b border-gray-200">
+                <span className="font-medium text-gray-600">
+                  Année de construction:
+                </span>
+                <span className="font-semibold text-gray-800">
+                  {new Date(
+                    selectedInfrastructure.date_construction
+                  ).getFullYear()}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="p-4 text-center text-gray-500 italic bg-white rounded-lg border border-gray-200 shadow-inner h-(--size-container) flex items-center justify-center">
+              Cliquez sur un marqueur sur la carte pour voir les détails ici.
+            </div>
+          )}
+        </div>
+        {/* Ajoute d'autres filtres ici si besoin */}
+        <div className="border-t border-t-gray-100 flex flex-col gap-4">
+          <span className="py-2 font-semibold">Nos Partenaires</span>
+          <div className="flex flex-col gap-2">
+            <div className="flex  gap-4 ">
+              <Image
+                src="/ceedd.png"
+                alt="logo partenaire"
+                height={40}
+                width={40}
+                className="object-cover rounded-2xl md:h-20 md:w-20 lg:h-24 lg:w-24"
+              />
+              <span className="uppercase font-semibold text-green-700">
+                Centre d'études environnementales pour le développement durable
+              </span>
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
   );
 }

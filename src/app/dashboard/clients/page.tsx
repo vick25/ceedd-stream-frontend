@@ -2,8 +2,8 @@
 
 import { Locale, useTranslations } from "@/lib/i18n";
 import { PlusCircle } from "lucide-react";
-import React, { useState } from "react";
-import Table from "@/components/ui/infrastructure/table";
+import React, { useEffect, useState } from "react";
+import Table from "@/components/ui/clients/table";
 import {
   Dialog,
   DialogContent,
@@ -15,13 +15,32 @@ import {
 import { Button } from "@/components/ui/button";
 import CreateformInfrastructure from "@/components/ui/infrastructure/CreateformInfrastructure";
 import CreateFormClient from "@/components/ui/clients/CreateFormClient";
+import { useAppStore } from "@/store/appStore";
+import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader";
 
 type Props = {};
 
 const page = (props: Props) => {
+  const { user, _hasHydrated, isAuthenticated } = useAppStore();
+  const router = useRouter();
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
   const [isClosed, setIsClosed] = useState(false);
+
+  useEffect(() => {
+    if (_hasHydrated && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [_hasHydrated, isAuthenticated, router]);
+
+  if (!_hasHydrated) {
+    return <Loader />;
+  }
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
   return (
     <main className="container py-6 space-y-6 min-h-screen">
       <div className="flex items-center justify-between">

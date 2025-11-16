@@ -4,6 +4,9 @@
   --header-hm: 64px;
   --menu-mobile: 56px;
   --menu-mobil-sm: 64px;
+  --text-color-title: #005c99;
+
+  --size-container: 420px;
 }
 
 html,

@@ -1,6 +1,10 @@
 import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
 import EditInfrastructure from "@/components/editButton/EditInfrastructure";
-import { useCustomer, useGetCustomer } from "@/components/hooks/useCustomer";
+import {
+  useCustomer,
+  useCustomers,
+  useGetCustomer,
+} from "@/components/hooks/useCustomer";
 import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
 import {
   useAllTypeInfrastructure,
@@ -9,18 +13,17 @@ import {
 
 import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
-import { InfrastructureTypes } from "@/types/infrastructure";
+import { Client, InfrastructureTypes } from "@/types/infrastructure";
 import { useEffect, useState } from "react";
 import { tr } from "zod/v4/locales";
 import { Skeleton } from "../skeleton";
 import Link from "next/link";
 import { Eye } from "lucide-react";
 import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
+import EditCustomer from "@/components/editButton/EditCustomer";
 
-export default function InfrastructureTable() {
-  const [getInfastructure, setGetInfrastructure] = useState<
-    InfrastructureTypes[]
-  >([]);
+export default function ClientTable() {
+  const [getClients, setGetClients] = useState<Client[]>([]);
 
   const [clientNames, setClientNames] = useState<Record<string, string>>({});
   const [typeInfras, setTypeInfras] = useState<Record<string, string>>({});
@@ -29,35 +32,15 @@ export default function InfrastructureTable() {
     useState<string>("");
 
   // initialize mutation
-
-  const mutationInfranstructure = useGetInfrastructure();
-  const mutationCustomer = useGetCustomer();
-  const mutationTypeInfrastructure = useAllTypeInfrastructure();
-  const mutationZone = useZoneContributive();
+  const { data: customers, isPending: customersIspending } = useCustomers();
+  //   const mutationInfranstructure = useGetInfrastructure();
+  //   const mutationCustomer = useGetCustomer();
+  //   const mutationTypeInfrastructure = useAllTypeInfrastructure();
+  //   const mutationZone = useZoneContributive();
 
   //useEffect
 
-  useEffect(() => {
-    mutationInfranstructure.mutate();
-    mutationCustomer.mutate();
-    mutationTypeInfrastructure.mutate();
-  }, [
-    mutationInfranstructure.mutate,
-    mutationCustomer.mutate,
-    mutationTypeInfrastructure.mutate,
-  ]);
-
-  useEffect(() => {
-    if (
-      mutationInfranstructure.data &&
-      mutationInfranstructure.data.results.length > 0
-    ) {
-      const convertInfrastructure = mutationInfranstructure.data.results;
-      setGetInfrastructure(convertInfrastructure);
-    }
-  }, [mutationInfranstructure.data]);
-
-  if (mutationInfranstructure.isPending) {
+  if (customersIspending) {
     return <Loader />;
   }
   return (
@@ -65,11 +48,11 @@ export default function InfrastructureTable() {
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden">
-            {getInfastructure?.map((infrastructure: any) => {
+            {customers?.results.map((customer: any) => {
               return (
                 <Link
-                  key={infrastructure.id}
-                  href={`/dashboard/infrastructures/${infrastructure.id}`}
+                  key={customer.id}
+                  href={`/dashboard/infrastructures/${customer.id}`}
                 >
                   <div className="mb-2 w-full rounded-md bg-white p-4">
                     <div className="flex items-center justify-between border-b pb-4">
@@ -85,11 +68,11 @@ export default function InfrastructureTable() {
                           {/* <p>{invoice.name}</p> */}
                           <div className="flex flex-col gap-2">
                             <span className="font-semibold">Nom</span>
-                            <p>{infrastructure.nom}</p>
+                            <p>{customer.nom}</p>
                           </div>
                           <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Capacité</span>
-                            <p>{infrastructure.capacite}</p>
+                            <span className="font-semibold">Prénom:</span>
+                            <p>{customer.prenom}</p>
                           </div>
                         </div>
                         {/* <p className="text-sm text-gray-500"></p> */}
@@ -99,27 +82,23 @@ export default function InfrastructureTable() {
                     <div className="flex w-full items-center justify-between pt-4">
                       <div>
                         <p className="text-xl font-medium">
-                          Propriétaire : {infrastructure.client.nom}
+                          Adresse : {customer.avenue},{customer.quartier},
+                          {customer.commune}
                         </p>
                       </div>
                       <div className="flex justify-end gap-2">
-                        <EditInfrastructure
-                          id={infrastructure.id}
-                          nom={infrastructure.nom}
-                          type_infrastructure={
-                            infrastructure.type_infrastructure
-                          }
-                          date_construction={infrastructure.date_construction}
-                          latitude={infrastructure.latitude}
-                          longitude={infrastructure.longitude}
-                          capacite={infrastructure.capacite}
-                          unite={infrastructure.unite}
-                          // zone={infrastructure.zone}
-                          client={infrastructure.client}
+                        <EditCustomer
+                          id={customer.id}
+                          nom={customer.nom}
+                          prenom={customer.prenom}
+                          sexe={customer.sexe}
+                          avenue={customer.avenue}
+                          quartier={customer.quartier}
+                          commune={customer.commune}
                         />
                         <DeleteInfrastructure
-                          id={infrastructure.id}
-                          nom={infrastructure.nom}
+                          id={customer.id}
+                          nom={customer.nom}
                           setInfrastructureDeleted={setInfrastructureDeleted}
                         />
                       </div>
@@ -137,25 +116,13 @@ export default function InfrastructureTable() {
                   Nom
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Proprietaire
+                  Prénom
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Type Infrastructure
+                  Sexe{" "}
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Latitude
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Longitude
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Capacite{" "}
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  unite
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Zone
+                  Adresse
                 </th>
 
                 <th scope="col" className="relative py-3 pl-6 pr-3">
@@ -164,8 +131,8 @@ export default function InfrastructureTable() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {getInfastructure.length > 0 ? (
-                getInfastructure?.map((infra) => {
+              {customers.results.length > 0 ? (
+                customers?.results.map((infra: any) => {
                   //jointure
 
                   // const zone = zones[infra?.zone?.toString()];
@@ -187,39 +154,26 @@ export default function InfrastructureTable() {
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {infra.client.nom}
+                        {infra.prenom}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {infra.type_infrastructure.nom}
+                        {infra.sexe}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
                         {" "}
-                        {infra.latitude}
+                        {infra.avenue}, {infra.quartier}, {infra.commune}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-3">
-                        {infra.longitude}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3">
-                        {infra.capacite}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3">
-                        {infra.unite}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3"></td>
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3 items-center">
-                          <EditInfrastructure
+                          <EditCustomer
                             id={infra.id}
                             nom={infra.nom}
-                            type_infrastructure={infra.type_infrastructure}
-                            date_construction={infra.date_construction}
-                            latitude={infra.latitude}
-                            longitude={infra.longitude}
-                            capacite={infra.capacite}
-                            unite={infra.unite}
-                            // zone={infra.zone}
-                            client={infra.client}
+                            prenom={infra.prenom}
+                            sexe={infra.sexe}
+                            avenue={infra.avenue}
+                            quartier={infra.quartier}
+                            commune={infra.commune}
                           />
                           <DeleteInfrastructure
                             id={infra.id}

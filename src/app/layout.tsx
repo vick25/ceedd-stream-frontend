@@ -29,12 +29,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const pathnameFooter = usePathname();
   const hideLayout = pathname === "/login";
+  const hideFooter = pathnameFooter === "/";
   // const infrastructures = await fetchInfrastructure();
   // console.log(infrastructures.results);
 
   return (
     <html lang="fr" className={poppins.className}>
+      <head>
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
+      </head>
       <body
         className="min-h-screen bg-gray-50 text-gray-900"
         suppressHydrationWarning={true}
@@ -42,7 +47,7 @@ export default function RootLayout({
         <QueryProvider>
           {!hideLayout && <Nav />}
           {children}
-          {!hideLayout && <Footer />}
+          {!hideLayout && !pathnameFooter && <Footer />}
           <Toaster
             position="top-right"
             toastOptions={{
