@@ -37,6 +37,9 @@ export default function RootLayout({
 
   return (
     <html lang="fr" className={poppins.className}>
+      <head>
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
+      </head>
       <body
         className="min-h-screen bg-gray-50 text-gray-900"
         suppressHydrationWarning={true}
