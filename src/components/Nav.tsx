@@ -2,11 +2,13 @@
 
 import { Locale, useTranslations } from "@/lib/i18n";
 import { useAppStore } from "@/store/appStore";
+import { clsx } from "clsx";
 import { CircleUser, Heart, Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
 
 export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
