@@ -29,7 +29,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const pathnameFooter = usePathname();
   const hideLayout = pathname === "/login";
+  const hideFooter = pathnameFooter === "/";
   // const infrastructures = await fetchInfrastructure();
   // console.log(infrastructures.results);
 
@@ -42,7 +44,7 @@ export default function RootLayout({
         <QueryProvider>
           {!hideLayout && <Nav />}
           {children}
-          {!hideLayout && <Footer />}
+          {!hideLayout && !pathnameFooter && <Footer />}
           <Toaster
             position="top-right"
             toastOptions={{
