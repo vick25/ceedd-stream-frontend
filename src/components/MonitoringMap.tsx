@@ -83,39 +83,14 @@ export default function MonitoringMapPage({
     >
       {/* ======= MAP SECTION ======= */}
       <main className="flex-1 h-full relative">
-        {/* <div className="absolute top-4 right-4 z-999 flex gap-2">
-          <button
-            onClick={() => setMapStyle("standard")}
-            className={`px-3 py-2 rounded-lg text-sm font-semibold shadow-md transition 
-      ${
-        mapStyle === "standard"
-          ? "bg-green-600 text-white"
-          : "bg-white text-gray-700 border border-gray-200"
-      }`}
-          >
-            Standard
-          </button>
-
-          <button
-            onClick={() => setMapStyle("satellite")}
-            className={`px-3 py-2 rounded-lg text-sm font-semibold shadow-md transition 
-      ${
-        mapStyle === "satellite"
-          ? "bg-green-600 text-white"
-          : "bg-white text-gray-700 border border-gray-200"
-      }`}
-          >
-            Satellite
-          </button>
-        </div> */}
         <div className="flex absolute top-4 right-4 z-999 border border-blue-500 rounded-lg overflow-hidden shadow-md max-w-44">
           <button
             onClick={() => setMapStyle("standard")}
             className={`px-3 py-2 text-sm font-semibold transition flex-1 text-center whitespace-nowrap
       ${
         mapStyle === "standard"
-          ? "bg-white text-blue-700" /* Actif: Fond blanc, Texte bleu (pour correspondre au contour) */
-          : "bg-gray-100 text-gray-500 hover:bg-gray-200" /* Inactif: Fond gris clair */
+          ? "bg-white text-blue-700"
+          : "bg-gray-100 text-gray-500 hover:bg-gray-200"
       }`}
           >
             Map
@@ -126,8 +101,8 @@ export default function MonitoringMapPage({
             className={`px-3 py-2 text-sm font-semibold transition flex-1 text-center whitespace-nowrap
       ${
         mapStyle === "satellite"
-          ? "bg-white text-blue-700" /* Actif: Fond blanc, Texte bleu */
-          : "bg-gray-100 text-gray-500 hover:bg-gray-200" /* Inactif: Fond gris clair */
+          ? "bg-white text-blue-700"
+          : "bg-gray-100 text-gray-500 hover:bg-gray-200"
       }`}
           >
             Satellite
