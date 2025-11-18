@@ -17,11 +17,11 @@ export default function HomePage() {
         </div>
 
         {/* Title overlay */}
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-xl px-6 py-3 rounded-full shadow-sm border border-white/40">
+        {/* <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-xl px-6 py-3 rounded-full shadow-sm border border-white/40">
           <h1 className="text-lg md:text-xl font-semibold text-gray-800">
             Monitoring National des Infrastructures Hydrauliques
           </h1>
-        </div>
+        </div> */}
       </section>
 
       {/* Stats Section */}
