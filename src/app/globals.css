@@ -7,6 +7,7 @@
   --text-color-title: #005c99;
 
   --size-container: 420px;
+  ---z-index: 999;
 }
 
 html,
