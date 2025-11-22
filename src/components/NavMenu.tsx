@@ -42,7 +42,7 @@ const links = [
   {
     icon: Globe,
     name: "zonecontributive",
-    href: "/dashboard/zonecontributives",
+    href: "/dashboard/zonecontibutives",
   },
   {
     icon: Images,

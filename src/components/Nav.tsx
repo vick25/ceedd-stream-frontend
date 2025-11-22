@@ -2,9 +2,18 @@
 import Link from "next/link";
 import { clsx } from "clsx";
 import { Button } from "@radix-ui/themes";
-import { CircleUser, Heart, Menu, User, X } from "lucide-react";
+import {
+  CircleUser,
+  Heart,
+  LogIn,
+  LogOut,
+  Menu,
+  Settings,
+  User,
+  X,
+} from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Locale, useTranslations } from "@/lib/i18n";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
@@ -12,13 +21,13 @@ import { useRouter } from "next/navigation";
 export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
   const [token, setToken] = useState<string | null>(null);
   const { logout, user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
-  // const token = localStorage.getItem("ceeAuth-token");
-  // const useAuthentificated = isAUthentificated();
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -35,11 +44,22 @@ export function Nav() {
     }
   }, [isOpen]);
 
-  // useEffect(() => {
-  //   const storedToken = localStorage.getItem("ceeAuth-token");
-  //   setToken(storedToken);
-  // }, []);
-  // const isLogined = !!token;
+  const menuRef = useRef<HTMLDivElement>(null);
+  const handletoggle = () => {
+    setIsClicked((prev) => !prev);
+  };
+  useEffect(() => {
+    const handleClickOut = (e: MouseEvent | globalThis.MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setIsClicked(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOut);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOut);
+    };
+  }, []);
 
   return (
     <header
@@ -100,11 +120,55 @@ export function Nav() {
               "hover:underline md:text-sm lg:text-base text-gray-600 hover:text-(--text-color-title)"
             )}
           >
-            Données historiques
+            Donate
           </Link>
-          <span>
-            <CircleUser className="text-(--text-color-title)" />
-          </span>
+          <div className="relative" ref={menuRef}>
+            <CircleUser
+              className="text-(--text-color-title) cursor-pointer"
+              onClick={handletoggle}
+            />
+            {isClicked && (
+              <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                {_hasHydrated && isAuthenticated && user ? (
+                  <ul className="py-1">
+                    <li className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      Profil
+                    </li>
+
+                    <li className="text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                      <Link
+                        href="/dashboard"
+                        target="_blank"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                      >
+                        {" "}
+                        <Settings className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </Link>
+                    </li>
+                    <hr className="my-1" />
+                    <li className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Déconnexion
+                    </li>
+                  </ul>
+                ) : (
+                  <ul>
+                    <li className="flex items-center px-4 py-2 text-sm text-blue-600 hover:bg-red-50 cursor-pointer">
+                      <Link
+                        href="/login"
+                        className="flex items-center px-4 py-2 text-sm text-blue-600 hover:bg-red-50 cursor-pointer"
+                      >
+                        <LogIn className="mr-2 h-4 w-4" />
+                        Connexion
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
           {/* <div> */}
           <select className="p-1">
             <option value="fr">Fr</option>

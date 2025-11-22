@@ -57,7 +57,7 @@ const page = (props: Props) => {
               <Button
                 size="lg"
                 variant="outline"
-                className="hover:bg-blue-50 px-3 py-2 flex gap-4"
+                className="hover:bg-blue-50 px-3 py-2 flex gap-4 border border-gray-300"
               >
                 <PlusCircle /> Nouveau Client
               </Button>
