@@ -26,7 +26,16 @@ import {
 } from "../hooks/useCustomer";
 import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
 import { Skeleton } from "../ui/skeleton";
-
+import { useQueryClient } from "@tanstack/react-query";
+interface ClientProps {
+  id: string;
+  nom: string;
+  prenom: string;
+  sexe: string;
+  avenue: string;
+  quartier: string;
+  commune: string;
+}
 const EditCustomer = ({
   id,
   nom,
@@ -35,7 +44,7 @@ const EditCustomer = ({
   avenue,
   quartier,
   commune,
-}: Client) => {
+}: ClientProps) => {
   const [formData, setFormData] = useState({
     nom: "",
     prenom: "",
@@ -44,7 +53,8 @@ const EditCustomer = ({
     quartier: "",
     commune: "",
   });
-
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
   const updateMutationCustomer = useUpdateCustomers();
 
   const handleChange = (
@@ -64,6 +74,8 @@ const EditCustomer = ({
     // };
     if (id) {
       await updateMutationCustomer.mutateAsync({ data: formData, id });
+      await queryClient.invalidateQueries({ queryKey: ["customers"] });
+      setIsOpen(false);
     }
   };
   //   useEffect(() => {
@@ -83,7 +95,7 @@ const EditCustomer = ({
     }
   }, [nom, prenom, sexe, quartier, avenue, commune]);
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <IconButton
           variant="surface"
@@ -93,7 +105,7 @@ const EditCustomer = ({
           <PencilLine size={20} />
         </IconButton>
       </DialogTrigger>
-      <DialogContent className="bg-white z-[9999]  ">
+      <DialogContent className="bg-white z-9999 ">
         <DialogTitle>Modifier le client</DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}

@@ -11,7 +11,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 import { Button } from "@/components/ui/button";
-import { useCreateInfrastructure } from "@/components/hooks/useInfrastructure";
+import {
+  useCreateInfrastructure,
+  useInfrastructures,
+} from "@/components/hooks/useInfrastructure";
 import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -25,55 +28,46 @@ import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 interface FormData {
+  infrastructures: string;
   nom: string;
-  postnom: string;
-  prenom: string;
-  sexe: string;
-  avenue: string;
-  quartier: string;
-  numero: string;
-  telephone: string;
-  email: string;
-  commune: string;
+  superficie: string;
+  etat_ravin: string;
+  description: string;
+  geom: string;
+  shapefile_id: string;
 }
 
-interface CreateFormClientProps {
+interface ZoneFormClientProps {
   onFormSuccess: () => void;
 }
 
-const clientSchema = z.object({
+const zoneSchema = z.object({
+  infrastructures: z.string().min(1, "saisir un infrastructure"),
   nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
-  postnom: z.string().optional(),
-  prenom: z.string().optional(),
-  sexe: z.string().min(1, "Le sexe est requis").optional(),
-  avenue: z.string().optional(),
-  quartier: z.string().min(1, "La capacité est requise").optional(),
-  numero: z.string().optional(),
-  telephone: z.string().optional(),
-  email: z.string().optional(),
-  commune: z.string().min(1, "Veuillez veuillez entrer une commune."),
+  superficie: z.string().optional(),
+  etat_ravin: z.string().optional(),
+  description: z.string().optional(),
+  geom: z.string().optional(),
+  shapefile_id: z.string().optional(),
 });
 
-type ClientFormData = z.infer<typeof clientSchema>;
+type ZoneFormData = z.infer<typeof zoneSchema>;
 
-const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
+const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
-  } = useForm<ClientFormData>({
-    resolver: zodResolver(clientSchema),
+  } = useForm<ZoneFormData>({
+    resolver: zodResolver(zoneSchema),
     defaultValues: {
+      infrastructures: "",
       nom: "",
-      postnom: "",
-      prenom: "",
-      sexe: "",
-      avenue: "",
-      quartier: "",
-      numero: "",
-      telephone: "",
-      email: "",
-      commune: "",
+      superficie: "",
+      etat_ravin: "",
+      description: "",
+      geom: "",
+      shapefile_id: "",
     },
   });
   const router = useRouter();
@@ -81,22 +75,21 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
 
   const mutationCreateCustomers = useCreateCustomers();
+  const { data: infrastructures, isLoading: infIsLoading } =
+    useInfrastructures();
 
   // const {data:zonesData,isLoading:isZonesLoading}=useZone()
 
-  const onSubmit = async (data: ClientFormData) => {
+  const onSubmit = async (data: ZoneFormData) => {
     // Handle form submission logic here
     const payload = {
+      infrastructures: data.infrastructures,
       nom: data.nom,
-      postnom: data.postnom,
-      prenom: data.prenom,
-      sexe: data.sexe,
-      avenue: data.avenue,
-      quartier: data.quartier,
-      numero: data.numero,
-      telephone: data.telephone,
-      email: data.email,
-      commune: data.commune,
+      superficie: data.superficie,
+      etat_ravin: data.etat_ravin,
+      description: data.description,
+      geom: data.geom,
+      shapefile_id: data.shapefile_id,
     };
     await mutationCreateCustomers.mutateAsync(payload);
 
@@ -121,6 +114,29 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2 flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
+            <Label htmlFor="infrastructures">Infrastructures: </Label>
+
+            <select
+              id="infrastructures"
+              {...register("infrastructures")}
+              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.etat_ravin
+                  ? "border border-red-500 "
+                  : "border border-green-500"
+              }`}
+            >
+              <option>Selectionnez:</option>
+              {infrastructures?.results.map((infr: any) => (
+                <option value={infr.id}>{infr.nom}</option>
+              ))}
+            </select>
+            {errors.etat_ravin && (
+              <p className="text-red-500 text-sm ">
+                {errors.etat_ravin.message}
+              </p>
+            )}
+          </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="nom"> Nom:</Label>
             <Input
@@ -141,33 +157,24 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="postnom">postnom </Label>
+            <Label htmlFor="superficie">superficie </Label>
             <Input
-              id="postnom"
+              id="superficie"
               type="text"
-              placeholder="postnom"
-              {...register("postnom")}
+              placeholder="superficie"
+              {...register("superficie")}
               className={`border border-gray-200 `}
             />
           </div>
-          <div>
-            <Label htmlFor="prenom">prenom:</Label>
-            <Input
-              id="prenom"
-              type="prenom"
-              placeholder="prenom"
-              {...register("prenom")}
-            />
-            {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
-          </div>
+
           <div className="flex flex-col gap-4">
-            <Label htmlFor="sexe">sexe </Label>
+            <Label htmlFor="etat_ravin">etat_ravin </Label>
 
             <select
-              id="sexe"
-              {...register("sexe")}
+              id="etat_ravin"
+              {...register("etat_ravin")}
               className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.sexe
+                errors.etat_ravin
                   ? "border border-red-500 "
                   : "border border-green-500"
               }`}
@@ -175,88 +182,55 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               <option value="M">M</option>
               <option value="F">F</option>
             </select>
-            {errors.sexe && (
-              <p className="text-red-500 text-sm ">{errors.sexe.message}</p>
+            {errors.etat_ravin && (
+              <p className="text-red-500 text-sm ">
+                {errors.etat_ravin.message}
+              </p>
             )}
           </div>
           <div>
-            <Label htmlFor="avenue">avenue : </Label>
+            <Label htmlFor="description">description : </Label>
             <Input
-              id="avenue"
-              type="avenue"
-              placeholder="avenue"
-              {...register("avenue")}
+              id="description"
+              type="description"
+              placeholder="description"
+              {...register("description")}
               className="border-gray-200  border"
             />
-            {/* {errors.avenue && (
-              <p className="text-red-500 text-sm">{errors.avenue.message}</p>
+            {/* {errors.description && (
+              <p className="text-red-500 text-sm">{errors.description.message}</p>
             )} */}
           </div>
           <div>
-            <Label htmlFor="quartier">quartier : </Label>
+            <Label htmlFor="geom">geom : </Label>
             <Input
-              id="quartier"
+              id="geom"
               type="text"
-              placeholder="quartier"
-              {...register("quartier")}
+              placeholder="geom"
+              {...register("geom")}
               className="border border-gray-200 "
             />
-            {/* {errors.quartier && (
-              <p className="text-red-500 text-sm">{errors.quartier.message}</p>
+            {/* {errors.geom && (
+              <p className="text-red-500 text-sm">{errors.geom.message}</p>
             )} */}
           </div>
+
           <div>
-            <Label htmlFor="commune">commune : </Label>
+            <Label htmlFor="shapefile_id">shapefile_id : </Label>
             <Input
-              id="commune"
+              id="shapefile_id"
               type="text"
-              placeholder="commune"
-              {...register("commune")}
+              {...register("shapefile_id")}
+              placeholder="shapefile_id"
               className="border border-gray-200 "
             />
-            {/* {errors.commune && (
-              <p className="text-red-500 text-sm">{errors.commune.message}</p>
-            )} */}
-          </div>
-          <div>
-            <Label htmlFor="numero">numero : </Label>
-            <Input
-              id="numero"
-              type="text"
-              {...register("numero")}
-              placeholder="numero"
-              className="border border-gray-200 "
-            />
-            {errors.numero && (
-              <p className="text-red-500 text-sm">{errors.numero.message}</p>
+            {errors.shapefile_id && (
+              <p className="text-red-500 text-sm">
+                {errors.shapefile_id.message}
+              </p>
             )}
           </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="telephone">Telephone : </Label>
-            <Input
-              id="telephone"
-              type="text"
-              {...register("telephone")}
-              placeholder="telephone"
-              className="border border-gray-200 "
-            />
-            {/* {errors.telephone && (
-              <p className="text-red-500 text-sm">{errors.telephone.message}</p>
-            )} */}
-          </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="email">email :</Label>
-            <Input
-              id="email"
-              type="text"
-              {...register("email")}
-              placeholder="email"
-              className="border border-gray-200 "
-            />
-            {/* {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )} */}
-          </div>
+
           <Button
             type="submit"
             size="lg"

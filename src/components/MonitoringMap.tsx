@@ -218,6 +218,14 @@ export default function MonitoringMapPage({
                 </span>
               </div>
             </div>
+            <div className="w-40 h-20 relative">
+              <Image
+                src="/terrafirma.png"
+                fill
+                alt="logo partenaire"
+                className=" object-over"
+              />
+            </div>
           </div>
         ) : (
           <p className="text-center text-gray-500 italic py-6">
@@ -226,15 +234,14 @@ export default function MonitoringMapPage({
         )}
 
         {/* PARTENAIRES */}
-        <div className="border-t border-t-gray-300 pt-4 mt-6">
-          <p className="font-semibold text-sm text-gray-700 mb-3">
-            Nos Partenaires
-          </p>
-          <div className="flex items-center gap-3">
+        <div className="border-t border-t-gray-300 pt-4 mt-3">
+          <p className="font-semibold text-sm text-gray-700">Nos Partenaires</p>
+          <div className="flex items-center gap-3 w-full h-20">
             <Image
               src="/ceedd.png"
               width={50}
               height={50}
+              sizes=""
               className="rounded-lg"
               alt="Logo partenaire"
             />
