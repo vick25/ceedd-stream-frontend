@@ -12,15 +12,16 @@ export const serviceZoneContributive = {
   },
   async createZoneContributive(data: any) {
     const response = await API.post(
-      `${API_ENDPOINTS.api}${ceedd.zonecontributive}/`,
+      `${API_ENDPOINTS.api}${ceedd.zonecontributive}`,
       data
     );
     return response.data;
   },
   async getZoneContributiveAll(): Promise<any> {
     const response = await API.get<Zone_contributive[]>(
-      `${API_ENDPOINTS.api}${ceedd.zonecontributive}/`
+      `${API_ENDPOINTS.api}${ceedd.zonecontributive}`
     );
+    console.log("test brut zone", response.data);
     return response.data;
   },
   async updateZoneContributive(data: any, id: string): Promise<any> {

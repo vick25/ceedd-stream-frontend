@@ -27,40 +27,41 @@ import {
 import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
 import { Skeleton } from "../ui/skeleton";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/appStore";
+import { useRouter } from "next/navigation";
 import Loader from "../Loader";
 interface ClientProps {
   id: string;
   nom: string;
-  prenom: string;
-  sexe: string;
-  avenue: string;
-  quartier: string;
-  commune: string;
+  superficie: string;
+  etat_ravin: string;
+  description: string;
+  geom: string;
+  shapefile_id: string;
 }
-const EditCustomer = ({
+const EditZoneContributide = ({
   id,
   nom,
-  prenom,
-  sexe,
-  avenue,
-  quartier,
-  commune,
+  superficie,
+  etat_ravin,
+  description,
+  geom,
+  shapefile_id,
 }: ClientProps) => {
   const [formData, setFormData] = useState({
     nom: "",
-    prenom: "",
-    sexe: "",
-    avenue: "",
-    quartier: "",
-    commune: "",
+    superficie: "",
+    etat_ravin: "",
+    description: "",
+    geom: "",
+    shapefile_id: "",
   });
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
   const updateMutationCustomer = useUpdateCustomers();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -90,14 +91,14 @@ const EditCustomer = ({
     if (id) {
       setFormData({
         nom,
-        prenom,
-        sexe,
-        avenue,
-        quartier,
-        commune,
+        superficie,
+        etat_ravin,
+        description,
+        geom,
+        shapefile_id,
       });
     }
-  }, [nom, prenom, sexe, quartier, avenue, commune]);
+  }, [nom, superficie, etat_ravin, description, geom, shapefile_id]);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -140,56 +141,56 @@ const EditCustomer = ({
               />
             </div>
             <div>
-              <Label htmlFor="prenom">Prénom:</Label>
+              <Label htmlFor="superficie">Superficie:</Label>
               <Input
-                id="prenom"
-                name="prenom"
+                id="superficie"
+                name="superficie"
                 type="text"
                 required
-                value={formData.prenom}
+                value={formData.superficie}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <Label htmlFor="sexe">Sexe:</Label>
+              <Label htmlFor="sexe">etat_ravin:</Label>
               <Input
-                id="sexe"
-                name="sexe"
+                id="etat_ravin"
+                name="etat_ravin"
                 type="text"
-                value={formData.sexe}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="avenue">Avenue:</Label>
-              <Input
-                id="avenue"
-                name="avenue"
-                type="text"
-                value={formData.avenue}
+                value={formData.etat_ravin}
                 onChange={handleChange}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="quartier">Quartier:</Label>
+              <Label htmlFor="avenue">Description:</Label>
               <Input
-                id="quartier"
-                name="quartier"
+                id="description"
+                name="description"
                 type="text"
-                value={formData.quartier}
+                value={formData.description}
                 onChange={handleChange}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="commune">Commune:</Label>
+              <Label htmlFor="geom">Geom:</Label>
               <Input
-                id="commune"
-                name="commune"
+                id="geom"
+                name="geom"
                 type="text"
-                value={formData.commune}
+                value={formData.geom}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="shapefile_id">Shapefile:</Label>
+              <Input
+                id="shapefile_id"
+                name="shapefile_id"
+                type="text"
+                value={formData.shapefile_id}
                 onChange={handleChange}
                 required
               />
@@ -215,4 +216,4 @@ const EditCustomer = ({
   );
 };
 
-export default EditCustomer;
+export default EditZoneContributide;

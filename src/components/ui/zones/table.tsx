@@ -11,7 +11,10 @@ import {
   useTypeInfrastructure,
 } from "@/components/hooks/useTypeInfrastructure";
 
-import { useZoneContributive } from "@/components/hooks/useZoneContributive";
+import {
+  useZoneContributive,
+  useZoneContributives,
+} from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import {
   Client,
@@ -23,8 +26,7 @@ import { tr } from "zod/v4/locales";
 import { Skeleton } from "../skeleton";
 import Link from "next/link";
 import { Eye } from "lucide-react";
-import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
-import EditCustomer from "@/components/editButton/EditCustomer";
+import EditZoneContributide from "@/components/editButton/EditZoneContributide";
 
 export default function ZoneTable() {
   const [getZones, setGetZones] = useState<Zone_contributive[]>([]);
@@ -37,10 +39,8 @@ export default function ZoneTable() {
 
   // initialize mutation
   const { data: customers, isPending: customersIspending } = useCustomers();
-  //   const mutationInfranstructure = useGetInfrastructure();
-  //   const mutationCustomer = useGetCustomer();
-  //   const mutationTypeInfrastructure = useAllTypeInfrastructure();
-  const { data: zonesData, isPending: zoneIspending } = useZoneContributive();
+
+  const { data: zonesData, isPending: zoneIspending } = useZoneContributives();
 
   //useEffect
 
@@ -52,12 +52,9 @@ export default function ZoneTable() {
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden">
-            {customers?.results.map((customer: any) => {
+            {zonesData?.results.features.map((zone: any) => {
               return (
-                <Link
-                  key={customer.id}
-                  href={`/dashboard/infrastructures/${customer.id}`}
-                >
+                <Link key={zone.id} href={`/dashboard/zones/${zone.id}`}>
                   <div className="mb-2 w-full rounded-md bg-white p-4">
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
@@ -72,11 +69,13 @@ export default function ZoneTable() {
                           {/* <p>{invoice.name}</p> */}
                           <div className="flex flex-col gap-2">
                             <span className="font-semibold">Nom</span>
-                            <p>{customer.nom}</p>
+                            <p>{zone.nom}</p>
                           </div>
                           <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Prénom:</span>
-                            <p>{customer.prenom}</p>
+                            <span className="font-semibold">
+                              Superficie(m2):
+                            </span>
+                            <p>{zone.superficie}</p>
                           </div>
                         </div>
                         {/* <p className="text-sm text-gray-500"></p> */}
@@ -86,23 +85,22 @@ export default function ZoneTable() {
                     <div className="flex w-full items-center justify-between pt-4">
                       <div>
                         <p className="text-xl font-medium">
-                          Adresse : {customer.avenue},{customer.quartier},
-                          {customer.commune}
+                          Etat du ravin : {zone.etat_ravin}
                         </p>
                       </div>
                       <div className="flex justify-end gap-2">
-                        <EditCustomer
-                          id={customer.id}
-                          nom={customer.nom}
-                          prenom={customer.prenom}
-                          sexe={customer.sexe}
-                          avenue={customer.avenue}
-                          quartier={customer.quartier}
-                          commune={customer.commune}
+                        <EditZoneContributide
+                          id={zone.id}
+                          nom={zone.nom}
+                          superficie={zone.superficie}
+                          etat_ravin={zone.etat_ravin}
+                          description={zone.description}
+                          geom={zone.geom}
+                          shapefile_id={zone.shapefile_id}
                         />
                         <DeleteInfrastructure
-                          id={customer.id}
-                          nom={customer.nom}
+                          id={zone.id}
+                          nom={zone.nom}
                           setInfrastructureDeleted={setInfrastructureDeleted}
                         />
                       </div>
@@ -120,13 +118,19 @@ export default function ZoneTable() {
                   Nom
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Prénom
+                  superficie
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Sexe{" "}
+                  etat du ravin{" "}
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Adresse
+                  description
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  geom
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  shapefile_id
                 </th>
 
                 <th scope="col" className="relative py-3 pl-6 pr-3">
@@ -135,14 +139,14 @@ export default function ZoneTable() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {customers.results.length > 0 ? (
-                customers?.results.map((infra: any) => {
+              {zonesData?.results?.features.length > 0 ? (
+                zonesData?.results?.features.map((zone: any) => {
                   //jointure
 
                   // const zone = zones[infra?.zone?.toString()];
                   return (
                     <tr
-                      key={infra.id}
+                      key={zone.id}
                       className="w-full border-b border-b-gray-300 py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
@@ -154,37 +158,46 @@ export default function ZoneTable() {
                         height={28}
                         alt={`${invoice.name}'s profile picture`}
                       /> */}
-                          {infra.nom}
+                          {zone.properties.nom}
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {infra.prenom}
+                        {zone.properties.superficie}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {infra.sexe}
+                        {zone.properties.etat_ravin}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
                         {" "}
-                        {infra.avenue}, {infra.quartier}, {infra.commune}
+                        {zone.properties.description}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-3">
+                        {" "}
+                        {zone.geometry}
+                        {zone.id}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-3">
+                        {" "}
+                        {zone.shapefile_id}
                       </td>
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3 items-center">
-                          <EditCustomer
-                            id={infra.id}
-                            nom={infra.nom}
-                            prenom={infra.prenom}
-                            sexe={infra.sexe}
-                            avenue={infra.avenue}
-                            quartier={infra.quartier}
-                            commune={infra.commune}
+                          <EditZoneContributide
+                            id={zone.id}
+                            nom={zone.nom}
+                            superficie={zone.superficie}
+                            etat_ravin={zone.etat_ravin}
+                            description={zone.description}
+                            geom={zone.geom}
+                            shapefile_id={zone.shapefile_id}
                           />
                           <DeleteInfrastructure
-                            id={infra.id}
-                            nom={infra.nom}
+                            id={zone.id}
+                            nom={zone.nom}
                             setInfrastructureDeleted={setInfrastructureDeleted}
                           />
-                          <Link href={`/dashboard/infrastructures/${infra.id}`}>
+                          <Link href={`/dashboard/infrastructures/${zone.id}`}>
                             <Eye className="h-4" />
                           </Link>
                         </div>

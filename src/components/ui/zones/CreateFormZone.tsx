@@ -27,14 +27,15 @@ import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { etat_ravin } from "@/types/infrastructure";
+import { useCreateZoneContributives } from "@/components/hooks/useZoneContributive";
 interface FormData {
-  infrastructures: string;
   nom: string;
   superficie: string;
   etat_ravin: string;
   description: string;
   geom: string;
-  shapefile_id: string;
+  shapefile_id: number;
 }
 
 interface ZoneFormClientProps {
@@ -42,10 +43,13 @@ interface ZoneFormClientProps {
 }
 
 const zoneSchema = z.object({
-  infrastructures: z.string().min(1, "saisir un infrastructure"),
   nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
   superficie: z.string().optional(),
-  etat_ravin: z.string().optional(),
+  etat_ravin: z
+    .string()
+    .refine((val) => Object.values(etat_ravin).includes(val as etat_ravin), {
+      message: "Veuillez sélectionner un état de ravin valide.",
+    }),
   description: z.string().optional(),
   geom: z.string().optional(),
   shapefile_id: z.string().optional(),
@@ -61,20 +65,20 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
   } = useForm<ZoneFormData>({
     resolver: zodResolver(zoneSchema),
     defaultValues: {
-      infrastructures: "",
       nom: "",
       superficie: "",
-      etat_ravin: "",
+      etat_ravin: etat_ravin.SELECTIONNEZ,
       description: "",
       geom: "",
       shapefile_id: "",
     },
   });
+  const states = Object.values(etat_ravin);
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
 
-  const mutationCreateCustomers = useCreateCustomers();
+  const mutationCreateZone = useCreateZoneContributives();
   const { data: infrastructures, isLoading: infIsLoading } =
     useInfrastructures();
 
@@ -83,7 +87,6 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
   const onSubmit = async (data: ZoneFormData) => {
     // Handle form submission logic here
     const payload = {
-      infrastructures: data.infrastructures,
       nom: data.nom,
       superficie: data.superficie,
       etat_ravin: data.etat_ravin,
@@ -91,9 +94,9 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
       geom: data.geom,
       shapefile_id: data.shapefile_id,
     };
-    await mutationCreateCustomers.mutateAsync(payload);
+    await mutationCreateZone.mutateAsync(payload);
 
-    await queryClient.invalidateQueries({ queryKey: ["customers"] });
+    await queryClient.invalidateQueries({ queryKey: ["zone_contributives"] });
     onFormSuccess();
   };
 
@@ -114,29 +117,6 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2 flex flex-col gap-3">
-          <div className="flex flex-col gap-4">
-            <Label htmlFor="infrastructures">Infrastructures: </Label>
-
-            <select
-              id="infrastructures"
-              {...register("infrastructures")}
-              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.etat_ravin
-                  ? "border border-red-500 "
-                  : "border border-green-500"
-              }`}
-            >
-              <option>Selectionnez:</option>
-              {infrastructures?.results.map((infr: any) => (
-                <option value={infr.id}>{infr.nom}</option>
-              ))}
-            </select>
-            {errors.etat_ravin && (
-              <p className="text-red-500 text-sm ">
-                {errors.etat_ravin.message}
-              </p>
-            )}
-          </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="nom"> Nom:</Label>
             <Input
@@ -160,7 +140,7 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
             <Label htmlFor="superficie">superficie </Label>
             <Input
               id="superficie"
-              type="text"
+              type="number"
               placeholder="superficie"
               {...register("superficie")}
               className={`border border-gray-200 `}
@@ -179,8 +159,12 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
                   : "border border-green-500"
               }`}
             >
-              <option value="M">M</option>
-              <option value="F">F</option>
+              <option value={etat_ravin.SELECTIONNEZ} disabled>
+                Selectionnez un ravin
+              </option>
+              {states.map((state, index) => (
+                <option key={index}>{state}</option>
+              ))}
             </select>
             {errors.etat_ravin && (
               <p className="text-red-500 text-sm ">
@@ -219,7 +203,7 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
             <Label htmlFor="shapefile_id">shapefile_id : </Label>
             <Input
               id="shapefile_id"
-              type="text"
+              type="number"
               {...register("shapefile_id")}
               placeholder="shapefile_id"
               className="border border-gray-200 "
@@ -234,12 +218,10 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
           <Button
             type="submit"
             size="lg"
-            // disabled={mutationCreateCustomers.isPending}
+            disabled={mutationCreateZone.isPending}
             className="w-full bg-green-600 text-gray-200"
           >
-            {mutationCreateCustomers.isPending
-              ? "Chargement..."
-              : " Ajouter Client"}
+            {mutationCreateZone.isPending ? "Chargement..." : " Ajouter Client"}
           </Button>
         </div>
       </form>

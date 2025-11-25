@@ -22,6 +22,9 @@ import {
 import { useCustomers, useGetCustomer } from "../hooks/useCustomer";
 import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
 import { Skeleton } from "../ui/skeleton";
+import { useAppStore } from "@/store/appStore";
+import { useRouter } from "next/navigation";
+import Loader from "../Loader";
 
 const EditInfrastructure = ({
   id,
@@ -47,10 +50,10 @@ const EditInfrastructure = ({
   });
   const [customers, setCustomers] = useState<Client[]>([]);
   // const [zones, setZones] = useState<zone_contributive[]>([]);
-
+  const { user, _hasHydrated, isAuthenticated } = useAppStore();
+  const router = useRouter();
   const mutationInfrastructure = useGetInfrastructure();
-  // const mutationCustomer = useGetCustomer();
-  // const mutationTypeInfrastructure = useAllTypeInfrastructure();
+
   const updateMutationInfrastructure = useUpdateInfrastructure();
 
   const { data: CustomerData, isLoading } = useCustomers();
@@ -106,6 +109,20 @@ const EditInfrastructure = ({
 
     client,
   ]);
+
+  useEffect(() => {
+    if (_hasHydrated && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [_hasHydrated, isAuthenticated, router]);
+
+  if (!_hasHydrated) {
+    return <Loader />;
+  }
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -117,7 +134,7 @@ const EditInfrastructure = ({
           <PencilLine size={20} />
         </IconButton>
       </DialogTrigger>
-      <DialogContent className="bg-white z-[9999]  ">
+      <DialogContent className="bg-white z-9999  ">
         <DialogTitle>Modifier l'infrastructure</DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}

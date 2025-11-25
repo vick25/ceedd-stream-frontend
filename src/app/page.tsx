@@ -11,6 +11,12 @@ import { useInfrastructures } from "@/components/hooks/useInfrastructure";
 export default function HomePage() {
   const { data: infrastructures } = useInfrastructures();
   console.log({ infrastructures });
+  let result = 0;
+  if (infrastructures?.count === 0 || infrastructures === "undefined") {
+    result = 0;
+  } else {
+    result = infrastructures?.count;
+  }
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Map Hero Section */}
@@ -57,9 +63,7 @@ export default function HomePage() {
               <h3 className="text-sm font-semibold tracking-wide text-green-700 uppercase mt-3">
                 Actuellement en surveillance
               </h3>
-              <p className="mt-2 text-4xl font-bold text-gray-900">
-                {infrastructures?.count}
-              </p>
+              <p className="mt-2 text-4xl font-bold text-gray-900">{result}</p>
               <span className="mt-1 block text-sm text-gray-600">
                 Infrastructures
               </span>

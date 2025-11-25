@@ -1,6 +1,5 @@
 "use client";
 
-import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { ChangeEvent, useEffect, useState } from "react";
 import { MapContainer, TileLayer, CircleMarker } from "react-leaflet";
@@ -117,10 +116,6 @@ export default function MonitoringMapPage({
             zoom={13}
             style={{ height: "100%", width: "100%" }}
           >
-            {/* <TileLayer
-              attribution="&copy; OpenStreetMap"
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            /> */}
             {mapStyle === "standard" ? (
               <TileLayer
                 attribution="&copy; OpenStreetMap"
