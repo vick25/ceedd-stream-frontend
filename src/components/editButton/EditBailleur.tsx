@@ -31,36 +31,21 @@ import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 import Loader from "../Loader";
 import { useUpdateZoneContributive } from "../hooks/useZoneContributive";
-interface ClientProps {
+import { useUpdateBailleurs } from "../hooks/useBailleur";
+interface BailleurProps {
   id: string;
   nom: string;
-  superficie: string;
-  etat_ravin: string;
-  description: string;
-  geom: string;
-  shapefile_id: string;
+  sigle: string;
 }
-const EditZoneContributide = ({
-  id,
-  nom,
-  superficie,
-  etat_ravin,
-  description,
-  geom,
-  shapefile_id,
-}: ClientProps) => {
+const EditBailleur = ({ id, nom, sigle }: BailleurProps) => {
   const [formData, setFormData] = useState({
     nom: "",
-    superficie: "",
-    etat_ravin: "",
-    description: "",
-    geom: "",
-    shapefile_id: "",
+    sigle: "",
   });
 
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
-  const updateMutationZoneContributive = useUpdateZoneContributive();
+  const updateBailleurs = useUpdateBailleurs();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
 
@@ -77,7 +62,7 @@ const EditZoneContributide = ({
     e.preventDefault();
 
     if (id) {
-      await updateMutationZoneContributive.mutateAsync({ data: formData, id });
+      await updateBailleurs.mutateAsync({ data: formData, id });
       await queryClient.invalidateQueries({ queryKey: ["zone_contributives"] });
       setIsOpen(false);
     }
@@ -87,14 +72,10 @@ const EditZoneContributide = ({
     if (id) {
       setFormData({
         nom,
-        superficie,
-        etat_ravin,
-        description,
-        geom,
-        shapefile_id,
+        sigle,
       });
     }
-  }, [nom, superficie, etat_ravin, description, geom, shapefile_id]);
+  }, [nom, sigle]);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -121,7 +102,7 @@ const EditZoneContributide = ({
         </IconButton>
       </DialogTrigger>
       <DialogContent className="bg-white z-9999 ">
-        <DialogTitle>Modifier la Zone </DialogTitle>
+        <DialogTitle>Modifier le Bailleur </DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}
           <form className="space-y-3 " onSubmit={handleSubmit}>
@@ -137,50 +118,13 @@ const EditZoneContributide = ({
               />
             </div>
             <div>
-              <Label htmlFor="superficie">Superficie:</Label>
+              <Label htmlFor="sigle">sigle:</Label>
               <Input
-                id="superficie"
-                name="superficie"
+                id="sigle"
+                name="sigle"
                 type="text"
                 required
-                value={formData.superficie}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <Label htmlFor="sexe">etat_ravin:</Label>
-              <select name="" id="">
-                <option value="Bon">Bon</option>
-              </select>
-            </div>
-            <div>
-              <Label htmlFor="avenue">Description:</Label>
-              <Input
-                id="description"
-                name="description"
-                type="text"
-                value={formData.description}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="geom">Geom:</Label>
-              <Input
-                id="geom"
-                name="geom"
-                type="text"
-                value={formData.geom}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <Label htmlFor="shapefile_id">Shapefile:</Label>
-              <Input
-                id="shapefile_id"
-                name="shapefile_id"
-                type="text"
-                value={formData.shapefile_id}
+                value={formData.sigle}
                 onChange={handleChange}
               />
             </div>
@@ -191,9 +135,9 @@ const EditZoneContributide = ({
                 size="lg"
                 //   disabled={createDeliveryMutation.isPending}
                 className="w-full bg-green-600 text-gray-200"
-                disabled={updateMutationZoneContributive.isPending}
+                disabled={updateBailleurs.isPending}
               >
-                {updateMutationZoneContributive.isPending
+                {updateBailleurs.isPending
                   ? "Chargement ..."
                   : "Mettre à jour la zone"}
               </Button>{" "}
@@ -205,4 +149,4 @@ const EditZoneContributide = ({
   );
 };
 
-export default EditZoneContributide;
+export default EditBailleur;

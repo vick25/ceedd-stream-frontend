@@ -28,23 +28,20 @@ import Link from "next/link";
 import { Eye } from "lucide-react";
 import EditZoneContributide from "@/components/editButton/EditZoneContributide";
 import DeleteZoneContributide from "@/components/deleteButton/DeleteZoneContributide";
+import { useBailleurs } from "@/components/hooks/useBailleur";
+import EditBailleur from "@/components/editButton/EditBailleur";
 
-export default function ZoneTable() {
-  const [getZones, setGetZones] = useState<Zone_contributive[]>([]);
-
-  const [clientNames, setClientNames] = useState<Record<string, string>>({});
-  const [typeInfras, setTypeInfras] = useState<Record<string, string>>({});
-  const [zones, setZones] = useState<Record<string, string>>({});
-  const [zoneContributide, setZoneContributide] = useState<string>("");
+export default function BailleurTable() {
+  const [zoneContributide, setBailleur] = useState<string>("");
 
   // initialize mutation
   // const { data: customers, isPending: customersIspending } = useCustomers();
 
-  const { data: zonesData, isPending: zoneIspending } = useZoneContributives();
+  const { data: bailleurs, isPending: bailleurIspending } = useBailleurs();
 
   //useEffect
 
-  if (zoneIspending) {
+  if (bailleurIspending) {
     return <Loader />;
   }
   return (
@@ -52,7 +49,7 @@ export default function ZoneTable() {
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden">
-            {zonesData?.results.features.map((zone: any) => {
+            {bailleurs?.results.map((zone: any) => {
               return (
                 <Link key={zone.id} href={`/dashboard/zones/${zone.id}`}>
                   <div className="mb-2 w-full rounded-md bg-white p-4">
@@ -69,13 +66,11 @@ export default function ZoneTable() {
                           {/* <p>{invoice.name}</p> */}
                           <div className="flex flex-col gap-2">
                             <span className="font-semibold">Nom</span>
-                            <p>{zone.properties.nom}</p>
+                            <p>{zone.nom}</p>
                           </div>
                           <div className="flex flex-col gap-2">
-                            <span className="font-semibold">
-                              Superficie(m2):
-                            </span>
-                            <p>{zone.properties.superficie}</p>
+                            <span className="font-semibold">sigle </span>
+                            <p>{zone.sigle}</p>
                           </div>
                         </div>
                         {/* <p className="text-sm text-gray-500"></p> */}
@@ -83,26 +78,17 @@ export default function ZoneTable() {
                       {/* <InvoiceStatus status={invoice.status} /> */}
                     </div>
                     <div className="flex w-full items-center justify-between pt-4">
-                      <div>
-                        <p className="text-xl font-medium">
-                          Etat du ravin : {zone.properties.etat_ravin}
-                        </p>
-                      </div>
                       <div className="flex justify-end gap-2">
-                        <EditZoneContributide
+                        <EditBailleur
                           id={zone.id}
-                          nom={zone.properties.nom}
-                          superficie={zone.properties.superficie}
-                          etat_ravin={zone.properties.etat_ravin}
-                          description={zone.properties.description}
-                          geom={zone.geom}
-                          shapefile_id={zone.shapefile_id}
+                          nom={zone.nom}
+                          sigle={zone.sigle}
                         />
-                        <DeleteZoneContributide
+                        {/* <DeleteZoneContributide
                           id={zone.id}
-                          nom={zone.properties.nom}
-                          setZoneContributide={setZoneContributide}
-                        />
+                          nom={zone.nom}
+                          setBailleur={setBailleur}
+                        /> */}
                       </div>
                     </div>
                   </div>
@@ -118,19 +104,7 @@ export default function ZoneTable() {
                   Nom
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  superficie
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  etat du ravin{" "}
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  description
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  geom
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  shapefile_id
+                  sigle
                 </th>
 
                 <th scope="col" className="relative py-3 pl-6 pr-3">
@@ -139,8 +113,8 @@ export default function ZoneTable() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {zonesData?.results?.features.length > 0 ? (
-                zonesData?.results?.features.map((zone: any) => {
+              {bailleurs?.results?.length > 0 ? (
+                bailleurs?.results?.map((zone: any) => {
                   //jointure
 
                   // const zone = zones[infra?.zone?.toString()];
@@ -158,45 +132,25 @@ export default function ZoneTable() {
                         height={28}
                         alt={`${invoice.name}'s profile picture`}
                       /> */}
-                          {zone.properties.nom}
+                          {zone.nom}
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {zone.properties.superficie}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3">
-                        {zone.properties.etat_ravin}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3">
-                        {" "}
-                        {zone.properties.description}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3">
-                        {" "}
-                        {zone.geometry}
-                        {zone.id}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3">
-                        {" "}
-                        {zone.shapefile_id}
+                        {zone.sigle}
                       </td>
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3 items-center">
-                          <EditZoneContributide
+                          <EditBailleur
                             id={zone.id}
-                            nom={zone.properties.nom}
-                            superficie={zone.properties.superficie}
-                            etat_ravin={zone.properties.etat_ravin}
-                            description={zone.properties.description}
-                            geom={zone.geom}
-                            shapefile_id={zone.shapefile_id}
+                            nom={zone.nom}
+                            sigle={zone.sigle}
                           />
-                          <DeleteZoneContributide
+                          {/* <DeleteBailleur
                             id={zone.id}
-                            nom={zone.properties.nom}
-                            setZoneContributide={setZoneContributide}
-                          />
+                            nom={zone.nom}
+                            setBailleur={setBailleur}
+                          /> */}
                           <Link href={`/dashboard/infrastructures/${zone.id}`}>
                             <Eye className="h-4" />
                           </Link>

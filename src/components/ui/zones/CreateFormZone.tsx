@@ -221,7 +221,7 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
             disabled={mutationCreateZone.isPending}
             className="w-full bg-green-600 text-gray-200"
           >
-            {mutationCreateZone.isPending ? "Chargement..." : " Ajouter Client"}
+            {mutationCreateZone.isPending ? "Chargement..." : " Ajouter Zone"}
           </Button>
         </div>
       </form>
