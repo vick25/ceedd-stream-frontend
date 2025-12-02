@@ -47,7 +47,7 @@ const links = [
   {
     icon: Images,
     name: "Photo",
-    href: "/dashboard/photo",
+    href: "/dashboard/photos",
   },
 ];
 export default function NavMenu() {

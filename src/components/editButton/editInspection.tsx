@@ -31,6 +31,7 @@ import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/appStore";
 import Loader from "../Loader";
 import { displayDate } from "@/utils/utils";
+import { useUpdateInspection } from "../hooks/useInspection";
 interface InspectionProps {
   id: string;
   date: Date;
@@ -59,7 +60,7 @@ const EditInspection = ({
   });
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
-  const updateMutationCustomer = useUpdateCustomers();
+  const updateMutationInspection = useUpdateInspection();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
   const handleChange = (
@@ -78,8 +79,8 @@ const EditInspection = ({
 
     // };
     if (id) {
-      await updateMutationCustomer.mutateAsync({ data: formData, id });
-      await queryClient.invalidateQueries({ queryKey: ["customers"] });
+      await updateMutationInspection.mutateAsync({ data: formData, id });
+      await queryClient.invalidateQueries({ queryKey: ["inspections"] });
       setIsOpen(false);
     }
   };
@@ -202,11 +203,11 @@ const EditInspection = ({
                 size="lg"
                 //   disabled={createDeliveryMutation.isPending}
                 className="w-full bg-green-600 text-gray-200"
-                disabled={updateMutationCustomer.isPending}
+                disabled={updateMutationInspection.isPending}
               >
-                {updateMutationCustomer.isPending
+                {updateMutationInspection.isPending
                   ? "Chargement ..."
-                  : "Mettre à jour le client"}
+                  : "Mettre à jour  l'inspection"}
               </Button>{" "}
             </div>
           </form>

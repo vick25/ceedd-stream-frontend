@@ -22,7 +22,7 @@ export const useCreateInspection = () => {
   });
 };
 
-export const updateInspection = () => {
+export const useUpdateInspection = () => {
   return useMutation({
     mutationFn: ({ data, id }: { data: any; id: string }) =>
       serviceInspection.updateInspection(data, id),

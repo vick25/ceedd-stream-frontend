@@ -96,7 +96,7 @@ const CreateFormInspections = ({
     };
     await mutationCreateInspection.mutateAsync(payload);
 
-    await queryClient.invalidateQueries({ queryKey: ["customers"] });
+    await queryClient.invalidateQueries({ queryKey: ["inspections"] });
     onFormSuccess();
   };
 
