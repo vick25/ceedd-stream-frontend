@@ -30,35 +30,37 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/appStore";
 import Loader from "../Loader";
-interface ClientProps {
+import { displayDate } from "@/utils/utils";
+import { useUpdateInspection } from "../hooks/useInspection";
+interface InspectionProps {
   id: string;
-  nom: string;
-  prenom: string;
-  sexe: string;
-  avenue: string;
-  quartier: string;
-  commune: string;
+  date: Date;
+  etat: string;
+  inspecteur: string;
+  commentaire: string;
+  prochain_controle: string;
+  infrastructure: string;
 }
-const EditCustomer = ({
+const EditInspection = ({
   id,
-  nom,
-  prenom,
-  sexe,
-  avenue,
-  quartier,
-  commune,
-}: ClientProps) => {
+  date,
+  etat,
+  inspecteur,
+  commentaire,
+  prochain_controle,
+  infrastructure,
+}: InspectionProps) => {
   const [formData, setFormData] = useState({
-    nom: "",
-    prenom: "",
-    sexe: "",
-    avenue: "",
-    quartier: "",
-    commune: "",
+    date: "",
+    etat: "",
+    inspecteur: "",
+    commentaire: "",
+    prochain_controle: "",
+    infrastructure: "",
   });
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
-  const updateMutationCustomer = useUpdateCustomers();
+  const updateMutationInspection = useUpdateInspection();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
   const handleChange = (
@@ -77,8 +79,8 @@ const EditCustomer = ({
 
     // };
     if (id) {
-      await updateMutationCustomer.mutateAsync({ data: formData, id });
-      await queryClient.invalidateQueries({ queryKey: ["customers"] });
+      await updateMutationInspection.mutateAsync({ data: formData, id });
+      await queryClient.invalidateQueries({ queryKey: ["inspections"] });
       setIsOpen(false);
     }
   };
@@ -89,15 +91,15 @@ const EditCustomer = ({
   useEffect(() => {
     if (id) {
       setFormData({
-        nom,
-        prenom,
-        sexe,
-        avenue,
-        quartier,
-        commune,
+        date: displayDate(date),
+        etat,
+        inspecteur,
+        commentaire,
+        prochain_controle: displayDate(prochain_controle),
+        infrastructure,
       });
     }
-  }, [nom, prenom, sexe, quartier, avenue, commune]);
+  }, [date, etat, inspecteur, prochain_controle, commentaire, infrastructure]);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -129,67 +131,67 @@ const EditCustomer = ({
           {" "}
           <form className="space-y-3 " onSubmit={handleSubmit}>
             <div>
-              <Label htmlFor="nom">Nom :</Label>
+              <Label htmlFor="date">date :</Label>
               <Input
-                id="nom"
-                name="nom"
-                type="text"
+                id="date"
+                name="date"
+                type="date"
                 required
-                value={formData.nom}
+                value={formData.date}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <Label htmlFor="prenom">Prénom:</Label>
+              <Label htmlFor="etat">Prédate:</Label>
               <Input
-                id="prenom"
-                name="prenom"
+                id="etat"
+                name="etat"
                 type="text"
                 required
-                value={formData.prenom}
+                value={formData.etat}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <Label htmlFor="sexe">Sexe:</Label>
+              <Label htmlFor="inspection">inspection:</Label>
               <Input
-                id="sexe"
-                name="sexe"
+                id="inspection"
+                name="inspection"
                 type="text"
-                value={formData.sexe}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="avenue">Avenue:</Label>
-              <Input
-                id="avenue"
-                name="avenue"
-                type="text"
-                value={formData.avenue}
+                value={formData.inspecteur}
                 onChange={handleChange}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="quartier">Quartier:</Label>
+              <Label htmlFor="commentaire">commentaire:</Label>
               <Input
-                id="quartier"
-                name="quartier"
+                id="commentaire"
+                name="commentaire"
                 type="text"
-                value={formData.quartier}
+                value={formData.commentaire}
                 onChange={handleChange}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="commune">Commune:</Label>
+              <Label htmlFor="prochain_controle">prochain_controle:</Label>
               <Input
-                id="commune"
-                name="commune"
+                id="prochain_controle"
+                name="prochain_controle"
+                type="date"
+                value={formData.prochain_controle}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="infrastructure">infrastructure:</Label>
+              <Input
+                id="infrastructure"
+                name="infrastructure"
                 type="text"
-                value={formData.commune}
+                value={formData.infrastructure}
                 onChange={handleChange}
                 required
               />
@@ -201,11 +203,11 @@ const EditCustomer = ({
                 size="lg"
                 //   disabled={createDeliveryMutation.isPending}
                 className="w-full bg-green-600 text-gray-200"
-                disabled={updateMutationCustomer.isPending}
+                disabled={updateMutationInspection.isPending}
               >
-                {updateMutationCustomer.isPending
+                {updateMutationInspection.isPending
                   ? "Chargement ..."
-                  : "Mettre à jour le client"}
+                  : "Mettre à jour  l'inspection"}
               </Button>{" "}
             </div>
           </form>
@@ -215,4 +217,4 @@ const EditCustomer = ({
   );
 };
 
-export default EditCustomer;
+export default EditInspection;

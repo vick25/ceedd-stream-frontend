@@ -60,6 +60,18 @@ export interface InfrastructureTypes {
   // zone: string;
   client: Client;
 }
+
+export enum etat_ravin {
+  SELECTIONNEZ = "",
+  rav_stable = "stable",
+  rav_active = "active",
+}
+export enum inspection {
+  SELECTIONNEZ = "",
+  bon = "bon",
+  moyen = "moyen",
+  mauvais = "mauvais",
+}
 export interface Zone_contributive {
   id: string;
   nom: string;

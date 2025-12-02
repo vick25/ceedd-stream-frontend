@@ -5,11 +5,6 @@ import {
   useCustomers,
   useGetCustomer,
 } from "@/components/hooks/useCustomer";
-import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
-import {
-  useAllTypeInfrastructure,
-  useTypeInfrastructure,
-} from "@/components/hooks/useTypeInfrastructure";
 
 import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
@@ -19,7 +14,6 @@ import { tr } from "zod/v4/locales";
 import { Skeleton } from "../skeleton";
 import Link from "next/link";
 import { Eye } from "lucide-react";
-import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
 import EditCustomer from "@/components/editButton/EditCustomer";
 
 export default function ClientTable() {

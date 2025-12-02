@@ -3,7 +3,7 @@
 import { Locale, useTranslations } from "@/lib/i18n";
 import { PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Table from "@/components/ui/clients/table";
+import Table from "@/components/ui/zones/table";
 import {
   Dialog,
   DialogContent,

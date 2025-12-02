@@ -27,40 +27,28 @@ import {
 import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
 import { Skeleton } from "../ui/skeleton";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/appStore";
+import { useRouter } from "next/navigation";
 import Loader from "../Loader";
-interface ClientProps {
+import { useUpdateZoneContributive } from "../hooks/useZoneContributive";
+import { useUpdateBailleurs } from "../hooks/useBailleur";
+interface BailleurProps {
   id: string;
   nom: string;
-  prenom: string;
-  sexe: string;
-  avenue: string;
-  quartier: string;
-  commune: string;
+  sigle: string;
 }
-const EditCustomer = ({
-  id,
-  nom,
-  prenom,
-  sexe,
-  avenue,
-  quartier,
-  commune,
-}: ClientProps) => {
+const EditBailleur = ({ id, nom, sigle }: BailleurProps) => {
   const [formData, setFormData] = useState({
     nom: "",
-    prenom: "",
-    sexe: "",
-    avenue: "",
-    quartier: "",
-    commune: "",
+    sigle: "",
   });
+
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
-  const updateMutationCustomer = useUpdateCustomers();
+  const updateBailleurs = useUpdateBailleurs();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -72,32 +60,22 @@ const EditCustomer = ({
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // const dataToSend = {
-    //   ...formData,
 
-    // };
     if (id) {
-      await updateMutationCustomer.mutateAsync({ data: formData, id });
-      await queryClient.invalidateQueries({ queryKey: ["customers"] });
+      await updateBailleurs.mutateAsync({ data: formData, id });
+      await queryClient.invalidateQueries({ queryKey: ["bailleurs"] });
       setIsOpen(false);
     }
   };
-  //   useEffect(() => {
-  //     mutationInfrastructure.mutate();
-  //   }, []);
 
   useEffect(() => {
     if (id) {
       setFormData({
         nom,
-        prenom,
-        sexe,
-        avenue,
-        quartier,
-        commune,
+        sigle,
       });
     }
-  }, [nom, prenom, sexe, quartier, avenue, commune]);
+  }, [nom, sigle]);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -118,13 +96,13 @@ const EditCustomer = ({
         <IconButton
           variant="surface"
           color="orange"
-          className="px-3 py-2 rounded-md border border-gray-200 text-gray-800"
+          className="px-3 py-2 rounded-md border border-gray-200 text-red-800 "
         >
           <PencilLine size={20} />
         </IconButton>
       </DialogTrigger>
       <DialogContent className="bg-white z-9999 ">
-        <DialogTitle>Modifier le client</DialogTitle>
+        <DialogTitle>Modifier le Bailleur </DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}
           <form className="space-y-3 " onSubmit={handleSubmit}>
@@ -140,58 +118,14 @@ const EditCustomer = ({
               />
             </div>
             <div>
-              <Label htmlFor="prenom">Prénom:</Label>
+              <Label htmlFor="sigle">sigle:</Label>
               <Input
-                id="prenom"
-                name="prenom"
+                id="sigle"
+                name="sigle"
                 type="text"
                 required
-                value={formData.prenom}
+                value={formData.sigle}
                 onChange={handleChange}
-              />
-            </div>
-            <div>
-              <Label htmlFor="sexe">Sexe:</Label>
-              <Input
-                id="sexe"
-                name="sexe"
-                type="text"
-                value={formData.sexe}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="avenue">Avenue:</Label>
-              <Input
-                id="avenue"
-                name="avenue"
-                type="text"
-                value={formData.avenue}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="quartier">Quartier:</Label>
-              <Input
-                id="quartier"
-                name="quartier"
-                type="text"
-                value={formData.quartier}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="commune">Commune:</Label>
-              <Input
-                id="commune"
-                name="commune"
-                type="text"
-                value={formData.commune}
-                onChange={handleChange}
-                required
               />
             </div>
 
@@ -201,11 +135,11 @@ const EditCustomer = ({
                 size="lg"
                 //   disabled={createDeliveryMutation.isPending}
                 className="w-full bg-green-600 text-gray-200"
-                disabled={updateMutationCustomer.isPending}
+                disabled={updateBailleurs.isPending}
               >
-                {updateMutationCustomer.isPending
+                {updateBailleurs.isPending
                   ? "Chargement ..."
-                  : "Mettre à jour le client"}
+                  : "Mettre à jour le bailleur"}
               </Button>{" "}
             </div>
           </form>
@@ -215,4 +149,4 @@ const EditCustomer = ({
   );
 };
 
-export default EditCustomer;
+export default EditBailleur;
