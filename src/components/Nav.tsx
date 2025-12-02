@@ -17,6 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import { Locale, useTranslations } from "@/lib/i18n";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
+import { useLogOut } from "./hooks/useAuth";
 
 export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -25,9 +26,9 @@ export function Nav() {
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
   const [token, setToken] = useState<string | null>(null);
-  const { logout, user, _hasHydrated, isAuthenticated } = useAppStore();
+  const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
-
+  const mutationLogout = useLogOut();
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -60,6 +61,10 @@ export function Nav() {
       document.removeEventListener("mousedown", handleClickOut);
     };
   }, []);
+
+  const handleLogout = () => {
+    mutationLogout.mutate();
+  };
 
   return (
     <header
@@ -148,7 +153,10 @@ export function Nav() {
                       </Link>
                     </li>
                     <hr className="my-1" />
-                    <li className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 cursor-pointer">
+                    <li
+                      className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 cursor-pointer "
+                      onClick={handleLogout}
+                    >
                       <LogOut className="mr-2 h-4 w-4" />
                       Déconnexion
                     </li>

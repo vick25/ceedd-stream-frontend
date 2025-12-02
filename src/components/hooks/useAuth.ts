@@ -19,3 +19,15 @@ export const useAuth = () => {
     },
   });
 };
+
+export const useLogOut = () => {
+  const logOut = useAppStore((state) => state.logout);
+  return useMutation({
+    mutationFn: () => authService.logout(),
+    onSuccess: () => {
+      logOut();
+      window.location.href = "/";
+      toast.success("Déconnexion réussie");
+    },
+  });
+};
