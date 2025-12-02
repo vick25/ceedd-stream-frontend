@@ -24,7 +24,7 @@ export const serviceinfrastructure = {
   },
   async createInfrastructure(data: InfrastructureData) {
     const response = await API.post(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}/`,
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}`,
       data
     );
     return response.data;

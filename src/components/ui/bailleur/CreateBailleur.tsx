@@ -68,9 +68,7 @@ const CreateBailleur = ({ onFormSuccess }: BailleurFormProps) => {
 
   const mutationCreateBailleurs = useCreateBailleurs();
 
-  // const {data:zonesData,isLoading:isZonesLoading}=useZone()
-
-  const onSubmit = async (data: BailleurFormData) => {
+    const onSubmit = async (data: BailleurFormData) => {
     // Handle form submission logic here
     const payload = {
       nom: data.nom,

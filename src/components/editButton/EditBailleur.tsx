@@ -63,7 +63,7 @@ const EditBailleur = ({ id, nom, sigle }: BailleurProps) => {
 
     if (id) {
       await updateBailleurs.mutateAsync({ data: formData, id });
-      await queryClient.invalidateQueries({ queryKey: ["zone_contributives"] });
+      await queryClient.invalidateQueries({ queryKey: ["bailleurs"] });
       setIsOpen(false);
     }
   };
@@ -96,7 +96,7 @@ const EditBailleur = ({ id, nom, sigle }: BailleurProps) => {
         <IconButton
           variant="surface"
           color="orange"
-          className="px-3 py-2 rounded-md border border-gray-200 text-gray-800"
+          className="px-3 py-2 rounded-md border border-gray-200 text-red-800 "
         >
           <PencilLine size={20} />
         </IconButton>
@@ -139,7 +139,7 @@ const EditBailleur = ({ id, nom, sigle }: BailleurProps) => {
               >
                 {updateBailleurs.isPending
                   ? "Chargement ..."
-                  : "Mettre à jour la zone"}
+                  : "Mettre à jour le bailleur"}
               </Button>{" "}
             </div>
           </form>

@@ -51,48 +51,41 @@ export default function BailleurTable() {
           <div className="lg:hidden">
             {bailleurs?.results.map((zone: any) => {
               return (
-                <Link key={zone.id} href={`/dashboard/zones/${zone.id}`}>
-                  <div className="mb-2 w-full rounded-md bg-white p-4">
-                    <div className="flex items-center justify-between border-b pb-4">
-                      <div>
-                        <div className="mb-2 flex items-center gap-3">
-                          {/* <Image
-                        src={invoice.image_url}
-                        className="mr-2 rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${invoice.name}'s profile picture`}
-                      /> */}
-                          {/* <p>{invoice.name}</p> */}
-                          <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Nom</span>
-                            <p>{zone.nom}</p>
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            <span className="font-semibold">sigle </span>
-                            <p>{zone.sigle}</p>
-                          </div>
+                // <Link  href={`/dashboard/zones/${zone.id}`}>
+                <div
+                  className="mb-2 w-full rounded-md bg-white p-4"
+                  key={zone.id}
+                >
+                  <div className="flex items-center justify-between border-b pb-4">
+                    <div>
+                      <div className="mb-2 flex items-center gap-3">
+                        <div className="flex flex-col gap-2">
+                          <span className="font-semibold">Nom</span>
+                          <p>{zone.nom}</p>
                         </div>
-                        {/* <p className="text-sm text-gray-500"></p> */}
+                        <div className="flex flex-col gap-2">
+                          <span className="font-semibold">sigle </span>
+                          <p>{zone.sigle}</p>
+                        </div>
                       </div>
-                      {/* <InvoiceStatus status={invoice.status} /> */}
                     </div>
-                    <div className="flex w-full items-center justify-between pt-4">
-                      <div className="flex justify-end gap-2">
-                        <EditBailleur
-                          id={zone.id}
-                          nom={zone.nom}
-                          sigle={zone.sigle}
-                        />
-                        {/* <DeleteZoneContributide
+                  </div>
+                  <div className="flex w-full items-center justify-between pt-4">
+                    <div className="flex justify-end gap-2">
+                      <EditBailleur
+                        id={zone.id}
+                        nom={zone.nom}
+                        sigle={zone.sigle}
+                      />
+                      {/* <DeleteZoneContributide
                           id={zone.id}
                           nom={zone.nom}
                           setBailleur={setBailleur}
                         /> */}
-                      </div>
                     </div>
                   </div>
-                </Link>
+                </div>
+                // </Link>
               );
             })}
           </div>
@@ -115,9 +108,6 @@ export default function BailleurTable() {
             <tbody className="bg-white">
               {bailleurs?.results?.length > 0 ? (
                 bailleurs?.results?.map((zone: any) => {
-                  //jointure
-
-                  // const zone = zones[infra?.zone?.toString()];
                   return (
                     <tr
                       key={zone.id}
@@ -125,13 +115,6 @@ export default function BailleurTable() {
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex items-center gap-3">
-                          {/* <Image
-                        src={invoice.image_url}
-                        className="rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${invoice.name}'s profile picture`}
-                      /> */}
                           {zone.nom}
                         </div>
                       </td>
