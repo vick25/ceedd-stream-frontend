@@ -80,7 +80,7 @@ export default function DashboardPage() {
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div className="p-4 rounded-lg border bg-white">
+          <div className="p-4 rounded-lg border border-gray-200 bg-white">
             <div className="text-sm text-gray-500 flex items-center gap-3">
               <Building2 className="text-green-800" />{" "}
               {t.dashboard.totalInfrastructures}
@@ -97,7 +97,7 @@ export default function DashboardPage() {
              {stats.coveragePercentage}%
             </div>
           </div>  */}
-          <div className="p-4 rounded-lg border bg-white">
+          <div className="p-4 rounded-lg border border-gray-200 bg-white">
             <div className="text-sm text-gray-500">
               {t.dashboard.typeInfrastructures}
             </div>
@@ -105,7 +105,7 @@ export default function DashboardPage() {
               {/* {stats.populationImpacted.toLocaleString()} */}
             </div>
           </div>
-          <div className="p-4 rounded-lg border bg-white">
+          <div className="p-4 rounded-lg border border-gray-200 bg-white">
             <div className="text-sm text-gray-500 flex items-center gap-3">
               <User className="text-orange-600" />
               {t.dashboard.totalClients}
@@ -114,7 +114,7 @@ export default function DashboardPage() {
               {stats.totalClients}
             </div>
           </div>
-          <div className="p-4 rounded-lg border bg-white">
+          <div className="p-4 rounded-lg border border-gray-200 bg-white">
             <div className="text-sm text-gray-500">
               {t.dashboard.totalInvestment}
             </div>

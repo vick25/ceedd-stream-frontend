@@ -12,14 +12,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 
-import CreateFormZone from "@/components/ui/zones/CreateFormZone";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
-import { ceedd } from "@/utils/apiRoutes";
-import toast from "react-hot-toast";
+
 import { usePhoto } from "@/components/hooks/usePhotos";
 import { useUplaoderImage } from "@/components/importFiles";
 import { CLOUDINARY_URL } from "@/utils/utils";
@@ -86,7 +83,7 @@ const page = (props: Props) => {
         <div className="flex gap-2"></div>
       </div>
 
-      <hr className="my-4" />
+      <hr className="my-4 border border-gray-200" />
 
       <div className="flex flex-col md:flex-row items-center justify-center gap-8 p-4 sm:p-6 bg-white rounded-xl shadow-lg">
         <div
