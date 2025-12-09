@@ -34,27 +34,24 @@ import { useUpdateZoneContributive } from "../hooks/useZoneContributive";
 interface ClientProps {
   id: string;
   nom: string;
-  superficie: string;
   etat_ravin: string;
   description: string;
-  geom: string;
+
   shapefile_id: string;
 }
 const EditZoneContributide = ({
   id,
   nom,
-  superficie,
   etat_ravin,
   description,
-  geom,
   shapefile_id,
 }: ClientProps) => {
   const [formData, setFormData] = useState({
     nom: "",
-    superficie: "",
+
     etat_ravin: "",
     description: "",
-    geom: "",
+
     shapefile_id: "",
   });
 
@@ -87,14 +84,12 @@ const EditZoneContributide = ({
     if (id) {
       setFormData({
         nom,
-        superficie,
         etat_ravin,
         description,
-        geom,
         shapefile_id,
       });
     }
-  }, [nom, superficie, etat_ravin, description, geom, shapefile_id]);
+  }, [nom, etat_ravin, description, shapefile_id]);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -136,17 +131,7 @@ const EditZoneContributide = ({
                 onChange={handleChange}
               />
             </div>
-            <div>
-              <Label htmlFor="superficie">Superficie:</Label>
-              <Input
-                id="superficie"
-                name="superficie"
-                type="text"
-                required
-                value={formData.superficie}
-                onChange={handleChange}
-              />
-            </div>
+
             <div>
               <Label htmlFor="sexe">etat_ravin:</Label>
               <select name="" id="">
@@ -164,16 +149,7 @@ const EditZoneContributide = ({
                 required
               />
             </div>
-            <div>
-              <Label htmlFor="geom">Geom:</Label>
-              <Input
-                id="geom"
-                name="geom"
-                type="text"
-                value={formData.geom}
-                onChange={handleChange}
-              />
-            </div>
+
             <div>
               <Label htmlFor="shapefile_id">Shapefile:</Label>
               <Input

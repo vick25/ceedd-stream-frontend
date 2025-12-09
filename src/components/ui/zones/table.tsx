@@ -52,7 +52,7 @@ export default function ZoneTable() {
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden">
-            {zonesData?.results.features.map((zone: any) => {
+            {zonesData?.results.map((zone: any) => {
               return (
                 <Link key={zone.id} href={`/dashboard/zones/${zone.id}`}>
                   <div className="mb-2 w-full rounded-md bg-white p-4">
@@ -69,13 +69,13 @@ export default function ZoneTable() {
                           {/* <p>{invoice.name}</p> */}
                           <div className="flex flex-col gap-2">
                             <span className="font-semibold">Nom</span>
-                            <p>{zone.properties.nom}</p>
+                            <p>{zone.nom}</p>
                           </div>
                           <div className="flex flex-col gap-2">
                             <span className="font-semibold">
                               Superficie(m2):
                             </span>
-                            <p>{zone.properties.superficie}</p>
+                            <p>{zone?.superficie}</p>
                           </div>
                         </div>
                         {/* <p className="text-sm text-gray-500"></p> */}
@@ -85,22 +85,20 @@ export default function ZoneTable() {
                     <div className="flex w-full items-center justify-between pt-4">
                       <div>
                         <p className="text-xl font-medium">
-                          Etat du ravin : {zone.properties.etat_ravin}
+                          Etat du ravin : {zone.etat_ravin}
                         </p>
                       </div>
                       <div className="flex justify-end gap-2">
                         <EditZoneContributide
                           id={zone.id}
-                          nom={zone.properties.nom}
-                          superficie={zone.properties.superficie}
-                          etat_ravin={zone.properties.etat_ravin}
-                          description={zone.properties.description}
-                          geom={zone.geom}
+                          nom={zone.nom}
+                          etat_ravin={zone.etat_ravin}
+                          description={zone.description}
                           shapefile_id={zone.shapefile_id}
                         />
                         <DeleteZoneContributide
                           id={zone.id}
-                          nom={zone.properties.nom}
+                          nom={zone.nom}
                           setZoneContributide={setZoneContributide}
                         />
                       </div>
@@ -117,9 +115,7 @@ export default function ZoneTable() {
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   Nom
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  superficie
-                </th>
+
                 <th scope="col" className="px-3 py-5 font-medium">
                   etat du ravin{" "}
                 </th>
@@ -139,8 +135,8 @@ export default function ZoneTable() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {zonesData?.results?.features.length > 0 ? (
-                zonesData?.results?.features.map((zone: any) => {
+              {zonesData?.results.length > 0 ? (
+                zonesData?.results.map((zone: any) => {
                   //jointure
 
                   // const zone = zones[infra?.zone?.toString()];
@@ -158,18 +154,16 @@ export default function ZoneTable() {
                         height={28}
                         alt={`${invoice.name}'s profile picture`}
                       /> */}
-                          {zone.properties.nom}
+                          {zone.nom}
                         </div>
                       </td>
+
                       <td className="whitespace-nowrap px-3 py-3">
-                        {zone.properties.superficie}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3">
-                        {zone.properties.etat_ravin}
+                        {zone.etat_ravin}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
                         {" "}
-                        {zone.properties.description}
+                        {zone.description}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
                         {" "}
@@ -185,16 +179,14 @@ export default function ZoneTable() {
                         <div className="flex justify-end gap-3 items-center">
                           <EditZoneContributide
                             id={zone.id}
-                            nom={zone.properties.nom}
-                            superficie={zone.properties.superficie}
-                            etat_ravin={zone.properties.etat_ravin}
-                            description={zone.properties.description}
-                            geom={zone.geom}
+                            nom={zone.nom}
+                            etat_ravin={zone.etat_ravin}
+                            description={zone.description}
                             shapefile_id={zone.shapefile_id}
                           />
                           <DeleteZoneContributide
                             id={zone.id}
-                            nom={zone.properties.nom}
+                            nom={zone.nom}
                             setZoneContributide={setZoneContributide}
                           />
                           <Link href={`/dashboard/infrastructures/${zone.id}`}>
