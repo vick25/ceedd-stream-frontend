@@ -123,7 +123,7 @@ export function Nav() {
         </div>
 
         {/* Barre de recherche (cachée sur petit écran, peut-être ?) */}
-        <div className="relative hidden lg:block">
+        <div className="relative hidden lg:block w-96">
           <Input
             type="text"
             name="searchfield"
