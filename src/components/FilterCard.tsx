@@ -18,6 +18,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   onClose,
   availableCategories,
 }) => {
+  const maxCapacity = selectedFeature?.maxCapacity;
+  const volumeActuel = maxCapacity;
   return (
     <div className="h-full flex flex-col p-6">
       {/* Header of Card */}
@@ -51,7 +53,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
           htmlFor="category-select"
           className="block text-sm font-semibold text-gray-700 mb-2"
         >
-          Category
+          Type d'infrastructures
         </label>
         <div className="relative">
           <select
@@ -77,7 +79,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               <h3 className="text-lg font-bold text-gray-800 leading-tight">
                 {selectedFeature.type}
               </h3>
-              <span
+              {/* <span
                 className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${
                   selectedFeature.state === "Functional"
                     ? "bg-green-100 text-green-700"
@@ -87,7 +89,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                 }`}
               >
                 {selectedFeature.state}
-              </span>
+              </span> */}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -95,26 +97,26 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               <div className="flex-1 space-y-3">
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-                    Location
+                    Infrastructure
                   </p>
                   <p className="font-medium text-gray-800 text-sm mt-1">
-                    {selectedFeature.location}
+                    {selectedFeature.nom}
                   </p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-                    Partner
+                    Date de construction
                   </p>
                   <p className="font-medium text-gray-800 text-sm mt-1">
-                    {selectedFeature.fundingPartner}
+                    {selectedFeature.date_construction}
                   </p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-                    Verified
+                    Capacité
                   </p>
                   <p className="font-medium text-gray-800 text-sm mt-1">
-                    {selectedFeature.lastVerification}
+                    {selectedFeature.maxCapacity}
                   </p>
                 </div>
               </div>
@@ -122,7 +124,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               {/* Graph */}
               <div className="w-full sm:w-auto flex justify-center items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
                 <CylinderGraph
-                  current={selectedFeature.waterVolume}
+                  current={volumeActuel}
                   max={selectedFeature.maxCapacity}
                 />
               </div>

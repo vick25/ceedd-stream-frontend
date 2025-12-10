@@ -2,6 +2,7 @@
 
 import { FilterCard } from "@/components/FilterCard";
 import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
+import { useGetInspections } from "@/components/hooks/useInspection";
 import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
 import { MapFeature } from "@/types/types";
 import { Building2, Droplet, Users } from "lucide-react";
@@ -10,7 +11,6 @@ import { Building2, Droplet, Users } from "lucide-react";
 
 import dynamic from "next/dynamic";
 import { useEffect, useState, useMemo } from "react";
-// import { useGetInfrastructure, useAllTypeInfrastructure } from "./hooks"; // Assurez-vous que le chemin vers vos hooks est correct
 
 // Dynamic import for Leaflet map to avoid SSR issues
 const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
@@ -27,33 +27,33 @@ interface InfrastructureData {
   id: number;
   latitude: number;
   longitude: number;
+  nom: string;
   type_infrastructure: { nom: string };
   city: string;
-  status: "Functional" | "Needs Repair" | "Critical"; // Exemple de statuts
   last_update_date: string;
-  partner: string;
+  date_construction: string;
   current_volume: number;
-  capacity: number;
+  capacite: number;
 }
 
 export default function Home() {
   // 1. HOOKS D'API
   const mutationInfrastructure = useGetInfrastructure();
   const mutationTypeInfrastructure = useAllTypeInfrastructure();
+  const { data: inspectionData } = useGetInspections();
+  const result = mutationInfrastructure.data?.count;
 
+  console.log({ mutationInfrastructure });
   // 2. ÉTATS LOCAUX (pour la carte et les filtres)
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
     null
   );
   const [isFilterVisible, setIsFilterVisible] = useState(true);
-  const [selectedCategory, setSelectedCategory] =
-    useState<string>("All Categories");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Tous");
   const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
     "standard"
   );
-  const [typesDisponibles, setTypesDisponibles] = useState<string[]>([
-    "All Categories",
-  ]);
+  const [typesDisponibles, setTypesDisponibles] = useState<string[]>(["Tous"]);
 
   // États pour stocker les données brutes
   const [rawData, setRawData] = useState<InfrastructureData[]>([]);
@@ -85,7 +85,7 @@ export default function Home() {
     if (typesData?.results?.length > 0) {
       // Assurez-vous que 'nom' est la propriété correcte
       const types: any[] = [
-        "All Categories",
+        "Tous",
         ...new Set(typesData.results.map((t: any) => t.nom)),
       ];
       setTypesDisponibles(types);
@@ -101,19 +101,19 @@ export default function Home() {
       id: item.id.toString(),
       lat: item.latitude,
       lng: item.longitude,
+      nom: item.nom,
       type: item.type_infrastructure.nom,
       location: item.city,
-      state: item.status,
       lastVerification: item.last_update_date,
-      fundingPartner: item.partner,
+      date_construction: item.date_construction,
       waterVolume: item.current_volume,
-      maxCapacity: item.capacity,
+      maxCapacity: item.capacite,
     }));
   }, [rawData]);
 
   // --- LOGIQUE DE FILTRAGE DES FEATURES (utilise allFeatures maintenant) ---
   const filteredFeatures =
-    selectedCategory === "All Categories"
+    selectedCategory === "Tous"
       ? allFeatures
       : allFeatures.filter((f) => f.type === selectedCategory);
 
@@ -247,7 +247,9 @@ export default function Home() {
               <h3 className="text-sm font-semibold tracking-wide text-green-700 uppercase mt-3">
                 Actuellement en surveillance
               </h3>
-              {/* <p className="mt-2 text-4xl font-bold text-gray-900">{result}</p> */}
+              <p className="mt-2 text-4xl font-bold text-gray-900">
+                {result > 0 ? result : 0}
+              </p>
               <span className="mt-1 block text-sm text-gray-600">
                 Infrastructures
               </span>

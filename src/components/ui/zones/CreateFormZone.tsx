@@ -137,10 +137,10 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
             <select
               id="etat_ravin"
               {...register("etat_ravin")}
-              className={`flex h-10 w-full rounded-md border border-gray-200   bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+              className={`flex h-10 w-full rounded-md   bg-background px-3 py-2 text-sm ring-offset-background  file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
                 errors.etat_ravin
                   ? "border border-red-500 "
-                  : "border border-gray-500"
+                  : "border border-gray-300"
               }`}
             >
               <option value={etat_ravin.SELECTIONNEZ} disabled>

@@ -71,12 +71,6 @@ export default function ZoneTable() {
                             <span className="font-semibold">Nom</span>
                             <p>{zone.nom}</p>
                           </div>
-                          <div className="flex flex-col gap-2">
-                            <span className="font-semibold">
-                              Superficie(m2):
-                            </span>
-                            <p>{zone?.superficie}</p>
-                          </div>
                         </div>
                         {/* <p className="text-sm text-gray-500"></p> */}
                       </div>
@@ -122,9 +116,7 @@ export default function ZoneTable() {
                 <th scope="col" className="px-3 py-5 font-medium">
                   description
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  geom
-                </th>
+
                 <th scope="col" className="px-3 py-5 font-medium">
                   shapefile_id
                 </th>
@@ -165,11 +157,7 @@ export default function ZoneTable() {
                         {" "}
                         {zone.description}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-3">
-                        {" "}
-                        {zone.geometry}
-                        {zone.id}
-                      </td>
+
                       <td className="whitespace-nowrap px-3 py-3">
                         {" "}
                         {zone.shapefile_id}

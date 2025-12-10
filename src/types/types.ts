@@ -2,11 +2,11 @@ export interface MapFeature {
   id: string;
   lat: number;
   lng: number;
+  nom: string;
   type: string;
   location: string;
-  state: "Functional" | "Needs Repair" | "Critical";
   lastVerification: string;
-  fundingPartner: string;
+  date_construction: string;
   waterVolume: number; // in m3
   maxCapacity: number; // in m3
 }

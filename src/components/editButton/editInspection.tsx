@@ -126,7 +126,7 @@ const EditInspection = ({
         </IconButton>
       </DialogTrigger>
       <DialogContent className="bg-white z-9999 ">
-        <DialogTitle>Modifier le client</DialogTitle>
+        <DialogTitle>Modifier modifier une inspection</DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}
           <form className="space-y-3 " onSubmit={handleSubmit}>

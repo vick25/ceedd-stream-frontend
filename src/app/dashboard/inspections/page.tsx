@@ -65,7 +65,7 @@ const page = (props: Props) => {
             </DialogTrigger>
             <DialogContent className=" bg-white z-9999 ">
               <DialogHeader>
-                <DialogTitle>Ajouter un Nouveau client </DialogTitle>
+                <DialogTitle>Ajouter une nouvelle inspection </DialogTitle>
                 <DialogDescription>Voici les détails.</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]">

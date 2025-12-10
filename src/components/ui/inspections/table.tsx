@@ -72,7 +72,7 @@ export default function InspectionTable() {
                           inspecteur={customer.inspecteur}
                           commentaire={customer.commentaire}
                           prochain_controle={customer.prochain_controle}
-                          infrastructure={customer.infrastructure}
+                          infrastructure={customer.infrastructure.nom}
                         />
                         <DeleteInspection
                           id={customer.id}
@@ -150,7 +150,7 @@ export default function InspectionTable() {
                         {displayDate(insp.prochain_controle)}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {insp.infrastructure}{" "}
+                        {insp.infrastructure?.nom}{" "}
                       </td>
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
@@ -162,7 +162,7 @@ export default function InspectionTable() {
                             inspecteur={insp.inspecteur}
                             commentaire={insp.commentaire}
                             prochain_controle={insp.prochain_controle}
-                            infrastructure={insp.infrastructure}
+                            infrastructure={insp.infrastructure.nom}
                           />
                           <DeleteInspection
                             id={insp.id}

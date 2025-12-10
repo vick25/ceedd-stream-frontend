@@ -156,6 +156,7 @@ const CreateFormInspections = ({
               type="inspecteur"
               placeholder="inspecteur"
               {...register("inspecteur")}
+              className="border border-gray-300"
             />
             {/* {errors.inspecteur && <p>{errors.inspecteur?.message}</p>} */}
           </div>
