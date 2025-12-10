@@ -19,7 +19,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   availableCategories,
 }) => {
   const maxCapacity = selectedFeature?.maxCapacity;
-  const volumeActuel = maxCapacity;
+  const volumeActuel = 4000;
   return (
     <div className="h-full flex flex-col p-6">
       {/* Header of Card */}

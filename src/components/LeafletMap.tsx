@@ -16,7 +16,7 @@ import {
   TileLayer,
   useMap,
   ZoomControl,
-  Marker, // ⭐ MODIFICATION: Utilisation de Marker
+  Marker, //MODIFICATION: Utilisation de Marker
 } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 
@@ -27,7 +27,7 @@ interface LeafletMapProps {
   mapStyle: "standard" | "satellite";
 }
 
-// ⭐ 1. Définition de l'icône de l'usine (à l'extérieur du composant pour la performance)
+// 1. Définition de l'icône de l'usine (à l'extérieur du composant pour la performance)
 const customIcon = new Icon({
   iconUrl: "/iconImage.png",
   iconSize: [64, 64],

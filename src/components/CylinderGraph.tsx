@@ -44,12 +44,12 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
             ))}
           </div>
 
-          {/* 💧 Liquid (CORRECTION: Utilisation du style inline pour la hauteur) */}
+          {/* Liquid (CORRECTION: Utilisation du style inline pour la hauteur) */}
           <div
             className={`absolute bottom-0 left-0 w-full transition-all duration-1000 ease-out z-10 ${getColor(
               percentage
             )} opacity-80`}
-            // ⭐ Applique la hauteur dynamique directement via le style React
+            //Applique la hauteur dynamique directement via le style React
             style={{ height: `${percentage}%` }}
           >
             {/* Surface reflection */}
@@ -72,7 +72,7 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
         </div>
       </div>
 
-      {/* 📊 Indicateur Textuel de Volume (CORRECTION: current est la variable à afficher) */}
+      {/*  Indicateur Textuel de Volume (CORRECTION: current est la variable à afficher) */}
       <div className="text-center mt-1">
         <span className="block text-2xl font-bold text-gray-800 leading-tight">
           {/* Affiche la valeur de 'current' qui représente le volume actuel */}
