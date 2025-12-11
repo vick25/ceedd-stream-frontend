@@ -43,4 +43,23 @@ export const serviceinfrastructure = {
     );
     return response.data;
   },
+  async getInfrastrucureByAdresse(searchTerm: string): Promise<any[]> {
+    // const enCodeSearchTerm = encodeURIComponent(searchTerm);
+    const queryParameters = "searchTerm";
+    const response = await API.get(
+      `${API_ENDPOINTS.apiAuth}${ceedd.infras}volume`,
+      {
+        params: {
+          [queryParameters]: searchTerm,
+        },
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  },
+  async getInfrastructureByVolume(volume: string) {
+    const response = await API.get(
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}/${volume}`
+    );
+  },
 };

@@ -20,6 +20,7 @@ import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 import { useLogOut } from "./hooks/useAuth";
 import { Input } from "./ui/input";
+import SearchInputWithAutocomplete from "./SearchInputWithAutocomplete";
 
 export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,6 +32,7 @@ export function Nav() {
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
   const mutationLogout = useLogOut();
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Gestion du défilement
   useEffect(() => {
@@ -124,13 +126,14 @@ export function Nav() {
 
         {/* Barre de recherche (cachée sur petit écran, peut-être ?) */}
         <div className="relative hidden lg:block w-96">
-          <Input
+          {/* <Input
             type="text"
             name="searchfield"
             placeholder="Rechercher..."
             className="border border-gray-300 w-full pr-10" // Ajout de padding à droite
           />
-          <Search className="w-5 h-5 absolute text-gray-400 right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" />
+          <Search className="w-5 h-5 absolute text-gray-400 right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" /> */}
+          <SearchInputWithAutocomplete />
         </div>
 
         {/* Navigation Bureau */}

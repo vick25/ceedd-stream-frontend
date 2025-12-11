@@ -152,7 +152,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                     mouseout: (e) => e.target.closePopup(),
                   }}
                 >
-                  <Popup closeButton={false} className="custom-popup">
+                  <Popup closeButton={false} className="custom-popup ">
                     <div className="min-w-64 max-w-sm p-3 font-sans text-gray-800 flex flex-col  gap-3">
                       {/* TITRE PRINCIPAL ET TYPE */}
                       <div className="flex items-center gap-2">

@@ -1,6 +1,10 @@
 import { serviceinfrastructure } from "@/services/infrastructure";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { error } from "console";
 import toast from "react-hot-toast";
+import { useDebounce } from "./useDebounce";
+import { InfrastructureTypes } from "@/types/infrastructure";
+import { useEffect } from "react";
 
 export const useGetInfrastructure = () => {
   return useMutation({
@@ -47,4 +51,27 @@ export const useInfrastructureDeleted = () => {
       toast.success("Infrastructure supprimée avec succès");
     },
   });
+};
+type InfrastructureResponse = InfrastructureTypes[];
+export const useInfrastructureByAdresse = (
+  searchTerm: string,
+  delay: number = 400
+) => {
+  const debounceTerm = useDebounce(searchTerm, delay);
+
+  const isSearchearDebounce = debounceTerm.length >= 3;
+  const query = useQuery<InfrastructureResponse, Error>({
+    queryKey: ["infrastructureSearch", debounceTerm],
+    queryFn: () =>
+      serviceinfrastructure.getInfrastrucureByAdresse(debounceTerm),
+    enabled: isSearchearDebounce,
+    staleTime: 1000 * 60 * 5,
+  });
+  useEffect(() => {
+    if (query.isError) {
+      toast.error("Impossible d'effectuer la recherche. Veuillez réessayer.");
+    }
+  }, [query.isError]);
+
+  return query;
 };

@@ -12,4 +12,5 @@ export const ceedd = {
   zonecontributive: "/zones/",
   photo: "/photos/",
   users: "/users",
+  infras: "/infras/",
 };
