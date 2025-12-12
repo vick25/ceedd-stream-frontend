@@ -60,7 +60,9 @@ export interface InfrastructureTypes {
   // zone: string;
   client: Client;
 }
-
+export interface InfrastructureSearch {
+  total_volume: number;
+}
 export enum etat_ravin {
   SELECTIONNEZ = "",
   rav_stable = "stable",

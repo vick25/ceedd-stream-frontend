@@ -3,7 +3,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { error } from "console";
 import toast from "react-hot-toast";
 import { useDebounce } from "./useDebounce";
-import { InfrastructureTypes } from "@/types/infrastructure";
+import {
+  InfrastructureSearch,
+  InfrastructureTypes,
+} from "@/types/infrastructure";
 import { useEffect } from "react";
 
 export const useGetInfrastructure = () => {
@@ -52,7 +55,7 @@ export const useInfrastructureDeleted = () => {
     },
   });
 };
-type InfrastructureResponse = InfrastructureTypes[];
+type InfrastructureResponse = InfrastructureSearch;
 export const useInfrastructureByAdresse = (
   searchTerm: string,
   delay: number = 400

@@ -2,18 +2,24 @@ import { InfrastructureTypes, User } from "@/types/infrastructure";
 import { set } from "zod";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+
+interface InfrastructureSearch {
+  total_volume: number;
+}
 interface AppState {
   user: User | null;
   isAuthenticated: boolean;
   _hasHydrated: boolean;
   searchTerms: string;
-  searchResults: InfrastructureTypes[];
+  searchResults: InfrastructureSearch | null;
+  // searchResults: InfrastructureTypes[];
 
   setUser: (user: User | null) => void;
   setHasHydrated: () => void;
   logout: () => void;
   setSearchTerms: (term: string) => void;
-  setSearchResults: (results: InfrastructureTypes[]) => void;
+  // setSearchResults: (results: InfrastructureTypes[]) => void;
+  setSearchResults: (results: InfrastructureSearch | null) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -28,7 +34,7 @@ export const useAppStore = create<AppState>()(
           set({
             searchTerms: term,
           }),
-        searchResults: [],
+        searchResults: null,
         setSearchResults: (results) =>
           set({
             searchResults: results,

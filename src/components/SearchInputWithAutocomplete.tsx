@@ -15,28 +15,23 @@ const SearchInputWithAutocomplete = () => {
   const { data, isFetching } = useInfrastructureByAdresse(localSearchTerm);
 
   useEffect(() => {
-    if (data) {
+    if (localSearchTerm.length === 0) {
+      setSearchResults(null);
+    } else if (data !== undefined) {
       setSearchResults(data);
       setSearchTerms(localSearchTerm);
     }
   }, [data, setSearchResults, setSearchTerms, localSearchTerm]);
 
-  // OPTIONNEL : Afficher des suggestions d'autocomplétion juste sous l'input
-  const showAutocomplete =
-    localSearchTerm.length >= 3 && !isFetching && data && data.length > 0;
+  const showAutocomplete = false;
+  // localSearchTerm.length >= 3 && !isFetching && data && data.length > 0;
 
-  // --- Gestion des clics d'autocomplétion (pour une meilleure UX) ---
-  // Si l'utilisateur clique sur un résultat de la liste, vous pouvez :
-  // 1. Mettre à jour `localSearchTerm` avec l'adresse complète.
-  // 2. Mettre à jour le store avec *uniquement* le résultat sélectionné (si l'API le permet).
-
-  const handleSelectAddress = (address: InfrastructureTypes) => {
-    setLocalSearchTerm(
-      address.client.avenue || address.client.quartier || address.client.commune
-    );
-    setSearchResults([address]); // Mettre à jour le store avec l'adresse sélectionnée
-    // Fermer la liste des suggestions ici
-  };
+  // const handleSelectAddress = (address: InfrastructureTypes) => {
+  //   setLocalSearchTerm(
+  //     address.client.avenue || address.client.quartier || address.client.commune
+  //   );
+  //   setSearchResults([address]);
+  // };
 
   return (
     <div className="relative w-full">
@@ -55,7 +50,7 @@ const SearchInputWithAutocomplete = () => {
 
       {/* Liste des suggestions (Autocomplétion) */}
       {/* Vous pouvez créer un composant dédié pour cette liste */}
-      {showAutocomplete && (
+      {/* {showAutocomplete && (
         <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto z-50">
           {data.map((item) => (
             <div
@@ -69,7 +64,7 @@ const SearchInputWithAutocomplete = () => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

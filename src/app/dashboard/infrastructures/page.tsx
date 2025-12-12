@@ -17,11 +17,14 @@ import CreateformInfrastructure from "@/components/ui/infrastructure/CreateformI
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
+import SearchInputWithAutocomplete from "@/components/SearchInputWithAutocomplete";
+import SearchResultsList from "@/components/SearchResultsList";
 
 type Props = {};
 
 const page = (props: Props) => {
-  const { user, _hasHydrated, isAuthenticated } = useAppStore();
+  const { user, _hasHydrated, isAuthenticated, searchResults, searchTerms } =
+    useAppStore();
   const router = useRouter();
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
@@ -39,6 +42,8 @@ const page = (props: Props) => {
   if (!isAuthenticated || !user) {
     return null;
   }
+
+  const isSearching = searchTerms && searchTerms.length > 0;
   return (
     <main className="container py-6 space-y-6 min-h-screen">
       <div className="flex items-center justify-between">
@@ -73,10 +78,16 @@ const page = (props: Props) => {
           {/* <button className="bg-blue-600 text-white px-3 py-2 rounded flex flex-row gap-4 items-center"></button> */}
         </div>
       </div>
-
+      <div>
+        <SearchInputWithAutocomplete />
+      </div>
       {/* KPI Cards */}
       <div className="w-full bg-white rounded-lg shadow-xl p-6">
-        <Table />
+        {isSearching ? (
+          <SearchResultsList results={searchResults} searchTerm={searchTerms} />
+        ) : (
+          <Table />
+        )}
       </div>
     </main>
   );

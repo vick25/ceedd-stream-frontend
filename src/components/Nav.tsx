@@ -126,14 +126,14 @@ export function Nav() {
 
         {/* Barre de recherche (cachée sur petit écran, peut-être ?) */}
         <div className="relative hidden lg:block w-96">
-          {/* <Input
+          <Input
             type="text"
             name="searchfield"
             placeholder="Rechercher..."
             className="border border-gray-300 w-full pr-10" // Ajout de padding à droite
           />
-          <Search className="w-5 h-5 absolute text-gray-400 right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" /> */}
-          <SearchInputWithAutocomplete />
+          <Search className="w-5 h-5 absolute text-gray-400 right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" />
+          {/* <SearchInputWithAutocomplete />*/}
         </div>
 
         {/* Navigation Bureau */}

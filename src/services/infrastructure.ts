@@ -43,7 +43,7 @@ export const serviceinfrastructure = {
     );
     return response.data;
   },
-  async getInfrastrucureByAdresse(searchTerm: string): Promise<any[]> {
+  async getInfrastrucureByAdresse(searchTerm: string): Promise<any> {
     // const enCodeSearchTerm = encodeURIComponent(searchTerm);
     const queryParameters = "searchTerm";
     const response = await API.get(
