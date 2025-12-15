@@ -1,14 +1,14 @@
 // import { fetchInfrastructure } from "@/actions/streamData";
-import Footer from "@/components/Footer";
-import { Nav } from "@/components/Nav";
+// import Footer from "@/components/Footer";
+// import { Nav } from "@/components/Nav";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 
 import QueryProvider from "@/components/QueryProvider";
 import type { Metadata } from "next";
-import { usePathname } from "next/navigation";
-import { Toaster } from "react-hot-toast";
+// import { usePathname } from "next/navigation";
 import { Header } from "@/components/Header";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],

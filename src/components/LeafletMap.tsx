@@ -11,12 +11,12 @@ import "leaflet/dist/leaflet.css";
 import React, { useEffect, useMemo } from "react";
 import {
   MapContainer,
+  Marker,
   Popup,
   ScaleControl,
   TileLayer,
   useMap,
   ZoomControl,
-  Marker, //MODIFICATION: Utilisation de Marker
 } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 
@@ -111,15 +111,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       style={{ height: "100%", width: "100%" }}
       zoomControl={false}
     >
-      <CtrlZoomHandler />
-      <ZoomControl position="topleft" />
-      <ScaleControl position="bottomleft" imperial={false} />
-
       {/* Base Layer (inchangé) */}
       {mapStyle === "standard" ? (
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://www.ceeddrdc.org/">CEEDD</a>'
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
       ) : (
         <TileLayer
@@ -202,6 +198,10 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       <MapUpdater
         selectedFeature={features.find((f) => f.id === selectedFeatureId)}
       />
+
+      <CtrlZoomHandler />
+      <ZoomControl position="topleft" />
+      <ScaleControl position="bottomleft" imperial={false} />
     </MapContainer>
   );
 };

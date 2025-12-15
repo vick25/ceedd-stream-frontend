@@ -2,9 +2,9 @@ import {
   InfrastructureFilters,
   InfrastructureTypes,
 } from "@/types/infrastructure";
-import API from "./api";
-import { API_ENDPOINTS } from "@/utils/constants";
 import { ceedd } from "@/utils/apiRoutes";
+import { API_ENDPOINTS } from "@/utils/constants";
+import API from "./api";
 
 interface InfrastructureData {
   nom: string;
@@ -57,7 +57,7 @@ export const serviceinfrastructure = {
         },
       }
     );
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   },
   async getInfrastructureByadresseLocation(

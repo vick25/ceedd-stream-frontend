@@ -23,8 +23,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   return (
     <div className="h-full flex flex-col p-6">
       {/* Header of Card */}
-      <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
-        <h2 className="text-xl font-bold text-gray-900">Map Options</h2>
+      <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
+        <h2 className="text-lg font-bold text-gray-900">Map Options</h2>
         <button
           type="button"
           onClick={onClose}

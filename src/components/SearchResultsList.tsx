@@ -1,4 +1,3 @@
-import { InfrastructureTypes } from "@/types/infrastructure";
 import React from "react";
 
 interface InfrastructureSearch {
@@ -22,7 +21,7 @@ const SearchResultsList: React.FC<SearchResultProps> = ({
       </p>
     </div>;
   }
-  console.log({ results });
+  // console.log({ results });
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-medium text-gray-800">

@@ -1,14 +1,12 @@
 import { serviceinfrastructure } from "@/services/infrastructure";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { error } from "console";
-import toast from "react-hot-toast";
-import { useDebounce } from "./useDebounce";
 import {
   InfrastructureFilters,
   InfrastructureSearch,
-  InfrastructureTypes,
 } from "@/types/infrastructure";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
+import { useDebounce } from "./useDebounce";
 
 export const useGetInfrastructure = () => {
   return useMutation({
@@ -33,8 +31,8 @@ export const useUpdateInfrastructure = () => {
     mutationFn: ({ data, id }: { data: any; id: any }) =>
       serviceinfrastructure.updateInfrastructure(data, id),
     onSuccess: (response) => {
-      console.log(response);
-      toast.success("Mise à jour de l'infrastructure reussi");
+      // console.log(response);
+      toast.success("Mise à jour de l'infrastructure reussie");
     },
     onError: (error) => {
       toast.error("Impossible de modifier l'infrastructures");

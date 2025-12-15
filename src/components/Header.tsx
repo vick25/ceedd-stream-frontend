@@ -1,11 +1,14 @@
 "use client";
-import Link from "next/link";
-import React, { useState } from "react";
-// import { Link } from "./Link"; // Use our custom Link component
+
 import { clsx } from "clsx";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
+
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const navLinks = [
     { name: "Dashboard", href: "/home" },
@@ -23,15 +26,16 @@ export const Header: React.FC = () => {
             <Image
               src="/streamlogo.png"
               alt="logo"
-              width={40}
-              height={40}
+              width={56}
+              height={56}
               className="w-8 h-8 md:w-10 md:h-10 object-cover"
             />
             <span
               className={clsx(
-                "font-bold text-xl tracking-tight text-gray-800 max-w-xs", // Correction de la couleur et taille pour la lisibilité
+                "font-bold text-xl tracking-tight text-gray-900 max-w-xs", // Correction de la couleur et taille pour la lisibilité
                 "hidden sm:inline" // Masquer sur les très petits écrans si nécessaire
               )}
+              title='Sustainable Tools for Rainwater Evaluation And Management'
             >
               {/* Sustainable Tools for Rainwater Evaluation And Management */}
               STREAM
@@ -40,15 +44,18 @@ export const Header: React.FC = () => {
 
           {/* Center: Navigation (Desktop) */}
           <nav className="hidden md:flex space-x-8">
-            {navLinks.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-gray-500 hover:text-blue-600  transition-colors text-md"
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navLinks.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`text-sm transition-colors pb-1 ${isActive ? 'font-bold text-blue-600 border-b-2 border-blue-600' : 'font-medium text-gray-900 hover:text-blue-600'}`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Right: Actions (Desktop) */}
@@ -143,16 +150,19 @@ export const Header: React.FC = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-16 shadow-lg z-50">
           <div className="px-4 py-4 space-y-4">
-            {navLinks.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="block text-gray-700 hover:text-blue-600 font-medium py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navLinks.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`block py-2 ${isActive ? 'font-bold text-blue-600' : 'font-medium text-gray-700 hover:text-blue-600'}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
             <div className="h-px bg-gray-100 my-2"></div>
             <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
               <span className="text-gray-700 font-medium">Language</span>
