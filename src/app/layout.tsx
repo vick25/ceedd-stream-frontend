@@ -1,5 +1,3 @@
-"use client";
-
 // import { fetchInfrastructure } from "@/actions/streamData";
 import Footer from "@/components/Footer";
 import { Nav } from "@/components/Nav";
@@ -10,6 +8,7 @@ import QueryProvider from "@/components/QueryProvider";
 import type { Metadata } from "next";
 import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import { Header } from "@/components/Header";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -17,21 +16,21 @@ const poppins = Poppins({
   display: "swap",
 });
 
-// export const metadata: Metadata = {
-//   title: "CEEDD-STREAM",
-//   description:
-//     "CEEDD est une Organisation Non Gouvernementale de droit Congolais qui œuvre dans le secteur de la gestion durable des ressources environnementales pour le développement durable de la RDC",
-// };
+export const metadata: Metadata = {
+  title: "CEEDD-STREAM",
+  description:
+    "CEEDD est une Organisation Non Gouvernementale de droit Congolais qui œuvre dans le secteur de la gestion durable des ressources environnementales pour le développement durable de la RDC",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const pathnameFooter = usePathname();
-  const hideLayout = pathname === "/login";
-  const hideFooter = pathnameFooter === "/";
+  // const pathname = usePathname();
+  // const pathnameFooter = usePathname();
+  // const hideLayout = pathname === "/login";
+  // const hideFooter = pathnameFooter === "/";
   // const infrastructures = await fetchInfrastructure();
   // console.log(infrastructures.results);
 
@@ -45,9 +44,11 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <QueryProvider>
-          {!hideLayout && <Nav />}
+          <Header />
+          {/* <Nav /> */}
+          {/* {!hideLayout && } */}
           {children}
-          {!hideLayout && !pathnameFooter && <Footer />}
+          {/* {!hideLayout && !pathnameFooter && <Footer />} */}
           <Toaster
             position="top-right"
             toastOptions={{

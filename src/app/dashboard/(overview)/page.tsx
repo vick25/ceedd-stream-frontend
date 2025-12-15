@@ -18,7 +18,7 @@ import { useAppStore } from "@/store/appStore";
 export default function DashboardPage() {
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
-  const { user, _hasHydrated, isAuthenticated } = useAppStore();
+  // const { user, _hasHydrated, isAuthenticated } = useAppStore();
   // const infrastructures = useInfrastructureStore((s) => s.infrastructures);
   const { data: infrastructures } = useInfrastructures();
   const router = useRouter();
@@ -53,15 +53,16 @@ export default function DashboardPage() {
     };
   }, [infrastructures, clients]);
 
-  useEffect(() => {
-    if (_hasHydrated && !isAuthenticated) {
-      router.push("/login");
-    }
-  }, [_hasHydrated, isAuthenticated, router]);
+  // useEffect(() => {
+  //   if (_hasHydrated && !isAuthenticated) {
+  //     router.push("/login");
+  //   }
+  // }, [_hasHydrated, isAuthenticated, router]);
 
   return (
     <div>
-      <Nav />
+      {/* <Nav /> */}
+
       <main className="container py-6 space-y-6 min-h-screen">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">{t.navigation.dashboard}</h1>

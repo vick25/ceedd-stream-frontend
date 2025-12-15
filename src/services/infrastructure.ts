@@ -1,4 +1,7 @@
-import { InfrastructureTypes } from "@/types/infrastructure";
+import {
+  InfrastructureFilters,
+  InfrastructureTypes,
+} from "@/types/infrastructure";
 import API from "./api";
 import { API_ENDPOINTS } from "@/utils/constants";
 import { ceedd } from "@/utils/apiRoutes";
@@ -45,7 +48,7 @@ export const serviceinfrastructure = {
   },
   async getInfrastrucureByAdresse(searchTerm: string): Promise<any> {
     // const enCodeSearchTerm = encodeURIComponent(searchTerm);
-    const queryParameters = "searchTerm";
+    const queryParameters = "commune";
     const response = await API.get(
       `${API_ENDPOINTS.apiAuth}${ceedd.infras}volume`,
       {
@@ -55,6 +58,26 @@ export const serviceinfrastructure = {
       }
     );
     console.log(response.data);
+    return response.data;
+  },
+  async getInfrastructureByadresseLocation(
+    filters: InfrastructureFilters
+  ): Promise<any> {
+    const validParams = Object.fromEntries(
+      Object.entries(filters).filter(([, value]) => value)
+    );
+
+    if (Object.keys(validParams).length === 0) {
+      return Promise.resolve({ data: [] });
+    }
+
+    const response = await API.get(
+      `${API_ENDPOINTS.apiAuth}${ceedd.infras}volume`,
+      {
+        params: validParams,
+      }
+    );
+
     return response.data;
   },
   async getInfrastructureByVolume(volume: string) {

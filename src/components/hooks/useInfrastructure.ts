@@ -4,6 +4,7 @@ import { error } from "console";
 import toast from "react-hot-toast";
 import { useDebounce } from "./useDebounce";
 import {
+  InfrastructureFilters,
   InfrastructureSearch,
   InfrastructureTypes,
 } from "@/types/infrastructure";
@@ -73,6 +74,34 @@ export const useInfrastructureByAdresse = (
   useEffect(() => {
     if (query.isError) {
       toast.error("Impossible d'effectuer la recherche. Veuillez réessayer.");
+    }
+  }, [query.isError]);
+
+  return query;
+};
+
+type InfrastructureResponseLocation = InfrastructureSearch;
+export const useInfrastructureByAdresseLocation = (
+  locationFilters: InfrastructureFilters,
+  runSearch: boolean
+) => {
+  const queryKey = ["infrastructureLocation", locationFilters];
+
+  const isFilterSelected = Object.values(locationFilters).some(
+    (value) => value !== ""
+  );
+  const isEnabled = runSearch && isFilterSelected;
+
+  const query = useQuery<InfrastructureResponseLocation, Error>({
+    queryKey: queryKey,
+    queryFn: () =>
+      serviceinfrastructure.getInfrastructureByadresseLocation(locationFilters),
+    enabled: isEnabled,
+    staleTime: 1000 * 60 * 5,
+  });
+  useEffect(() => {
+    if (query.isError) {
+      toast.error("l'element chércher n'existe pas");
     }
   }, [query.isError]);
 

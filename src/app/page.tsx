@@ -132,7 +132,7 @@ export default function Home() {
   // --- RENDU ---
   return (
     // <div className="min-h-screen flex flex-col">
-    <main className="min-h-screen flex flex-col pt-20">
+    <main className="min-h-screen flex flex-col ">
       {/* Hero / Map Section */}
       <section className="relative w-full h-[600px] md:h-[700px] bg-gray-200 ">
         {/* Indicateur de Chargement */}
