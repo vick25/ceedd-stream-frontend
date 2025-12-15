@@ -50,8 +50,8 @@ const page = () => {
     <div className="min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-md bg-white shadow-sm border border-gray-300">
         <CardHeader className="space-y-1 flex flex-col gap-3">
-          <Link href="/" className="flex">
-            <ArrowBigLeft />
+          <Link href="/" className="flex text-gray-700">
+            <ArrowBigLeft className="text-gray-700" />
             Retour
           </Link>
           <CardTitle className="text-2xl font-bold text-left">Ceedd</CardTitle>
