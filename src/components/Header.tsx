@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 import { useLogOut } from "./hooks/useAuth";
+
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
