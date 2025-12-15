@@ -107,3 +107,30 @@ export const useInfrastructureByAdresseLocation = (
 
   return query;
 };
+type InfrastructureResponseDate = InfrastructureSearch;
+export const useInfrastructureVolumeByDate = (
+  dateFilters: InfrastructureFilters,
+  runSearch: boolean
+) => {
+  const queryKey = ["infrastructureLocation", dateFilters];
+
+  const isFilterSelected = Object.values(dateFilters).some(
+    (value) => value !== ""
+  );
+  const isEnabled = runSearch && isFilterSelected;
+
+  const query = useQuery<InfrastructureResponseLocation, Error>({
+    queryKey: queryKey,
+    queryFn: () =>
+      serviceinfrastructure.getInfrastructureVolumeByDate(dateFilters),
+    enabled: isEnabled,
+    staleTime: 1000 * 60 * 5,
+  });
+  useEffect(() => {
+    if (query.isError) {
+      toast.error("l'element chércher n'existe pas");
+    }
+  }, [query.isError]);
+
+  return query;
+};

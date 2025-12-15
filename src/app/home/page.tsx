@@ -4,7 +4,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useInfrastructureByAdresseLocation } from "@/components/hooks/useInfrastructure";
+import {
+  useInfrastructureByAdresseLocation,
+  useInfrastructureVolumeByDate,
+} from "@/components/hooks/useInfrastructure";
 import { useCustomers } from "@/components/hooks/useCustomer";
 import { useLocationList } from "@/utils/utils";
 
@@ -70,22 +73,8 @@ const t = {
   locationDesc: "Filter volumes by administrative area",
   dateTitle: "Search by Date",
   dateDesc: "Filter by construction date",
-  locationBtn: "Generate Location Report",
-  dateBtn: "Generate Date Report",
-};
-
-/* =====================
-   API Fetchers (Mock)
-===================== */
-
-const fetchLocationReport = async (params: any) => {
-  console.log("Fetching location report with", params);
-  return { volume: 1200 };
-};
-
-const fetchDateReport = async (params: any) => {
-  console.log("Fetching date report with", params);
-  return { volume: 800 };
+  locationBtn: "Search",
+  dateBtn: "Search",
 };
 
 /* =====================
@@ -105,8 +94,8 @@ const Dashboard: React.FC = () => {
     semester: "",
     trimester: "",
     month: "",
-    startDate: "",
-    endDate: "",
+    date_from: "",
+    date_to: "",
   });
 
   const [runLocationSearch, setRunLocationSearch] = useState(false);
@@ -121,10 +110,19 @@ const Dashboard: React.FC = () => {
     isPending: isLocationPending,
   } = useInfrastructureByAdresseLocation(locationFilters, runLocationSearch);
 
+  const {
+    data: dateData,
+    isFetching: isDateFetching,
+    isError: isDateError,
+    isSuccess: isDateIsSuccess,
+  } = useInfrastructureVolumeByDate(dateFilters, runDateSearch);
+
   const { data: clientData } = useCustomers();
   const uniqueCommunes = useLocationList(clientData, "commune");
   const uniqueQuartier = useLocationList(clientData, "quartier");
   const uniqueAvenue = useLocationList(clientData, "avenue");
+  // const startDate = useLocationList(clientData, "date_from");
+  // const startEnd = useLocationList(clientData, "date_to");
 
   useEffect(() => {
     if (runLocationSearch && (isLocationSuccess || isLocationError)) {
@@ -133,6 +131,16 @@ const Dashboard: React.FC = () => {
   }, [runLocationSearch, isLocationSuccess, isLocationError]);
 
   const isAnyLocationFilterSelected = Object.values(locationFilters).some(
+    (value) => value !== ""
+  );
+
+  useEffect(() => {
+    if (runDateSearch && (isDateIsSuccess || isDateError)) {
+      setRunDateSearch(false);
+    }
+  }, [runDateSearch, isDateIsSuccess, isDateError]);
+
+  const isAnyDateFilterSelected = Object.values(dateFilters).some(
     (value) => value !== ""
   );
   return (
@@ -244,30 +252,38 @@ const Dashboard: React.FC = () => {
                   onChange={(e) =>
                     setDateFilters({
                       ...dateFilters,
-                      startDate: e.target.value,
+                      date_from: e.target.value,
                     })
                   }
                 />
                 <Input
                   type="date"
                   onChange={(e) =>
-                    setDateFilters({ ...dateFilters, endDate: e.target.value })
+                    setDateFilters({ ...dateFilters, date_to: e.target.value })
                   }
                 />
               </div>
             </div>
 
-            <Button
+            {/* <Button
               label={t.dateBtn}
               variant="blue"
               onClick={() => setRunDateSearch(true)}
-            />
+              
+            /> */}
+            <button
+              onClick={() => setRunDateSearch(true)}
+              disabled={isDateFetching || !isAnyDateFilterSelected}
+              className="w-full text-white py-2 rounded-md transition bg-blue-600 hover:bg-blue-700"
+            >
+              {isDateFetching ? "chargemant ..." : t.dateBtn}
+            </button>
 
-            {/* {dateData && (
+            {dateData && (
               <p className="text-sm text-gray-600 mt-3">
-                Volume: {dateData.volume}
+                Volume: {dateData.total_volume}
               </p>
-            )} */}
+            )}
           </Card>
         </div>
         <div className="bg-white shadow-xl max-w-7xl h-20 flex justify-center items-center">

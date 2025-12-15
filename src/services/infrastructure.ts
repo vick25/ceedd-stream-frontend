@@ -80,6 +80,26 @@ export const serviceinfrastructure = {
 
     return response.data;
   },
+  async getInfrastructureVolumeByDate(
+    filters: InfrastructureFilters
+  ): Promise<any> {
+    const validParams = Object.fromEntries(
+      Object.entries(filters).filter(([, value]) => value)
+    );
+
+    if (Object.keys(validParams).length === 0) {
+      return Promise.resolve({ data: [] });
+    }
+
+    const response = await API.get(
+      `${API_ENDPOINTS.apiAuth}${ceedd.infras}volume_by_date`,
+      {
+        params: validParams,
+      }
+    );
+
+    return response.data;
+  },
   async getInfrastructureByVolume(volume: string) {
     const response = await API.get(
       `${API_ENDPOINTS.api}${ceedd.infrastructure}/${volume}`
