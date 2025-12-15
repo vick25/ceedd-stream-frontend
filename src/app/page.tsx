@@ -166,7 +166,7 @@ export default function Home() {
           <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4 md:mt-0">
             <button
               onClick={() => setMapStyle("standard")}
-              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "standard"
+              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "standard"
                 ? "text-blue-600 bg-blue-50"
                 : "text-gray-500 hover:text-gray-800"
                 }`}
@@ -176,7 +176,7 @@ export default function Home() {
             <div className="w-px bg-gray-200 my-1 mx-1"></div>
             <button
               onClick={() => setMapStyle("satellite")}
-              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "satellite"
+              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "satellite"
                 ? "text-blue-600 bg-blue-50"
                 : "text-gray-500 hover:text-gray-800"
                 }`}
@@ -188,7 +188,7 @@ export default function Home() {
           {/* Filter Card Container */}
           <div
             className={`
-              w-full md:w-[380px]
+              w-full md:w-[350px]
               bg-white/95 backdrop-blur-sm shadow-2xl
               overflow-y-auto pointer-events-auto flex flex-col
               transition-transform duration-300 ease-in-out

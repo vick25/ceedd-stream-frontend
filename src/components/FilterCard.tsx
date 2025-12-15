@@ -53,7 +53,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
           htmlFor="category-select"
           className="block text-sm font-semibold text-gray-700 mb-2"
         >
-          Type d'infrastructures
+          Filtrer par type d'infrastructures
         </label>
         <div className="relative">
           <select
