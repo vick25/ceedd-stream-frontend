@@ -2,14 +2,13 @@
 // state management, search trigger, i18n-ready structure,
 // and TanStack Query integration placeholders.
 "use client";
-import React, { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useCustomers } from "@/components/hooks/useCustomer";
 import {
   useInfrastructureByAdresseLocation,
   useInfrastructureVolumeByDate,
 } from "@/components/hooks/useInfrastructure";
-import { useCustomers } from "@/components/hooks/useCustomer";
 import { useLocationList } from "@/utils/utils";
+import React, { useEffect, useState } from "react";
 
 /* =====================
    Reusable UI Components
@@ -34,11 +33,10 @@ const Button: React.FC<{
 }> = ({ label, variant = "blue", onClick }) => (
   <button
     onClick={onClick}
-    className={`w-full text-white py-2 rounded-md transition ${
-      variant === "blue"
-        ? "bg-blue-600 hover:bg-blue-700"
-        : "bg-purple-600 hover:bg-purple-700"
-    }`}
+    className={`w-full text-white py-2 rounded-md transition ${variant === "blue"
+      ? "bg-blue-600 hover:bg-blue-700"
+      : "bg-purple-600 hover:bg-purple-700"
+      }`}
   >
     {label}
   </button>
@@ -58,7 +56,7 @@ const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (
 ) => (
   <input
     {...props}
-    className="w-full border   border-gray-200 rounded-md px-3 py-2"
+    className="w-full border border-gray-200 rounded-md px-3 py-2"
   />
 );
 
@@ -205,7 +203,7 @@ const Dashboard: React.FC = () => {
               <button
                 onClick={() => setRunLocationSearch(true)}
                 disabled={isLocationFetching || !isAnyLocationFilterSelected}
-                className="w-full text-white py-2 rounded-md transition bg-blue-600 hover:bg-blue-700"
+                className="w-full mt-6 text-white py-2 rounded-md transition bg-blue-600 hover:bg-blue-700"
               >
                 {isLocationFetching ? "Chargement..." : t.locationBtn}
               </button>
@@ -269,7 +267,7 @@ const Dashboard: React.FC = () => {
               label={t.dateBtn}
               variant="blue"
               onClick={() => setRunDateSearch(true)}
-              
+
             /> */}
             <button
               onClick={() => setRunDateSearch(true)}
@@ -286,6 +284,7 @@ const Dashboard: React.FC = () => {
             )}
           </Card>
         </div>
+
         <div className="bg-white shadow-xl max-w-7xl h-20 flex justify-center items-center">
           {locationData && (
             <p className=" text-gray-500 font-bold text-md">

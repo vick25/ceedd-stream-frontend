@@ -1,6 +1,6 @@
 import { Facebook, Instagram, Linkedin } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -45,27 +45,30 @@ const Footer = () => {
           </h2>
 
           <div className="flex space-x-4">
-            <a
+            <Link
               target="_blank"
+              rel="noopener noreferrer"
               href="https://web.facebook.com/p/CEEDD-100075980903950"
               className="p-2 bg-white/10 rounded-full hover:bg-highlight hover:text-black transition-colors"
             >
               <Facebook className="w-5 h-5" />
-            </a>
-            <a
+            </Link>
+            <Link
               target="_blank"
+              rel="noopener noreferrer"
               href="#"
               className="p-2 bg-white/10 rounded-full hover:bg-highlight hover:text-black transition-colors"
             >
               <Instagram className="w-5 h-5" />
-            </a>
-            <a
+            </Link>
+            <Link
               target="_blank"
+              rel="nooopener noreferrer"
               href="#"
               className="p-2 bg-white/10 rounded-full hover:bg-highlight hover:text-black transition-colors"
             >
               <Linkedin className="w-5 h-5" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
