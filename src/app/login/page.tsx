@@ -12,7 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Value } from "@radix-ui/react-select";
-import { Lock, User } from "lucide-react";
+import { ArrowBigLeft, Lock, User } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -48,7 +49,11 @@ const page = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-md bg-white shadow-sm border border-gray-300">
-        <CardHeader className="space-y-1">
+        <CardHeader className="space-y-1 flex flex-col gap-2">
+          <Link href="/" className="flex text-gray-700 items-center">
+            <ArrowBigLeft className="text-gray-700 w-4 h-4" />
+            Retour
+          </Link>
           <CardTitle className="text-2xl font-bold text-left">Ceedd</CardTitle>
           <CardDescription className="text-left text-sm text-gray-700">
             Connectez-vous à votre compte administrateur
