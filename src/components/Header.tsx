@@ -4,8 +4,22 @@ import React, { useState } from "react";
 // import { Link } from "./Link"; // Use our custom Link component
 import { clsx } from "clsx";
 import Image from "next/image";
+import { useAppStore } from "@/store/appStore";
+import { useLogOut } from "./hooks/useAuth";
+import { useRouter } from "next/navigation";
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, _hasHydrated, isAuthenticated } = useAppStore();
+  const mutationLogout = useLogOut();
+  const router = useRouter();
+  const handleLogout = () => {
+    mutationLogout.mutate();
+    //  setIsClicked(false); // Fermer le menu après la déconnexion
+  };
+
+  const handleLogin = () => {
+    router.push("/login");
+  };
 
   const navLinks = [
     { name: "Dashboard", href: "/home" },
@@ -77,25 +91,49 @@ export const Header: React.FC = () => {
                 </svg>
               </div>
             </div>
-            <button
-              type="button"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {_hasHydrated && isAuthenticated && user ? (
+              <button
+                type="button"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
+                onClick={handleLogout}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                />
-              </svg>
-              Login
-            </button>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+                Deconnexion
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
+                onClick={handleLogin}
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+                Login
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -164,7 +202,10 @@ export const Header: React.FC = () => {
                 </button>
               </div>
             </div>
-            <button className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold text-center">
+            <button
+              className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold text-center"
+              onClick={handleLogin}
+            >
               Login
             </button>
           </div>
