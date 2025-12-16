@@ -1,20 +1,14 @@
 import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
-import EditInfrastructure from "@/components/editButton/EditInfrastructure";
 import {
-  useCustomer,
-  useCustomers,
-  useGetCustomer,
+  useCustomers
 } from "@/components/hooks/useCustomer";
 
-import { useZoneContributive } from "@/components/hooks/useZoneContributive";
-import Loader from "@/components/Loader";
-import { Client, InfrastructureTypes } from "@/types/infrastructure";
-import { useEffect, useState } from "react";
-import { tr } from "zod/v4/locales";
-import { Skeleton } from "../skeleton";
-import Link from "next/link";
-import { Eye } from "lucide-react";
 import EditCustomer from "@/components/editButton/EditCustomer";
+import Loader from "@/components/Loader";
+import { Client } from "@/types/infrastructure";
+import { Eye } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function ClientTable() {
   const [getClients, setGetClients] = useState<Client[]>([]);
@@ -61,11 +55,11 @@ export default function ClientTable() {
                       /> */}
                           {/* <p>{invoice.name}</p> */}
                           <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Nom</span>
+                            <span className="font-semibold">Noms</span>
                             <p>{customer.nom}</p>
                           </div>
                           <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Prénom:</span>
+                            <span className="font-semibold">Prénom</span>
                             <p>{customer.prenom}</p>
                           </div>
                         </div>
@@ -107,13 +101,13 @@ export default function ClientTable() {
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Nom
+                  Noms
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Prénom
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Sexe{" "}
+                  Sexe
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Adresse

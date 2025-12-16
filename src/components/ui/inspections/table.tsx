@@ -1,16 +1,14 @@
 // import Deleteinspstructure from "@/components/deleteButton/Deletei";
-import EditInspstructure from "@/components/editButton/editInspection";
 
 import Loader from "@/components/Loader";
 
-import { useEffect, useState } from "react";
-import { Skeleton } from "../skeleton";
-import Link from "next/link";
-import { Eye } from "lucide-react";
-import { useGetInspections } from "@/components/hooks/useInspection";
-import EditInspection from "@/components/editButton/editInspection";
 import DeleteInspection from "@/components/deleteButton/DeleteInspection";
+import EditInspection from "@/components/editButton/editInspection";
+import { useGetInspections } from "@/components/hooks/useInspection";
 import { displayDate } from "@/utils/utils";
+import { Eye } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function InspectionTable() {
   const [clientNames, setClientNames] = useState<Record<string, string>>({});
@@ -51,7 +49,7 @@ export default function InspectionTable() {
                             <p>{displayDate(customer.date)}</p>
                           </div>
                           <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Etat:</span>
+                            <span className="font-semibold">Etat</span>
                             <p>{customer.etat}</p>
                           </div>
                         </div>
@@ -61,7 +59,7 @@ export default function InspectionTable() {
                     <div className="flex w-full items-center justify-between pt-4">
                       <div>
                         <p className="text-xl font-medium">
-                          inspecteur : {customer.inspecteur}
+                          Inspecteur : {customer.inspecteur}
                         </p>
                       </div>
                       <div className="flex justify-end gap-2">
@@ -91,13 +89,13 @@ export default function InspectionTable() {
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  date
+                  Date
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  etat
+                  Etat
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Inspecteur{" "}
+                  Inspecteur
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Commentaire
@@ -106,7 +104,7 @@ export default function InspectionTable() {
                   Prochain controle
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Infastructure{" "}
+                  Infastructure
                 </th>
 
                 <th scope="col" className="relative py-3 pl-6 pr-3">

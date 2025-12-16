@@ -1,33 +1,16 @@
-import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
-import EditInfrastructure from "@/components/editButton/EditInfrastructure";
-import {
-  useCustomer,
-  useCustomers,
-  useGetCustomer,
-} from "@/components/hooks/useCustomer";
-import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
-import {
-  useAllTypeInfrastructure,
-  useTypeInfrastructure,
-} from "@/components/hooks/useTypeInfrastructure";
 
+import DeleteZoneContributide from "@/components/deleteButton/DeleteZoneContributide";
+import EditZoneContributide from "@/components/editButton/EditZoneContributide";
 import {
-  useZoneContributive,
-  useZoneContributives,
+  useZoneContributives
 } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import {
-  Client,
-  InfrastructureTypes,
-  Zone_contributive,
+  Zone_contributive
 } from "@/types/infrastructure";
-import { useEffect, useState } from "react";
-import { tr } from "zod/v4/locales";
-import { Skeleton } from "../skeleton";
-import Link from "next/link";
 import { Eye } from "lucide-react";
-import EditZoneContributide from "@/components/editButton/EditZoneContributide";
-import DeleteZoneContributide from "@/components/deleteButton/DeleteZoneContributide";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function ZoneTable() {
   const [getZones, setGetZones] = useState<Zone_contributive[]>([]);
@@ -111,14 +94,14 @@ export default function ZoneTable() {
                 </th>
 
                 <th scope="col" className="px-3 py-5 font-medium">
-                  etat du ravin{" "}
+                  Etat du ravin
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  description
+                  Description
                 </th>
 
                 <th scope="col" className="px-3 py-5 font-medium">
-                  shapefile_id
+                  Lié au shapefile
                 </th>
 
                 <th scope="col" className="relative py-3 pl-6 pr-3">

@@ -8,7 +8,8 @@
     "language": "Language",
     "login": "Login",
     "logout": "Logout",
-    "register": "Register"
+    "register": "Register",
+    "backOffice": "Go to Admin"
   },
   "Footer": {
     "copyright": "© 2023 CEEDD. All rights reserved.",

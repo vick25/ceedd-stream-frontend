@@ -1,11 +1,10 @@
 // import { fetchInfrastructure } from "@/actions/streamData";
-// "use client";
+
 import { Poppins } from "next/font/google";
 import "../globals.css";
 
 import { Header } from "@/components/Header";
 import QueryProvider from "@/components/QueryProvider";
-// import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 
 import type { Metadata } from "next";
@@ -29,10 +28,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: Readonly<Props>) {
-  // const pathname = usePathname();
-  // const pathnameFooter = usePathname();
-  // const hideLayout = pathname === "/login";
-  // const hideFooter = pathnameFooter === "/";
+
   // const infrastructures = await fetchInfrastructure();
   // console.log(infrastructures.results);
 

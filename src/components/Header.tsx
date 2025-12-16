@@ -70,11 +70,10 @@ export const Header: React.FC = () => {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-sm transition-colors pb-1 ${
-                    isActive
+                  className={`text-sm transition-colors pb-1 ${isActive
                       ? "font-bold text-blue-600 border-b-2 border-blue-600"
                       : "font-medium text-gray-900 hover:text-blue-600"
-                  }`}
+                    }`}
                 >
                   {item.name}
                 </Link>
@@ -131,7 +130,7 @@ export const Header: React.FC = () => {
                   className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
                   target="_blank"
                 >
-                  {t("Back Office")}
+                  {t("backOffice")}
                 </Link>
               </div>
             ) : (
@@ -209,11 +208,10 @@ export const Header: React.FC = () => {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`block py-2 ${
-                    isActive
+                  className={`block py-2 ${isActive
                       ? "font-bold text-blue-600"
                       : "font-medium text-gray-700 hover:text-blue-600"
-                  }`}
+                    }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.name}
