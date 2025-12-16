@@ -15,18 +15,26 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
             <div className="p-4 bg-blue-50 rounded-lg space-y-2">
               <h3 className="font-bold text-blue-800 mb-2">Our Mission</h3>
+
               <p className="text-md text-gray-700">
                 Our mission focuses on preventing and limiting urban gullies and flooding caused by extreme events due to climate change in African megacities. Our interventions mainly focus on rainwater harvesting and infiltration at the household level.
                 We are aware that:
-                <ul>
-                  <li>a complete system for the safe drainage of rainwater is difficult to implement on the scale of our cities, given the resources required.</li>
-                  <li>our water needs will only worsen as our population grows and rainfall intensifies with climate change.</li>
-                </ul>
               </p>
+
+              <ul className="list-disc pl-5 text-md text-gray-700">
+                <li>
+                  a complete system for the safe drainage of rainwater is difficult to implement on the scale of our cities, given the resources required.
+                </li>
+                <li>
+                  our water needs will only worsen as our population grows and rainfall intensifies with climate change.
+                </li>
+              </ul>
+
               <p className="text-md text-gray-700">
                 We empower underserved and marginalised communities to take control of their water-related future in the face of climate change. Our rainwater harvesting systems provide a source of domestic water for 9 months of the year, reducing the need to purchase and transport water, while providing a local response to catastrophic urban flooding and erosion.
               </p>
             </div>
+
             <div className="p-4 bg-blue-50 rounded-lg">
               <h3 className="font-bold text-blue-800 mb-2">Our Vision</h3>
               <p className="text-md text-gray-700">A world where every community has reliable access to clean water through data-driven management.</p>

@@ -1,7 +1,7 @@
 // import { fetchInfrastructure } from "@/actions/streamData";
 // "use client";
 import { Poppins } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 
 import { Header } from "@/components/Header";
 import QueryProvider from "@/components/QueryProvider";
@@ -46,7 +46,7 @@ export default async function RootLayout({ children }: Readonly<Props>) {
       </head>
       <body
         className="min-h-screen bg-gray-50 text-gray-900">
-        <NextIntlClientProvider messages={messages}  >
+        <NextIntlClientProvider messages={messages}>
           <QueryProvider>
             <Header />
             {/* <Nav /> */}

@@ -1,4 +1,5 @@
 "use client";
+
 import { useAuth } from "@/components/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,13 +12,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Value } from "@radix-ui/react-select";
 import { ArrowBigLeft, Lock, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-const page = () => {
+const LoginPage = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -49,12 +49,12 @@ const page = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-md bg-white shadow-sm border border-gray-300">
-        <CardHeader className="space-y-1 flex flex-col gap-2">
-          <Link href="/" className="flex text-gray-700 items-center">
-            <ArrowBigLeft className="text-gray-700 w-4 h-4" />
+        <CardHeader className="space-y-1 flex flex-col gap-2 text-left">
+          <Link href="/" className="flex text-gray-700 text-xs items-center hover:text-gray-900 hover:font-medium">
+            <ArrowBigLeft className="text-gray-700 w-4 h-4 mr-1" />
             Retour
           </Link>
-          <CardTitle className="text-2xl font-bold text-left">Ceedd</CardTitle>
+          <CardTitle className="text-2xl font-bold text-left">CEEDD</CardTitle>
           <CardDescription className="text-left text-sm text-gray-700">
             Connectez-vous à votre compte administrateur
           </CardDescription>
@@ -99,7 +99,7 @@ const page = () => {
             </div>
             <Button
               type="submit"
-              className="w-full bg-green-600 text-white "
+              className="w-full bg-green-600 text-white hover:bg-green-700"
               disabled={loginMutation.isPending}
             >
               {loginMutation.isPending ? "...Chargement" : "Se connecter"}
@@ -121,4 +121,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default LoginPage;
