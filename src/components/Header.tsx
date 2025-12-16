@@ -33,8 +33,8 @@ export const Header: React.FC = () => {
   const navLinks = [
     { name: "Dashboard", href: "/home" },
     { name: `${t("about")}`, href: "/abouts" },
-    { name: `${t("donate")}`, href: "/donate" },
-    { name: `${t("contact")}`, href: "/contact" },
+    { name: `${t("donate")}`, href: "#" },
+    { name: `${t("contact")}`, href: "#" },
   ];
 
   return (
@@ -131,7 +131,7 @@ export const Header: React.FC = () => {
                   className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
                   target="_blank"
                 >
-                  Back Office
+                  {t("Back Office")}
                 </Link>
               </div>
             ) : (
