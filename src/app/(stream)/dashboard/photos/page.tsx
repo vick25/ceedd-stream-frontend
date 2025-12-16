@@ -40,6 +40,7 @@ const page = (props: Props) => {
   const handleDelete = () => {
     SetSecureUrl("");
   };
+  const CLOUDINARY_URL = process.env.NEXT_PUBLIC_CLOUDINARY_URL;
   const { handleFileUpload, urlLoading } = useUplaoderImage(CLOUDINARY_URL);
   const uploadUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
