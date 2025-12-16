@@ -149,18 +149,18 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                   }}
                 >
                   <Popup closeButton={false} className="custom-popup ">
-                    <div className="min-w-64 max-w-sm p-3 font-sans text-gray-800 flex flex-col  gap-3">
+                    <div className="min-w-64 max-w-sm font-sans text-gray-800 flex flex-col gap-3">
                       {/* TITRE PRINCIPAL ET TYPE */}
                       <div className="flex items-center gap-2">
                         <span>Zone : </span>
-                        <strong className=" text-base font-bold text-blue-700 leading-tight">
+                        <strong className="text-base font-bold text-blue-700 leading-tight">
                           {feature.nom}
                         </strong>
                       </div>
                       <hr className="mb-3 border-gray-100" />
                       <div className="flex items-center gap-2">
                         <span>Type :</span>
-                        <strong className=" text-xs font-semibold text-blue-500  uppercase tracking-wider">
+                        <strong className="text-xs font-semibold text-blue-500 uppercase tracking-wider">
                           {feature.type}
                         </strong>
                       </div>

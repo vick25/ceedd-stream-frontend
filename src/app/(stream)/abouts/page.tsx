@@ -33,7 +33,7 @@ export default function AboutPage() {
                 African megacities. Our interventions mainly focus on rainwater
                 harvesting and infiltration at the household level. We are aware
                 that:
-                <ul>
+                <ul className="list-disc list-inside mt-2 space-y-1 pl-5">
                   <li>
                     a complete system for the safe drainage of rainwater is
                     difficult to implement on the scale of our cities, given the

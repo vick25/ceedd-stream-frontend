@@ -188,7 +188,7 @@ export default function Home() {
           {/* Filter Card Container */}
           <div
             className={`
-              w-full md:w-[350px]
+              w-full md:w-[380px]
               bg-white/95 backdrop-blur-sm shadow-2xl
               overflow-y-auto pointer-events-auto flex flex-col
               transition-transform duration-300 ease-in-out

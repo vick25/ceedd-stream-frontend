@@ -1,6 +1,5 @@
-// This file has been refactored for professional design, state handling,
-// and clear separation of rendering logic (Success, Loading, Error, No Data).
 "use client";
+
 import { useCustomers } from "@/components/hooks/useCustomer";
 import {
   useInfrastructureByAdresseLocation,
@@ -52,9 +51,8 @@ const ResultCard: React.FC<{
   color: "blue" | "green";
 }> = ({ title, volume, details, color }) => (
   <div
-    className={`bg-white rounded-xl shadow-lg p-6 flex flex-col justify-center items-center h-40 border-t-4 ${
-      color === "blue" ? "border-blue-500" : "border-green-500"
-    }`}
+    className={`bg-white rounded-xl shadow-lg p-6 flex flex-col justify-center items-center h-40 border-t-4 ${color === "blue" ? "border-blue-500" : "border-green-500"
+      }`}
   >
     <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
     <h3 className="text-4xl font-extrabold text-gray-800 mb-3">
@@ -303,9 +301,8 @@ const Dashboard: React.FC = () => {
     // Nous rendons le succès prioritaire sur toute autre vérification, car si les données sont là, elles doivent s'afficher.
     if (hasVolumeData(locationData)) {
       const { commune, quartier, avenue } = locationFilters;
-      const details = `Filtres: ${commune || "Tous"}, ${quartier || "Tous"}, ${
-        avenue || "Toutes"
-      }`;
+      const details = `Filtres: ${commune || "Tous"}, ${quartier || "Tous"}, ${avenue || "Toutes"
+        }`;
       return (
         <ResultCard
           title={`Capacité Totale (${commune || "Global"})`}
@@ -358,9 +355,8 @@ const Dashboard: React.FC = () => {
 
     // 1. État de Succès (Volume > 0)
     if (hasVolumeData(dateData)) {
-      const details = `Période du ${dateFilters.date_from || "N/A"} au ${
-        dateFilters.date_to || "N/A"
-      }`;
+      const details = `Période du ${dateFilters.date_from || "N/A"} au ${dateFilters.date_to || "N/A"
+        }`;
       return (
         <ResultCard
           title="Volume Total par Période"
