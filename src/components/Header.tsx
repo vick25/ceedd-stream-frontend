@@ -7,15 +7,20 @@ import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
 import { useAppStore } from "@/store/appStore";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useLogOut } from "./hooks/useAuth";
+import LocaleSwitcher from "./Locale-switcher";
 
 export const Header: React.FC = () => {
+  const t = useTranslations('Header');
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const mutationLogout = useLogOut();
   const router = useRouter();
+
   const handleLogout = () => {
     mutationLogout.mutate();
     //  setIsClicked(false); // Fermer le menu après la déconnexion
@@ -27,9 +32,9 @@ export const Header: React.FC = () => {
 
   const navLinks = [
     { name: "Dashboard", href: "/home" },
-    { name: "About Us", href: "/abouts" },
-    { name: "Donate", href: "/donate" },
-    { name: "Contact", href: "/contact" },
+    { name: `${t("about")}`, href: "/abouts" },
+    { name: `${t("donate")}`, href: "/donate" },
+    { name: `${t("contact")}`, href: "/contact" },
   ];
 
   return (
@@ -76,13 +81,9 @@ export const Header: React.FC = () => {
           {/* Right: Actions (Desktop) */}
           <div className="hidden md:flex items-center space-x-4">
             <div className="relative">
-              <select
-                className="appearance-none bg-white border border-gray-300 text-gray-700 py-1.5 pl-3 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-50 focus:border-blue-500 text-sm cursor-pointer font-medium hover:text-gray-900"
-                aria-label="Language selection"
-              >
-                <option value="EN">EN</option>
-                <option value="FR">FR</option>
-              </select>
+              {/* <!-- Local switcher --> */}
+              <LocaleSwitcher />
+
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                 <svg
                   className="w-4 h-4"
@@ -118,7 +119,7 @@ export const Header: React.FC = () => {
                     d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
                   />
                 </svg>
-                Deconnexion
+                {t('logout')}
               </button>
             ) : (
               <button
@@ -139,7 +140,7 @@ export const Header: React.FC = () => {
                     d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
                   />
                 </svg>
-                Login
+                {t('login')}
               </button>
             )}
           </div>
@@ -204,20 +205,14 @@ export const Header: React.FC = () => {
             })}
             <div className="h-px bg-gray-100 my-2"></div>
             <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
-              <span className="text-gray-700 font-medium">Language</span>
-              <div className="flex space-x-2">
-                <button className="text-blue-600 font-bold">EN</button>
-                <span className="text-gray-300">|</span>
-                <button className="text-gray-500 hover:text-blue-600">
-                  FR
-                </button>
-              </div>
+              <span className="text-gray-700 font-medium">{t('language')}</span>
+              <LocaleSwitcher />
             </div>
             <button
               className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold text-center"
               onClick={handleLogin}
             >
-              Login
+              {t('login')}
             </button>
           </div>
         </div>
