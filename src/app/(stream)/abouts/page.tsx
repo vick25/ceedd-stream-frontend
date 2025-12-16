@@ -54,6 +54,7 @@ export default function AboutPage() {
                 to catastrophic urban flooding and erosion.
               </p>
             </div>
+
             <div className="p-4 bg-blue-50 rounded-lg">
               <h3 className="font-bold text-blue-800 mb-2">Our Vision</h3>
               <p className="text-md text-gray-700">

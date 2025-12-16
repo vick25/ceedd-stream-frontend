@@ -1,7 +1,6 @@
 import { authService } from "@/services/auth";
 import { useAppStore } from "@/store/appStore";
 import { useMutation } from "@tanstack/react-query";
-import { error } from "console";
 import toast from "react-hot-toast";
 
 export const useAuth = () => {

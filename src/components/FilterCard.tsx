@@ -1,5 +1,7 @@
 // import { CATEGORIES } from '@/lib/constants';
 import { MapFeature } from "@/types/types";
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { CylinderGraph } from "./CylinderGraph";
 
@@ -93,8 +95,19 @@ export const FilterCard: React.FC<FilterCardProps> = ({
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
+
               {/* Details List */}
               <div className="flex-1 space-y-3">
+                <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300">
+                  <Link href={"#"}>
+                    <Image
+                      src="/1.jpg"
+                      alt="image infrastructure"
+                      fill
+                      className="object-cover"
+                    />
+                  </Link>
+                </div>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
                     Infrastructure
