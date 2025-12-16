@@ -1,0 +1,116 @@
+{
+  "Header": {
+    "home": "Accueil",
+    "about": "À propos de nous",
+    "donate": "Faire un don",
+    "contact": "Nous contacter",
+    "dashboard": "Dashboard",
+    "language": "Langue",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "register": "S'inscrire",
+    "backOffice": "Aller à l'administration"
+  },
+  "Footer": {
+    "copyright": "© 2023 CEEDD. All rights reserved.",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation"
+  },
+  "HomePage": {
+    "welcome": "Bienvenue à CEEDD",
+    "partner": "Votre partenaire en développement durable.",
+    "learnMore": "En savoir plus",
+    "ourMission": "Notre mission",
+    "missionDescription": "Renforcer les communautés grâce à des solutions innovantes et durables.",
+    "featuredProjects": "Projets en vedette",
+    "viewAllProjects": "Voir tous les projets"
+  },
+  "AboutPage": {
+    "title": "À propos de CEEDD",
+    "whoWeAre": "Qui sommes-nous",
+    "whoWeAreDescription": "CEEDD est une organisation à but non lucratif dédiée à la promotion du développement durable dans les communautés mal desservies. Nous croyons en l'autonomisation des populations locales par l'éducation, la fourniture de ressources et des projets collaboratifs.",
+    "ourValues": "Nos valeurs",
+    "value1": "Durabilité",
+    "value2": "Autonomisation communautaire",
+    "value3": "Innovation",
+    "value4": "Transparence",
+    "value5": "Collaboration",
+    "ourTeam": "Notre équipe",
+    "teamDescription": "Rencontrez les personnes dévouées qui font avancer la mission de CEEDD.",
+    "teamMember1": "Dr. Emily White - Fondatrice et PDG",
+    "teamMember2": "M. David Green - Directeur des opérations"
+  },
+  "ContactPage": {
+    "title": "Nous contacter",
+    "getInTouch": "Prenez contact",
+    "contactDescription": "Vous avez des questions ou souhaitez collaborer ? Contactez-nous !",
+    "name": "Nom",
+    "email": "Email",
+    "message": "Message",
+    "sendMessage": "Envoyer le message",
+    "address": "Notre adresse",
+    "phone": "Téléphone",
+    "emailAddress": "Email"
+  },
+  "DashboardPage": {
+    "title": "Dashboard",
+    "welcomeUser": "Bienvenue, {username} !",
+    "recentActivity": "Activité récente",
+    "myProjects": "Mes projets",
+    "settings": "Paramètres",
+    "viewProfile": "Voir le profil"
+  },
+  "LoginPage": {
+    "title": "Connexion",
+    "Username": "Nom d'utilisateur",
+    "Password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "loginButton": "Connexion",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "registerNow": "Inscrivez-vous maintenant"
+  },
+  "RegisterPage": {
+    "title": "S'inscrire",
+    "username": "Nom d'utilisateur",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "registerButton": "S'inscrire",
+    "alreadyAccount": "Vous avez déjà un compte ?",
+    "loginHere": "Connectez-vous ici"
+  },
+  "ProjectCard": {
+    "viewDetails": "Voir les détails",
+    "Status": "Status",
+    "Location": "Location"
+  },
+  "ProjectDetailsPage": {
+    "title": "Détails du projet",
+    "description": "Description",
+    "goals": "Objectifs",
+    "impact": "Impact",
+    "budget": "Budget",
+    "timeline": "Chronologie",
+    "backToProjects": "Retour aux projets"
+  },
+  "Forms": {
+    "requiredField": "Ce champ est obligatoire.",
+    "invalidEmail": "Veuillez entrer une adresse e-mail valide.",
+    "passwordMismatch": "Les mots de passe ne correspondent pas.",
+    "minLength": "La longueur minimale est de {min} caractères.",
+    "maxLength": "La longueur maximale est de {max} caractères."
+  },
+  "Notifications": {
+    "success": "Succès !",
+    "error": "Erreur !",
+    "warning": "Attention !",
+    "info": "Information."
+  },
+  "Buttons": {
+    "submit": "Soumettre",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "save": "Enregistrer"
+  }
+}

@@ -61,6 +61,17 @@ export interface InfrastructureTypes {
   client: Client;
 }
 
+export interface InfrastructureFilters {
+  commune?: string;
+  quartier?: string;
+  avenue?: string;
+  year?: string;
+  startDate?: string;
+  endDate?: string;
+}
+export interface InfrastructureSearch {
+  total_volume: number;
+}
 export enum etat_ravin {
   SELECTIONNEZ = "",
   rav_stable = "stable",

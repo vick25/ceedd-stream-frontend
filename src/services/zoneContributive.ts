@@ -1,7 +1,7 @@
 import { Zone_contributive } from "@/types/infrastructure";
-import API from "./api";
-import { API_ENDPOINTS } from "@/utils/constants";
 import { ceedd } from "@/utils/apiRoutes";
+import { API_ENDPOINTS } from "@/utils/constants";
+import API from "./api";
 
 export const serviceZoneContributive = {
   async getZoneContributiveId(id: string): Promise<any> {
@@ -21,7 +21,7 @@ export const serviceZoneContributive = {
     const response = await API.get<Zone_contributive[]>(
       `${API_ENDPOINTS.api}${ceedd.zonecontributive}`
     );
-    console.log("Brut Api", { response });
+    // console.log("Brut Api", { response });
     return response.data;
   },
   async updateZoneContributive(data: any, id: string): Promise<any> {
@@ -29,7 +29,7 @@ export const serviceZoneContributive = {
       `${API_ENDPOINTS.api}${ceedd.zonecontributive}${id}/`,
       data
     );
-    console.log("brut API", { response });
+    // console.log("brut API", { response });
     return response.data;
   },
   async deleteZoneContributive(id: string): Promise<any> {

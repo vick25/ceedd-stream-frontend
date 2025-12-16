@@ -1,7 +1,8 @@
 import { User } from "@/types/infrastructure";
-import API from "./api";
-import { API_ENDPOINTS } from "@/utils/constants";
 import { auth, ceedd } from "@/utils/apiRoutes";
+import { API_ENDPOINTS } from "@/utils/constants";
+import API from "./api";
+
 interface LoginCredentials {
   username: string;
   password: string;
@@ -10,6 +11,7 @@ interface RegisterData {
   username: string;
   password: string;
 }
+
 export const authService = {
   async login(credentials: LoginCredentials): Promise<User> {
     const response = await API.post<User>(
@@ -26,7 +28,7 @@ export const authService = {
     );
   },
   async logout() {
-    localStorage.removeItem("ceeAuth-token");
+    localStorage.removeItem("ceedd");
     return Promise.resolve();
   },
 };

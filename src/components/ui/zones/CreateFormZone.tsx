@@ -66,10 +66,8 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
     resolver: zodResolver(zoneSchema),
     defaultValues: {
       nom: "",
-      superficie: "",
       etat_ravin: etat_ravin.SELECTIONNEZ,
       description: "",
-      geom: "",
       shapefile_id: "",
     },
   });
@@ -88,10 +86,10 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
     // Handle form submission logic here
     const payload = {
       nom: data.nom,
-      superficie: data.superficie,
+
       etat_ravin: data.etat_ravin,
       description: data.description,
-      geom: data.geom,
+
       shapefile_id: data.shapefile_id,
     };
     await mutationCreateZone.mutateAsync(payload);
@@ -125,38 +123,24 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
               placeholder="nom"
               {...register("nom")}
               className={`border border-white ${
-                errors.nom
-                  ? "border border-red-500"
-                  : touchedFields.nom
-                  ? "border border-green-600"
-                  : "border border-gray-300"
+                errors.nom ? "border border-red-500" : "border border-gray-300"
               }`}
             />
             {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
             )}
           </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="superficie">superficie </Label>
-            <Input
-              id="superficie"
-              type="number"
-              placeholder="superficie"
-              {...register("superficie")}
-              className={`border border-gray-200 `}
-            />
-          </div>
 
           <div className="flex flex-col gap-4">
-            <Label htmlFor="etat_ravin">etat_ravin </Label>
+            <Label htmlFor="etat_ravin">etat ravin </Label>
 
             <select
               id="etat_ravin"
               {...register("etat_ravin")}
-              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+              className={`flex h-10 w-full rounded-md   bg-background px-3 py-2 text-sm ring-offset-background  file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
                 errors.etat_ravin
                   ? "border border-red-500 "
-                  : "border border-green-500"
+                  : "border border-gray-300"
               }`}
             >
               <option value={etat_ravin.SELECTIONNEZ} disabled>
@@ -179,23 +163,10 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
               type="description"
               placeholder="description"
               {...register("description")}
-              className="border-gray-200  border"
+              className="border border-gray-200 "
             />
             {/* {errors.description && (
               <p className="text-red-500 text-sm">{errors.description.message}</p>
-            )} */}
-          </div>
-          <div>
-            <Label htmlFor="geom">geom : </Label>
-            <Input
-              id="geom"
-              type="text"
-              placeholder="geom"
-              {...register("geom")}
-              className="border border-gray-200 "
-            />
-            {/* {errors.geom && (
-              <p className="text-red-500 text-sm">{errors.geom.message}</p>
             )} */}
           </div>
 
@@ -206,7 +177,7 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
               type="number"
               {...register("shapefile_id")}
               placeholder="shapefile_id"
-              className="border border-gray-200 "
+              className="border border-gray-200"
             />
             {errors.shapefile_id && (
               <p className="text-red-500 text-sm">

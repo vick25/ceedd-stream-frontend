@@ -1,0 +1,116 @@
+{
+  "Header": {
+    "home": "Home",
+    "about": "About Us",
+    "donate": "Donate",
+    "contact": "Contact Us",
+    "dashboard": "Dashboard",
+    "language": "Language",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "backOffice": "Go to Admin"
+  },
+  "Footer": {
+    "copyright": "© 2023 CEEDD. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  },
+  "HomePage": {
+    "welcome": "Welcome to CEEDD",
+    "partner": "Your partner in sustainable development.",
+    "learnMore": "Learn More",
+    "ourMission": "Our Mission",
+    "missionDescription": "To empower communities through innovative and sustainable solutions.",
+    "featuredProjects": "Featured Projects",
+    "viewAllProjects": "View All Projects"
+  },
+  "AboutPage": {
+    "title": "About CEEDD",
+    "whoWeAre": "Who We Are",
+    "whoWeAreDescription": "CEEDD is a non-profit organization dedicated to fostering sustainable development in underserved communities. We believe in empowering local populations through education, resource provision, and collaborative projects.",
+    "ourValues": "Our Values",
+    "value1": "Sustainability",
+    "value2": "Community Empowerment",
+    "value3": "Innovation",
+    "value4": "Transparency",
+    "value5": "Collaboration",
+    "ourTeam": "Our Team",
+    "teamDescription": "Meet the dedicated individuals driving CEEDD's mission forward.",
+    "teamMember1": "Dr. Emily White - Founder & CEO",
+    "teamMember2": "Mr. David Green - Chief Operations Officer"
+  },
+  "ContactPage": {
+    "title": "Contact Us",
+    "getInTouch": "Get in Touch",
+    "contactDescription": "Have questions or want to collaborate? Reach out to us!",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "sendMessage": "Send Message",
+    "address": "Our Address",
+    "phone": "Phone",
+    "emailAddress": "Email"
+  },
+  "DashboardPage": {
+    "title": "Dashboard",
+    "welcomeUser": "Welcome, {username}!",
+    "recentActivity": "Recent Activity",
+    "myProjects": "My Projects",
+    "settings": "Settings",
+    "viewProfile": "View Profile"
+  },
+  "LoginPage": {
+    "title": "Login",
+    "Username": "Username",
+    "Password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "loginButton": "Login",
+    "noAccount": "Don't have an account?",
+    "registerNow": "Register Now"
+  },
+  "RegisterPage": {
+    "title": "Register",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "registerButton": "Register",
+    "alreadyAccount": "Already have an account?",
+    "loginHere": "Login Here"
+  },
+  "ProjectCard": {
+    "viewDetails": "View Details",
+    "Status": "Status",
+    "Location": "Location"
+  },
+  "ProjectDetailsPage": {
+    "title": "Project Details",
+    "description": "Description",
+    "goals": "Goals",
+    "impact": "Impact",
+    "budget": "Budget",
+    "timeline": "Timeline",
+    "backToProjects": "Back to Projects"
+  },
+  "Forms": {
+    "requiredField": "This field is required.",
+    "invalidEmail": "Please enter a valid email address.",
+    "passwordMismatch": "Passwords do not match.",
+    "minLength": "Minimum length is {min} characters.",
+    "maxLength": "Maximum length is {max} characters."
+  },
+  "Notifications": {
+    "success": "Success!",
+    "error": "Error!",
+    "warning": "Warning!",
+    "info": "Information."
+  },
+  "Buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save"
+  }
+}

@@ -1,7 +1,10 @@
-import { InfrastructureTypes } from "@/types/infrastructure";
-import API from "./api";
-import { API_ENDPOINTS } from "@/utils/constants";
+import {
+  InfrastructureFilters,
+  InfrastructureTypes,
+} from "@/types/infrastructure";
 import { ceedd } from "@/utils/apiRoutes";
+import { API_ENDPOINTS } from "@/utils/constants";
+import API from "./api";
 
 interface InfrastructureData {
   nom: string;
@@ -42,5 +45,64 @@ export const serviceinfrastructure = {
       `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`
     );
     return response.data;
+  },
+  async getInfrastrucureByAdresse(searchTerm: string): Promise<any> {
+    // const enCodeSearchTerm = encodeURIComponent(searchTerm);
+    const queryParameters = "commune";
+    const response = await API.get(
+      `${API_ENDPOINTS.apiAuth}${ceedd.infras}volume`,
+      {
+        params: {
+          [queryParameters]: searchTerm,
+        },
+      }
+    );
+    // console.log(response.data);
+    return response.data;
+  },
+  async getInfrastructureByadresseLocation(
+    filters: InfrastructureFilters
+  ): Promise<any> {
+    const validParams = Object.fromEntries(
+      Object.entries(filters).filter(([, value]) => value)
+    );
+
+    if (Object.keys(validParams).length === 0) {
+      return Promise.resolve({ data: [] });
+    }
+
+    const response = await API.get(
+      `${API_ENDPOINTS.apiAuth}${ceedd.infras}volume`,
+      {
+        params: validParams,
+      }
+    );
+
+    return response.data;
+  },
+  async getInfrastructureVolumeByDate(
+    filters: InfrastructureFilters
+  ): Promise<any> {
+    const validParams = Object.fromEntries(
+      Object.entries(filters).filter(([, value]) => value)
+    );
+
+    if (Object.keys(validParams).length === 0) {
+      return Promise.resolve({ data: [] });
+    }
+
+    const response = await API.get(
+      `${API_ENDPOINTS.apiAuth}${ceedd.infras}volume_by_date`,
+      {
+        params: validParams,
+      }
+    );
+
+    return response.data;
+  },
+  async getInfrastructureByVolume(volume: string) {
+    const response = await API.get(
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}/${volume}`
+    );
   },
 };

@@ -1,14 +1,13 @@
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-import { Callout, IconButton } from "@radix-ui/themes";
-import { InfoIcon, Trash } from "lucide-react";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
-import { useInfrastructureDeleted } from "../hooks/useInfrastructure";
-import { useZoneContributiveDeleted } from "../hooks/useZoneContributive";
+import { Callout, IconButton } from "@radix-ui/themes";
 import { useQueryClient } from "@tanstack/react-query";
+import { InfoIcon, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useZoneContributiveDeleted } from "../hooks/useZoneContributive";
+import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 type props = {
   id: string;
@@ -35,9 +34,9 @@ const DeleteZoneContributide = ({ id, nom, setZoneContributide }: props) => {
     if (formData.nom === `supprimer la zone  ${nom}`) {
       try {
         await mutationZoneContributive.mutateAsync(id);
-        console.log("Mutation reussie !!");
+        // console.log("Mutation reussie !!");
         setIsOpen(false);
-        console.log("Dialogue fermer !!");
+        // console.log("Dialogue fermer !!");
       } catch (error) {
         console.error("Erreur lors de la suppression de la zone :", error);
 

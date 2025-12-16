@@ -3,7 +3,7 @@
 import { Locale, useTranslations } from "@/lib/i18n";
 import { PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Table from "@/components/ui/inspections/table";
+import Table from "@/components/ui/infrastructure/table";
 import {
   Dialog,
   DialogContent,
@@ -14,20 +14,20 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import CreateformInfrastructure from "@/components/ui/infrastructure/CreateformInfrastructure";
-import CreateFormClient from "@/components/ui/clients/CreateFormClient";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
-import CreateFormInspections from "@/components/ui/inspections/CreateFormInspections";
+import SearchInputWithAutocomplete from "@/components/SearchInputWithAutocomplete";
+import SearchResultsList from "@/components/SearchResultsList";
 
 type Props = {};
 
 const page = (props: Props) => {
-  const { user, _hasHydrated, isAuthenticated } = useAppStore();
+  const { user, _hasHydrated, isAuthenticated, searchResults, searchTerms } =
+    useAppStore();
   const router = useRouter();
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
-  const [isClosed, setIsClosed] = useState(false);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -42,6 +42,8 @@ const page = (props: Props) => {
   if (!isAuthenticated || !user) {
     return null;
   }
+
+  const isSearching = searchTerms && searchTerms.length > 0;
   return (
     <main className="container py-6 space-y-6 min-h-screen">
       <div className="flex items-center justify-between">
@@ -53,35 +55,39 @@ const page = (props: Props) => {
               >
                 {locale === "fr" ? "EN" : "FR"}
               </button> */}
-          <Dialog open={isClosed} onOpenChange={setIsClosed}>
+          <Dialog>
             <DialogTrigger asChild>
               <Button
                 size="lg"
                 variant="outline"
                 className="hover:bg-blue-50 px-3 py-2 flex gap-4 border border-gray-300"
               >
-                <PlusCircle /> Nouvelle Inspection
+                <PlusCircle /> Nouvelle infrastructure
               </Button>
             </DialogTrigger>
             <DialogContent className=" bg-white z-9999 ">
               <DialogHeader>
-                <DialogTitle>Ajouter un Nouveau client </DialogTitle>
+                <DialogTitle>Ajouter une Nouvelle Infrastructure </DialogTitle>
                 <DialogDescription>Voici les détails.</DialogDescription>
               </DialogHeader>
-              <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]">
-                <CreateFormInspections
-                  onFormSuccess={() => setIsClosed(false)}
-                />
+              <div className="space-y-4 py-4  overflow-y-auto max-h-[70vh]">
+                <CreateformInfrastructure />
               </div>
             </DialogContent>
           </Dialog>
           {/* <button className="bg-blue-600 text-white px-3 py-2 rounded flex flex-row gap-4 items-center"></button> */}
         </div>
       </div>
-
+      <div>
+        <SearchInputWithAutocomplete />
+      </div>
       {/* KPI Cards */}
       <div className="w-full bg-white rounded-lg shadow-xl p-6">
-        <Table />
+        {isSearching ? (
+          <SearchResultsList results={searchResults} searchTerm={searchTerms} />
+        ) : (
+          <Table />
+        )}
       </div>
     </main>
   );
