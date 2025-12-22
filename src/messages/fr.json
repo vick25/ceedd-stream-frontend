@@ -12,7 +12,10 @@
     "backOffice": "Aller à l'administration"
   },
   "Footer": {
-    "copyright": "© 2023 CEEDD. All rights reserved.",
+    "ceedd": "CEEDD est une Organisation Non Gouvernementale de droit Congolais qui œuvre dans le secteur de la gestion durable des ressources environnementales pour le développement durable de la RDC.",
+    "copyright": "{date} CEEDD. Tous droits réservés.",
+    "contact": "Nous contacter",
+    "followUs": "Suivez-nous",
     "privacyPolicy": "Politique de confidentialité",
     "termsOfService": "Conditions d'utilisation"
   },

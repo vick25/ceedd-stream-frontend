@@ -1,11 +1,9 @@
-"use client";
-
 import Footer from "@/components/Footer";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
-export default function AboutPage() {
-  const t = useTranslations("AboutPage");
+export default async function AboutPage() {
+  const t = await getTranslations("AboutPage");
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -16,7 +14,7 @@ export default function AboutPage() {
           </h1>
           <p className="text-md text-gray-600 mb-6">
             {t.rich("whoWeAreDescription", {
-              link: (chunks: string) => (
+              link: (chunks: React.ReactNode) => (
                 <Link
                   className="text-blue-500 hover:underline"
                   href={t("ceeddHref")}
@@ -25,7 +23,7 @@ export default function AboutPage() {
                   {chunks}
                 </Link>
               ),
-              link1: (chunks: string) => (
+              link1: (chunks: React.ReactNode) => (
                 <Link
                   className="text-blue-500 hover:underline"
                   href={t("terrafirmaHref")}

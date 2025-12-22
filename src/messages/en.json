@@ -12,7 +12,10 @@
     "backOffice": "Go to Admin"
   },
   "Footer": {
-    "copyright": "© 2023 CEEDD. All rights reserved.",
+    "ceedd": "CEEDD is a Congolese non-governmental organization working in the field of sustainable environmental resource management for the sustainable development of the DRC.",
+    "contact": "Contact Us",
+    "copyright": "{date} CEEDD. All rights reserved.",
+    "followUs": "Follow Us",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service"
   },
