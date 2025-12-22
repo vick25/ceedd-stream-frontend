@@ -4,10 +4,11 @@
 
 import { MapFeature } from "@/types/types";
 import { displayDate } from "@/utils/utils";
-import { Icon } from "leaflet"; // ⭐ NOUVEL IMPORT: Icône de Leaflet
+import { Icon } from "leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet/dist/leaflet.css";
+import dynamic from "next/dynamic";
 import React, { useEffect, useMemo } from "react";
 import {
   MapContainer,
@@ -18,7 +19,11 @@ import {
   useMap,
   ZoomControl,
 } from "react-leaflet";
-import MarkerClusterGroup from "react-leaflet-markercluster";
+// Dynamically import MarkerClusterGroup to prevent SSR issues
+const MarkerClusterGroup = dynamic(
+  () => import("react-leaflet-markercluster").then((mod) => mod.default),
+  { ssr: false }
+) as unknown as React.ComponentType<React.PropsWithChildren<any>>;
 
 interface LeafletMapProps {
   features: MapFeature[];

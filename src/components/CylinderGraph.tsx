@@ -22,8 +22,8 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
     return "bg-blue-500";
   };
 
-  // Generate ticks from 100 down to 0 with step of 10
-  const ticks = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0];
+  // Generate ticks from 10 down to 0 with step of 1
+  const ticks = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
 
   return (
     <div className="flex flex-col items-center">
@@ -47,8 +47,8 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
           {/* Liquid (CORRECTION: Utilisation du style inline pour la hauteur) */}
           <div
             className={`absolute bottom-0 left-0 w-full transition-all duration-1000 ease-out z-10 ${getColor(
-              percentage
-            )} opacity-80`}
+              percentage,
+            )} opacity-90`}
             //Applique la hauteur dynamique directement via le style React
             style={{ height: `${percentage}%` }}
           >
