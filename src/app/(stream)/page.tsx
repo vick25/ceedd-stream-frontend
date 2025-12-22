@@ -1,6 +1,7 @@
 "use client";
 
 import { FilterCard } from "@/components/FilterCard";
+import { Footer } from "@/components/MapFooter";
 import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
 import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
@@ -46,12 +47,12 @@ export default function Home() {
   // console.log({ mutationInfrastructure });
   // 2. ÉTATS LOCAUX (pour la carte et les filtres)
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
-    null
+    null,
   );
   const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("Tous");
   const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
-    "standard"
+    "standard",
   );
   const [typesDisponibles, setTypesDisponibles] = useState<string[]>(["Tous"]);
 
@@ -102,7 +103,7 @@ export default function Home() {
       lat: item.latitude,
       lng: item.longitude,
       nom: item.nom,
-      type: item.type_infrastructure.nom,
+      type: item.type_infrastructure?.nom,
       location: item.city,
       lastVerification: item.last_update_date,
       date_construction: item.date_construction,
@@ -166,20 +167,22 @@ export default function Home() {
           <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4 md:mt-0">
             <button
               onClick={() => setMapStyle("standard")}
-              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "standard"
-                ? "text-blue-600 bg-blue-50"
-                : "text-gray-500 hover:text-gray-800"
-                }`}
+              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+                mapStyle === "standard"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-500 hover:text-gray-800"
+              }`}
             >
               Carte
             </button>
             <div className="w-px bg-gray-200 my-1 mx-1"></div>
             <button
               onClick={() => setMapStyle("satellite")}
-              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "satellite"
-                ? "text-blue-600 bg-blue-50"
-                : "text-gray-500 hover:text-gray-800"
-                }`}
+              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+                mapStyle === "satellite"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-500 hover:text-gray-800"
+              }`}
             >
               Satellite
             </button>
@@ -192,9 +195,10 @@ export default function Home() {
               bg-white/95 backdrop-blur-sm shadow-2xl
               overflow-y-auto pointer-events-auto flex flex-col
               transition-transform duration-300 ease-in-out
-              ${isFilterVisible
-                ? "translate-x-0"
-                : "translate-x-full md:translate-x-0 hidden md:flex"
+              ${
+                isFilterVisible
+                  ? "translate-x-0"
+                  : "translate-x-full md:translate-x-0 hidden md:flex"
               }
               h-full md:h-auto md:max-h-[calc(100%-4rem)] md:rounded-xl
               border-t md:border border-gray-100
@@ -216,14 +220,14 @@ export default function Home() {
       {/* <StatsSection /> */}
 
       <section className="relative z-10 py-10 md:py-14">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="text-center mb-16">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
               Aperçu global
             </h2>
             <p className="text-gray-600 mt-2 max-w-xl mx-auto">
-              Données en temps réel sur l’état et l’impact des infrastructures de
-              distribution d’eau.
+              Données en temps réel sur l’état et l’impact des infrastructures
+              de distribution d’eau.
             </p>
           </div>
 
@@ -235,9 +239,7 @@ export default function Home() {
                 Impact
               </h3>
               <p className="mt-2 text-4xl font-bold text-gray-900">900,900</p>
-              <p className="mt-1 block text-sm text-gray-600">
-                Population
-              </p>
+              <p className="mt-1 block text-sm text-gray-600">Population</p>
             </div>
 
             {/* Card 2 */}
@@ -268,6 +270,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }

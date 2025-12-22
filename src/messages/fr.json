@@ -13,7 +13,7 @@
   },
   "Footer": {
     "ceedd": "CEEDD est une Organisation Non Gouvernementale de droit Congolais qui œuvre dans le secteur de la gestion durable des ressources environnementales pour le développement durable de la RDC.",
-    "copyright": "{date} CEEDD. Tous droits réservés.",
+    "copyright": "{date} STREAM. Tous droits réservés.",
     "contact": "Nous contacter",
     "followUs": "Suivez-nous",
     "privacyPolicy": "Politique de confidentialité",
@@ -21,10 +21,11 @@
   },
   "HomePage": {
     "welcome": "Bienvenue à CEEDD",
-    "partner": "Votre partenaire en développement durable.",
+    "partner": "Nos partenaires",
+    "copyright": "{date} STREAM | CEEDD. Tous droits réservés.",
     "learnMore": "En savoir plus",
     "ourMission": "Notre mission",
-    "missionDescription": "Renforcer les communautés grâce à des solutions innovantes et durables.",
+    "missionDescription": "Des solutions de cartographie innovantes pour un monde connecté.",
     "featuredProjects": "Projets en vedette",
     "viewAllProjects": "Voir tous les projets"
   },

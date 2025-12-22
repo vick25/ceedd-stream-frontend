@@ -14,17 +14,18 @@
   "Footer": {
     "ceedd": "CEEDD is a Congolese non-governmental organization working in the field of sustainable environmental resource management for the sustainable development of the DRC.",
     "contact": "Contact Us",
-    "copyright": "{date} CEEDD. All rights reserved.",
+    "copyright": "{date} STREAM. All rights reserved.",
     "followUs": "Follow Us",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service"
   },
   "HomePage": {
     "welcome": "Welcome to CEEDD",
-    "partner": "Your partner in sustainable development.",
+    "partner": "Our partners",
+    "copyright": "{date} STREAM | CEEDD. All rights reserved.",
     "learnMore": "Learn More",
     "ourMission": "Our Mission",
-    "missionDescription": "To empower communities through innovative and sustainable solutions.",
+    "missionDescription": "Innovative mapping solutions for a connected world.",
     "featuredProjects": "Featured Projects",
     "viewAllProjects": "View All Projects"
   },
