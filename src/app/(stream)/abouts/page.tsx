@@ -1,66 +1,59 @@
 "use client";
 
 import Footer from "@/components/Footer";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 export default function AboutPage() {
+  const t = useTranslations("AboutPage");
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="grow bg-gray-50 flex flex-col items-center justify-center p-8">
         <div className="bg-white p-8 rounded-2xl shadow-sm text-center max-w-5xl">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            About STREAMS
+            {t("title")}
           </h1>
           <p className="text-md text-gray-600 mb-6">
-            The Sustainable Tools for Rainwater Evaluation And Management
-            (STREAM) is a tool for monitoring infrastructure installed for
-            collecting, storing and measuring rainwater in urban areas. It
-            promotes the efforts made by the population and CEEDD, together with
-            the Terrafirma Rainwater Collective, to reduce the expansion and
-            risk of new gullies forming in neighbourhoods located in hilly
-            areas. Our goal is to help these neighbourhoods transition to sponge
-            neighbourhoods capable of absorbing all the rainwater they
-            intercept, and thus increase their resilience to increasingly
-            frequent extreme events. But also to collect data on rainfall and
-            runoff in order to study and formulate scientifically valid
-            solutions.
+            {t.rich("whoWeAreDescription", {
+              link: (chunks: string) => (
+                <Link
+                  className="text-blue-500 hover:underline"
+                  href={t("ceeddHref")}
+                  rel="noopener noreferrer"
+                >
+                  {chunks}
+                </Link>
+              ),
+              link1: (chunks: string) => (
+                <Link
+                  className="text-blue-500 hover:underline"
+                  href={t("terrafirmaHref")}
+                  rel="noopener noreferrer"
+                >
+                  {chunks}
+                </Link>
+              ),
+            })}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
             <div className="p-4 bg-blue-50 rounded-lg space-y-2">
-              <h3 className="font-bold text-blue-800 mb-2">Our Mission</h3>
+              <h3 className="font-bold text-blue-800 mb-2">
+                {t("ourMission")}
+              </h3>
               <div className="text-md text-gray-700">
-                Our mission focuses on preventing and limiting urban gullies and
-                flooding caused by extreme events due to climate change in
-                African megacities. Our interventions mainly focus on rainwater
-                harvesting and infiltration at the household level. We are aware
-                that:
+                {t("value1")}
                 <ul className="list-disc list-inside mt-2 space-y-1 pl-5">
-                  <li>
-                    a complete system for the safe drainage of rainwater is
-                    difficult to implement on the scale of our cities, given the
-                    resources required.
-                  </li>
-                  <li>
-                    our water needs will only worsen as our population grows and
-                    rainfall intensifies with climate change.
-                  </li>
+                  <li>{t("value2")}</li>
+                  <li>{t("value3")}</li>
                 </ul>
               </div>
-              <p className="text-md text-gray-700">
-                We empower underserved and marginalised communities to take
-                control of their water-related future in the face of climate
-                change. Our rainwater harvesting systems provide a source of
-                domestic water for 9 months of the year, reducing the need to
-                purchase and transport water, while providing a local response
-                to catastrophic urban flooding and erosion.
-              </p>
+              <p className="text-md text-gray-700">{t("value4")}</p>
             </div>
 
             <div className="p-4 bg-blue-50 rounded-lg">
-              <h3 className="font-bold text-blue-800 mb-2">Our Vision</h3>
-              <p className="text-md text-gray-700">
-                A world where every community has reliable access to clean water
-                through data-driven management.
-              </p>
+              <h3 className="font-bold text-blue-800 mb-2">{t("ourVision")}</h3>
+              <p className="text-md text-gray-700">{t("value5")}</p>
             </div>
           </div>
         </div>
