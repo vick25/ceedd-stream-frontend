@@ -75,7 +75,12 @@ export default function Home() {
 
     if (infraData?.results?.length > 0) {
       const infrastructures: InfrastructureData[] = infraData.results;
-      setRawData(infrastructures);
+      setRawData(
+        infrastructures.filter(
+          (infra: InfrastructureData) =>
+            infra.latitude !== null && infra.longitude !== null,
+        ),
+      );
     }
   }, [mutationInfrastructure.data]);
 

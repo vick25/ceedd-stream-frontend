@@ -96,13 +96,13 @@ export const FilterCard: React.FC<FilterCardProps> = ({
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-
               {/* Details List */}
               <div className="flex-1 space-y-3">
                 <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300">
                   <Link href={"#"}>
                     <Image
                       src="/1.jpg"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       alt="image infrastructure"
                       fill
                       className="object-cover"

@@ -57,7 +57,7 @@ export interface InfrastructureTypes {
   longitude: string;
   capacite: string;
   unite: string;
-  // zone: string;
+  zone?: string;
   client: Client;
 }
 
