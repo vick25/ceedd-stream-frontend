@@ -1,8 +1,5 @@
 import { useAppStore } from "@/store/appStore";
-import {
-  Client,
-  InfrastructureTypes,
-} from "@/types/infrastructure";
+import { Client, InfrastructureTypes } from "@/types/infrastructure";
 import { IconButton } from "@radix-ui/themes";
 import { PencilLine } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -61,7 +58,7 @@ const EditInfrastructure = ({
     isLoading: IsTypeInfrastructureLoading,
   } = useTypeInfradtructures();
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -87,13 +84,13 @@ const EditInfrastructure = ({
     if (id) {
       setFormData({
         nom,
-        type_infrastructure: type_infrastructure.id,
+        type_infrastructure: type_infrastructure?.id,
         date_construction,
         latitude,
         longitude,
         capacite,
         unite,
-        client: client.id,
+        client: client?.id,
       });
     }
   }, [

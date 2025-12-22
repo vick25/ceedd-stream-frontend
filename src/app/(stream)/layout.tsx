@@ -8,8 +8,8 @@ import QueryProvider from "@/components/QueryProvider";
 import { Toaster } from "react-hot-toast";
 
 import type { Metadata } from "next";
-import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -28,7 +28,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: Readonly<Props>) {
-
   // const infrastructures = await fetchInfrastructure();
   // console.log(infrastructures.results);
 
@@ -36,25 +35,26 @@ export default async function RootLayout({ children }: Readonly<Props>) {
   const locale = await getLocale();
 
   return (
-    <html lang={locale} className={poppins.className} suppressHydrationWarning={true}>
+    <html
+      lang={locale}
+      className={poppins.className}
+      suppressHydrationWarning={true}
+    >
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
       </head>
-      <body
-        className="min-h-screen bg-gray-50 text-gray-900">
+      <body className="min-h-screen bg-gray-50 text-gray-900">
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>
             <Header />
-            {/* <Nav /> */}
-            {/* {!hideLayout && <Header />} */}
             {children}
-            {/* {!hideLayout && !pathnameFooter && <Footer />} */}
             <Toaster
               position="top-right"
               toastOptions={{
                 duration: 4000,
                 style: {
-                  background: "linear-gradient(135deg, #16a34a 0%, #22c55e 100%)",
+                  background:
+                    "linear-gradient(135deg, #16a34a 0%, #22c55e 100%)",
                   color: "#fff",
                   borderRadius: "12px",
                   boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",

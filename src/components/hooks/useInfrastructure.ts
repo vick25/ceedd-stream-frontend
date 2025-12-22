@@ -26,19 +26,21 @@ export const useCreateInfrastructure = () => {
     },
   });
 };
+
 export const useUpdateInfrastructure = () => {
   return useMutation({
     mutationFn: ({ data, id }: { data: any; id: any }) =>
       serviceinfrastructure.updateInfrastructure(data, id),
     onSuccess: (response) => {
       // console.log(response);
-      toast.success("Mise à jour de l'infrastructure reussie");
+      toast.success("Mise à jour de l'infrastructure réussie.");
     },
     onError: (error) => {
-      toast.error("Impossible de modifier l'infrastructures");
+      toast.error("Impossible de modifier l'infrastructure.");
     },
   });
 };
+
 export const useInfrastructures = () => {
   return useQuery({
     queryKey: ["infrastructures"],
@@ -54,10 +56,12 @@ export const useInfrastructureDeleted = () => {
     },
   });
 };
+
 type InfrastructureResponse = InfrastructureSearch;
+
 export const useInfrastructureByAdresse = (
   searchTerm: string,
-  delay: number = 400
+  delay: number = 400,
 ) => {
   const debounceTerm = useDebounce(searchTerm, delay);
 
@@ -81,12 +85,12 @@ export const useInfrastructureByAdresse = (
 type InfrastructureResponseLocation = InfrastructureSearch;
 export const useInfrastructureByAdresseLocation = (
   locationFilters: InfrastructureFilters,
-  runSearch: boolean
+  runSearch: boolean,
 ) => {
   const queryKey = ["infrastructureLocation", locationFilters];
 
   const isFilterSelected = Object.values(locationFilters).some(
-    (value) => value !== ""
+    (value) => value !== "",
   );
   const isEnabled = runSearch && isFilterSelected;
 
@@ -99,21 +103,23 @@ export const useInfrastructureByAdresseLocation = (
   });
   useEffect(() => {
     if (query.isError) {
-      toast.error("l'element chércher n'existe pas");
+      toast.error("l'élément cherché n'existe pas!");
     }
   }, [query.isError]);
 
   return query;
 };
+
 type InfrastructureResponseDate = InfrastructureSearch;
+
 export const useInfrastructureVolumeByDate = (
   dateFilters: InfrastructureFilters,
-  runSearch: boolean
+  runSearch: boolean,
 ) => {
   const queryKey = ["infrastructureLocation", dateFilters];
 
   const isFilterSelected = Object.values(dateFilters).some(
-    (value) => value !== ""
+    (value) => value !== "",
   );
   const isEnabled = runSearch && isFilterSelected;
 
@@ -126,7 +132,7 @@ export const useInfrastructureVolumeByDate = (
   });
   useEffect(() => {
     if (query.isError) {
-      toast.error("l'element chércher n'existe pas");
+      toast.error("l'élément cherché n'existe pas!");
     }
   }, [query.isError]);
 

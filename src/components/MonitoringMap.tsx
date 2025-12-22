@@ -26,7 +26,7 @@ export default function MonitoringMapPage({
   >(null);
   const [allInfrastructures, setAllInfrastructures] = useState<any[]>([]);
   const [filteredInfrastructures, setFilteredInfrastructures] = useState<any[]>(
-    []
+    [],
   );
   const [typesDisponibles, setTypesDisponibles] = useState<any[]>([]);
   const [typeSelectionne, setTypeSelectionne] = useState("Tous");
@@ -53,7 +53,7 @@ export default function MonitoringMapPage({
 
       const types = [
         ...new Set(
-          convertInfrastructure.map((i: any) => i.type_infrastructure.nom)
+          convertInfrastructure.map((i: any) => i.type_infrastructure.nom),
         ),
       ];
       setTypesDisponibles(types);
@@ -67,8 +67,8 @@ export default function MonitoringMapPage({
       selected === "Tous"
         ? allInfrastructures
         : allInfrastructures.filter(
-            (infra) => infra.type_infrastructure.nom === selected
-          )
+            (infra) => infra.type_infrastructure.nom === selected,
+          ),
     );
   };
 
@@ -177,6 +177,7 @@ export default function MonitoringMapPage({
             <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300">
               <Image
                 src="/1.jpg"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 alt="image infrastructure"
                 fill
                 className="object-cover"
@@ -208,7 +209,7 @@ export default function MonitoringMapPage({
                 <span className="text-gray-600">Année:</span>
                 <span className="font-semibold">
                   {new Date(
-                    selectedInfrastructure.date_construction
+                    selectedInfrastructure.date_construction,
                   ).getFullYear()}
                 </span>
               </div>

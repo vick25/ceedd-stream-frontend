@@ -17,10 +17,11 @@ interface InfrastructureData {
   zone: string;
   client: string;
 }
+
 export const serviceinfrastructure = {
   async getInfrastructure(): Promise<any> {
     const response = await API.get<InfrastructureTypes[]>(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}`
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}`,
     );
 
     return response.data;
@@ -28,21 +29,21 @@ export const serviceinfrastructure = {
   async createInfrastructure(data: InfrastructureData) {
     const response = await API.post(
       `${API_ENDPOINTS.api}${ceedd.infrastructure}`,
-      data
+      data,
     );
     return response.data;
   },
   async updateInfrastructure(data: any, id: string): Promise<any> {
     const response = await API.put(
       `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`,
-      data
+      data,
     );
 
     return response.data;
   },
   async deleteInfrastructure(id: string): Promise<any> {
     const response = await API.delete(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`,
     );
     return response.data;
   },
@@ -55,16 +56,16 @@ export const serviceinfrastructure = {
         params: {
           [queryParameters]: searchTerm,
         },
-      }
+      },
     );
     // console.log(response.data);
     return response.data;
   },
   async getInfrastructureByadresseLocation(
-    filters: InfrastructureFilters
+    filters: InfrastructureFilters,
   ): Promise<any> {
     const validParams = Object.fromEntries(
-      Object.entries(filters).filter(([, value]) => value)
+      Object.entries(filters).filter(([, value]) => value),
     );
 
     if (Object.keys(validParams).length === 0) {
@@ -75,16 +76,16 @@ export const serviceinfrastructure = {
       `${API_ENDPOINTS.apiAuth}${ceedd.infras}volume`,
       {
         params: validParams,
-      }
+      },
     );
 
     return response.data;
   },
   async getInfrastructureVolumeByDate(
-    filters: InfrastructureFilters
+    filters: InfrastructureFilters,
   ): Promise<any> {
     const validParams = Object.fromEntries(
-      Object.entries(filters).filter(([, value]) => value)
+      Object.entries(filters).filter(([, value]) => value),
     );
 
     if (Object.keys(validParams).length === 0) {
@@ -95,14 +96,14 @@ export const serviceinfrastructure = {
       `${API_ENDPOINTS.apiAuth}${ceedd.infras}volume_by_date`,
       {
         params: validParams,
-      }
+      },
     );
 
     return response.data;
   },
   async getInfrastructureByVolume(volume: string) {
     const response = await API.get(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}/${volume}`
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}/${volume}`,
     );
   },
 };
