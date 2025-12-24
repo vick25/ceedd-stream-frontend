@@ -26,8 +26,20 @@
     "learnMore": "Learn More",
     "ourMission": "Our Mission",
     "missionDescription": "Innovative mapping solutions for a connected world.",
-    "featuredProjects": "Featured Projects",
-    "viewAllProjects": "View All Projects"
+    "all": "All",
+    "dataLoading": "Loading data...",
+    "overView": "Global view",
+    "overViewIntro": "Real-time data on the status and impact of water infrastructure.",
+    "currentMonitoring": "Currently monitoring",
+    "status": "Status",
+    "water": "Used water"
+  },
+  "FilterCard": {
+    "title": "Map Options",
+    "description": "Filter the data by the infrastructure type",
+    "dateConstruction": "Date of construction",
+    "capacity": "Capacity",
+    "selectMarker": "Select a marker on the map"
   },
   "AboutPage": {
     "title": "About STREAM",
@@ -65,7 +77,24 @@
     "recentActivity": "Recent Activity",
     "myProjects": "My Projects",
     "settings": "Settings",
-    "viewProfile": "View Profile"
+    "viewProfile": "View Profile",
+    "alert": "Please select at least one year for the period filters, or enter the complete date range.",
+    "locationMessage": "Searching for location data...",
+    "errorMessage": "Error retrieving location data.",
+    "volumeMessage": "Searching for volume data...",
+    "dateErrorMessage": "Error retrieving date data.",
+    "noVolumeFound": "No infrastructure volume found for this period.",
+    "noData": "No infrastructure volume found for these criteria.",
+    "subtitle": "Infrastructure and volume report generation.",
+    "locationTitle": "Search by Localisation",
+    "locationDesc": "Filter volumes by administrative zone.",
+    "dateTitle": "Search by Date",
+    "dateDesc": "Filter by construction period.",
+    "locationBtn": "Search by (Localisation)",
+    "dateBtn": "Search by (Period)",
+    "plageDate": "SPECIFIC DATE BLOCK (Highest Priority)",
+    "synthese": "Summary of Results",
+    "requestedPeriod": "Requested period: {dateFrom} to {dateTo}"
   },
   "LoginPage": {
     "title": "Login",

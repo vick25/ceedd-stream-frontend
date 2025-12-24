@@ -7,6 +7,7 @@ import {
 } from "@/components/hooks/useInfrastructure";
 // Assurez-vous que resolveDateRange et useLocationList sont exportés depuis le même fichier ou depuis "@/utils/dateResolvers"
 import { resolveDateRange, useLocationList } from "@/utils/utils";
+import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 
 /* =========================================================================
@@ -26,7 +27,7 @@ const Card: React.FC<{
 );
 
 const Select: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>> = (
-  props
+  props,
 ) => (
   <select
     {...props}
@@ -35,7 +36,7 @@ const Select: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>> = (
 );
 
 const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (
-  props
+  props,
 ) => (
   <input
     {...props}
@@ -127,16 +128,16 @@ const MessageCard: React.FC<{
    Data & i18n
 ========================================================================= */
 
-const t = {
-  dashboard: "Dashboard",
-  subtitle: "Gestion des infrastructures et génération de rapports de volume.",
-  locationTitle: "Recherche par Localisation",
-  locationDesc: "Filtrer les volumes par zone administrative.",
-  dateTitle: "Recherche par Date",
-  dateDesc: "Filtrer par période de construction.",
-  locationBtn: "Rechercher (Localisation)",
-  dateBtn: "Rechercher (Période)",
-};
+// const t = {
+//   dashboard: "Dashboard",
+//   subtitle: "Gestion des infrastructures et génération de rapports de volume.",
+//   locationTitle: "Recherche par Localisation",
+//   locationDesc: "Filtrer les volumes par zone administrative.",
+//   dateTitle: "Recherche par Date",
+//   dateDesc: "Filtrer par période de construction.",
+//   locationBtn: "Rechercher (Localisation)",
+//   dateBtn: "Rechercher (Période)",
+// };
 
 const dateOptions = {
   months: [
@@ -170,6 +171,7 @@ const dateOptions = {
 ========================================================================= */
 
 const Dashboard: React.FC = () => {
+  const t = useTranslations("DashboardPage");
   /* ---- State Management ---- */
   const [locationFilters, setLocationFilters] = useState({
     commune: "",
@@ -255,11 +257,11 @@ const Dashboard: React.FC = () => {
 
   // Vérifie si un filtre est sélectionné pour activer le bouton de recherche
   const isAnyLocationFilterSelected = Object.values(locationFilters).some(
-    (value) => value !== ""
+    (value) => value !== "",
   );
 
   const isAnyDateFilterSelected = Object.values(dateFilters).some(
-    (value) => value !== ""
+    (value) => value !== "",
   );
 
   /**
@@ -284,9 +286,7 @@ const Dashboard: React.FC = () => {
 
       setRunDateSearch(true);
     } else {
-      alert(
-        "Veuillez sélectionner au moins une année pour les filtres de période, ou renseignez la plage de dates complète."
-      );
+      alert(`${t("alert")}`);
     }
   };
 
@@ -316,35 +316,20 @@ const Dashboard: React.FC = () => {
     // À partir d'ici, si la recherche n'a pas été lancée ou si elle est encore en cours, on sort.
     if (!searchAttempted || isLocationFetching) {
       if (isLocationFetching) {
-        return (
-          <MessageCard
-            type="loading"
-            message="Recherche des données de localisation..."
-          />
-        );
+        return <MessageCard type="loading" message={t("locationMessage")} />;
       }
       return null;
     }
 
     // 2. État d'Erreur (La recherche s'est terminée avec une erreur)
     if (isLocationError) {
-      return (
-        <MessageCard
-          type="error"
-          message="Erreur lors de la récupération des données de localisation."
-        />
-      );
+      return <MessageCard type="error" message={t("errorMessage")} />;
     }
 
     // 3. État d'Absence de Données (La recherche a réussi, mais hasVolumeData est faux)
     // Cette condition s'exécute si isLocationSuccess est vrai ET que hasVolumeData est faux
     if (isLocationSuccess) {
-      return (
-        <MessageCard
-          type="no-data"
-          message="Aucun volume d'infrastructure trouvé pour ces critères."
-        />
-      );
+      return <MessageCard type="no-data" message={t("noData")} />;
     }
 
     return null;
@@ -355,8 +340,10 @@ const Dashboard: React.FC = () => {
 
     // 1. État de Succès (Volume > 0)
     if (hasVolumeData(dateData)) {
-      const details = `Période du ${dateFilters.date_from || "N/A"} au ${dateFilters.date_to || "N/A"
-        }`;
+      const details = t("requestedPeriod", {
+        dateFrom: dateFilters.date_from ?? "N/A",
+        dateTo: dateFilters.date_to ?? "N/A"
+      });
       return (
         <ResultCard
           title="Volume Total par Période"
@@ -370,34 +357,19 @@ const Dashboard: React.FC = () => {
     // À partir d'ici, si la recherche n'a pas été lancée ou si elle est encore en cours, on sort.
     if (!searchAttempted || isDateFetching) {
       if (isDateFetching) {
-        return (
-          <MessageCard
-            type="loading"
-            message="Recherche des données de volume par date..."
-          />
-        );
+        return <MessageCard type="loading" message={t("volumeMessage")} />;
       }
       return null;
     }
 
     // 2. État d'Erreur
     if (isDateError) {
-      return (
-        <MessageCard
-          type="error"
-          message="Erreur lors de la récupération des données de date."
-        />
-      );
+      return <MessageCard type="error" message={t("dateErrorMessage")} />;
     }
 
     // 3. État d'Absence de Données
     if (isDateIsSuccess) {
-      return (
-        <MessageCard
-          type="no-data"
-          message="Aucun volume d'infrastructure trouvé pour cette période."
-        />
-      );
+      return <MessageCard type="no-data" message={t("noVolumeFound")} />;
     }
 
     return null;
@@ -410,13 +382,13 @@ const Dashboard: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto px-6 py-10 ">
         {/* En-tête */}
-        <h1 className="text-3xl font-bold text-gray-800 mb-1">{t.dashboard}</h1>
-        <p className="text-gray-500 mb-8">{t.subtitle}</p>
+        <h1 className="text-3xl font-bold text-gray-800 mb-1">{t("title")}</h1>
+        <p className="text-gray-500 mb-8">{t("subtitle")}</p>
 
         {/* SECTION FILTRES */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {/* Location Card */}
-          <Card title={t.locationTitle} description={t.locationDesc}>
+          <Card title={t("locationTitle")} description={t("locationDesc")}>
             <div className="space-y-4">
               <Select
                 value={locationFilters.commune}
@@ -472,13 +444,13 @@ const Dashboard: React.FC = () => {
                 disabled={isLocationFetching || !isAnyLocationFilterSelected}
                 className="w-full mt-6 text-white py-2.5 rounded-lg transition bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
               >
-                {isLocationFetching ? "Chargement..." : t.locationBtn}
+                {isLocationFetching ? "Chargement..." : t("locationBtn")}
               </button>
             </div>
           </Card>
 
           {/* Date Card */}
-          <Card title={t.dateTitle} description={t.dateDesc}>
+          <Card title={t("dateTitle")} description={t("dateDesc")}>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <Input
                 placeholder="e.g. 2023"
@@ -545,9 +517,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <p className="text-xs text-gray-400 mb-2">
-                PLAGE DE DATE SPÉCIFIQUE (Priorité la plus haute)
-              </p>
+              <p className="text-xs text-gray-400 mb-2">{t("plageDate")}</p>
               <div className="grid grid-cols-2 gap-4">
                 <Input
                   type="date"
@@ -585,18 +555,20 @@ const Dashboard: React.FC = () => {
               disabled={isDateFetching || !isAnyDateFilterSelected}
               className="w-full text-white py-2.5 rounded-lg transition bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
-              {isDateFetching ? "Chargement..." : t.dateBtn}
+              {isDateFetching ? "Chargement..." : t("dateBtn")}
             </button>
             <p className="text-xs text-gray-400 mt-2 text-center">
-              Période demandée: {dateFilters.date_from || "N/A"} au{" "}
-              {dateFilters.date_to || "N/A"}
+              {t("requestedPeriod", {
+                dateFrom: dateFilters.date_from ?? "N/A",
+                dateTo: dateFilters.date_to ?? "N/A",
+              })}
             </p>
           </Card>
         </div>
 
         {/* SECTION RÉSULTATS */}
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Synthèse des Résultats
+          {t("synthese")}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Résultat Localisation */}

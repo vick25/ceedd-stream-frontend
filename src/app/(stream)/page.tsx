@@ -7,6 +7,7 @@ import { useGetInspections } from "@/components/hooks/useInspection";
 import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
 import { MapFeature } from "@/types/types";
 import { Building2, Droplet, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // Remplacement de l'import MOCK_FEATURES
 
@@ -38,6 +39,7 @@ interface InfrastructureData {
 }
 
 export default function Home() {
+  const t = useTranslations("HomePage");
   // 1. HOOKS D'API
   const mutationInfrastructure = useGetInfrastructure();
   const mutationTypeInfrastructure = useAllTypeInfrastructure();
@@ -50,11 +52,11 @@ export default function Home() {
     null,
   );
   const [isFilterVisible, setIsFilterVisible] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<string>("Tous");
+  const [selectedCategory, setSelectedCategory] = useState<string>(`All`);
   const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
     "standard",
   );
-  const [typesDisponibles, setTypesDisponibles] = useState<string[]>(["Tous"]);
+  const [typesDisponibles, setTypesDisponibles] = useState<string[]>([`All`]);
 
   // États pour stocker les données brutes
   const [rawData, setRawData] = useState<InfrastructureData[]>([]);
@@ -91,7 +93,7 @@ export default function Home() {
     if (typesData?.results?.length > 0) {
       // Assurez-vous que 'nom' est la propriété correcte
       const types: any[] = [
-        "Tous",
+        `All`,
         ...new Set(typesData.results.map((t: any) => t.nom)),
       ];
       setTypesDisponibles(types);
@@ -119,7 +121,7 @@ export default function Home() {
 
   // --- LOGIQUE DE FILTRAGE DES FEATURES (utilise allFeatures maintenant) ---
   const filteredFeatures =
-    selectedCategory === "Tous"
+    selectedCategory === `All`
       ? allFeatures
       : allFeatures.filter((f) => f.type === selectedCategory);
 
@@ -145,7 +147,7 @@ export default function Home() {
         {isLoading && (
           <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm">
             <p className="text-xl font-bold text-blue-600">
-              Chargement des données de la carte...
+              {t("dataLoading")}
             </p>
           </div>
         )}
@@ -178,7 +180,7 @@ export default function Home() {
                   : "text-gray-500 hover:text-gray-800"
               }`}
             >
-              Carte
+              OSM
             </button>
             <div className="w-px bg-gray-200 my-1 mx-1"></div>
             <button
@@ -228,11 +230,10 @@ export default function Home() {
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="text-center mb-16">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Aperçu global
+              {t("overView")}
             </h2>
             <p className="text-gray-600 mt-2 max-w-xl mx-auto">
-              Données en temps réel sur l’état et l’impact des infrastructures
-              de distribution d’eau.
+              {t("overViewIntro")}
             </p>
           </div>
 
@@ -251,7 +252,7 @@ export default function Home() {
             <div className="bg-blue-50/50 hover:bg-white border border-transparent hover:border-gray-200 rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
               <Building2 className="mx-auto h-10 w-10 text-blue-600" />
               <h3 className="text-sm font-semibold tracking-wide text-blue-700 uppercase mt-3">
-                Actuellement en surveillance
+                {t("currentMonitoring")}
               </h3>
               <p className="mt-2 text-4xl font-bold text-gray-900">
                 {result > 0 ? result : 0}
@@ -265,12 +266,10 @@ export default function Home() {
             <div className="bg-blue-50/50 hover:bg-white border border-transparent hover:border-gray-200 rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
               <Droplet className="mx-auto h-10 w-10 text-blue-600" />
               <h3 className="text-sm font-semibold tracking-wide text-blue-700 uppercase mt-3">
-                Statut
+                {t("status")}
               </h3>
               <p className="mt-2 text-4xl font-bold text-gray-900">90%</p>
-              <p className="mt-1 block text-sm text-gray-600">
-                Eau fonctionnelle
-              </p>
+              <p className="mt-1 block text-sm text-gray-600">{t("water")}</p>
             </div>
           </div>
         </div>

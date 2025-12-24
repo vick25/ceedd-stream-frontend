@@ -9,7 +9,7 @@
     "login": "Connexion",
     "logout": "Déconnexion",
     "register": "S'inscrire",
-    "backOffice": "Aller à l'administration"
+    "backOffice": "Aller à l'Admin"
   },
   "Footer": {
     "ceedd": "CEEDD est une Organisation Non Gouvernementale de droit Congolais qui œuvre dans le secteur de la gestion durable des ressources environnementales pour le développement durable de la RDC.",
@@ -26,8 +26,20 @@
     "learnMore": "En savoir plus",
     "ourMission": "Notre mission",
     "missionDescription": "Des solutions de cartographie innovantes pour un monde connecté.",
-    "featuredProjects": "Projets en vedette",
-    "viewAllProjects": "Voir tous les projets"
+    "all": "Tous",
+    "dataLoading": "Chargement des données...",
+    "overView": "Aperçu global",
+    "overViewIntro": "Données en temps réel sur l’état et l’impact des infrastructures de gestion des eaux.",
+    "currentMonitoring": "Actuellement en monitoring",
+    "status": "Statut",
+    "water": "Eau fonctionnelle"
+  },
+  "FilterCard": {
+    "title": "Options de filtrage",
+    "description": "Filtrer par type d'infrastructures",
+    "dateConstruction": "Date de construction",
+    "capacity": "Capacité",
+    "selectMarker": "Sélectionner un marqueur sur la carte"
   },
   "AboutPage": {
     "title": "À propos de STREAM",
@@ -65,7 +77,24 @@
     "recentActivity": "Activité récente",
     "myProjects": "Mes projets",
     "settings": "Paramètres",
-    "viewProfile": "Voir le profil"
+    "viewProfile": "Voir le profil",
+    "alert": "Veuillez sélectionner au moins une année pour les filtres de période, ou renseignez la plage de dates complète.",
+    "locationMessage": "Recherche des données de localisation...",
+    "errorMessage": "Erreur lors de la récupération des données de localisation.",
+    "volumeMessage": "Recherche des données de volume par date...",
+    "dateErrorMessage": "Erreur lors de la récupération des données de date.",
+    "noVolumeFound": "Aucun volume d'infrastructure trouvé pour cette période.",
+    "noData": "Aucun volume d'infrastructure trouvé pour ces critères.",
+    "subtitle": "Gestion des infrastructures et génération de rapports de volume.",
+    "locationTitle": "Recherche par Localisation",
+    "locationDesc": "Filtrer les volumes par zone administrative.",
+    "dateTitle": "Recherche par Date",
+    "dateDesc": "Filtrer par période de construction.",
+    "locationBtn": "Rechercher (Localisation)",
+    "dateBtn": "Rechercher (Période)",
+    "plageDate": "PLAGE DE DATE SPÉCIFIQUE (Priorité la plus haute)",
+    "synthese": "Synthèse des Résultats",
+    "requestedPeriod": "Période demandée : {dateFrom} au {dateTo}"
   },
   "LoginPage": {
     "title": "Connexion",

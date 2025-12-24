@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { CylinderGraph } from "./CylinderGraph";
+import { useTranslations } from "next-intl";
 
 interface FilterCardProps {
   selectedFeature: MapFeature | null;
@@ -20,6 +21,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   onClose,
   availableCategories,
 }) => {
+  const t = useTranslations("FilterCard");
   const maxCapacity = selectedFeature?.maxCapacity;
   const volumeActuel = 4000;
 
@@ -27,7 +29,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
     <div className="h-full flex flex-col p-6">
       {/* Header of Card */}
       <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
-        <h2 className="text-lg font-bold text-gray-900">Map Options</h2>
+        <h2 className="text-lg font-bold text-gray-900">{t("title")}</h2>
         <button
           type="button"
           onClick={onClose}
@@ -56,7 +58,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
           htmlFor="category-select"
           className="block text-sm font-semibold text-gray-700 mb-2"
         >
-          Filtrer par type d'infrastructures
+          {t("description")}
         </label>
         <div className="relative">
           <select
@@ -119,7 +121,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-                    Date de construction
+                    {t("dateConstruction")}
                   </p>
                   <p className="font-medium text-gray-800 text-sm mt-1">
                     {selectedFeature.date_construction}
@@ -127,7 +129,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-                    Capacité
+                    {t("capacity")}
                   </p>
                   <p className="font-medium text-gray-800 text-sm mt-1">
                     {selectedFeature.maxCapacity}
@@ -165,7 +167,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
               />
             </svg>
-            <p className="text-sm font-medium">Select a marker on the map</p>
+            <p className="text-sm font-medium">{t("selectMarker")}</p>
           </div>
         )}
       </div>
