@@ -123,11 +123,6 @@ export default function Home() {
     return map;
   }, [inspectionData]);
 
-  // Pour debugger, utilisez un useEffect qui surveille le changement
-  // useEffect(() => {
-  //   console.log("Ma map a changé :", inspectionStateMap);
-  // }, [inspectionStateMap]);
-  // console.log({ inspectionStateMap });
   const allFeatures: MapFeature[] = useMemo(() => {
     // Si les données brutes sont vides ou non chargées, retourner un tableau vide.
     if (rawData.length === 0) return [];
@@ -170,6 +165,14 @@ export default function Home() {
   const toggleFilter = () => {
     setIsFilterVisible(!isFilterVisible);
   };
+
+  const PARTNERS = [
+    { name: "Snel", logo: "/terrafirma.png" }, // Remplacez par vos vrais chemins
+    { name: "Regideso", logo: "/unikin.jpeg" },
+    { name: "USAID", logo: "/ceedd.png" },
+    { name: "World Bank", logo: "/AICPKK.jpg" },
+    { name: "Unicef", logo: "/leuven.png" },
+  ];
 
   if (isLoading) {
     return <Loader />;
@@ -302,6 +305,38 @@ export default function Home() {
                 Eau fonctionnelle
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+      {/* Partner Section */}
+      <section className="py-16 bg-gray-50 border-t border-gray-100">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
+              Ils nous font confiance
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60">
+            {PARTNERS.map((partner: any) => (
+              <div
+                key={partner.name}
+                className="  transition-all duration-300 transform hover:scale-110 cursor-pointer"
+              >
+                {/* Remplacez l'image par votre logo ou un placeholder si pas encore de logo */}
+                {partner.logo ? (
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    className="h-8 md:h-12 w-auto object-contain"
+                  />
+                ) : (
+                  <span className="text-xl font-bold text-gray-400">
+                    {partner.name}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
