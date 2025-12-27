@@ -326,7 +326,7 @@ export default function Home() {
         </div>
       </section>
       {/* Partner Section */}
-      <section className="py-16 bg-gray-50 border-t border-gray-100">
+      <section className="py-10 md:py-14 bg-gray-50 border-t border-gray-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
@@ -334,21 +334,20 @@ export default function Home() {
             </h3>
           </div>
 
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-12 items-center justify-items-center">
             {PARTNERS.map((partner: any) => (
               <div
                 key={partner.name}
-                className="  transition-all duration-300 transform hover:scale-110 cursor-pointer"
+                className="transition-all duration-300 transform hover:scale-110 cursor-pointer w-full flex justify-center"
               >
-                {/* Remplacez l'image par votre logo ou un placeholder si pas encore de logo */}
                 {partner.logo ? (
                   <img
                     src={partner.logo}
                     alt={partner.name}
-                    className="h-8 md:h-12 w-auto object-contain"
+                    className="h-10 sm:h-12 md:h-14 w-auto object-contain max-w-[120px] md:max-w-[150px] filter "
                   />
                 ) : (
-                  <span className="text-xl font-bold text-gray-400">
+                  <span className="text-sm md:text-lg font-bold text-gray-400 text-center">
                     {partner.name}
                   </span>
                 )}
