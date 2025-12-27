@@ -131,7 +131,7 @@ export const Header: React.FC = () => {
                   className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
                   target="_blank"
                 >
-                  {t("Back Office")}
+                  Back office
                 </Link>
               </div>
             ) : (
