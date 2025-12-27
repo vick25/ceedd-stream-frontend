@@ -60,12 +60,6 @@ export default function Home() {
 
   // États pour stocker les données brutes
   const [rawData, setRawData] = useState<InfrastructureData[]>([]);
-
-  // 1. HOOKS D'API
-  const mutationInfrastructure = useGetInfrastructure();
-  const mutationTypeInfrastructure = useAllTypeInfrastructure();
-  const { data: inspectionData } = useGetInspections();
-  const result = mutationInfrastructure.data?.count;
   console.log({ inspectionData });
   //--- État de chargement consolidé
   // État de chargement consolidé
