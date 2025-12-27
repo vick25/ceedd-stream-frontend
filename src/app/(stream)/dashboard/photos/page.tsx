@@ -21,6 +21,8 @@ import { usePhoto } from "@/components/hooks/usePhotos";
 import { useUplaoderImage } from "@/components/importFiles";
 import { CLOUDINARY_URL } from "@/utils/utils";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { useInfrastructures } from "@/components/hooks/useInfrastructure";
 
 type Props = {};
 
@@ -34,6 +36,7 @@ const page = (props: Props) => {
   const [localPreview, setLocalPreview] = useState<string | null>(null);
   // const [isLoading, setIsLoading] = useState(false);
   const mutationPhoto = usePhoto();
+  const { data: infrastructureData, isPending } = useInfrastructures();
   const [formData, setFormData] = useState({
     url: "",
   });
@@ -86,7 +89,7 @@ const page = (props: Props) => {
 
       <hr className="my-4 border border-gray-200" />
 
-      <div className="flex flex-col md:flex-row items-center justify-center gap-8 p-4 sm:p-6 bg-white rounded-xl shadow-lg">
+      <div className="flex flex-col  md:flex-row-reverse  gap-8 p-4 sm:p-6 bg-white rounded-xl shadow-lg">
         <div
           className="
                 w-full max-w-sm h-64 border-2 border-gray-200 rounded-xl overflow-hidden shadow-inner 
@@ -117,8 +120,8 @@ const page = (props: Props) => {
           {/* Zone de Drag & Drop/Click (Input File) */}
           <div
             className="
-                        flex flex-col items-center justify-center 
-                        w-full h-64 p-6 
+                        flex flex-col items-center
+                        w-full 
                         border-2 border-dashed border-gray-300 
                         rounded-xl bg-gray-50 
                         transition duration-300 ease-in-out
@@ -171,10 +174,25 @@ const page = (props: Props) => {
             </label>
 
             {/* Instructions */}
-            <p className="text-sm text-gray-500 mb-1">Choisir une image.</p>
+            {/* <p className="text-sm text-gray-500 mb-1">Choisir une image.</p>
             <p className="text-xs text-gray-400">
               **JPG, JPEG, PNG and WEBP. Max 20 MB.**
-            </p>
+            </p> */}
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="infrastructure">Infrastructure:</label>
+            <select
+              name="infrastructure"
+              id="infrastructure"
+              className="flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="">Sélectionnez une infrastructure</option>
+              {infrastructureData?.results.map((infra: any) => (
+                <option key={infra.id} value={infra.id}>
+                  {infra.nom}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Bouton de Soumission */}

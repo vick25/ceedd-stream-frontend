@@ -9,6 +9,8 @@ export interface MapFeature {
   date_construction: string;
   waterVolume: number; // in m3
   maxCapacity: number; // in m3
+  date: string;
+  etat: string;
 }
 
 export interface StatItem {

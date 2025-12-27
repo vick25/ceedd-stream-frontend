@@ -142,3 +142,12 @@ export const useLocationList = (
 
   return uniqueClientList;
 };
+
+//--- Formatage de la date pour l'affichage lisible en français pour l'inspection de l'infrastructure ---
+export const formatDate = (dateStr: any) => {
+  const date = new Date(dateStr);
+  // Vérifie si la date est valide (getTime ne renvoie pas NaN)
+  return !isNaN(date.getTime())
+    ? date.toISOString().split("T")[0]
+    : "Aucune inspection";
+};

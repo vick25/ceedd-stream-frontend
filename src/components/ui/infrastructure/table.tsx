@@ -15,7 +15,7 @@ import { tr } from "zod/v4/locales";
 import { Skeleton } from "../skeleton";
 import Link from "next/link";
 import { Eye } from "lucide-react";
-import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
+// import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
 
 export default function InfrastructureTable() {
   const [getInfastructure, setGetInfrastructure] = useState<
@@ -60,6 +60,8 @@ export default function InfrastructureTable() {
   if (mutationInfranstructure.isPending) {
     return <Loader />;
   }
+
+  console.log({ getInfastructure });
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
@@ -99,7 +101,8 @@ export default function InfrastructureTable() {
                     <div className="flex w-full items-center justify-between pt-4">
                       <div>
                         <p className="text-xl font-medium">
-                          Propriétaire : {infrastructure.client.nom}
+                          {/* Propriétaire : {infrastructure?.client?.nom} */}
+                          {infrastructure?.client?.nom || "Aucun propriétaire"}
                         </p>
                       </div>
                       <div className="flex justify-end gap-2">
@@ -187,10 +190,11 @@ export default function InfrastructureTable() {
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {infra.client.nom}
+                        {/* {infra?.client?.nom} */}
+                        {infra.client?.nom || "Aucun propriétaire"}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {infra.type_infrastructure.nom}
+                        {infra.type_infrastructure?.nom || "aucun "}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
                         {" "}
@@ -226,7 +230,7 @@ export default function InfrastructureTable() {
                             nom={infra.nom}
                             setInfrastructureDeleted={setInfrastructureDeleted}
                           />
-                          <Link href={`/dashboard/infrastructures/${infra.id}`}>
+                          <Link href={`/dashboard/shows/${infra.id}`}>
                             <Eye className="h-4" />
                           </Link>
                         </div>

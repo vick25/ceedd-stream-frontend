@@ -28,6 +28,7 @@ const page = (props: Props) => {
   const router = useRouter();
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -55,7 +56,7 @@ const page = (props: Props) => {
               >
                 {locale === "fr" ? "EN" : "FR"}
               </button> */}
-          <Dialog>
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button
                 size="lg"
@@ -65,13 +66,13 @@ const page = (props: Props) => {
                 <PlusCircle /> Nouvelle infrastructure
               </Button>
             </DialogTrigger>
-            <DialogContent className=" bg-white z-9999 ">
+            <DialogContent className=" bg-white z-9999 max-w-2xl md:max-w-4xl">
               <DialogHeader>
                 <DialogTitle>Ajouter une Nouvelle Infrastructure </DialogTitle>
                 <DialogDescription>Voici les détails.</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4  overflow-y-auto max-h-[70vh]">
-                <CreateformInfrastructure />
+                <CreateformInfrastructure open={isOpen} setOpen={setIsOpen} />
               </div>
             </DialogContent>
           </Dialog>

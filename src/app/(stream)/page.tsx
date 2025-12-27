@@ -4,6 +4,7 @@ import { FilterCard } from "@/components/FilterCard";
 import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
 import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
+import Loader from "@/components/Loader";
 import { MapFeature } from "@/types/types";
 import { Building2, Droplet, Users } from "lucide-react";
 
@@ -37,13 +38,6 @@ interface InfrastructureData {
 }
 
 export default function Home() {
-  // 1. HOOKS D'API
-  const mutationInfrastructure = useGetInfrastructure();
-  const mutationTypeInfrastructure = useAllTypeInfrastructure();
-  const { data: inspectionData } = useGetInspections();
-  const result = mutationInfrastructure.data?.count;
-
-  // console.log({ mutationInfrastructure });
   // 2. ÉTATS LOCAUX (pour la carte et les filtres)
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
     null
@@ -58,6 +52,13 @@ export default function Home() {
   // États pour stocker les données brutes
   const [rawData, setRawData] = useState<InfrastructureData[]>([]);
 
+  // 1. HOOKS D'API
+  const mutationInfrastructure = useGetInfrastructure();
+  const mutationTypeInfrastructure = useAllTypeInfrastructure();
+  const { data: inspectionData } = useGetInspections();
+  const result = mutationInfrastructure.data?.count;
+  console.log({ inspectionData });
+  //--- État de chargement consolidé
   // État de chargement consolidé
   const isLoading =
     mutationInfrastructure.isPending || mutationTypeInfrastructure.isPending;
@@ -93,23 +94,64 @@ export default function Home() {
   }, [mutationTypeInfrastructure.data]);
 
   // --- TRANSFORMATION DES DONNÉES BRUTES EN MapFeature[] (pour la carte) ---
+  //--- function de mémoïsation pour éviter les recalculs inutiles
+
+  const inspectionStateMap = useMemo(() => {
+    const map: Record<string, { etat: string; date: string }> = {};
+
+    if (!inspectionData?.results || !Array.isArray(inspectionData.results)) {
+      return map;
+    }
+
+    inspectionData.results.forEach((insp: any) => {
+      // 1. On récupère l'ID de l'infrastructure (2, 5, etc.)
+      const infraId = insp.infrastructure?.id;
+
+      // 2. On récupère l'état directement ("mauvais", "moyen")
+      const etatActuel = insp.etat;
+      const lastInspection = insp.date;
+
+      if (infraId) {
+        // On utilise l'ID de l'infrastructure comme CLÉ pour la map
+        map[infraId.toString()] = {
+          etat: etatActuel || "Inconnu",
+          date: lastInspection || "N/A",
+        };
+      }
+    });
+
+    return map;
+  }, [inspectionData]);
+
+  // Pour debugger, utilisez un useEffect qui surveille le changement
+  // useEffect(() => {
+  //   console.log("Ma map a changé :", inspectionStateMap);
+  // }, [inspectionStateMap]);
+  // console.log({ inspectionStateMap });
   const allFeatures: MapFeature[] = useMemo(() => {
     // Si les données brutes sont vides ou non chargées, retourner un tableau vide.
     if (rawData.length === 0) return [];
 
-    return rawData.map((item) => ({
-      id: item.id.toString(),
-      lat: item.latitude,
-      lng: item.longitude,
-      nom: item.nom,
-      type: item.type_infrastructure.nom,
-      location: item.city,
-      lastVerification: item.last_update_date,
-      date_construction: item.date_construction,
-      waterVolume: item.current_volume,
-      maxCapacity: item.capacite,
-    }));
-  }, [rawData]);
+    return rawData
+      .filter((item) => item.latitude !== null && item.longitude !== null)
+      .map((item) => {
+        const inspectionInfo = inspectionStateMap[item.id.toString()];
+        return {
+          id: item.id.toString(),
+          lat: item.latitude,
+          lng: item.longitude,
+          nom: item.nom,
+          type: item.type_infrastructure?.nom,
+          location: item.city,
+          lastVerification: item.last_update_date,
+          date_construction: item.date_construction,
+          waterVolume: item.current_volume,
+          maxCapacity: item.capacite,
+          date: inspectionInfo?.date || "Non renseignée",
+          etat: inspectionInfo?.etat || "Inconnu",
+        };
+      });
+  }, [rawData, inspectionData]);
 
   // --- LOGIQUE DE FILTRAGE DES FEATURES (utilise allFeatures maintenant) ---
   const filteredFeatures =
@@ -129,21 +171,15 @@ export default function Home() {
     setIsFilterVisible(!isFilterVisible);
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
   // --- RENDU ---
   return (
     // <div className="min-h-screen flex flex-col">
     <main className="min-h-screen flex flex-col ">
       {/* Hero / Map Section */}
       <section className="relative w-full h-[600px] md:h-[700px] bg-gray-200 ">
-        {/* Indicateur de Chargement */}
-        {isLoading && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm">
-            <p className="text-xl font-bold text-blue-600">
-              Chargement des données de la carte...
-            </p>
-          </div>
-        )}
-
         <LeafletMap
           // Utilise les données filtrées réelles
           features={filteredFeatures}
@@ -166,20 +202,22 @@ export default function Home() {
           <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4 md:mt-0">
             <button
               onClick={() => setMapStyle("standard")}
-              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "standard"
-                ? "text-blue-600 bg-blue-50"
-                : "text-gray-500 hover:text-gray-800"
-                }`}
+              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+                mapStyle === "standard"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-500 hover:text-gray-800"
+              }`}
             >
               Carte
             </button>
             <div className="w-px bg-gray-200 my-1 mx-1"></div>
             <button
               onClick={() => setMapStyle("satellite")}
-              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "satellite"
-                ? "text-blue-600 bg-blue-50"
-                : "text-gray-500 hover:text-gray-800"
-                }`}
+              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+                mapStyle === "satellite"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-500 hover:text-gray-800"
+              }`}
             >
               Satellite
             </button>
@@ -192,9 +230,10 @@ export default function Home() {
               bg-white/95 backdrop-blur-sm shadow-2xl
               overflow-y-auto pointer-events-auto flex flex-col
               transition-transform duration-300 ease-in-out
-              ${isFilterVisible
-                ? "translate-x-0"
-                : "translate-x-full md:translate-x-0 hidden md:flex"
+              ${
+                isFilterVisible
+                  ? "translate-x-0"
+                  : "translate-x-full md:translate-x-0 hidden md:flex"
               }
               h-full md:h-auto md:max-h-[calc(100%-4rem)] md:rounded-xl
               border-t md:border border-gray-100
@@ -222,8 +261,8 @@ export default function Home() {
               Aperçu global
             </h2>
             <p className="text-gray-600 mt-2 max-w-xl mx-auto">
-              Données en temps réel sur l’état et l’impact des infrastructures de
-              distribution d’eau.
+              Données en temps réel sur l’état et l’impact des infrastructures
+              de distribution d’eau.
             </p>
           </div>
 
@@ -235,9 +274,7 @@ export default function Home() {
                 Impact
               </h3>
               <p className="mt-2 text-4xl font-bold text-gray-900">900,900</p>
-              <p className="mt-1 block text-sm text-gray-600">
-                Population
-              </p>
+              <p className="mt-1 block text-sm text-gray-600">Population</p>
             </div>
 
             {/* Card 2 */}

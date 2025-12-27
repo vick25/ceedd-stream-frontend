@@ -9,7 +9,7 @@ interface CylinderGraphProps {
 export const CylinderGraph: React.FC<CylinderGraphProps> = ({
   current,
   max,
-  unit = "m³",
+  unit = "L",
 }) => {
   const volumeCurrent = current !== undefined ? current : 0;
   // Calcul du pourcentage (Assure une valeur entre 0 et 100)
@@ -76,10 +76,11 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
       <div className="text-center mt-1">
         <span className="block text-2xl font-bold text-gray-800 leading-tight">
           {/* Affiche la valeur de 'current' qui représente le volume actuel */}
-          {volumeCurrent} <span className="text-xs text-gray-500">{unit}</span>
+          {/* {volumeCurrent} <span className="text-xs text-gray-500">{unit}</span> */}
         </span>
         <span className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">
-          Volume ({percentage.toFixed(0)}% Rempli)
+          {/* Volume ({percentage.toFixed(0)}% Rempli) */}
+          Volume ({volumeCurrent} {unit})
         </span>
       </div>
     </div>

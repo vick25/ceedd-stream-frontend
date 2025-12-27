@@ -88,13 +88,13 @@ const EditInfrastructure = ({
     if (id) {
       setFormData({
         nom,
-        type_infrastructure: type_infrastructure.id,
+        type_infrastructure: type_infrastructure?.id,
         date_construction,
         latitude,
         longitude,
         capacite,
         unite,
-        client: client.id,
+        client: client?.id,
       });
     }
   }, [
