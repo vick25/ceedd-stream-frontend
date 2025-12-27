@@ -14,16 +14,18 @@ import { useCustomers } from "@/components/hooks/useCustomer";
 
 import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/appStore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardPage() {
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   // const infrastructures = useInfrastructureStore((s) => s.infrastructures);
-  const { data: infrastructures } = useInfrastructures();
+  const { data: infrastructures, isPending: isInfrastructuresPending } =
+    useInfrastructures();
   const router = useRouter();
 
-  const { data: clients } = useCustomers();
+  const { data: clients, isPending: isClientsPending } = useCustomers();
 
   const stats = useMemo(() => {
     // const total = infrastructures.count;
@@ -81,15 +83,35 @@ export default function DashboardPage() {
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div className="p-4 rounded-lg border border-gray-200 bg-white">
-            <div className="text-sm text-gray-500 flex items-center gap-3">
-              <Building2 className="text-green-800" />{" "}
-              {t.dashboard.totalInfrastructures}
+          {isInfrastructuresPending ? (
+            // <Skeleton className="p-4 rounded-lg border border-gray-200 bg-gray-400 animate-pulse transition-all ease-in-out 5s" />
+            <div className="p-4 rounded-lg border border-gray-200 bg-white animate-pulse">
+              {/* Ligne du haut : Icône + Titre */}
+              <div className="flex items-center gap-3 mb-3">
+                {/* Cercle pour simuler l'icône Building2 */}
+                <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                {/* Barre pour simuler le texte du titre */}
+                <div className="h-4 w-32 bg-gray-200 rounded"></div>
+              </div>
+
+              {/* Ligne du bas : Le grand chiffre central */}
+              <div className="flex items-center justify-center">
+                {/* Bloc plus large et plus foncé pour simuler le chiffre */}
+                <div className="h-9 w-16 bg-gray-300 rounded-md"></div>
+              </div>
             </div>
-            <div className="text-3xl font-bold text-green-600 flex items-center justify-center">
-              {stats.totalInfrastructures}
+          ) : (
+            <div className="p-4 rounded-lg border border-gray-200 bg-white">
+              <div className="text-sm text-gray-500 flex items-center gap-3">
+                <Building2 className="text-green-800" />{" "}
+                {t.dashboard.totalInfrastructures}
+              </div>
+              <div className="text-3xl font-bold text-green-600 flex items-center justify-center">
+                {stats.totalInfrastructures}
+              </div>
             </div>
-          </div>
+          )}
+
           {/* <div className="p-4 rounded-lg border bg-white">
             <div className="text-sm text-gray-500">
               {t.dashboard.coveragePercentage}
@@ -98,31 +120,85 @@ export default function DashboardPage() {
              {stats.coveragePercentage}%
             </div>
           </div>  */}
-          <div className="p-4 rounded-lg border border-gray-200 bg-white">
-            <div className="text-sm text-gray-500">
-              {t.dashboard.typeInfrastructures}
+          {isInfrastructuresPending ? (
+            <div className="p-4 rounded-lg border border-gray-200 bg-white animate-pulse">
+              {/* Ligne du haut : Icône + Titre */}
+              <div className="flex items-center gap-3 mb-3">
+                {/* Cercle pour simuler l'icône Building2 */}
+                <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                {/* Barre pour simuler le texte du titre */}
+                <div className="h-4 w-32 bg-gray-200 rounded"></div>
+              </div>
+
+              {/* Ligne du bas : Le grand chiffre central */}
+              <div className="flex items-center justify-center">
+                {/* Bloc plus large et plus foncé pour simuler le chiffre */}
+                <div className="h-9 w-16 bg-gray-300 rounded-md"></div>
+              </div>
             </div>
-            <div className="text-3xl font-bold text-purple-600">
-              {/* {stats.populationImpacted.toLocaleString()} */}
+          ) : (
+            <div className="p-4 rounded-lg border border-gray-200 bg-white">
+              <div className="text-sm text-gray-500">
+                {t.dashboard.typeInfrastructures}
+              </div>
+              <div className="text-3xl font-bold text-purple-600">
+                {/* {stats.populationImpacted.toLocaleString()} */}
+              </div>
             </div>
-          </div>
-          <div className="p-4 rounded-lg border border-gray-200 bg-white">
-            <div className="text-sm text-gray-500 flex items-center gap-3">
-              <User className="text-orange-600" />
-              {t.dashboard.totalClients}
+          )}
+          {isClientsPending ? (
+            <div className="p-4 rounded-lg border border-gray-200 bg-white animate-pulse">
+              {/* Ligne du haut : Icône + Titre */}
+              <div className="flex items-center gap-3 mb-3">
+                {/* Cercle pour simuler l'icône Building2 */}
+                <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                {/* Barre pour simuler le texte du titre */}
+                <div className="h-4 w-32 bg-gray-200 rounded"></div>
+              </div>
+
+              {/* Ligne du bas : Le grand chiffre central */}
+              <div className="flex items-center justify-center">
+                {/* Bloc plus large et plus foncé pour simuler le chiffre */}
+                <div className="h-9 w-16 bg-gray-300 rounded-md"></div>
+              </div>
             </div>
-            <div className="text-3xl font-bold text-orange-600 flex items-center justify-center">
-              {stats.totalClients}
+          ) : (
+            <div className="p-4 rounded-lg border border-gray-200 bg-white">
+              <div className="text-sm text-gray-500 flex items-center gap-3">
+                <User className="text-orange-600" />
+                {t.dashboard.totalClients}
+              </div>
+              <div className="text-3xl font-bold text-orange-600 flex items-center justify-center">
+                {stats.totalClients}
+              </div>
             </div>
-          </div>
-          <div className="p-4 rounded-lg border border-gray-200 bg-white">
-            <div className="text-sm text-gray-500">
-              {t.dashboard.totalInvestment}
+          )}
+          {isClientsPending ? (
+            <div className="p-4 rounded-lg border border-gray-200 bg-white animate-pulse">
+              {/* Ligne du haut : Icône + Titre */}
+              <div className="flex items-center gap-3 mb-3">
+                {/* Cercle pour simuler l'icône Building2 */}
+                <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                {/* Barre pour simuler le texte du titre */}
+                <div className="h-4 w-32 bg-gray-200 rounded"></div>
+              </div>
+
+              {/* Ligne du bas : Le grand chiffre central */}
+              <div className="flex items-center justify-center">
+                {/* Bloc plus large et plus foncé pour simuler le chiffre */}
+                <div className="h-9 w-16 bg-gray-300 rounded-md"></div>
+              </div>
             </div>
-            <div className="text-3xl font-bold text-red-600">
-              {/* ${stats.totalInvestment.toLocaleString()} */}
+          ) : (
+            <div className="p-4 rounded-lg border border-gray-200 bg-white">
+              <div className="text-sm text-gray-500">
+                {t.dashboard.totalInvestment}
+              </div>
+              <div className="text-3xl font-bold text-red-600">
+                {/* ${stats.totalInvestment.toLocaleString()} */}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Charts Grid */}

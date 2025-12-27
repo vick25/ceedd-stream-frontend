@@ -17,6 +17,8 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCustomers } from "@/components/hooks/useCustomer";
+import { useZoneContributives } from "@/components/hooks/useZoneContributive";
+import { resourceLimits } from "node:worker_threads";
 interface FormData {
   nom: string;
   type_infrastructure: string;
@@ -39,10 +41,17 @@ const infrastructureSchema = z.object({
   zone: z.string().min(1, "Veuillez sélectionner une zone."),
   client: z.string().min(1, "Veuillez sélectionner un client."),
 });
+type CreateformInfrastructureProps = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+};
 
 type InfrastructureFormData = z.infer<typeof infrastructureSchema>;
 
-const CreateformInfrastructure = () => {
+const CreateformInfrastructure = ({
+  open,
+  setOpen,
+}: CreateformInfrastructureProps) => {
   const {
     register,
     handleSubmit,
@@ -63,10 +72,13 @@ const CreateformInfrastructure = () => {
   });
 
   const mutationCreateInfrastructure = useCreateInfrastructure();
+  // const [isOpen,setIsOpen]=useState(false)
   const { data: typeInfrastructure, isLoading } = useTypeInfradtructures();
   const { data: customersData, isLoading: isCustomersLoading } = useCustomers();
   // const {data:zonesData,isLoading:isZonesLoading}=useZone()
+  const { data: zoneData, isLoading: isLoandingZone } = useZoneContributives();
 
+  // console.log({ zoneData });
   const onSubmit = async (data: InfrastructureFormData) => {
     // Handle form submission logic here
     const payload = {
@@ -80,13 +92,19 @@ const CreateformInfrastructure = () => {
       zone: data.zone,
       client: data.client,
     };
+    console.log({ payload });
+
     await mutationCreateInfrastructure.mutateAsync(payload);
+    setOpen(false);
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-2 flex flex-col gap-3">
+    <div className=" w-full min-w-[50vw] lg:min-w-[800px] p-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-6 flex flex-col gap-4"
+      >
+        <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
             <Label htmlFor="nom"> Nom:</Label>
             <Input
@@ -94,12 +112,8 @@ const CreateformInfrastructure = () => {
               type="text"
               placeholder="nom"
               {...register("nom")}
-              className={`border border-white ${
-                errors.nom
-                  ? "border border-red-500"
-                  : touchedFields.nom
-                  ? "border border-green-600"
-                  : "border border-gray-300"
+              className={`border border-gray-300 ${
+                errors.nom ? "border border-red-500" : "border border-gray-300"
               }`}
             />
             {errors.nom && (
@@ -112,10 +126,10 @@ const CreateformInfrastructure = () => {
             </Label>
             <select
               {...register("type_infrastructure")}
-              className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+              className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
                 errors.type_infrastructure
                   ? "border border-red-500 "
-                  : "border border-green-500"
+                  : "border border-gray-500"
               }`}
             >
               <option value="">Selectionnez</option>
@@ -135,9 +149,10 @@ const CreateformInfrastructure = () => {
             <Label htmlFor="date_construction">date Construction:</Label>
             <Input
               id="date_construction"
-              type="date_construction"
+              type="date"
               placeholder="date_construction"
               {...register("date_construction")}
+              className="flex h-10 w-full border border-gray-300 rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.date_construction && (
               <p>{errors.date_construction?.message}</p>
@@ -147,9 +162,10 @@ const CreateformInfrastructure = () => {
             <Label htmlFor="latitude">Latitude : </Label>
             <Input
               id="latitude"
-              type="latitude"
+              type="text"
               placeholder="latitude"
               {...register("latitude")}
+              className="flex h-10 w-full border border-gray-300 rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.latitude && (
               <p className="text-red-500 text-sm">{errors.latitude.message}</p>
@@ -159,9 +175,10 @@ const CreateformInfrastructure = () => {
             <Label htmlFor="longitude">Longitude : </Label>
             <Input
               id="longitude"
-              type="longitude"
+              type="text"
               placeholder="longitude"
               {...register("longitude")}
+              className="flex h-10 w-full border border-gray-300 rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.longitude && (
               <p className="text-red-500 text-sm">{errors.longitude.message}</p>
@@ -171,22 +188,23 @@ const CreateformInfrastructure = () => {
             <Label htmlFor="capacite">Capacite : </Label>
             <Input
               id="capacite"
-              type="capacite"
+              type="number"
               placeholder="capacite"
               {...register("capacite")}
+              className="flex h-10 w-full border border-gray-300 rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.capacite && (
               <p className="text-red-500 text-sm">{errors.capacite.message}</p>
             )}
-            capacite
           </div>
           <div>
             <Label htmlFor="unite">Unite (L): </Label>
             <Input
               id="unite"
-              type="unite"
+              type="text"
               {...register("unite")}
               placeholder="unite"
+              className="flex h-10 w-full border border-gray-300 rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.unite && (
               <p className="text-red-500 text-sm">{errors.unite.message}</p>
@@ -196,10 +214,14 @@ const CreateformInfrastructure = () => {
             <Label htmlFor="zone">Zone : </Label>
             <select
               {...register("zone")}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex border border-gray-300 h-10 w-full rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             >
               <option value="">Selectionnez</option>
-              <option value="1">Zone</option>
+              {zoneData?.results.map((zone: any) => (
+                <option key={zone.id} value={zone.id}>
+                  {zone.nom}
+                </option>
+              ))}
             </select>
             {errors.zone && (
               <p className="text-red-500 text-sm">{errors.zone.message}</p>
@@ -209,10 +231,10 @@ const CreateformInfrastructure = () => {
             <Label htmlFor="client_id">Client :</Label>
             <select
               {...register("client")}
-              className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+              className={`flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
                 errors.client
                   ? "border border-red-500 "
-                  : "border border-green-500"
+                  : "border border-gray-300"
               }`}
             >
               <option value="">Selectionnez</option>
@@ -226,15 +248,25 @@ const CreateformInfrastructure = () => {
               <p className="text-red-500 text-sm">{errors.client.message}</p>
             )}
           </div>
+        </div>
+        <div className="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
+          {/* Bouton Annuler */}
+          <Button
+            type="button"
+            className="w-fit bg-gray-600 hover:bg-gray-700 text-gray-100 px-5 py-2 h-auto text-sm font-medium"
+          >
+            Annuler
+          </Button>
+
+          {/* Bouton Ajouter */}
           <Button
             type="submit"
-            size="lg"
             disabled={mutationCreateInfrastructure.isPending}
-            className="w-full bg-orange-600 text-gray-200"
+            className="w-fit bg-blue-600 hover:bg-blue-700 text-gray-200 px-5 py-2 h-auto text-sm font-medium"
           >
             {mutationCreateInfrastructure.isPending
               ? "Chargement..."
-              : " Ajouter Infrastructure"}
+              : "Ajouter Infrastructure"}
           </Button>
         </div>
       </form>

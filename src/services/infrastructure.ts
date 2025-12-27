@@ -26,6 +26,12 @@ export const serviceinfrastructure = {
 
     return response.data;
   },
+  async getInfrastructureById(id: string): Promise<any> {
+    const response = await API.get(
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`
+    );
+    return response.data;
+  },
   async createInfrastructure(data: InfrastructureData) {
     const response = await API.post(
       `${API_ENDPOINTS.api}${ceedd.infrastructure}`,

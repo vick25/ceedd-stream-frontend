@@ -1,10 +1,10 @@
 "use client";
 
 import { FilterCard } from "@/components/FilterCard";
-import { Footer } from "@/components/MapFooter";
 import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
 import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
+import Loader from "@/components/Loader";
 import { MapFeature } from "@/types/types";
 import { Building2, Droplet, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -61,6 +61,13 @@ export default function Home() {
   // États pour stocker les données brutes
   const [rawData, setRawData] = useState<InfrastructureData[]>([]);
 
+  // 1. HOOKS D'API
+  const mutationInfrastructure = useGetInfrastructure();
+  const mutationTypeInfrastructure = useAllTypeInfrastructure();
+  const { data: inspectionData } = useGetInspections();
+  const result = mutationInfrastructure.data?.count;
+  console.log({ inspectionData });
+  //--- État de chargement consolidé
   // État de chargement consolidé
   const isLoading =
     mutationInfrastructure.isPending || mutationTypeInfrastructure.isPending;
@@ -101,23 +108,59 @@ export default function Home() {
   }, [mutationTypeInfrastructure.data]);
 
   // --- TRANSFORMATION DES DONNÉES BRUTES EN MapFeature[] (pour la carte) ---
+  //--- function de mémoïsation pour éviter les recalculs inutiles
+
+  const inspectionStateMap = useMemo(() => {
+    const map: Record<string, { etat: string; date: string }> = {};
+
+    if (!inspectionData?.results || !Array.isArray(inspectionData.results)) {
+      return map;
+    }
+
+    inspectionData.results.forEach((insp: any) => {
+      // 1. On récupère l'ID de l'infrastructure (2, 5, etc.)
+      const infraId = insp.infrastructure?.id;
+
+      // 2. On récupère l'état directement ("mauvais", "moyen")
+      const etatActuel = insp.etat;
+      const lastInspection = insp.date;
+
+      if (infraId) {
+        // On utilise l'ID de l'infrastructure comme CLÉ pour la map
+        map[infraId.toString()] = {
+          etat: etatActuel || "Inconnu",
+          date: lastInspection || "N/A",
+        };
+      }
+    });
+
+    return map;
+  }, [inspectionData]);
+
   const allFeatures: MapFeature[] = useMemo(() => {
     // Si les données brutes sont vides ou non chargées, retourner un tableau vide.
     if (rawData.length === 0) return [];
 
-    return rawData.map((item) => ({
-      id: item.id.toString(),
-      lat: item.latitude,
-      lng: item.longitude,
-      nom: item.nom,
-      type: item.type_infrastructure?.nom,
-      location: item.city,
-      lastVerification: item.last_update_date,
-      date_construction: item.date_construction,
-      waterVolume: item.current_volume,
-      maxCapacity: item.capacite,
-    }));
-  }, [rawData]);
+    return rawData
+      .filter((item) => item.latitude !== null && item.longitude !== null)
+      .map((item) => {
+        const inspectionInfo = inspectionStateMap[item.id.toString()];
+        return {
+          id: item.id.toString(),
+          lat: item.latitude,
+          lng: item.longitude,
+          nom: item.nom,
+          type: item.type_infrastructure?.nom,
+          location: item.city,
+          lastVerification: item.last_update_date,
+          date_construction: item.date_construction,
+          waterVolume: item.current_volume,
+          maxCapacity: item.capacite,
+          date: inspectionInfo?.date || "Non renseignée",
+          etat: inspectionInfo?.etat || "Inconnu",
+        };
+      });
+  }, [rawData, inspectionData]);
 
   // --- LOGIQUE DE FILTRAGE DES FEATURES (utilise allFeatures maintenant) ---
   const filteredFeatures =
@@ -137,6 +180,17 @@ export default function Home() {
     setIsFilterVisible(!isFilterVisible);
   };
 
+  const PARTNERS = [
+    { name: "Snel", logo: "/terrafirma.png" }, // Remplacez par vos vrais chemins
+    { name: "Regideso", logo: "/unikin.jpeg" },
+    { name: "USAID", logo: "/ceedd.png" },
+    { name: "World Bank", logo: "/AICPKK.jpg" },
+    { name: "Unicef", logo: "/leuven.png" },
+  ];
+
+  if (isLoading) {
+    return <Loader />;
+  }
   // --- RENDU ---
   return (
     // <div className="min-h-screen flex flex-col">
@@ -174,22 +228,20 @@ export default function Home() {
           <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4 md:mt-0">
             <button
               onClick={() => setMapStyle("standard")}
-              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
-                mapStyle === "standard"
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-500 hover:text-gray-800"
-              }`}
+              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "standard"
+                ? "text-blue-600 bg-blue-50"
+                : "text-gray-500 hover:text-gray-800"
+                }`}
             >
               OSM
             </button>
             <div className="w-px bg-gray-200 my-1 mx-1"></div>
             <button
               onClick={() => setMapStyle("satellite")}
-              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
-                mapStyle === "satellite"
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-500 hover:text-gray-800"
-              }`}
+              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "satellite"
+                ? "text-blue-600 bg-blue-50"
+                : "text-gray-500 hover:text-gray-800"
+                }`}
             >
               Satellite
             </button>
@@ -202,10 +254,9 @@ export default function Home() {
               bg-white/95 backdrop-blur-sm shadow-2xl
               overflow-y-auto pointer-events-auto flex flex-col
               transition-transform duration-300 ease-in-out
-              ${
-                isFilterVisible
-                  ? "translate-x-0"
-                  : "translate-x-full md:translate-x-0 hidden md:flex"
+              ${isFilterVisible
+                ? "translate-x-0"
+                : "translate-x-full md:translate-x-0 hidden md:flex"
               }
               h-full md:h-auto md:max-h-[calc(100%-4rem)] md:rounded-xl
               border-t md:border border-gray-100
@@ -274,8 +325,38 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* Partner Section */}
+      <section className="py-16 bg-gray-50 border-t border-gray-100">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
+              Ils nous font confiance
+            </h3>
+          </div>
 
-      <Footer />
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60">
+            {PARTNERS.map((partner: any) => (
+              <div
+                key={partner.name}
+                className="  transition-all duration-300 transform hover:scale-110 cursor-pointer"
+              >
+                {/* Remplacez l'image par votre logo ou un placeholder si pas encore de logo */}
+                {partner.logo ? (
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    className="h-8 md:h-12 w-auto object-contain"
+                  />
+                ) : (
+                  <span className="text-xl font-bold text-gray-400">
+                    {partner.name}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

@@ -119,11 +119,13 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       {/* Base Layer (inchangé) */}
       {mapStyle === "standard" ? (
         <TileLayer
+          key="osm-layer"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://www.ceeddrdc.org/">CEEDD</a>'
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
       ) : (
         <TileLayer
+          key="satellite-layer"
           attribution="Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
         />
@@ -135,12 +137,12 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           () =>
             features.map((feature) => {
               const isSelected = feature.id === selectedFeatureId;
-              // const stateColorClass =
-              //   feature.state === "Functional"
-              //     ? "text-green-600"
-              //     : feature.state === "Needs Repair"
-              //     ? "text-yellow-600"
-              //     : "text-red-600";
+              const stateColorClass =
+                feature.etat === "mauvais"
+                  ? "text-green-600"
+                  : feature.etat === "bon"
+                  ? "text-yellow-600"
+                  : "text-red-600";
 
               return (
                 <Marker
