@@ -1,10 +1,11 @@
 // import { CATEGORIES } from '@/lib/constants';
 import { MapFeature } from "@/types/types";
+import { formatDate } from "@/utils/utils";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { CylinderGraph } from "./CylinderGraph";
-import { useTranslations } from "next-intl";
 
 interface FilterCardProps {
   selectedFeature: MapFeature | null;
@@ -82,7 +83,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
           <div className="animate-fade-in space-y-4">
             <div className="flex justify-between items-start">
               <h3 className="text-lg font-bold text-gray-800 leading-tight">
-                {selectedFeature.type}
+                {selectedFeature.nom}
               </h3>
               {/* <span
                 className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${
@@ -127,20 +128,46 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     {selectedFeature.date_construction}
                   </p>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
+                {/* <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
                     {t("capacity")}
                   </p>
                   <p className="font-medium text-gray-800 text-sm mt-1">
                     {selectedFeature.maxCapacity}
                   </p>
+                </div> */}
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
+                  <p className="text-xs text-gray-400  tracking-wider font-semibold">
+                    Derniére mise à jour{" "}
+                  </p>
+                  <p className="font-medium text-gray-800 text-sm mt-1">
+                    {formatDate(selectedFeature.date)}{" "}
+                  </p>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
+                  <p className="text-xs text-gray-400  tracking-wider font-semibold">
+                    Etat infrastructure
+                  </p>
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${selectedFeature.etat === "bon"
+                      ? "bg-green-100 text-green-700"
+                      : selectedFeature.etat === "moyen"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                      }`}
+                  >
+                    {selectedFeature.etat}
+                  </span>
+                  {/* <p className="font-medium text-gray-800 text-sm mt-1">
+                    {selectedFeature.etat}
+                  </p> */}
                 </div>
               </div>
 
               {/* Graph */}
               <div className="w-full sm:w-auto flex justify-center items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
                 <CylinderGraph
-                  current={volumeActuel}
+                  current={selectedFeature.maxCapacity}
                   max={selectedFeature.maxCapacity}
                 />
               </div>
