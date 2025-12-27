@@ -5,6 +5,7 @@ import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
 import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
 import Loader from "@/components/Loader";
+import { Footer } from "@/components/MapFooter";
 import { MapFeature } from "@/types/types";
 import { Building2, Droplet, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -40,21 +41,21 @@ interface InfrastructureData {
 
 export default function Home() {
   const t = useTranslations("HomePage");
+  // console.log({ mutationInfrastructure });
+
   // 1. HOOKS D'API
   const mutationInfrastructure = useGetInfrastructure();
   const mutationTypeInfrastructure = useAllTypeInfrastructure();
   const { data: inspectionData } = useGetInspections();
   const result = mutationInfrastructure.data?.count;
-
-  // console.log({ mutationInfrastructure });
   // 2. ÉTATS LOCAUX (pour la carte et les filtres)
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
-    null,
+    null
   );
   const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>(`All`);
   const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
-    "standard",
+    "standard"
   );
   const [typesDisponibles, setTypesDisponibles] = useState<string[]>([`All`]);
 
@@ -81,8 +82,8 @@ export default function Home() {
       setRawData(
         infrastructures.filter(
           (infra: InfrastructureData) =>
-            infra.latitude !== null && infra.longitude !== null,
-        ),
+            infra.latitude !== null && infra.longitude !== null
+        )
       );
     }
   }, [mutationInfrastructure.data]);
@@ -222,20 +223,22 @@ export default function Home() {
           <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4 md:mt-0">
             <button
               onClick={() => setMapStyle("standard")}
-              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "standard"
-                ? "text-blue-600 bg-blue-50"
-                : "text-gray-500 hover:text-gray-800"
-                }`}
+              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+                mapStyle === "standard"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-500 hover:text-gray-800"
+              }`}
             >
               OSM
             </button>
             <div className="w-px bg-gray-200 my-1 mx-1"></div>
             <button
               onClick={() => setMapStyle("satellite")}
-              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "satellite"
-                ? "text-blue-600 bg-blue-50"
-                : "text-gray-500 hover:text-gray-800"
-                }`}
+              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+                mapStyle === "satellite"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-500 hover:text-gray-800"
+              }`}
             >
               Satellite
             </button>
@@ -248,9 +251,10 @@ export default function Home() {
               bg-white/95 backdrop-blur-sm shadow-2xl
               overflow-y-auto pointer-events-auto flex flex-col
               transition-transform duration-300 ease-in-out
-              ${isFilterVisible
-                ? "translate-x-0"
-                : "translate-x-full md:translate-x-0 hidden md:flex"
+              ${
+                isFilterVisible
+                  ? "translate-x-0"
+                  : "translate-x-full md:translate-x-0 hidden md:flex"
               }
               h-full md:h-auto md:max-h-[calc(100%-4rem)] md:rounded-xl
               border-t md:border border-gray-100
@@ -350,6 +354,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }
