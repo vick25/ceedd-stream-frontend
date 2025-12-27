@@ -48,6 +48,14 @@ export const useInfrastructures = () => {
   });
 };
 
+export const useGetInfrastructureById = (id: string) => {
+  return useQuery({
+    queryKey: ["infrastructureById", id],
+    queryFn: () => serviceinfrastructure.getInfrastructureById(id),
+    enabled: !!id,
+  });
+};
+
 export const useInfrastructureDeleted = () => {
   return useMutation({
     mutationFn: (id: string) => serviceinfrastructure.deleteInfrastructure(id),

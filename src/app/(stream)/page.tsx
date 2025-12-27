@@ -1,10 +1,11 @@
 "use client";
 
 import { FilterCard } from "@/components/FilterCard";
-import { Footer } from "@/components/MapFooter";
 import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
 import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
+import Loader from "@/components/Loader";
+import { Footer } from "@/components/MapFooter";
 import { MapFeature } from "@/types/types";
 import { Building2, Droplet, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -40,13 +41,8 @@ interface InfrastructureData {
 
 export default function Home() {
   const t = useTranslations("HomePage");
-  // 1. HOOKS D'API
-  const mutationInfrastructure = useGetInfrastructure();
-  const mutationTypeInfrastructure = useAllTypeInfrastructure();
-  const { data: inspectionData } = useGetInspections();
-  const result = mutationInfrastructure.data?.count;
-
   // console.log({ mutationInfrastructure });
+
   // 2. ÉTATS LOCAUX (pour la carte et les filtres)
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
     null,
@@ -61,6 +57,13 @@ export default function Home() {
   // États pour stocker les données brutes
   const [rawData, setRawData] = useState<InfrastructureData[]>([]);
 
+  // 1. HOOKS D'API
+  const mutationInfrastructure = useGetInfrastructure();
+  const mutationTypeInfrastructure = useAllTypeInfrastructure();
+  const { data: inspectionData } = useGetInspections();
+  const result = mutationInfrastructure.data?.count;
+  console.log({ inspectionData });
+  //--- État de chargement consolidé
   // État de chargement consolidé
   const isLoading =
     mutationInfrastructure.isPending || mutationTypeInfrastructure.isPending;
@@ -101,23 +104,59 @@ export default function Home() {
   }, [mutationTypeInfrastructure.data]);
 
   // --- TRANSFORMATION DES DONNÉES BRUTES EN MapFeature[] (pour la carte) ---
+  //--- function de mémoïsation pour éviter les recalculs inutiles
+
+  const inspectionStateMap = useMemo(() => {
+    const map: Record<string, { etat: string; date: string }> = {};
+
+    if (!inspectionData?.results || !Array.isArray(inspectionData.results)) {
+      return map;
+    }
+
+    inspectionData.results.forEach((insp: any) => {
+      // 1. On récupère l'ID de l'infrastructure (2, 5, etc.)
+      const infraId = insp.infrastructure?.id;
+
+      // 2. On récupère l'état directement ("mauvais", "moyen")
+      const etatActuel = insp.etat;
+      const lastInspection = insp.date;
+
+      if (infraId) {
+        // On utilise l'ID de l'infrastructure comme CLÉ pour la map
+        map[infraId.toString()] = {
+          etat: etatActuel || "Inconnu",
+          date: lastInspection || "N/A",
+        };
+      }
+    });
+
+    return map;
+  }, [inspectionData]);
+
   const allFeatures: MapFeature[] = useMemo(() => {
     // Si les données brutes sont vides ou non chargées, retourner un tableau vide.
     if (rawData.length === 0) return [];
 
-    return rawData.map((item) => ({
-      id: item.id.toString(),
-      lat: item.latitude,
-      lng: item.longitude,
-      nom: item.nom,
-      type: item.type_infrastructure?.nom,
-      location: item.city,
-      lastVerification: item.last_update_date,
-      date_construction: item.date_construction,
-      waterVolume: item.current_volume,
-      maxCapacity: item.capacite,
-    }));
-  }, [rawData]);
+    return rawData
+      .filter((item) => item.latitude !== null && item.longitude !== null)
+      .map((item) => {
+        const inspectionInfo = inspectionStateMap[item.id.toString()];
+        return {
+          id: item.id.toString(),
+          lat: item.latitude,
+          lng: item.longitude,
+          nom: item.nom,
+          type: item.type_infrastructure?.nom,
+          location: item.city,
+          lastVerification: item.last_update_date,
+          date_construction: item.date_construction,
+          waterVolume: item.current_volume,
+          maxCapacity: item.capacite,
+          date: inspectionInfo?.date || "Non renseignée",
+          etat: inspectionInfo?.etat || "Inconnu",
+        };
+      });
+  }, [rawData, inspectionData]);
 
   // --- LOGIQUE DE FILTRAGE DES FEATURES (utilise allFeatures maintenant) ---
   const filteredFeatures =
@@ -137,12 +176,24 @@ export default function Home() {
     setIsFilterVisible(!isFilterVisible);
   };
 
+  const PARTNERS = [
+    { name: "Snel", logo: "/terrafirma.png" }, // Remplacez par vos vrais chemins
+    { name: "Regideso", logo: "/unikin.jpeg" },
+    { name: "USAID", logo: "/ceedd.png" },
+    { name: "World Bank", logo: "/AICPKK.jpg" },
+    { name: "Unicef", logo: "/leuven.png" },
+  ];
+
+  if (isLoading) {
+    return <Loader />;
+  }
   // --- RENDU ---
   return (
     // <div className="min-h-screen flex flex-col">
     <main className="min-h-screen flex flex-col ">
       {/* Hero / Map Section */}
       <section className="relative w-full h-[600px] md:h-[700px] bg-gray-200 ">
+
         {/* Indicateur de Chargement */}
         {isLoading && (
           <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm">
@@ -276,6 +327,38 @@ export default function Home() {
       </section>
 
       <Footer />
+
+      {/* Partner Section */}
+      <section className="py-10 md:py-14 bg-gray-50 border-t border-gray-100">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
+              Ils nous font confiance
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-12 items-center justify-items-center">
+            {PARTNERS.map((partner: any) => (
+              <div
+                key={partner.name}
+                className="transition-all duration-300 transform hover:scale-110 cursor-pointer w-full flex justify-center"
+              >
+                {partner.logo ? (
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    className="h-10 sm:h-12 md:h-14 w-auto object-contain max-w-[120px] md:max-w-[150px] filter "
+                  />
+                ) : (
+                  <span className="text-sm md:text-lg font-bold text-gray-400 text-center">
+                    {partner.name}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

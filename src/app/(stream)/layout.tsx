@@ -1,5 +1,3 @@
-// import { fetchInfrastructure } from "@/actions/streamData";
-
 import { Poppins } from "next/font/google";
 import "../globals.css";
 
@@ -28,8 +26,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: Readonly<Props>) {
-  // const infrastructures = await fetchInfrastructure();
-  // console.log(infrastructures.results);
 
   const messages = await getMessages();
   const locale = await getLocale();
@@ -43,7 +39,10 @@ export default async function RootLayout({ children }: Readonly<Props>) {
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
       </head>
-      <body className="min-h-screen bg-gray-50 text-gray-900">
+      <body
+        className="min-h-screen bg-gray-50 text-gray-900"
+      >
+
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>
             <Header />
