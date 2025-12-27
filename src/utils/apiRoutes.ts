@@ -1,14 +1,17 @@
 export const auth = {
-  login: "/login",
-  register: "/register",
+  login: "/token/",
+  register: "/register/",
 };
 export const ceedd = {
-  infrastructure: "/infrastructure/",
-  finance: "/finance/",
-  inspection: "/inspection/",
-  client: "/client/",
-  typeinfrastructure: "/typeinfrastructure",
-  bailleur: "/bailleur/",
-  zonecontributive: "/zonecontributive/",
-  photo: "/photo/",
+  infrastructure: "/infrastructures/",
+  finance: "/finances/",
+  inspection: "/inspections/",
+  client: "/clients/",
+  typeinfrastructure: "/types-infrastructure/",
+  bailleur: "/bailleurs/",
+  zonecontributive: "/zones/",
+  photo: "/photos/",
+  users: "/users/",
+  volume: "/volume/",
+  infras: "/infras/",
 };

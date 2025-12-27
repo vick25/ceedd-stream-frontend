@@ -1,0 +1,152 @@
+{
+  "Header": {
+    "home": "Accueil",
+    "about": "À propos de nous",
+    "donate": "Faire un don",
+    "contact": "Nous contacter",
+    "dashboard": "Dashboard",
+    "language": "Langue",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "register": "S'inscrire",
+    "backOffice": "Aller à l'Admin"
+  },
+  "Footer": {
+    "ceedd": "CEEDD est une Organisation Non Gouvernementale de droit Congolais qui œuvre dans le secteur de la gestion durable des ressources environnementales pour le développement durable de la RDC.",
+    "copyright": "{date} STREAM. Tous droits réservés.",
+    "contact": "Nous contacter",
+    "followUs": "Suivez-nous",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation"
+  },
+  "HomePage": {
+    "welcome": "Bienvenue à CEEDD",
+    "partner": "Nos partenaires",
+    "copyright": "{date} STREAM | CEEDD. Tous droits réservés.",
+    "learnMore": "En savoir plus",
+    "ourMission": "Notre mission",
+    "missionDescription": "Des solutions de cartographie innovantes pour un monde connecté.",
+    "all": "Tous",
+    "dataLoading": "Chargement des données...",
+    "overView": "Aperçu global",
+    "overViewIntro": "Données en temps réel sur l’état et l’impact des infrastructures de gestion des eaux.",
+    "currentMonitoring": "Actuellement en monitoring",
+    "status": "Statut",
+    "water": "Eau fonctionnelle"
+  },
+  "FilterCard": {
+    "title": "Options de filtrage",
+    "description": "Filtrer par type d'infrastructures",
+    "dateConstruction": "Date de construction",
+    "capacity": "Capacité",
+    "selectMarker": "Sélectionner un marqueur sur la carte"
+  },
+  "AboutPage": {
+    "title": "À propos de STREAM",
+    "whoWeAre": "Qui sommes-nous",
+    "whoWeAreDescription": "L’Outils d'évaluation et de gestion durables des eaux pluviales (STREAM) est un outil pour le monitoring des infrastructures installées pour la collecte, stockage, mesure des eaux de pluies en milieu urbain. Il permet de promouvoir les efforts que la population et le <link>CEEDD</link> ensemble avec le <link1>Terrafirma Rainwater collective</link1> fournissent pour réduire l’expansion et le risque de formation des nouveaux ravins dans les quartiers situés en zone collinaires. Notre objectif est d’aider les quartiers situés en zone collinaire à réaliser une transition vers des quartiers éponge capable d’absorber toutes les eaux de pluies qu’ils interceptent et ainsi accroitre leur résilience face aux évènements extrêmes de plus en plus fréquents. Mais aussi de collecter de données sur les pluies et le ruissellement pour étudier et formuler des solutions scientifiquement valide.",
+    "ceeddHref": "https://www.ceeddrdc.org/",
+    "terrafirmaHref": "https://www.tfrain.org/",
+    "ourMission": "Notre mission",
+    "ourVision": "Notre vision",
+    "value1": "Notre mission porte sur la prévention et limitation des ravins urbaine et des inondations causées par les évènements extrêmes dus au changement climatique dans les mégapoles africaines. Nos interventions se concentrent principalement sur la collecte et infiltration des eaux de pluie à l'échelle des ménages. Nous sommes conscients que :",
+    "value2": "un système complet d'évacuation sécurisée des eaux de pluies est difficile à mettre en place à l'échelle de nos ville, vu les ressources que cela nécessite.",
+    "value3": "nos besoins en matière d'eau ne feront qu'empirer à mesure que notre population augmentera et que notre pluviométrie s'intensifiera avec le changement climatique.",
+    "value4": "Nous donnons aux communautés défavorisées et marginalisées les moyens de prendre en main leur avenir en matière d'eau face au changement climatique. Nos systèmes de collecte des eaux de pluie fournissent une source d'eau domestique pendant 9 mois de l'année, réduisant ainsi le besoin d'acheter et de transporter de l'eau, tout en apportant une réponse locale aux inondations urbaines catastrophiques et à l'érosion.",
+    "value5": "Un monde où chaque communauté a un accès fiable à l'eau potable grâce à une gestion fondée sur les données.",
+    "ourTeam": "Notre équipe",
+    "teamDescription": "Rencontrez les personnes dévouées qui font avancer la mission de STREAM.",
+    "teamMember1": "Dr. Emily White - Fondatrice et PDG",
+    "teamMember2": "M. David Green - Directeur des opérations"
+  },
+  "ContactPage": {
+    "title": "Nous contacter",
+    "getInTouch": "Prenez contact",
+    "contactDescription": "Vous avez des questions ou souhaitez collaborer ? Contactez-nous !",
+    "name": "Nom",
+    "email": "Email",
+    "message": "Message",
+    "sendMessage": "Envoyer le message",
+    "address": "Notre adresse",
+    "phone": "Téléphone",
+    "emailAddress": "Email"
+  },
+  "DashboardPage": {
+    "title": "Dashboard",
+    "welcomeUser": "Bienvenue, {username} !",
+    "recentActivity": "Activité récente",
+    "myProjects": "Mes projets",
+    "settings": "Paramètres",
+    "viewProfile": "Voir le profil",
+    "alert": "Veuillez sélectionner au moins une année pour les filtres de période, ou renseignez la plage de dates complète.",
+    "locationMessage": "Recherche des données de localisation...",
+    "errorMessage": "Erreur lors de la récupération des données de localisation.",
+    "volumeMessage": "Recherche des données de volume par date...",
+    "dateErrorMessage": "Erreur lors de la récupération des données de date.",
+    "noVolumeFound": "Aucun volume d'infrastructure trouvé pour cette période.",
+    "noData": "Aucun volume d'infrastructure trouvé pour ces critères.",
+    "subtitle": "Gestion des infrastructures et génération de rapports de volume.",
+    "locationTitle": "Recherche par Localisation",
+    "locationDesc": "Filtrer les volumes par zone administrative.",
+    "dateTitle": "Recherche par Date",
+    "dateDesc": "Filtrer par période de construction.",
+    "locationBtn": "Rechercher (Localisation)",
+    "dateBtn": "Rechercher (Période)",
+    "plageDate": "PLAGE DE DATE SPÉCIFIQUE (Priorité la plus haute)",
+    "synthese": "Synthèse des Résultats",
+    "requestedPeriod": "Période demandée : {dateFrom} au {dateTo}"
+  },
+  "LoginPage": {
+    "title": "Connexion",
+    "Username": "Nom d'utilisateur",
+    "Password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "loginButton": "Connexion",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "registerNow": "Inscrivez-vous maintenant"
+  },
+  "RegisterPage": {
+    "title": "S'inscrire",
+    "username": "Nom d'utilisateur",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "registerButton": "S'inscrire",
+    "alreadyAccount": "Vous avez déjà un compte ?",
+    "loginHere": "Connectez-vous ici"
+  },
+  "ProjectCard": {
+    "viewDetails": "Voir les détails",
+    "Status": "Status",
+    "Location": "Location"
+  },
+  "ProjectDetailsPage": {
+    "title": "Détails du projet",
+    "description": "Description",
+    "goals": "Objectifs",
+    "impact": "Impact",
+    "budget": "Budget",
+    "timeline": "Chronologie",
+    "backToProjects": "Retour aux projets"
+  },
+  "Forms": {
+    "requiredField": "Ce champ est obligatoire.",
+    "invalidEmail": "Veuillez entrer une adresse e-mail valide.",
+    "passwordMismatch": "Les mots de passe ne correspondent pas.",
+    "minLength": "La longueur minimale est de {min} caractères.",
+    "maxLength": "La longueur maximale est de {max} caractères."
+  },
+  "Notifications": {
+    "success": "Succès !",
+    "error": "Erreur !",
+    "warning": "Attention !",
+    "info": "Information."
+  },
+  "Buttons": {
+    "submit": "Soumettre",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "save": "Enregistrer"
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +16,14 @@ import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCustomers } from "@/components/hooks/useCustomer";
+import {
+  useCreateCustomers,
+  useCustomers,
+} from "@/components/hooks/useCustomer";
+import { useAppStore } from "@/store/appStore";
+import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 interface FormData {
   nom: string;
   postnom: string;
@@ -30,22 +37,26 @@ interface FormData {
   commune: string;
 }
 
+interface CreateFormClientProps {
+  onFormSuccess: () => void;
+}
+
 const clientSchema = z.object({
   nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
-  postnom: z.string().min(1, "le post nom est requis"),
-  prenom: z.string().min(1, "Le Prenom est requis"),
-  sexe: z.string().min(1, "Le sexe est requis"),
-  avenue: z.string().min(1, "La avenue est requise"),
-  quartier: z.string().min(1, "La capacité est requise"),
-  numero: z.string().min(1, "Le  est requise"),
-  telephone: z.string().min(1, "Le numero de telephone est requis"),
-  email: z.string().email("Veuillez entrer une adresse e-mail valide."),
-  commune: z.string().min(1, "Veuillez veuillez entrer une addrese email."),
+  postnom: z.string().optional(),
+  prenom: z.string().optional(),
+  sexe: z.string().min(1, "Le sexe est requis").optional(),
+  avenue: z.string().optional(),
+  quartier: z.string().min(1, "La capacité est requise").optional(),
+  numero: z.string().optional(),
+  telephone: z.string().optional(),
+  email: z.string().optional(),
+  commune: z.string().min(1, "Veuillez veuillez entrer une commune."),
 });
 
 type ClientFormData = z.infer<typeof clientSchema>;
 
-const CreateFormClient = () => {
+const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
   const {
     register,
     handleSubmit,
@@ -65,10 +76,12 @@ const CreateFormClient = () => {
       commune: "",
     },
   });
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { user, _hasHydrated, isAuthenticated } = useAppStore();
 
-  const mutationCreateInfrastructure = useCreateInfrastructure();
-  const { data: typeInfrastructure, isLoading } = useTypeInfradtructures();
-  const { data: customersData, isLoading: isCustomersLoading } = useCustomers();
+  const mutationCreateCustomers = useCreateCustomers();
+
   // const {data:zonesData,isLoading:isZonesLoading}=useZone()
 
   const onSubmit = async (data: ClientFormData) => {
@@ -85,9 +98,25 @@ const CreateFormClient = () => {
       email: data.email,
       commune: data.commune,
     };
-    await mutationCreateInfrastructure.mutateAsync(payload);
+    await mutationCreateCustomers.mutateAsync(payload);
+
+    await queryClient.invalidateQueries({ queryKey: ["customers"] });
+    onFormSuccess();
   };
 
+  useEffect(() => {
+    if (_hasHydrated && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [_hasHydrated, isAuthenticated, router]);
+
+  if (!_hasHydrated) {
+    return <Loader />;
+  }
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -118,17 +147,8 @@ const CreateFormClient = () => {
               type="text"
               placeholder="postnom"
               {...register("postnom")}
-              className={`border border-white ${
-                errors.postnom
-                  ? "border border-red-500"
-                  : touchedFields.postnom
-                  ? "border border-green-600"
-                  : "border border-gray-300"
-              }`}
+              className={`border border-gray-200 `}
             />
-            {errors.postnom && (
-              <p className="text-red-500 text-sm">{errors.postnom.message}</p>
-            )}
           </div>
           <div>
             <Label htmlFor="prenom">prenom:</Label>
@@ -138,18 +158,23 @@ const CreateFormClient = () => {
               placeholder="prenom"
               {...register("prenom")}
             />
-            {errors.prenom && <p>{errors.prenom?.message}</p>}
+            {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col gap-4">
             <Label htmlFor="sexe">sexe </Label>
 
-            <input
+            <select
               id="sexe"
-              type="checkbox"
-              placeholder="sexe"
-              className="h-10"
               {...register("sexe")}
-            />
+              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.sexe
+                  ? "border border-red-500 "
+                  : "border border-green-500"
+              }`}
+            >
+              <option value="M">M</option>
+              <option value="F">F</option>
+            </select>
             {errors.sexe && (
               <p className="text-red-500 text-sm ">{errors.sexe.message}</p>
             )}
@@ -161,10 +186,11 @@ const CreateFormClient = () => {
               type="avenue"
               placeholder="avenue"
               {...register("avenue")}
+              className="border-gray-200  border"
             />
-            {errors.avenue && (
+            {/* {errors.avenue && (
               <p className="text-red-500 text-sm">{errors.avenue.message}</p>
-            )}
+            )} */}
           </div>
           <div>
             <Label htmlFor="quartier">quartier : </Label>
@@ -173,10 +199,24 @@ const CreateFormClient = () => {
               type="text"
               placeholder="quartier"
               {...register("quartier")}
+              className="border border-gray-200 "
             />
-            {errors.quartier && (
+            {/* {errors.quartier && (
               <p className="text-red-500 text-sm">{errors.quartier.message}</p>
-            )}
+            )} */}
+          </div>
+          <div>
+            <Label htmlFor="commune">commune : </Label>
+            <Input
+              id="commune"
+              type="text"
+              placeholder="commune"
+              {...register("commune")}
+              className="border border-gray-200 "
+            />
+            {/* {errors.commune && (
+              <p className="text-red-500 text-sm">{errors.commune.message}</p>
+            )} */}
           </div>
           <div>
             <Label htmlFor="numero">numero : </Label>
@@ -185,6 +225,7 @@ const CreateFormClient = () => {
               type="text"
               {...register("numero")}
               placeholder="numero"
+              className="border border-gray-200 "
             />
             {errors.numero && (
               <p className="text-red-500 text-sm">{errors.numero.message}</p>
@@ -197,10 +238,11 @@ const CreateFormClient = () => {
               type="text"
               {...register("telephone")}
               placeholder="telephone"
+              className="border border-gray-200 "
             />
-            {errors.telephone && (
+            {/* {errors.telephone && (
               <p className="text-red-500 text-sm">{errors.telephone.message}</p>
-            )}
+            )} */}
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="email">email :</Label>
@@ -209,20 +251,21 @@ const CreateFormClient = () => {
               type="text"
               {...register("email")}
               placeholder="email"
+              className="border border-gray-200 "
             />
-            {errors.email && (
+            {/* {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )}
+            )} */}
           </div>
           <Button
             type="submit"
             size="lg"
-            disabled={mutationCreateInfrastructure.isPending}
+            // disabled={mutationCreateCustomers.isPending}
             className="w-full bg-green-600 text-gray-200"
           >
-            {mutationCreateInfrastructure.isPending
+            {mutationCreateCustomers.isPending
               ? "Chargement..."
-              : " Ajouter Infrastructure"}
+              : " Ajouter Client"}
           </Button>
         </div>
       </form>

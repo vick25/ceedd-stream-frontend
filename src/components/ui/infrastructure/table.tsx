@@ -1,18 +1,15 @@
 import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
 import EditInfrastructure from "@/components/editButton/EditInfrastructure";
-import { useCustomer, useGetCustomer } from "@/components/hooks/useCustomer";
+import { useGetCustomer } from "@/components/hooks/useCustomer";
 import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
-import {
-  useAllTypeInfrastructure,
-  useTypeInfrastructure,
-} from "@/components/hooks/useTypeInfrastructure";
+import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
 
 import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
+import { Eye } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import { tr } from "zod/v4/locales";
-import { Skeleton } from "../skeleton";
 
 export default function InfrastructureTable() {
   const [getInfastructure, setGetInfrastructure] = useState<
@@ -53,43 +50,6 @@ export default function InfrastructureTable() {
       setGetInfrastructure(convertInfrastructure);
     }
   }, [mutationInfranstructure.data]);
-  console.log({ getInfastructure });
-  // mutationZone.mutate,
-  // useEffect(() => {
-  //   if (mutationCustomer.data && mutationCustomer.data.results.length) {
-  //     const map = mutationCustomer.data.results.reduce(
-  //       (acc: Record<string, string>, item: any) => {
-  //         acc[item.id.toString()] = item.nom;
-  //         return acc;
-  //       },
-  //       {}
-  //     );
-  //     setClientNames(map);
-  //   }
-  // }, [mutationCustomer.data]);
-  // console.log("testtlsll", clientNames);
-  // useEffect(() => {
-  //   if (
-  //     mutationTypeInfrastructure.data &&
-  //     mutationTypeInfrastructure.data.results
-  //   ) {
-  //     const maps = mutationTypeInfrastructure.data.results.reduce(
-  //       (acc: Record<string, string>, item: any) => {
-  //         acc[item.id.toString()] = item.nom;
-  //         return acc;
-  //       },
-  //       {}
-  //     );
-  //     setTypeInfras(maps);
-  //   }
-  // }, [mutationTypeInfrastructure.data]);
-
-  // useEffect(() => {
-  //   if (mutationZone.data) {
-  //     const zoneC = mutationZone.data.zone;
-  //     setZone(zoneC);
-  //   }
-  // }, []);
 
   if (mutationInfranstructure.isPending) {
     return <Loader />;
@@ -101,61 +61,65 @@ export default function InfrastructureTable() {
           <div className="lg:hidden">
             {getInfastructure?.map((infrastructure: any) => {
               return (
-                <div
+                <Link
                   key={infrastructure.id}
-                  className="mb-2 w-full rounded-md bg-white p-4"
+                  href={`/dashboard/infrastructures/${infrastructure.id}`}
                 >
-                  <div className="flex items-center justify-between border-b pb-4">
-                    <div>
-                      <div className="mb-2 flex items-center gap-3">
-                        {/* <Image
+                  <div className="mb-2 w-full rounded-md bg-white p-4">
+                    <div className="flex items-center justify-between border-b pb-4">
+                      <div>
+                        <div className="mb-2 flex items-center gap-3">
+                          {/* <Image
                         src={invoice.image_url}
                         className="mr-2 rounded-full"
                         width={28}
                         height={28}
                         alt={`${invoice.name}'s profile picture`}
                       /> */}
-                        {/* <p>{invoice.name}</p> */}
-                        <div className="flex flex-col gap-2">
-                          <span className="font-semibold">Nom</span>
-                          <p>{infrastructure.nom}</p>
+                          {/* <p>{invoice.name}</p> */}
+                          <div className="flex flex-col gap-2">
+                            <span className="font-semibold">Nom</span>
+                            <p>{infrastructure.nom}</p>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <span className="font-semibold">Capacité</span>
+                            <p>{infrastructure.capacite}</p>
+                          </div>
                         </div>
-                        <div className="flex flex-col gap-2">
-                          <span className="font-semibold">Capacité</span>
-                          <p>{infrastructure.capacite}</p>
-                        </div>
+                        {/* <p className="text-sm text-gray-500"></p> */}
                       </div>
-                      {/* <p className="text-sm text-gray-500"></p> */}
+                      {/* <InvoiceStatus status={invoice.status} /> */}
                     </div>
-                    {/* <InvoiceStatus status={invoice.status} /> */}
+                    <div className="flex w-full items-center justify-between pt-4">
+                      <div>
+                        <p className="text-xl font-medium">
+                          Propriétaire : {infrastructure.client?.nom}
+                        </p>
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <EditInfrastructure
+                          id={infrastructure.id}
+                          nom={infrastructure.nom}
+                          type_infrastructure={
+                            infrastructure.type_infrastructure
+                          }
+                          date_construction={infrastructure.date_construction}
+                          latitude={infrastructure.latitude}
+                          longitude={infrastructure.longitude}
+                          capacite={infrastructure.capacite}
+                          unite={infrastructure.unite}
+                          // zone={infrastructure.zone}
+                          client={infrastructure.client}
+                        />
+                        <DeleteInfrastructure
+                          id={infrastructure.id}
+                          nom={infrastructure.nom}
+                          setInfrastructureDeleted={setInfrastructureDeleted}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex w-full items-center justify-between pt-4">
-                    <div>
-                      <p className="text-xl font-medium">
-                        Propriétaire : {infrastructure.client.nom}
-                      </p>
-                    </div>
-                    <div className="flex justify-end gap-2">
-                      <EditInfrastructure
-                        id={infrastructure.id}
-                        nom={infrastructure.nom}
-                        type_infrastructure={infrastructure.type_infrastructure}
-                        date_construction={infrastructure.date_construction}
-                        latitude={infrastructure.latitude}
-                        longitude={infrastructure.longitude}
-                        capacite={infrastructure.capacite}
-                        unite={infrastructure.unite}
-                        // zone={infrastructure.zone}
-                        client={infrastructure.client}
-                      />
-                      <DeleteInfrastructure
-                        id={infrastructure.id}
-                        nom={infrastructure.nom}
-                        setInfrastructureDeleted={setInfrastructureDeleted}
-                      />
-                    </div>
-                  </div>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -167,7 +131,7 @@ export default function InfrastructureTable() {
                   Nom
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Proprietaire
+                  Propriétaire
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Type Infrastructure
@@ -179,10 +143,10 @@ export default function InfrastructureTable() {
                   Longitude
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Capacite{" "}
+                  Capacité
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  unite
+                  Unité
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Zone
@@ -202,7 +166,7 @@ export default function InfrastructureTable() {
                   return (
                     <tr
                       key={infra.id}
-                      className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                      className="w-full border-b border-b-gray-300 py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex items-center gap-3">
@@ -217,13 +181,12 @@ export default function InfrastructureTable() {
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {infra.client.nom}
+                        {infra.client?.nom}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {infra.type_infrastructure.nom}
+                        {infra.type_infrastructure?.nom}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {" "}
                         {infra.latitude}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
@@ -238,7 +201,7 @@ export default function InfrastructureTable() {
                       <td className="whitespace-nowrap px-3 py-3"></td>
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                        <div className="flex justify-end gap-3">
+                        <div className="flex justify-end gap-3 items-center">
                           <EditInfrastructure
                             id={infra.id}
                             nom={infra.nom}
@@ -256,6 +219,9 @@ export default function InfrastructureTable() {
                             nom={infra.nom}
                             setInfrastructureDeleted={setInfrastructureDeleted}
                           />
+                          <Link href={`/dashboard/infrastructures/${infra.id}`}>
+                            <Eye className="h-4" />
+                          </Link>
                         </div>
                       </td>
                     </tr>

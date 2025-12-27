@@ -18,7 +18,11 @@ export type InfrastructureType =
   | "contributive_zone";
 
 export type InfrastructureStatus = "good" | "medium" | "bad";
-
+export type User = {
+  id: string;
+  username: string;
+  password: string;
+};
 export interface Infrastructure {
   id: string;
   name: string;
@@ -53,8 +57,31 @@ export interface InfrastructureTypes {
   longitude: string;
   capacite: string;
   unite: string;
-  // zone: string;
+  zone?: string;
   client: Client;
+}
+
+export interface InfrastructureFilters {
+  commune?: string;
+  quartier?: string;
+  avenue?: string;
+  year?: string;
+  startDate?: string;
+  endDate?: string;
+}
+export interface InfrastructureSearch {
+  total_volume: number;
+}
+export enum etat_ravin {
+  SELECTIONNEZ = "",
+  rav_stable = "stable",
+  rav_active = "active",
+}
+export enum inspection {
+  SELECTIONNEZ = "",
+  bon = "bon",
+  moyen = "moyen",
+  mauvais = "mauvais",
 }
 export interface Zone_contributive {
   id: string;

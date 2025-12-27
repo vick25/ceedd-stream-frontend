@@ -1,0 +1,152 @@
+{
+  "Header": {
+    "home": "Home",
+    "about": "About Us",
+    "donate": "Donate",
+    "contact": "Contact Us",
+    "dashboard": "Dashboard",
+    "language": "Language",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "backOffice": "Go to Admin"
+  },
+  "Footer": {
+    "ceedd": "CEEDD is a Congolese non-governmental organization working in the field of sustainable environmental resource management for the sustainable development of the DRC.",
+    "contact": "Contact Us",
+    "copyright": "{date} STREAM. All rights reserved.",
+    "followUs": "Follow Us",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  },
+  "HomePage": {
+    "welcome": "Welcome to CEEDD",
+    "partner": "Our partners",
+    "copyright": "{date} STREAM | CEEDD. All rights reserved.",
+    "learnMore": "Learn More",
+    "ourMission": "Our Mission",
+    "missionDescription": "Innovative mapping solutions for a connected world.",
+    "all": "All",
+    "dataLoading": "Loading data...",
+    "overView": "Global view",
+    "overViewIntro": "Real-time data on the status and impact of water infrastructure.",
+    "currentMonitoring": "Currently monitoring",
+    "status": "Status",
+    "water": "Used water"
+  },
+  "FilterCard": {
+    "title": "Map Options",
+    "description": "Filter the data by the infrastructure type",
+    "dateConstruction": "Date of construction",
+    "capacity": "Capacity",
+    "selectMarker": "Select a marker on the map"
+  },
+  "AboutPage": {
+    "title": "About STREAM",
+    "whoWeAre": "Who We Are",
+    "whoWeAreDescription": "The Sustainable Tools for Rainwater Evaluation And Management (STREAM) is a tool for monitoring infrastructure installed for collecting, storing and measuring rainwater in urban areas. It promotes the efforts made by the population and <link>CEEDD</link>, together with the <link1>Terrafirma Rainwater Collective</link1>, to reduce the expansion and risk of new gullies forming in neighbourhoods located in hilly areas. Our goal is to help these neighbourhoods transition to sponge neighbourhoods capable of absorbing all the rainwater they intercept, and thus increase their resilience to increasingly frequent extreme events. But also to collect data on rainfall and runoff in order to study and formulate scientifically valid solutions.",
+    "ceeddHref": "https://www.ceeddrdc.org/",
+    "terrafirmaHref": "https://www.tfrain.org/",
+    "ourMission": "Our Mission",
+    "ourVision": "Our Vision",
+    "value1": "Our mission focuses on preventing and limiting urban gullies and flooding caused by extreme events due to climate change in African megacities. Our interventions mainly focus on rainwater harvesting and infiltration at the household level. We are aware that:",
+    "value2": "a complete system for the safe drainage of rainwater is difficult to implement on the scale of our cities, given the resources required.",
+    "value3": "our water needs will only worsen as our population grows and rainfall intensifies with climate change.",
+    "value4": "We empower underserved and marginalised communities to take control of their water-related future in the face of climate change. Our rainwater harvesting systems provide a source of domestic water for 9 months of the year, reducing the need to purchase and transport water, while providing a local response to catastrophic urban flooding and erosion.",
+    "value5": "A world where every community has reliable access to clean water through data-driven management.",
+    "ourTeam": "Our Team",
+    "teamDescription": "Meet the dedicated individuals driving CEEDD's mission forward.",
+    "teamMember1": "Dr. Emily White - Founder & CEO",
+    "teamMember2": "Mr. David Green - Chief Operations Officer"
+  },
+  "ContactPage": {
+    "title": "Contact Us",
+    "getInTouch": "Get in Touch",
+    "contactDescription": "Have questions or want to collaborate? Reach out to us!",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "sendMessage": "Send Message",
+    "address": "Our Address",
+    "phone": "Phone",
+    "emailAddress": "Email"
+  },
+  "DashboardPage": {
+    "title": "Dashboard",
+    "welcomeUser": "Welcome, {username}!",
+    "recentActivity": "Recent Activity",
+    "myProjects": "My Projects",
+    "settings": "Settings",
+    "viewProfile": "View Profile",
+    "alert": "Please select at least one year for the period filters, or enter the complete date range.",
+    "locationMessage": "Searching for location data...",
+    "errorMessage": "Error retrieving location data.",
+    "volumeMessage": "Searching for volume data...",
+    "dateErrorMessage": "Error retrieving date data.",
+    "noVolumeFound": "No infrastructure volume found for this period.",
+    "noData": "No infrastructure volume found for these criteria.",
+    "subtitle": "Infrastructure and volume report generation.",
+    "locationTitle": "Search by Localisation",
+    "locationDesc": "Filter volumes by administrative zone.",
+    "dateTitle": "Search by Date",
+    "dateDesc": "Filter by construction period.",
+    "locationBtn": "Search by (Localisation)",
+    "dateBtn": "Search by (Period)",
+    "plageDate": "SPECIFIC DATE BLOCK (Highest Priority)",
+    "synthese": "Summary of Results",
+    "requestedPeriod": "Requested period: {dateFrom} to {dateTo}"
+  },
+  "LoginPage": {
+    "title": "Login",
+    "Username": "Username",
+    "Password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "loginButton": "Login",
+    "noAccount": "Don't have an account?",
+    "registerNow": "Register Now"
+  },
+  "RegisterPage": {
+    "title": "Register",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "registerButton": "Register",
+    "alreadyAccount": "Already have an account?",
+    "loginHere": "Login Here"
+  },
+  "ProjectCard": {
+    "viewDetails": "View Details",
+    "Status": "Status",
+    "Location": "Location"
+  },
+  "ProjectDetailsPage": {
+    "title": "Project Details",
+    "description": "Description",
+    "goals": "Goals",
+    "impact": "Impact",
+    "budget": "Budget",
+    "timeline": "Timeline",
+    "backToProjects": "Back to Projects"
+  },
+  "Forms": {
+    "requiredField": "This field is required.",
+    "invalidEmail": "Please enter a valid email address.",
+    "passwordMismatch": "Passwords do not match.",
+    "minLength": "Minimum length is {min} characters.",
+    "maxLength": "Maximum length is {max} characters."
+  },
+  "Notifications": {
+    "success": "Success!",
+    "error": "Error!",
+    "warning": "Warning!",
+    "info": "Information."
+  },
+  "Buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save"
+  }
+}

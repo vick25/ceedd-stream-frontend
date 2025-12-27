@@ -1,26 +1,25 @@
+import { useAppStore } from "@/store/appStore";
+import { Client, InfrastructureTypes } from "@/types/infrastructure";
+import { IconButton } from "@radix-ui/themes";
+import { PencilLine } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useCustomers } from "../hooks/useCustomer";
+import {
+  useGetInfrastructure,
+  useUpdateInfrastructure,
+} from "../hooks/useInfrastructure";
+import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
+import Loader from "../Loader";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { IconButton } from "@radix-ui/themes";
-import { PencilLine } from "lucide-react";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import {
-  Client,
-  InfrastructureTypes,
-  // zone_contributive,
-} from "@/types/infrastructure";
-import { Button } from "../ui/button";
-import {
-  useGetInfrastructure,
-  useUpdateInfrastructure,
-} from "../hooks/useInfrastructure";
-import { useCustomers, useGetCustomer } from "../hooks/useCustomer";
-import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
+import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";
 
 const EditInfrastructure = ({
@@ -47,10 +46,10 @@ const EditInfrastructure = ({
   });
   const [customers, setCustomers] = useState<Client[]>([]);
   // const [zones, setZones] = useState<zone_contributive[]>([]);
-
+  const { user, _hasHydrated, isAuthenticated } = useAppStore();
+  const router = useRouter();
   const mutationInfrastructure = useGetInfrastructure();
-  // const mutationCustomer = useGetCustomer();
-  // const mutationTypeInfrastructure = useAllTypeInfrastructure();
+
   const updateMutationInfrastructure = useUpdateInfrastructure();
 
   const { data: CustomerData, isLoading } = useCustomers();
@@ -59,7 +58,7 @@ const EditInfrastructure = ({
     isLoading: IsTypeInfrastructureLoading,
   } = useTypeInfradtructures();
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -85,13 +84,13 @@ const EditInfrastructure = ({
     if (id) {
       setFormData({
         nom,
-        type_infrastructure: type_infrastructure.id,
+        type_infrastructure: type_infrastructure?.id,
         date_construction,
         latitude,
         longitude,
         capacite,
         unite,
-        client: client.id,
+        client: client?.id,
       });
     }
   }, [
@@ -106,6 +105,20 @@ const EditInfrastructure = ({
 
     client,
   ]);
+
+  useEffect(() => {
+    if (_hasHydrated && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [_hasHydrated, isAuthenticated, router]);
+
+  if (!_hasHydrated) {
+    return <Loader />;
+  }
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -117,7 +130,7 @@ const EditInfrastructure = ({
           <PencilLine size={20} />
         </IconButton>
       </DialogTrigger>
-      <DialogContent className="bg-white z-[9999]  ">
+      <DialogContent className="bg-white z-9999  ">
         <DialogTitle>Modifier l'infrastructure</DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}
@@ -223,7 +236,7 @@ const EditInfrastructure = ({
               </select>
             </div> */}
             <div>
-              <Label htmlFor="client">Proprietaire:</Label>
+              <Label htmlFor="client">Propriétaire:</Label>
               {isLoading ? (
                 <Skeleton className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 " />
               ) : (

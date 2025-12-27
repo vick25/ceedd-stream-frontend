@@ -13,10 +13,11 @@ export const useGetCustomer = () => {
   return useMutation({
     mutationFn: serviceCustomer.getCustomerAll,
     onSuccess: (response) => {
-      console.log(response);
+      // console.log(response);
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
+      toast.error("Impossible d'afficher les clients");
     },
   });
 };
@@ -35,6 +36,18 @@ export const useCreateCustomers = () => {
     },
     onError: (error) => {
       toast.error("Impossible de créer le client");
+    },
+  });
+};
+export const useUpdateCustomers = () => {
+  return useMutation({
+    mutationFn: ({ data, id }: { data: any; id: any }) =>
+      serviceCustomer.updateCustomer(data, id),
+    onSuccess: (response) => {
+      toast.success("Mise à jour du client réalisé avec success");
+    },
+    onError: (error) => {
+      toast.error("Impossible de mettre à jour un client");
     },
   });
 };
