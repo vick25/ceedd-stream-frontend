@@ -7,8 +7,7 @@ import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructu
 import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
-import { Eye } from "lucide-react";
-import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { tr } from "zod/v4/locales";
 import { Skeleton } from "../skeleton";
