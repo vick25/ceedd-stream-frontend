@@ -1,14 +1,14 @@
 "use client";
+
 import clsx from "clsx";
 import {
   BadgeCheck,
   Building2,
   Globe,
-  Image,
   Images,
   Landmark,
   LayoutGrid,
-  User,
+  User
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -31,7 +31,7 @@ const links = [
   },
   {
     icon: Landmark,
-    name: "bailleur",
+    name: "Bailleur",
     href: "/dashboard/bailleurs",
   },
   {
@@ -41,7 +41,7 @@ const links = [
   },
   {
     icon: Globe,
-    name: "zonecontributive",
+    name: "Zone contributive",
     href: "/dashboard/zonecontibutives",
   },
   {

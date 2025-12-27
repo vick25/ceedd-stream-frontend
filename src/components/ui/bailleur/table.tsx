@@ -1,35 +1,10 @@
-import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
-import EditInfrastructure from "@/components/editButton/EditInfrastructure";
-import {
-  useCustomer,
-  useCustomers,
-  useGetCustomer,
-} from "@/components/hooks/useCustomer";
-import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
-import {
-  useAllTypeInfrastructure,
-  useTypeInfrastructure,
-} from "@/components/hooks/useTypeInfrastructure";
 
-import {
-  useZoneContributive,
-  useZoneContributives,
-} from "@/components/hooks/useZoneContributive";
-import Loader from "@/components/Loader";
-import {
-  Client,
-  InfrastructureTypes,
-  Zone_contributive,
-} from "@/types/infrastructure";
-import { useEffect, useState } from "react";
-import { tr } from "zod/v4/locales";
-import { Skeleton } from "../skeleton";
-import Link from "next/link";
-import { Eye } from "lucide-react";
-import EditZoneContributide from "@/components/editButton/EditZoneContributide";
-import DeleteZoneContributide from "@/components/deleteButton/DeleteZoneContributide";
-import { useBailleurs } from "@/components/hooks/useBailleur";
 import EditBailleur from "@/components/editButton/EditBailleur";
+import { useBailleurs } from "@/components/hooks/useBailleur";
+import Loader from "@/components/Loader";
+import { Eye } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function BailleurTable() {
   const [zoneContributide, setBailleur] = useState<string>("");
@@ -64,7 +39,7 @@ export default function BailleurTable() {
                           <p>{zone.nom}</p>
                         </div>
                         <div className="flex flex-col gap-2">
-                          <span className="font-semibold">sigle </span>
+                          <span className="font-semibold">Sigle</span>
                           <p>{zone.sigle}</p>
                         </div>
                       </div>
@@ -97,7 +72,7 @@ export default function BailleurTable() {
                   Nom
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  sigle
+                  Sigle
                 </th>
 
                 <th scope="col" className="relative py-3 pl-6 pr-3">

@@ -1,25 +1,15 @@
 "use client";
 
 import { Locale, useTranslations } from "@/lib/i18n";
-import { PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Table from "@/components/ui/zones/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
+import Loader from "@/components/Loader";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
-import Loader from "@/components/Loader";
 
 import { usePhoto } from "@/components/hooks/usePhotos";
 import { useUplaoderImage } from "@/components/importFiles";
-import { CLOUDINARY_URL } from "@/utils/utils";
+
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { useInfrastructures } from "@/components/hooks/useInfrastructure";
@@ -43,6 +33,7 @@ const page = (props: Props) => {
   const handleDelete = () => {
     SetSecureUrl("");
   };
+
   const CLOUDINARY_URL = process.env.NEXT_PUBLIC_CLOUDINARY_URL;
   const { handleFileUpload, urlLoading } = useUplaoderImage(CLOUDINARY_URL);
   const uploadUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,7 +83,7 @@ const page = (props: Props) => {
       <div className="flex flex-col  md:flex-row-reverse  gap-8 p-4 sm:p-6 bg-white rounded-xl shadow-lg">
         <div
           className="
-                w-full max-w-sm h-64 border-2 border-gray-200 rounded-xl overflow-hidden shadow-inner 
+                w-full max-w-sm h-64 border-2 border-gray-200 rounded-xl overflow-hidden shadow-inner
                 flex items-center justify-center bg-gray-100 relative
             "
         >
@@ -142,13 +133,13 @@ const page = (props: Props) => {
             <label
               htmlFor="url"
               className="
-                            flex items-center space-x-2 
-                            px-6 py-3 mb-4 
-                            text-base font-medium text-gray-700 
-                            bg-white 
-                            border border-gray-300 rounded-lg 
-                            shadow-sm 
-                            hover:bg-gray-50 
+                            flex items-center space-x-2
+                            px-6 py-3 mb-4
+                            text-base font-medium text-gray-700
+                            bg-white
+                            border border-gray-300 rounded-lg
+                            shadow-sm
+                            hover:bg-gray-50
                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
                             cursor-pointer
                         "
@@ -199,12 +190,12 @@ const page = (props: Props) => {
           <button
             type="submit"
             className="
-                        w-full 
-                        px-6 py-3 
-                        text-base font-semibold text-white 
-                        bg-indigo-600 rounded-lg 
-                        shadow-md 
-                        hover:bg-indigo-700 
+                        w-full
+                        px-6 py-3
+                        text-base font-semibold text-white
+                        bg-indigo-600 rounded-lg
+                        shadow-md
+                        hover:bg-indigo-700
                         focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-indigo-500
                         transition duration-150 ease-in-out
                         disabled:bg-gray-400 disabled:cursor-not-allowed

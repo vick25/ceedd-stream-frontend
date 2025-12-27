@@ -1,30 +1,29 @@
+import { useAppStore } from "@/store/appStore";
+import {
+  Client,
+  InfrastructureTypes,
+} from "@/types/infrastructure";
+import { IconButton } from "@radix-ui/themes";
+import { PencilLine } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useCustomers } from "../hooks/useCustomer";
+import {
+  useGetInfrastructure,
+  useUpdateInfrastructure,
+} from "../hooks/useInfrastructure";
+import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
+import Loader from "../Loader";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { IconButton } from "@radix-ui/themes";
-import { PencilLine } from "lucide-react";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import {
-  Client,
-  InfrastructureTypes,
-  // zone_contributive,
-} from "@/types/infrastructure";
-import { Button } from "../ui/button";
-import {
-  useGetInfrastructure,
-  useUpdateInfrastructure,
-} from "../hooks/useInfrastructure";
-import { useCustomers, useGetCustomer } from "../hooks/useCustomer";
-import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
+import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";
-import { useAppStore } from "@/store/appStore";
-import { useRouter } from "next/navigation";
-import Loader from "../Loader";
 
 const EditInfrastructure = ({
   id,
@@ -240,7 +239,7 @@ const EditInfrastructure = ({
               </select>
             </div> */}
             <div>
-              <Label htmlFor="client">Proprietaire:</Label>
+              <Label htmlFor="client">Propriétaire:</Label>
               {isLoading ? (
                 <Skeleton className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 " />
               ) : (

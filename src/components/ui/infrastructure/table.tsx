@@ -1,15 +1,14 @@
 import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
 import EditInfrastructure from "@/components/editButton/EditInfrastructure";
-import { useCustomer, useGetCustomer } from "@/components/hooks/useCustomer";
+import { useGetCustomer } from "@/components/hooks/useCustomer";
 import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
-import {
-  useAllTypeInfrastructure,
-  useTypeInfrastructure,
-} from "@/components/hooks/useTypeInfrastructure";
+import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
 
 import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
+import { Eye } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { tr } from "zod/v4/locales";
 import { Skeleton } from "../skeleton";
@@ -140,7 +139,7 @@ export default function InfrastructureTable() {
                   Nom
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Proprietaire
+                  Propriétaire
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Type Infrastructure
@@ -152,10 +151,10 @@ export default function InfrastructureTable() {
                   Longitude
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Capacite{" "}
+                  Capacité
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  unite
+                  Unité
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Zone

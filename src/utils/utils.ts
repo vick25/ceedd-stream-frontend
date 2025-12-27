@@ -93,9 +93,6 @@ export const displayDate = (dateObject: Date | string): string => {
   return `${year}-${month}-${day}`;
 };
 
-export const CLOUDINARY_URL =
-  "https://api.cloudinary.com/v1_1/dcnediean/image/upload";
-
 interface ClientData {
   results?: Array<Record<string, any>>; // Tableau d'objets bruts
 }
