@@ -32,7 +32,10 @@
     "overViewIntro": "Real-time data on the status and impact of water infrastructure.",
     "currentMonitoring": "Currently monitoring",
     "status": "Status",
-    "water": "Used water"
+    "water": "Used water",
+    "warning": "Error loading",
+    "warningMessage": "An error occurred while retrieving the data.",
+    "tryAgain": "Try again"
   },
   "FilterCard": {
     "title": "Map Options",
@@ -148,5 +151,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "save": "Save"
+  },
+  "Loader": {
+    "loading": "Loading..."
   }
 }
