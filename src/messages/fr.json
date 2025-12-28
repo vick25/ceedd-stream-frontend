@@ -32,7 +32,10 @@
     "overViewIntro": "Données en temps réel sur l’état et l’impact des infrastructures de gestion des eaux.",
     "currentMonitoring": "Actuellement en monitoring",
     "status": "Statut",
-    "water": "Eau fonctionnelle"
+    "water": "Eau fonctionnelle",
+    "warning": "Erreur de chargement",
+    "warningMessage": "Une erreur s'est produite lors de la récupération des données.",
+    "tryAgain": "Essayer de nouveau"
   },
   "FilterCard": {
     "title": "Options de filtrage",
@@ -148,5 +151,8 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "save": "Enregistrer"
+  },
+  "Loader": {
+    "loading": "Chargement en cours..."
   }
 }

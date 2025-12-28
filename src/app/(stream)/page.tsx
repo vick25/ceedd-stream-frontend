@@ -6,13 +6,15 @@ import { useGetInspections } from "@/components/hooks/useInspection";
 import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
 import Loader from "@/components/Loader";
 import { Footer } from "@/components/MapFooter";
+import { Card } from "@/components/ui/card";
 import { MapFeature } from "@/types/types";
-import { Building2, Droplet, Users } from "lucide-react";
+import { Building2, Droplet, Package, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 // Remplacement de l'import MOCK_FEATURES
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 // Dynamic import for Leaflet map to avoid SSR issues
@@ -176,15 +178,32 @@ export default function Home() {
   };
 
   const PARTNERS = [
-    { name: "Snel", logo: "/terrafirma.png" }, // Remplacez par vos vrais chemins
-    { name: "Regideso", logo: "/unikin.jpeg" },
-    { name: "USAID", logo: "/ceedd.png" },
-    { name: "World Bank", logo: "/AICPKK.jpg" },
-    { name: "Unicef", logo: "/leuven.png" },
+    { name: "terrafirma", logo: "/terrafirma.png" }, // Remplacez par vos vrais chemins
+    { name: "unikin", logo: "/unikin.jpeg" },
+    { name: "ceedd", logo: "/ceedd.png" },
+    { name: "aicpkk", logo: "/AICPKK.jpg" },
+    { name: "leuven", logo: "/leuven.png" },
   ];
+
+  const isError = mutationInfrastructure.isError;
 
   if (isLoading) {
     return <Loader />;
+  }
+
+  if (isError) {
+    return (
+      <Card className="p-12 text-center border-gray-400 bg-gray-50">
+        <Package className="h-12 w-12 text-red-900 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-red-900 mb-2">
+          {t("warning")}
+        </h3>
+        <p className="text-red-600">{t("warningMessage")}</p>
+        <Link href="/" className="mt-4 inline-block text-blue-600 underline">
+          {t("tryAgain")}
+        </Link>
+      </Card>
+    );
   }
   // --- RENDU ---
   return (

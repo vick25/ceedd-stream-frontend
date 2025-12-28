@@ -1,14 +1,16 @@
 import Sidebar from "@/components/Sidebar";
-
 import React, { ReactNode } from "react";
 
-const layoutDashboard = ({ children }: { children: ReactNode }) => {
+const LayoutDashboard = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="min-h-screen flex ">
+    <div className="min-h-screen flex bg-gray-50">
       <Sidebar />
-      <main className="flex-1 px-6 pt-4">{children}</main>
+      {/* On ajoute un overflow-y-auto pour que seule la zone de contenu défile */}
+      <main className="flex-1 h-screen overflow-y-auto">
+        <div className=" mx-auto px-4 sm:px-6 lg:px-6 py-6">{children}</div>
+      </main>
     </div>
   );
 };
 
-export default layoutDashboard;
+export default LayoutDashboard;

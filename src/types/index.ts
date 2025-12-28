@@ -3,3 +3,10 @@ export type InfrastructureDetailsProps = {
     id: string;
   }>;
 };
+
+export enum allawedTypesInfrastructure {
+  infrastructure = "infrastructure",
+  bailleur = "bailleur",
+  zonecontributive = "zonecontributive",
+  inspection = "inspection",
+}

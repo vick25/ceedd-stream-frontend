@@ -38,7 +38,10 @@ export default async function RootLayout({ children }: Readonly<Props>) {
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
       </head>
-      <body className="min-h-screen bg-gray-50 text-gray-900">
+      <body
+        className="min-h-screen bg-gray-50 text-gray-900"
+        suppressHydrationWarning={true}
+      >
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>
             <Header />
