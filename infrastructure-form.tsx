@@ -269,9 +269,3 @@ export default function InfrastructureForm({
       </form>
     </div>
   );
-<<<<<<< HEAD
-}
-=======
-}
-
->>>>>>> cdd48b2812e83d694cde9031f3b1bbe34e917c5d
