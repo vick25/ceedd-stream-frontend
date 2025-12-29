@@ -54,10 +54,10 @@ export default function InfrastructureForm({
                 placeholder="Entrez le nom"
                 {...register("nom")}
                 className={`transition-colors ${errors.nom
-                    ? "border-destructive focus-visible:ring-destructive"
-                    : touchedFields.nom
-                      ? "border-green-600 focus-visible:ring-green-600"
-                      : ""
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : touchedFields.nom
+                    ? "border-green-600 focus-visible:ring-green-600"
+                    : ""
                   }`}
               />
               {errors.nom && (
@@ -79,8 +79,8 @@ export default function InfrastructureForm({
               <select
                 {...register("type_infrastructure")}
                 className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.type_infrastructure
-                    ? "border-destructive focus-visible:ring-destructive"
-                    : "border-input"
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : "border-input"
                   }`}
               >
                 <option value="">Sélectionnez un type</option>
@@ -224,8 +224,8 @@ export default function InfrastructureForm({
               <select
                 {...register("client")}
                 className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.client
-                    ? "border-destructive focus-visible:ring-destructive"
-                    : "border-input"
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : "border-input"
                   }`}
               >
                 <option value="">Sélectionnez un client</option>
@@ -269,9 +269,4 @@ export default function InfrastructureForm({
       </form>
     </div>
   );
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> cdd48b2812e83d694cde9031f3b1bbe34e917c5d
