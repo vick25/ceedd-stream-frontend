@@ -8,7 +8,6 @@ import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
 
-
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -24,6 +23,7 @@ export default function InfrastructureTable() {
   const [zones, setZones] = useState<Record<string, string>>({});
   const [infrastructureDeleted, setInfrastructureDeleted] =
     useState<string>("");
+  const [isOpen, setIsOpen] = useState(false);
 
   // initialize mutation
 
@@ -116,6 +116,8 @@ export default function InfrastructureTable() {
                           unite={infrastructure.unite}
                           // zone={infrastructure.zone}
                           client={infrastructure.client}
+                          isOpen={isOpen}
+                          setIsOpen={setIsOpen}
                         />
                         <DeleteInfrastructure
                           id={infrastructure.id}
@@ -220,6 +222,8 @@ export default function InfrastructureTable() {
                             unite={infra.unite}
                             // zone={infra.zone}
                             client={infra.client}
+                            isOpen={isOpen}
+                            setIsOpen={setIsOpen}
                           />
                           <DeleteInfrastructure
                             id={infra.id}

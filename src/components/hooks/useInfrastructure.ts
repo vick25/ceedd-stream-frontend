@@ -15,6 +15,13 @@ export const useGetInfrastructure = () => {
   });
 };
 
+export const useGetAllInfrastructures = () => {
+  return useQuery({
+    queryKey: ["allInfrastructures"],
+    queryFn: () => serviceinfrastructure.getInfrastructure(),
+  });
+};
+
 export const useCreateInfrastructure = () => {
   return useMutation({
     mutationFn: (data: any) => serviceinfrastructure.createInfrastructure(data),
@@ -69,7 +76,7 @@ type InfrastructureResponse = InfrastructureSearch;
 
 export const useInfrastructureByAdresse = (
   searchTerm: string,
-  delay: number = 400,
+  delay: number = 400
 ) => {
   const debounceTerm = useDebounce(searchTerm, delay);
 
@@ -93,12 +100,12 @@ export const useInfrastructureByAdresse = (
 type InfrastructureResponseLocation = InfrastructureSearch;
 export const useInfrastructureByAdresseLocation = (
   locationFilters: InfrastructureFilters,
-  runSearch: boolean,
+  runSearch: boolean
 ) => {
   const queryKey = ["infrastructureLocation", locationFilters];
 
   const isFilterSelected = Object.values(locationFilters).some(
-    (value) => value !== "",
+    (value) => value !== ""
   );
   const isEnabled = runSearch && isFilterSelected;
 
@@ -122,12 +129,12 @@ type InfrastructureResponseDate = InfrastructureSearch;
 
 export const useInfrastructureVolumeByDate = (
   dateFilters: InfrastructureFilters,
-  runSearch: boolean,
+  runSearch: boolean
 ) => {
   const queryKey = ["infrastructureLocation", dateFilters];
 
   const isFilterSelected = Object.values(dateFilters).some(
-    (value) => value !== "",
+    (value) => value !== ""
   );
   const isEnabled = runSearch && isFilterSelected;
 

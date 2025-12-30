@@ -62,7 +62,7 @@ const page = (props: Props) => {
                 <PlusCircle /> Nouveau Client
               </Button>
             </DialogTrigger>
-            <DialogContent className=" bg-white z-9999 ">
+            <DialogContent className=" bg-white z-9999 max-w-2xl md:max-w-4xl ">
               <DialogHeader>
                 <DialogTitle>Ajouter un Nouveau client </DialogTitle>
                 <DialogDescription>Voici les détails.</DialogDescription>
