@@ -38,42 +38,42 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className="bg-white border-b border-gray-100 sticky top-0 z-1100">
+    <header className="bg-white border-b border-gray-100 sticky top-0 z-[1100] w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Left: Logo */}
-          <Link href="/" className="flex items-center gap-2">
+        <div className="flex justify-between items-center h-16 lg:h-20">
+          {/* --- Gauche: Logo --- */}
+          <Link href="/" className="flex items-center gap-2 shrink-0">
             <Image
               src="/streamlogo.png"
               alt="logo"
               width={56}
               height={56}
-              className="w-8 h-8 md:w-10 md:h-10 object-cover"
+              className="w-8 h-8 md:w-9 lg:w-10 lg:h-10 object-cover"
             />
             <span
               className={clsx(
-                "font-bold text-xl tracking-tight text-gray-900 max-w-xs", // Correction de la couleur et taille pour la lisibilité
-                "hidden sm:inline", // Masquer sur les très petits écrans si nécessaire
+                "font-bold tracking-tight text-gray-900",
+                "hidden sm:inline-block text-base md:text-sm lg:text-xl"
               )}
               title="Sustainable Tools for Rainwater Evaluation And Management"
             >
-              {/* Sustainable Tools for Rainwater Evaluation And Management */}
               STREAM
             </span>
           </Link>
 
-          {/* Center: Navigation (Desktop) */}
-          <nav className="hidden md:flex space-x-8">
+          {/* --- Centre: Navigation (Desktop & Tablet) --- */}
+          <nav className="hidden md:flex items-center md:space-x-3 lg:space-x-8">
             {navLinks.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-sm transition-colors pb-1 ${isActive
-                      ? "font-bold text-blue-600 border-b-2 border-blue-600"
-                      : "font-medium text-gray-900 hover:text-blue-600"
-                    }`}
+                  className={`transition-colors pb-1 border-b-2 ${
+                    isActive
+                      ? "font-bold text-blue-600 border-blue-600"
+                      : "font-medium text-gray-900 border-transparent hover:text-blue-600"
+                  } md:text-xs lg:text-base`}
                 >
                   {item.name}
                 </Link>
@@ -81,15 +81,13 @@ export const Header: React.FC = () => {
             })}
           </nav>
 
-          {/* Right: Actions (Desktop) */}
-          <div className="hidden md:flex items-center space-x-4">
-            <div className="relative">
-              {/* <!-- Local switcher --> */}
+          {/* --- Droite: Actions (Desktop & Tablet) --- */}
+          <div className="hidden md:flex items-center md:gap-1 lg:gap-4">
+            <div className="relative flex items-center md:scale-90 lg:scale-100">
               <LocaleSwitcher />
-
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+              <div className="pointer-events-none text-gray-500">
                 <svg
-                  className="w-4 h-4"
+                  className="w-3 h-3 lg:w-4 lg:h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -103,12 +101,43 @@ export const Header: React.FC = () => {
                 </svg>
               </div>
             </div>
-            {_hasHydrated && isAuthenticated && user ? (
-              <div className="flex items-center gap-3">
+
+            <div className="flex items-center gap-2 ml-1 lg:ml-4">
+              {_hasHydrated && isAuthenticated && user ? (
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    className="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
+                    onClick={handleLogout}
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    {t("logout")}
+                  </button>
+                  <Link
+                    href="/dashboard"
+                    className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
+                    target="_blank"
+                  >
+                    {t("backOffice")}
+                  </Link>
+                </div>
+              ) : (
                 <button
                   type="button"
-                  className="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
-                  onClick={handleLogout}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
+                  onClick={handleLogin}
                 >
                   <svg
                     className="w-4 h-4"
@@ -123,46 +152,18 @@ export const Header: React.FC = () => {
                       d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
                     />
                   </svg>
-                  {t("logout")}
+                  {t("login")}
                 </button>
-                <Link
-                  href="/dashboard"
-                  className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
-                  target="_blank"
-                >
-                  {t("backOffice")}
-                </Link>
-              </div>
-            ) : (
-              <button
-                type="button"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
-                onClick={handleLogin}
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                  />
-                </svg>
-                {t("login")}
-              </button>
-            )}
+              )}
+            </div>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* --- Bouton Menu Mobile --- */}
           <div className="md:hidden flex items-center">
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-500 hover:text-gray-900 focus:outline-none p-2"
+              className="text-gray-500 hover:text-gray-900 p-2 focus:outline-none"
             >
               {isMobileMenuOpen ? (
                 <svg
@@ -198,37 +199,64 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+      {/* --- Menu Mobile (Dropdown) --- */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-16 shadow-lg z-50">
-          <div className="px-4 py-4 space-y-4">
+        <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-16 shadow-2xl z-[1200]">
+          <div className="px-4 py-6 space-y-4">
             {navLinks.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`block py-2 ${isActive
-                      ? "font-bold text-blue-600"
-                      : "font-medium text-gray-700 hover:text-blue-600"
-                    }`}
+                  className={`block py-3 px-2 rounded-lg text-base ${
+                    isActive
+                      ? "font-bold text-blue-600 bg-blue-50"
+                      : "font-medium text-gray-700 hover:bg-gray-50"
+                  }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
               );
             })}
-            <div className="h-px bg-gray-100 my-2"></div>
-            <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
-              <span className="text-gray-700 font-medium">{t("language")}</span>
-              <LocaleSwitcher />
+
+            <div className="h-px bg-gray-100 my-4"></div>
+
+            {/* Actions Mobile */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center bg-gray-50 p-4 rounded-xl">
+                <span className="text-gray-700 font-medium">
+                  {t("language")}
+                </span>
+                <LocaleSwitcher />
+              </div>
+
+              {_hasHydrated && isAuthenticated && user ? (
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    className="bg-orange-600 text-white py-3 rounded-xl font-bold text-center"
+                    onClick={handleLogout}
+                  >
+                    {t("logout")}
+                  </button>
+                  <Link
+                    href="/dashboard"
+                    className="bg-green-600 text-white py-3 rounded-xl font-bold text-center"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {t("backOffice")}
+                  </Link>
+                </div>
+              ) : (
+                <button
+                  className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-center shadow-lg shadow-blue-200"
+                  onClick={handleLogin}
+                >
+                  {t("login")}
+                </button>
+              )}
             </div>
-            <button
-              className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold text-center"
-              onClick={handleLogin}
-            >
-              {t("login")}
-            </button>
           </div>
         </div>
       )}

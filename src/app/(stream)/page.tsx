@@ -1,23 +1,24 @@
 "use client";
 
 import { FilterCard } from "@/components/FilterCard";
-import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
+import { useGetAllInfrastructures } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
-import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
+import {
+  useAllTypeInfrastructure,
+  useTypeInfradtructures,
+} from "@/components/hooks/useTypeInfrastructure";
 import Loader from "@/components/Loader";
 import { Footer } from "@/components/MapFooter";
 import { Card } from "@/components/ui/card";
 import { MapFeature } from "@/types/types";
 import { Building2, Droplet, Package, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
-
-// Remplacement de l'import MOCK_FEATURES
-
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-// Dynamic import for Leaflet map to avoid SSR issues
+// Import dynamique de Leaflet (SSR impossible pour Leaflet)
 const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
   ssr: false,
   loading: () => (
@@ -27,121 +28,75 @@ const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
   ),
 });
 
-// Interface pour la structure des données brutes (ajustez si nécessaire)
-interface InfrastructureData {
-  id: number;
-  latitude: number;
-  longitude: number;
-  nom: string;
-  type_infrastructure: { nom: string };
-  city: string;
-  last_update_date: string;
-  date_construction: string;
-  current_volume: number;
-  capacite: number;
-}
-
 export default function Home() {
   const t = useTranslations("HomePage");
-  // console.log({ mutationInfrastructure });
+  const route = useRouter();
 
-  // 1. HOOKS D'API
-  const mutationInfrastructure = useGetInfrastructure();
-  const mutationTypeInfrastructure = useAllTypeInfrastructure();
+  // --- 1. RÉCUPÉRATION DES DONNÉES (AUTOMATIQUE AVEC USEQUERY) ---
+  const {
+    data: infraData,
+    isLoading: isInfraLoading,
+    isError: isInfraError,
+  } = useGetAllInfrastructures();
+
+  // const { data: typesData, isLoading: isTypesLoading } =
+  //   useAllTypeInfrastructure();
+  const { data: typesData, isLoading: isTypesLoading } =
+    useTypeInfradtructures();
+
   const { data: inspectionData } = useGetInspections();
-  const result = mutationInfrastructure.data?.count;
-  // 2. ÉTATS LOCAUX (pour la carte et les filtres)
+
+  // --- 2. ÉTATS LOCAUX ---
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
     null
   );
   const [isFilterVisible, setIsFilterVisible] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<string>(`All`);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
     "standard"
   );
-  const [typesDisponibles, setTypesDisponibles] = useState<string[]>([`All`]);
 
-  // États pour stocker les données brutes
-  const [rawData, setRawData] = useState<InfrastructureData[]>([]);
-  console.log({ inspectionData });
-  //--- État de chargement consolidé
-  // État de chargement consolidé
-  const isLoading =
-    mutationInfrastructure.isPending || mutationTypeInfrastructure.isPending;
+  // --- 3. LOGIQUE DE TRANSFORMATION (RÉACTIVE) ---
 
-  // --- LOGIQUE DE CHARGEMENT INITIAL (Déclenchement des requêtes) ---
-  useEffect(() => {
-    mutationInfrastructure.mutate();
-    mutationTypeInfrastructure.mutate();
-  }, [mutationInfrastructure.mutate, mutationTypeInfrastructure.mutate]);
+  // Liste des catégories pour le filtre
 
-  // --- LOGIQUE DE TRAITEMENT DES DONNÉES D'INFRASTRUCTURE ---
-  useEffect(() => {
-    const infraData = mutationInfrastructure.data;
+  // Spécifiez explicitement que le retour est un tableau de chaînes : string[]
+  const typesDisponibles: string[] = useMemo(() => {
+    // 1. On vérifie que results existe et est un tableau
+    const results = typesData?.results;
 
-    if (infraData?.results?.length > 0) {
-      const infrastructures: InfrastructureData[] = infraData.results;
-      setRawData(
-        infrastructures.filter(
-          (infra: InfrastructureData) =>
-            infra.latitude !== null && infra.longitude !== null
-        )
-      );
-    }
-  }, [mutationInfrastructure.data]);
-
-  // --- LOGIQUE DE TRAITEMENT DES TYPES (Catégories) ---
-  useEffect(() => {
-    const typesData = mutationTypeInfrastructure.data;
-
-    if (typesData?.results?.length > 0) {
-      // Assurez-vous que 'nom' est la propriété correcte
-      const types: any[] = [
-        `All`,
-        ...new Set(typesData.results.map((t: any) => t.nom)),
+    if (Array.isArray(results)) {
+      return [
+        "All",
+        // 2. On mappe et on force la conversion en string
+        // 3. On utilise "as string" pour rassurer TypeScript
+        ...new Set(results.map((t: any) => t.nom as string)),
       ];
-      setTypesDisponibles(types);
-    }
-  }, [mutationTypeInfrastructure.data]);
-
-  // --- TRANSFORMATION DES DONNÉES BRUTES EN MapFeature[] (pour la carte) ---
-  //--- function de mémoïsation pour éviter les recalculs inutiles
-
-  const inspectionStateMap = useMemo(() => {
-    const map: Record<string, { etat: string; date: string }> = {};
-
-    if (!inspectionData?.results || !Array.isArray(inspectionData.results)) {
-      return map;
     }
 
-    inspectionData.results.forEach((insp: any) => {
-      // 1. On récupère l'ID de l'infrastructure (2, 5, etc.)
+    return ["All"];
+  }, [typesData]);
+
+  // Transformation des données brutes en MapFeature[]
+  const allFeatures: MapFeature[] = useMemo(() => {
+    if (!infraData?.results) return [];
+
+    // Map des inspections pour un accès rapide par ID d'infrastructure
+    const inspectionMap: Record<string, { etat: string; date: string }> = {};
+    inspectionData?.results?.forEach((insp: any) => {
       const infraId = insp.infrastructure?.id;
-
-      // 2. On récupère l'état directement ("mauvais", "moyen")
-      const etatActuel = insp.etat;
-      const lastInspection = insp.date;
-
       if (infraId) {
-        // On utilise l'ID de l'infrastructure comme CLÉ pour la map
-        map[infraId.toString()] = {
-          etat: etatActuel || "Inconnu",
-          date: lastInspection || "N/A",
+        inspectionMap[infraId.toString()] = {
+          etat: insp.etat || "Inconnu",
+          date: insp.date || "N/A",
         };
       }
     });
 
-    return map;
-  }, [inspectionData]);
-
-  const allFeatures: MapFeature[] = useMemo(() => {
-    // Si les données brutes sont vides ou non chargées, retourner un tableau vide.
-    if (rawData.length === 0) return [];
-
-    return rawData
-      .filter((item) => item.latitude !== null && item.longitude !== null)
-      .map((item) => {
-        const inspectionInfo = inspectionStateMap[item.id.toString()];
+    return infraData.results
+      .filter((item: any) => item.latitude !== null && item.longitude !== null)
+      .map((item: any) => {
+        const inspectionInfo = inspectionMap[item.id.toString()];
         return {
           id: item.id.toString(),
           lat: item.latitude,
@@ -157,92 +112,92 @@ export default function Home() {
           etat: inspectionInfo?.etat || "Inconnu",
         };
       });
-  }, [rawData, inspectionData]);
+  }, [infraData, inspectionData]);
 
-  // --- LOGIQUE DE FILTRAGE DES FEATURES (utilise allFeatures maintenant) ---
-  const filteredFeatures =
-    selectedCategory === `All`
+  // Filtrage final basé sur la catégorie sélectionnée
+  const filteredFeatures = useMemo(() => {
+    return selectedCategory === "All"
       ? allFeatures
       : allFeatures.filter((f) => f.type === selectedCategory);
+  }, [allFeatures, selectedCategory]);
 
-  // --- GESTION DES INTERACTIONS ---
+  // --- 4. EFFETS DE BORD ---
+
+  // Correction Leaflet : forcer le calcul de la taille quand les données arrivent
+  useEffect(() => {
+    if (filteredFeatures.length > 0) {
+      const timer = setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [filteredFeatures.length]);
+
+  // --- 5. GESTION DES ACTIONS ---
   const handleFeatureClick = (feature: MapFeature) => {
     setSelectedFeature(feature);
-    if (window.innerWidth < 768) {
-      setIsFilterVisible(true);
-    }
-  };
-
-  const toggleFilter = () => {
-    setIsFilterVisible(!isFilterVisible);
+    if (window.innerWidth < 768) setIsFilterVisible(true);
   };
 
   const PARTNERS = [
-    { name: "terrafirma", logo: "/terrafirma.png" }, // Remplacez par vos vrais chemins
+    { name: "terrafirma", logo: "/terrafirma.png" },
     { name: "unikin", logo: "/unikin.jpeg" },
     { name: "ceedd", logo: "/ceedd.png" },
     { name: "aicpkk", logo: "/AICPKK.jpg" },
     { name: "leuven", logo: "/leuven.png" },
   ];
 
-  const isError = mutationInfrastructure.isError;
-
-  if (isLoading) {
+  // --- 6. ÉTATS DE RENDU (CHARGEMENT / ERREUR) ---
+  if (isInfraLoading || isTypesLoading) {
     return <Loader />;
   }
 
-  if (isError) {
+  if (isInfraError) {
     return (
-      <Card className="p-12 text-center border-gray-400 bg-gray-50">
-        <Package className="h-12 w-12 text-red-900 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-red-900 mb-2">
-          {t("warning")}
-        </h3>
-        <p className="text-red-600">{t("warningMessage")}</p>
-        <Link href="/" className="mt-4 inline-block text-blue-600 underline">
-          {t("tryAgain")}
-        </Link>
-      </Card>
+      <div className="flex items-center justify-center min-h-screen p-6">
+        <Card className="p-12 text-center border-gray-400 bg-gray-50 max-w-md">
+          <Package className="h-12 w-12 text-red-900 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-red-900 mb-2">
+            {t("warning")}
+          </h3>
+          <p className="text-red-600 mb-4">{t("warningMessage")}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="text-blue-600 underline font-medium"
+          >
+            {t("tryAgain")}
+          </button>
+        </Card>
+      </div>
     );
   }
-  // --- RENDU ---
-  return (
-    // <div className="min-h-screen flex flex-col">
-    <main className="min-h-screen flex flex-col ">
-      {/* Hero / Map Section */}
-      <section className="relative w-full h-[600px] md:h-[700px] bg-gray-200 ">
-        {/* Indicateur de Chargement */}
-        {isLoading && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm">
-            <p className="text-xl font-bold text-blue-600">
-              {t("dataLoading")}
-            </p>
-          </div>
-        )}
 
+  return (
+    <main className="min-h-screen flex flex-col">
+      {/* Map Section */}
+      <section className="relative w-full h-[600px] md:h-[700px] bg-gray-200">
         <LeafletMap
-          // Utilise les données filtrées réelles
           features={filteredFeatures}
           onFeatureClick={handleFeatureClick}
           selectedFeatureId={selectedFeature?.id}
           mapStyle={mapStyle}
         />
 
-        {/* Mobile Toggle Button for Filter Card */}
+        {/* Toggle Filtre Mobile */}
         <button
-          onClick={toggleFilter}
-          className="md:hidden absolute top-4 left-4 z-500 bg-white p-2 rounded-md shadow-lg text-blue-600 font-bold text-sm"
+          onClick={() => setIsFilterVisible(!isFilterVisible)}
+          className="md:hidden absolute top-4 left-4 z-[500] bg-white p-2 rounded-md shadow-lg text-blue-600 font-bold text-sm"
         >
           {isFilterVisible ? "Masquer Info" : "Afficher Info"}
         </button>
 
-        {/* Right Side Overlay Container */}
-        <div className="absolute -top-2 right-0 h-full w-full pointer-events-none flex flex-col items-end justify-start z-1000 md:p-6">
-          {/* Base Layer Control */}
-          <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4 md:mt-0">
+        {/* Overlay Contrôles et Filtres */}
+        <div className="absolute top-0 right-0 h-full w-full pointer-events-none flex flex-col items-end z-[1000] md:p-6">
+          {/* Style Map Selector */}
+          <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4">
             <button
               onClick={() => setMapStyle("standard")}
-              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
                 mapStyle === "standard"
                   ? "text-blue-600 bg-blue-50"
                   : "text-gray-500 hover:text-gray-800"
@@ -250,10 +205,9 @@ export default function Home() {
             >
               OSM
             </button>
-            <div className="w-px bg-gray-200 my-1 mx-1"></div>
             <button
               onClick={() => setMapStyle("satellite")}
-              className={`cursor-pointer px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
                 mapStyle === "satellite"
                   ? "text-blue-600 bg-blue-50"
                   : "text-gray-500 hover:text-gray-800"
@@ -263,112 +217,74 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Filter Card Container */}
+          {/* Filter Card */}
           <div
             className={`
-              w-full md:w-[380px]
-              bg-white/95 backdrop-blur-sm shadow-2xl
-              overflow-y-auto pointer-events-auto flex flex-col
-              transition-transform duration-300 ease-in-out
-              ${
-                isFilterVisible
-                  ? "translate-x-0"
-                  : "translate-x-full md:translate-x-0 hidden md:flex"
-              }
-              h-full md:h-auto md:max-h-[calc(100%-4rem)] md:rounded-xl
-              border-t md:border border-gray-100
-            `}
+            w-full md:w-[380px] bg-white/95 backdrop-blur-sm shadow-2xl overflow-y-auto pointer-events-auto flex flex-col transition-transform duration-300
+            ${
+              isFilterVisible
+                ? "translate-x-0"
+                : "translate-x-full md:translate-x-0 hidden md:flex"
+            }
+            h-full md:h-auto md:max-h-[calc(100%-6rem)] md:rounded-xl border-t md:border border-gray-100
+          `}
           >
             <FilterCard
               selectedFeature={selectedFeature}
               selectedCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
               onClose={() => setIsFilterVisible(false)}
-              // Passer la liste des catégories réelles
               availableCategories={typesDisponibles}
             />
           </div>
         </div>
       </section>
 
-      {/* Stats Section - Assurez-vous que StatsSection utilise également les données réelles */}
-      {/* <StatsSection /> */}
-
-      <section className="relative z-10 py-10 md:py-14">
-        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="text-center mb-16">
+      {/* Stats Section */}
+      <section className="py-10 md:py-14 bg-white">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
               {t("overView")}
             </h2>
-            <p className="text-gray-600 mt-2 max-w-xl mx-auto">
-              {t("overViewIntro")}
-            </p>
+            <p className="text-gray-600 mt-2">{t("overViewIntro")}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="bg-blue-50/50 hover:bg-white border border-transparent hover:border-gray-200 rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
-              <Users className="mx-auto h-10 w-10 text-blue-600" />
-              <h3 className="text-sm font-semibold tracking-wide text-blue-700 uppercase mt-3">
-                Impact
-              </h3>
-              <p className="mt-2 text-4xl font-bold text-gray-900">900,900</p>
-              <p className="mt-1 block text-sm text-gray-600">Population</p>
-            </div>
-
-            {/* Card 2 */}
-            <div className="bg-blue-50/50 hover:bg-white border border-transparent hover:border-gray-200 rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
-              <Building2 className="mx-auto h-10 w-10 text-blue-600" />
-              <h3 className="text-sm font-semibold tracking-wide text-blue-700 uppercase mt-3">
-                {t("currentMonitoring")}
-              </h3>
-              <p className="mt-2 text-4xl font-bold text-gray-900">
-                {result > 0 ? result : 0}
-              </p>
-              <p className="mt-1 block text-sm text-gray-600">
-                Infrastructures
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="bg-blue-50/50 hover:bg-white border border-transparent hover:border-gray-200 rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
-              <Droplet className="mx-auto h-10 w-10 text-blue-600" />
-              <h3 className="text-sm font-semibold tracking-wide text-blue-700 uppercase mt-3">
-                {t("status")}
-              </h3>
-              <p className="mt-2 text-4xl font-bold text-gray-900">90%</p>
-              <p className="mt-1 block text-sm text-gray-600">{t("water")}</p>
-            </div>
+            <StatCard
+              icon={<Users className="h-10 w-10" />}
+              title="Impact"
+              value="900,900"
+              subTitle="Population"
+            />
+            <StatCard
+              icon={<Building2 className="h-10 w-10" />}
+              title={t("currentMonitoring")}
+              value={infraData?.count || 0}
+              subTitle="Infrastructures"
+            />
+            <StatCard
+              icon={<Droplet className="h-10 w-10" />}
+              title={t("status")}
+              value="90%"
+              subTitle={t("water")}
+            />
           </div>
         </div>
       </section>
-      {/* Partner Section */}
-      <section className="py-10 md:py-14 bg-gray-50 border-t border-gray-100">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Ils nous font confiance
-            </h3>
-          </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-12 items-center justify-items-center">
-            {PARTNERS.map((partner: any) => (
-              <div
-                key={partner.name}
-                className="transition-all duration-300 transform hover:scale-110 cursor-pointer w-full flex justify-center"
-              >
-                {partner.logo ? (
-                  <img
-                    src={partner.logo}
-                    alt={partner.name}
-                    className="h-10 sm:h-12 md:h-14 w-auto object-contain max-w-[120px] md:max-w-[150px] filter "
-                  />
-                ) : (
-                  <span className="text-sm md:text-lg font-bold text-gray-400 text-center">
-                    {partner.name}
-                  </span>
-                )}
-              </div>
+      {/* Partners Section */}
+      <section className="py-10 bg-gray-50 ">
+        <div className="container mx-auto px-4 text-center">
+          <h3 className="text-xl font-bold mb-8">Ils nous font confiance</h3>
+          <div className="flex flex-wrap justify-center gap-8 items-centertransition-all">
+            {PARTNERS.map((p) => (
+              <img
+                key={p.name}
+                src={p.logo}
+                alt={p.name}
+                className="h-10 md:h-12 object-contain"
+              />
             ))}
           </div>
         </div>
@@ -376,5 +292,29 @@ export default function Home() {
 
       <Footer />
     </main>
+  );
+}
+
+// Composant Interne pour les cartes de statistiques
+function StatCard({
+  icon,
+  title,
+  value,
+  subTitle,
+}: {
+  icon: any;
+  title: string;
+  value: string | number;
+  subTitle: string;
+}) {
+  return (
+    <div className=" hover:bg-white border border-transparent  rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
+      <div className="text-blue-600 flex justify-center mb-4">{icon}</div>
+      <h3 className="text-sm font-semibold tracking-wide text-blue-700 uppercase">
+        {title}
+      </h3>
+      <p className="mt-2 text-4xl font-bold text-gray-900">{value}</p>
+      <p className="mt-1 text-sm text-gray-600">{subTitle}</p>
+    </div>
   );
 }

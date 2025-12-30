@@ -120,7 +120,7 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-2 flex flex-col gap-3">
+        <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
             <Label htmlFor="nom"> Nom:</Label>
             <Input
@@ -129,11 +129,7 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               placeholder="nom"
               {...register("nom")}
               className={`border border-white ${
-                errors.nom
-                  ? "border border-red-500"
-                  : touchedFields.nom
-                  ? "border border-green-600"
-                  : "border border-gray-300"
+                errors.nom ? "border border-red-500" : "border border-gray-300"
               }`}
             />
             {errors.nom && (
@@ -157,6 +153,9 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="prenom"
               placeholder="prenom"
               {...register("prenom")}
+              className={`border border-white ${
+                errors.nom ? "border border-red-500" : "border border-gray-300"
+              }`}
             />
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>
@@ -169,7 +168,7 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
                 errors.sexe
                   ? "border border-red-500 "
-                  : "border border-green-500"
+                  : "border border-gray-200"
               }`}
             >
               <option value="M">M</option>
@@ -257,11 +256,19 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               <p className="text-red-500 text-sm">{errors.email.message}</p>
             )} */}
           </div>
+        </div>
+        <div className=" w-full flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
+          <Button
+            type="button"
+            className="w-fit bg-gray-600 hover:bg-gray-700 text-gray-100 px-5 py-2 h-auto text-sm font-medium"
+          >
+            Annuler
+          </Button>
           <Button
             type="submit"
-            size="lg"
+            size="sm"
             // disabled={mutationCreateCustomers.isPending}
-            className="w-full bg-green-600 text-gray-200"
+            className="w-fit bg-blue-600 text-gray-200"
           >
             {mutationCreateCustomers.isPending
               ? "Chargement..."
