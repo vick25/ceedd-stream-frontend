@@ -1,5 +1,3 @@
-// src/components/LeafletMap.tsx
-
 "use client";
 
 import { MapFeature } from "@/types/types";
@@ -9,7 +7,7 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   MapContainer,
   Marker,
@@ -19,7 +17,7 @@ import {
   useMap,
   ZoomControl,
 } from "react-leaflet";
-// Dynamically import MarkerClusterGroup to prevent SSR issues
+
 const MarkerClusterGroup = dynamic(
   () => import("react-leaflet-markercluster").then((mod) => mod.default),
   { ssr: false }
@@ -32,69 +30,61 @@ interface LeafletMapProps {
   mapStyle: "standard" | "satellite";
 }
 
-// 1. Définition de l'icône de l'usine (à l'extérieur du composant pour la performance)
-const customIcon = new Icon({
-  iconUrl: "/iconImage.png",
-  iconSize: [64, 64],
-  iconAnchor: [40, 64],
-  popupAnchor: [0, -64],
-});
+// Hook personnalisé pour détecter si on est sur mobile
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  return isMobile;
+};
 
-// Component to handle map centering when a feature is selected
-const MapUpdater: React.FC<{ selectedFeature?: MapFeature }> = ({
-  selectedFeature,
-}) => {
+// Icônes adaptatives
+const getCustomIcon = (isMobile: boolean) =>
+  new Icon({
+    iconUrl: "/iconImage.png",
+    iconSize: isMobile ? [40, 40] : [64, 64],
+    iconAnchor: isMobile ? [20, 40] : [40, 64],
+    popupAnchor: isMobile ? [0, -40] : [0, -64],
+  });
+
+const MapUpdater: React.FC<{
+  selectedFeature?: MapFeature;
+  isMobile: boolean;
+}> = ({ selectedFeature, isMobile }) => {
   const map = useMap();
   useEffect(() => {
     if (selectedFeature) {
-      map.flyTo([selectedFeature.lat, selectedFeature.lng], 15, {
+      // Zoom plus faible sur mobile pour garder du contexte
+      const zoomLevel = isMobile ? 13 : 15;
+      map.flyTo([selectedFeature.lat, selectedFeature.lng], zoomLevel, {
         duration: 1.5,
       });
     }
-  }, [selectedFeature, map]);
+  }, [selectedFeature, map, isMobile]);
   return null;
 };
 
-// Component to handle Ctrl + Scroll to Zoom (inchangé)
 const CtrlZoomHandler: React.FC = () => {
   const map = useMap();
-
   useEffect(() => {
     map.scrollWheelZoom.disable();
-
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey) {
-        map.scrollWheelZoom.enable();
-      }
+      if (e.ctrlKey || e.metaKey) map.scrollWheelZoom.enable();
     };
-
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey) {
-        map.scrollWheelZoom.disable();
-      }
+      if (e.ctrlKey || e.metaKey) map.scrollWheelZoom.disable();
     };
-
-    const handleBlur = () => {
-      map.scrollWheelZoom.disable();
-    };
-
-    const onVisibility = () => {
-      if (document.hidden) map.scrollWheelZoom.disable();
-    };
-
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
-    window.addEventListener("blur", handleBlur);
-    document.addEventListener("visibilitychange", onVisibility);
-
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
-      window.removeEventListener("blur", handleBlur);
-      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [map]);
-
   return null;
 };
 
@@ -104,112 +94,114 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   selectedFeatureId,
   mapStyle,
 }) => {
-  // Center of Congo / Central Africa
+  const isMobile = useIsMobile();
   const center: [number, number] = [-2.5, 23.0];
-  const zoom = 5;
+  const zoom = isMobile ? 4 : 5; // Zoom initial dézommé sur petit écran
+
+  const icon = useMemo(() => getCustomIcon(isMobile), [isMobile]);
 
   return (
-    <MapContainer
-      center={center}
-      zoom={zoom}
-      scrollWheelZoom={false}
-      style={{ height: "100%", width: "100%" }}
-      zoomControl={false}
-    >
-      {/* Base Layer (inchangé) */}
-      {mapStyle === "standard" ? (
-        <TileLayer
-          key="osm-layer"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://www.ceeddrdc.org/">CEEDD</a>'
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-      ) : (
-        <TileLayer
-          key="satellite-layer"
-          attribution="Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-        />
-      )}
+    <div className="relative w-full h-full">
+      <MapContainer
+        center={center}
+        zoom={zoom}
+        scrollWheelZoom={false}
+        style={{ height: "100%", width: "100%" }}
+        zoomControl={false}
+        // On remplace tap par dragging pour améliorer l'expérience mobile
+        dragging={true}
+        touchZoom={true}
+        doubleClickZoom={true}
+      >
+        {mapStyle === "standard" ? (
+          <TileLayer
+            key="osm-layer"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://www.ceeddrdc.org/">CEEDD</a>'
+            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+        ) : (
+          <TileLayer
+            key="satellite-layer"
+            attribution="Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          />
+        )}
 
-      {/* Markers with Clustering */}
-      <MarkerClusterGroup>
-        {useMemo(
-          () =>
-            features.map((feature) => {
-              const isSelected = feature.id === selectedFeatureId;
-              const stateColorClass =
-                feature.etat === "mauvais"
-                  ? "text-green-600"
-                  : feature.etat === "bon"
-                  ? "text-yellow-600"
-                  : "text-red-600";
-
-              return (
+        <MarkerClusterGroup>
+          {useMemo(
+            () =>
+              features.map((feature) => (
                 <Marker
                   key={feature.id}
                   position={[feature.lat, feature.lng]}
-                  icon={customIcon}
+                  icon={icon}
                   eventHandlers={{
                     click: () => onFeatureClick(feature),
-                    mouseover: (e) => e.target.openPopup(),
-                    mouseout: (e) => e.target.closePopup(),
+                    // On n'active le popup au survol que sur desktop
+                    mouseover: (e) => !isMobile && e.target.openPopup(),
+                    mouseout: (e) => !isMobile && e.target.closePopup(),
                   }}
                 >
-                  <Popup closeButton={false} className="custom-popup ">
-                    <div className="min-w-64 max-w-sm font-sans text-gray-800 flex flex-col gap-3">
-                      {/* TITRE PRINCIPAL ET TYPE */}
-                      <div className="flex items-center gap-2">
-                        <span>Zone : </span>
-                        <strong className="text-base font-bold text-blue-700 leading-tight">
+                  <Popup closeButton={isMobile} className="custom-popup">
+                    {/* Largeur adaptative : 80% de la largeur de l'écran sur mobile, fixe sur desktop */}
+                    <div className="w-[80vw] sm:w-64 max-w-300px font-sans text-gray-800 flex flex-col gap-2 p-1">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] uppercase text-gray-400 font-bold">
+                          Zone
+                        </span>
+                        <strong className="text-sm md:text-base font-bold text-blue-700 leading-tight">
                           {feature.nom}
                         </strong>
                       </div>
-                      <hr className="mb-3 border-gray-100" />
-                      <div className="flex items-center gap-2">
-                        <span>Type :</span>
-                        <strong className="text-xs font-semibold text-blue-500 uppercase tracking-wider">
-                          {feature.type}
-                        </strong>
-                      </div>
 
-                      {/* GRILLE D'INFORMATION (pour les détails clés) */}
-                      <div className="grid grid-cols-1 gap-y-2 text-sm">
-                        {/* 1. Capacité Max */}
-                        <div className="flex items-center">
-                          <span className="text-gray-500 mr-2">Capacité:</span>
-                          <strong className="font-semibold text-gray-800">
-                            {feature.maxCapacity} m³
-                          </strong>
-                        </div>
+                      <hr className="border-gray-100" />
 
-                        {/* 2. Date de Construction */}
-                        <div className="flex items-center">
-                          <span className="text-gray-500 mr-2">
-                            Date de la Construction:
+                      <div className="grid grid-cols-2 gap-2 text-[11px] md:text-sm">
+                        <div className="flex flex-col">
+                          <span className="text-gray-500">Type</span>
+                          <span className="font-semibold text-blue-500">
+                            {feature.type}
                           </span>
-                          <strong className="font-semibold text-gray-800">
-                            {/* Formatage de la date (simple) */}
-                            {displayDate(feature.date_construction)}
-                          </strong>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-gray-500">Capacité</span>
+                          <span className="font-semibold">
+                            {feature.maxCapacity} m³
+                          </span>
                         </div>
                       </div>
+
+                      <div className="pt-1 text-[11px] md:text-xs text-gray-500 italic">
+                        Construit le : {displayDate(feature.date_construction)}
+                      </div>
+
+                      {isMobile && (
+                        <button
+                          className="mt-2 w-full bg-blue-600 text-white py-2 rounded text-xs font-bold"
+                          onClick={() => onFeatureClick(feature)}
+                        >
+                          Voir détails
+                        </button>
+                      )}
                     </div>
                   </Popup>
                 </Marker>
-              );
-            }),
-          [features, selectedFeatureId, onFeatureClick]
-        )}
-      </MarkerClusterGroup>
+              )),
+            [features, selectedFeatureId, onFeatureClick, isMobile, icon]
+          )}
+        </MarkerClusterGroup>
 
-      <MapUpdater
-        selectedFeature={features.find((f) => f.id === selectedFeatureId)}
-      />
+        <MapUpdater
+          selectedFeature={features.find((f) => f.id === selectedFeatureId)}
+          isMobile={isMobile}
+        />
 
-      <CtrlZoomHandler />
-      <ZoomControl position="topleft" />
-      <ScaleControl position="bottomleft" imperial={false} />
-    </MapContainer>
+        <CtrlZoomHandler />
+        {/* On remet les contrôles en bas sur mobile pour l'accessibilité du pouce */}
+        <ZoomControl position={isMobile ? "bottomright" : "topleft"} />
+        {!isMobile && <ScaleControl position="bottomleft" imperial={false} />}
+      </MapContainer>
+    </div>
   );
 };
 

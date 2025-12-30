@@ -21,25 +21,27 @@ import { useZoneContributives } from "@/components/hooks/useZoneContributive";
 import { resourceLimits } from "node:worker_threads";
 interface FormData {
   nom: string;
-  type_infrastructure: string;
+  type_infrastructure_id: string;
   date_construction: string;
   latitude: string;
   longitude: string;
   capacite: string;
   unite: string;
   zone: string;
-  client: string;
+  client_id: string;
 }
 const infrastructureSchema = z.object({
   nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
-  type_infrastructure: z.string().min(1, "Le type d'infrastructure est requis"),
+  type_infrastructure_id: z
+    .string()
+    .min(1, "Le type d'infrastructure est requis"),
   date_construction: z.string().min(1, "La date de construction est requise"),
   latitude: z.string().min(1, "La latitude est requise"),
   longitude: z.string().min(1, "La longitude est requise"),
   capacite: z.string().min(1, "La capacité est requise"),
   unite: z.string().min(1, "L'unité est requise"),
   zone: z.string().min(1, "Veuillez sélectionner une zone."),
-  client: z.string().min(1, "Veuillez sélectionner un client."),
+  client_id: z.string().min(1, "Veuillez sélectionner un client."),
 });
 type CreateformInfrastructureProps = {
   open: boolean;
@@ -60,14 +62,14 @@ const CreateformInfrastructure = ({
     resolver: zodResolver(infrastructureSchema),
     defaultValues: {
       nom: "",
-      type_infrastructure: "",
+      type_infrastructure_id: "",
       date_construction: "",
       latitude: "",
       longitude: "",
       capacite: "",
       unite: "",
       zone: "",
-      client: "",
+      client_id: "",
     },
   });
 
@@ -83,14 +85,14 @@ const CreateformInfrastructure = ({
     // Handle form submission logic here
     const payload = {
       nom: data.nom,
-      type_infrastructure: data.type_infrastructure,
+      type_infrastructure_id: data.type_infrastructure_id,
       date_construction: data.date_construction,
       latitude: Number(data.latitude),
       longitude: Number(data.longitude),
       capacite: Number(data.capacite),
       unite: data.unite,
       zone: data.zone,
-      client: data.client,
+      client_id: data.client_id,
     };
     console.log({ payload });
 
@@ -121,13 +123,13 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="type_infrastructure_id">
+            <Label htmlFor="type_infrastructure_id_id">
               Type infrastructure :
             </Label>
             <select
-              {...register("type_infrastructure")}
+              {...register("type_infrastructure_id")}
               className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.type_infrastructure
+                errors.type_infrastructure_id
                   ? "border border-red-500 "
                   : "border border-gray-500"
               }`}
@@ -139,9 +141,9 @@ const CreateformInfrastructure = ({
                 </option>
               ))}
             </select>
-            {errors.type_infrastructure && (
+            {errors.type_infrastructure_id && (
               <p className="text-red-500 text-sm">
-                {errors.type_infrastructure.message}
+                {errors.type_infrastructure_id.message}
               </p>
             )}
           </div>
@@ -230,9 +232,9 @@ const CreateformInfrastructure = ({
           <div className="flex flex-col gap-1">
             <Label htmlFor="client_id">Client :</Label>
             <select
-              {...register("client")}
+              {...register("client_id")}
               className={`flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.client
+                errors.client_id
                   ? "border border-red-500 "
                   : "border border-gray-300"
               }`}
@@ -244,8 +246,8 @@ const CreateformInfrastructure = ({
                 </option>
               ))}
             </select>
-            {errors.client && (
-              <p className="text-red-500 text-sm">{errors.client.message}</p>
+            {errors.client_id && (
+              <p className="text-red-500 text-sm">{errors.client_id.message}</p>
             )}
           </div>
         </div>
