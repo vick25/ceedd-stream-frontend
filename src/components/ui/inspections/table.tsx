@@ -36,51 +36,57 @@ export default function InspectionTable() {
           <div className="lg:hidden">
             {inspections?.results.map((customer: any) => {
               return (
-                <Link
+                // <Link
+                //   key={customer.id}
+                //   href={`/dashboard/inspstructures/${customer.id}`}
+                // >
+                <div
                   key={customer.id}
-                  href={`/dashboard/inspstructures/${customer.id}`}
+                  className="mb-2 w-full rounded-md bg-white p-4"
                 >
-                  <div className="mb-2 w-full rounded-md bg-white p-4">
-                    <div className="flex items-center justify-between border-b pb-4">
-                      <div>
-                        <div className="mb-2 flex items-center gap-3">
-                          <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Date</span>
-                            <p>{displayDate(customer.date)}</p>
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Etat</span>
-                            <p>{customer.etat}</p>
-                          </div>
+                  <div className="flex items-center justify-between border-b pb-4">
+                    <div>
+                      <div className="mb-2 flex items-center gap-3">
+                        <div className="flex flex-col gap-2">
+                          <span className="font-semibold">Date</span>
+                          <p>{displayDate(customer.date)}</p>
                         </div>
-                        {/* <p className="text-sm text-gray-500"></p> */}
+                        <div className="flex flex-col gap-2">
+                          <span className="font-semibold">Etat</span>
+                          <p>{customer.etat}</p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex w-full items-center justify-between pt-4">
-                      <div>
-                        <p className="text-xl font-medium">
-                          Inspecteur : {customer.inspecteur}
-                        </p>
-                      </div>
-                      <div className="flex justify-end gap-2">
-                        <EditInspection
-                          id={customer.id}
-                          date={customer.date}
-                          etat={customer.etat}
-                          inspecteur={customer.inspecteur}
-                          commentaire={customer.commentaire}
-                          prochain_controle={customer.prochain_controle}
-                          infrastructure={customer.infrastructure.nom}
-                        />
-                        <DeleteInspection
-                          id={customer.id}
-                          inspecteur={customer.inspecteur}
-                          setInspectionDeleted={setInspectionDeleted}
-                        />
-                      </div>
+                      {/* <p className="text-sm text-gray-500"></p> */}
                     </div>
                   </div>
-                </Link>
+                  <div className="flex w-full items-center justify-between pt-4">
+                    <div>
+                      <p className="text-xl font-medium">
+                        Inspecteur : {customer.inspecteur}
+                      </p>
+                    </div>
+                    <div className="flex justify-end items-center gap-2">
+                      <EditInspection
+                        id={customer.id}
+                        date={customer.date}
+                        etat={customer.etat}
+                        inspecteur={customer.inspecteur}
+                        commentaire={customer.commentaire}
+                        prochain_controle={customer.prochain_controle}
+                        infrastructure={customer.infrastructure.nom}
+                      />
+                      <DeleteInspection
+                        id={customer.id}
+                        inspecteur={customer.inspecteur}
+                        setInspectionDeleted={setInspectionDeleted}
+                      />
+                      <Link href={`/dashboard/inspstructures/${customer?.id}`}>
+                        <Eye className="h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+                // </Link>
               );
             })}
           </div>

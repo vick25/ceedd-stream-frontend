@@ -3,6 +3,7 @@
 import { FilterCard } from "@/components/FilterCard";
 import { useGetAllInfrastructures } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
+import { useGetPhotos } from "@/components/hooks/usePhotos";
 import {
   useAllTypeInfrastructure,
   useTypeInfradtructures,
@@ -45,6 +46,7 @@ export default function Home() {
     useTypeInfradtructures();
 
   const { data: inspectionData } = useGetInspections();
+  const { data: photosData, isPending: isPhotoPending } = useGetPhotos();
 
   // --- 2. ÉTATS LOCAUX ---
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
@@ -147,6 +149,7 @@ export default function Home() {
     { name: "leuven", logo: "/leuven.png" },
   ];
 
+  console.log("photo", photosData);
   // --- 6. ÉTATS DE RENDU (CHARGEMENT / ERREUR) ---
   if (isInfraLoading || isTypesLoading) {
     return <Loader />;

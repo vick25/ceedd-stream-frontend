@@ -63,16 +63,14 @@ const page = (props: Props) => {
                 <PlusCircle /> Nouvelle Inspection
               </Button>
             </DialogTrigger>
-            <DialogContent className=" bg-white z-9999 ">
+            <DialogContent className=" bg-white z-9999 max-w-2xl md:max-w-3xl ">
               <DialogHeader>
                 <DialogTitle>Ajouter une nouvelle inspection </DialogTitle>
                 <DialogDescription>Voici les détails.</DialogDescription>
               </DialogHeader>
-              <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]">
-                <CreateFormInspections
-                  onFormSuccess={() => setIsClosed(false)}
-                />
-              </div>
+              {/* <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]"> */}
+              <CreateFormInspections onFormSuccess={() => setIsClosed(false)} />
+              {/* </div> */}
             </DialogContent>
           </Dialog>
           {/* <button className="bg-blue-600 text-white px-3 py-2 rounded flex flex-row gap-4 items-center"></button> */}
