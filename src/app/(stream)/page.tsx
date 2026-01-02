@@ -3,6 +3,7 @@
 import { FilterCard } from "@/components/FilterCard";
 import { useGetAllInfrastructures } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
+import { useGetPhotos } from "@/components/hooks/usePhotos";
 import {
   useAllTypeInfrastructure,
   useTypeInfradtructures,
@@ -45,7 +46,9 @@ export default function Home() {
     useTypeInfradtructures();
 
   const { data: inspectionData } = useGetInspections();
+  const { data: photosData, isPending: isPhotoPending } = useGetPhotos();
 
+  console.log({ infraData });
   // --- 2. ÉTATS LOCAUX ---
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
     null
@@ -93,10 +96,25 @@ export default function Home() {
       }
     });
 
+    const photoMap: Record<string, string> = {};
+
+    // On force le type en précisant que c'est un objet contenant results
+    const photos = (photosData as any)?.results;
+
+    if (Array.isArray(photos)) {
+      photos.forEach((photo: any) => {
+        if (photo.object_id) {
+          photoMap[photo.object_id.toString()] = photo.url;
+        }
+      });
+    }
+
     return infraData.results
       .filter((item: any) => item.latitude !== null && item.longitude !== null)
       .map((item: any) => {
         const inspectionInfo = inspectionMap[item.id.toString()];
+        const photoUrl = photoMap[item.id.toString()];
+
         return {
           id: item.id.toString(),
           lat: item.latitude,
@@ -110,9 +128,10 @@ export default function Home() {
           maxCapacity: item.capacite,
           date: inspectionInfo?.date || "Non renseignée",
           etat: inspectionInfo?.etat || "Inconnu",
+          imageUrl: photoUrl || null,
         };
       });
-  }, [infraData, inspectionData]);
+  }, [infraData, inspectionData, photosData]);
 
   // Filtrage final basé sur la catégorie sélectionnée
   const filteredFeatures = useMemo(() => {
@@ -147,6 +166,7 @@ export default function Home() {
     { name: "leuven", logo: "/leuven.png" },
   ];
 
+  console.log("photo", photosData);
   // --- 6. ÉTATS DE RENDU (CHARGEMENT / ERREUR) ---
   if (isInfraLoading || isTypesLoading) {
     return <Loader />;

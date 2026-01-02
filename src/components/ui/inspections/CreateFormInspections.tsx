@@ -35,7 +35,7 @@ interface FormData {
   inspecteur: string;
   commentaire: string;
   prochain_controle: string;
-  infrastructure: string;
+  infrastructure_id: string;
 }
 
 interface CreateFormInspectionsProps {
@@ -52,7 +52,7 @@ const inspectionSchema = z.object({
   inspecteur: z.string().optional(),
   commentaire: z.string().min(1, "Le commentaire est requis").optional(),
   prochain_controle: z.string().optional(),
-  infrastructure: z.string().min(1, "La capacité est requise").optional(),
+  infrastructure_id: z.string().min(1, "La capacité est requise").optional(),
 });
 
 type InspectionFormData = z.infer<typeof inspectionSchema>;
@@ -72,7 +72,7 @@ const CreateFormInspections = ({
       inspecteur: "",
       commentaire: "",
       prochain_controle: "",
-      infrastructure: "",
+      infrastructure_id: "",
     },
   });
   const router = useRouter();
@@ -92,7 +92,7 @@ const CreateFormInspections = ({
       inspecteur: data.inspecteur,
       commentaire: data.commentaire,
       prochain_controle: data.prochain_controle,
-      infrastructure: data.infrastructure,
+      infrastructure_id: data.infrastructure_id,
     };
     await mutationCreateInspection.mutateAsync(payload);
 
@@ -114,103 +114,123 @@ const CreateFormInspections = ({
     return null;
   }
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-2 flex flex-col gap-3">
+    <div className="w-full min-w-50vw lg:min-w-800px p-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-6 flex flex-col gap-4"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Champ DATE */}
           <div className="flex flex-col gap-1">
-            <Label htmlFor="date"> date:</Label>
+            <Label htmlFor="date">Date</Label>
             <Input
               id="date"
               type="date"
-              placeholder="date"
               {...register("date")}
-              className={`border border-white`}
+              className="h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm"
             />
             {errors.date && (
-              <p className="text-red-500 text-sm">{errors.date.message}</p>
+              <p className="text-red-500 text-xs">{errors.date.message}</p>
             )}
           </div>
+
+          {/* Champ ETAT */}
           <div className="flex flex-col gap-1">
-            <Label htmlFor="etat">etat </Label>
+            <Label htmlFor="etat">État</Label>
             <select
               id="etat"
               {...register("etat")}
-              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 `}
+              className="h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm"
             >
-              {inspections.map((item, index) => (
-                <option key={index} value={item}>
+              <option value="">Sélectionner un état</option>
+              {inspections.map((item) => (
+                <option key={item} value={item}>
                   {item}
                 </option>
               ))}
             </select>
-            {errors.commentaire && (
-              <p className="text-red-500 text-sm ">
-                {errors.commentaire.message}
-              </p>
+            {errors.etat && (
+              <p className="text-red-500 text-xs">{errors.etat.message}</p>
             )}
           </div>
-          <div>
-            <Label htmlFor="inspecteur">inspecteur:</Label>
+
+          {/* Champ INSPECTEUR */}
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="inspecteur">Inspecteur</Label>
             <Input
               id="inspecteur"
-              type="inspecteur"
-              placeholder="inspecteur"
+              placeholder="Nom de l'inspecteur"
               {...register("inspecteur")}
-              className="border border-gray-300"
+              className="h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm"
             />
-            {/* {errors.inspecteur && <p>{errors.inspecteur?.message}</p>} */}
           </div>
-          <div className="flex flex-col gap-4">
-            <Label htmlFor="commentaire">commentaire </Label>
-            <textarea
-              id="commentaire"
-              placeholder="commentaire"
-              {...register("commentaire")}
-              className={`border border-gray-200 `}
-            ></textarea>
-          </div>
-          <div>
-            <Label htmlFor="prochain_controle">Prochain controle : </Label>
-            <Input
-              id="prochain_controle"
-              type="date"
-              placeholder="prochain_controle"
-              {...register("prochain_controle")}
-              className="border-gray-200  border"
-            />
-            {/* {errors.prochain_controle && (
-              <p className="text-red-500 text-sm">{errors.prochain_controle.message}</p>
-            )} */}
-          </div>
-          <div>
-            <Label htmlFor="infrastructure">infrastructure : </Label>
+
+          {/* Champ INFRASTRUCTURE */}
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="infrastructure_id">Infrastructure</Label>
             <select
-              id="infrastructure"
-              {...register("infrastructure")}
-              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 `}
+              id="infrastructure_id"
+              {...register("infrastructure_id")}
+              className="h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm"
             >
+              <option value="">Sélectionner une infrastructure</option>
               {infrastructureData?.results.map((item: any) => (
                 <option key={item.id} value={item.id}>
                   {item.nom}
                 </option>
               ))}
             </select>
-            {errors.infrastructure && (
-              <p className="text-red-500 text-sm">
-                {errors.infrastructure.message}
+            {errors.infrastructure_id && (
+              <p className="text-red-500 text-xs">
+                {errors.infrastructure_id.message}
               </p>
             )}
           </div>
 
+          {/* Champ PROCHAIN CONTROLE */}
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="prochain_controle">Prochain contrôle</Label>
+            <Input
+              id="prochain_controle"
+              type="date"
+              {...register("prochain_controle")}
+              className="h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm"
+            />
+          </div>
+
+          {/* Champ COMMENTAIRE */}
+          <div className="flex flex-col gap-1 md:col-span-2">
+            <Label htmlFor="commentaire">Commentaire</Label>
+            <textarea
+              id="commentaire"
+              {...register("commentaire")}
+              className="flex min-h-80px w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm"
+            />
+            {errors.commentaire && (
+              <p className="text-red-500 text-xs">
+                {errors.commentaire.message}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="w-fit flex gap-3 mt-4 justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1 border border-gray-200"
+            onClick={() => onFormSuccess()}
+          >
+            Annuler
+          </Button>
           <Button
             type="submit"
-            size="lg"
-            // disabled={mutationCreateInspection.isPending}
-            className="w-full bg-green-600 text-gray-200"
+            disabled={mutationCreateInspection.isPending}
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white"
           >
             {mutationCreateInspection.isPending
               ? "Chargement..."
-              : " Ajouter Inspection"}
+              : "Ajouter Inspection"}
           </Button>
         </div>
       </form>
