@@ -102,7 +102,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               {/* Details List */}
               <div className="flex-1 space-y-3">
                 <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300">
-                  <Link href={"#"}>
+                  {/* <Link href={"#"}>
                     <Image
                       src="/1.jpg"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -110,7 +110,14 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                       fill
                       className="object-cover"
                     />
-                  </Link>
+                  </Link> */}
+                  {selectedFeature.imageUrl && (
+                    <img
+                      src={selectedFeature.imageUrl}
+                      alt={selectedFeature.nom}
+                      className="w-full h-48 object-cover rounded-lg mb-4"
+                    />
+                  )}
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">

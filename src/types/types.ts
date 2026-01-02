@@ -11,6 +11,7 @@ export interface MapFeature {
   maxCapacity: number; // in m3
   date: string;
   etat: string;
+  imageUrl: string;
 }
 
 export interface StatItem {
