@@ -1,24 +1,30 @@
 import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
-import {
-  useCustomers
-} from "@/components/hooks/useCustomer";
+import { useCustomers } from "@/components/hooks/useCustomer";
 
 import EditCustomer from "@/components/editButton/EditCustomer";
 import Loader from "@/components/Loader";
 import { Client } from "@/types/infrastructure";
 import { Eye } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import DeleteCustomer from "@/components/deleteButton/DeleteCustomer";
+import { useRouter } from "next/navigation";
+import { useAppStore } from "@/store/appStore";
+import { Locale, useTranslations } from "next-intl";
 
 export default function ClientTable() {
   const [getClients, setGetClients] = useState<Client[]>([]);
-
+  const [customerDelete, setCustomerDeleted] = useState<string>("");
   const [clientNames, setClientNames] = useState<Record<string, string>>({});
   const [typeInfras, setTypeInfras] = useState<Record<string, string>>({});
   const [zones, setZones] = useState<Record<string, string>>({});
   const [infrastructureDeleted, setInfrastructureDeleted] =
     useState<string>("");
-
+  const [isOpen, setIsOpen] = useState(false);
+  const { user, _hasHydrated, isAuthenticated } = useAppStore();
+  const router = useRouter();
+  const [locale, setLocale] = useState<Locale>("fr");
+  const t = useTranslations(locale);
   // initialize mutation
   const { data: customers, isPending: customersIspending } = useCustomers();
   //   const mutationInfranstructure = useGetInfrastructure();
@@ -28,6 +34,19 @@ export default function ClientTable() {
 
   //useEffect
 
+  useEffect(() => {
+    if (_hasHydrated && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [_hasHydrated, isAuthenticated, router]);
+
+  if (!_hasHydrated) {
+    return <Loader />;
+  }
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
   if (customersIspending) {
     return <Loader />;
   }
@@ -84,10 +103,10 @@ export default function ClientTable() {
                           quartier={customer.quartier}
                           commune={customer.commune}
                         />
-                        <DeleteInfrastructure
+                        <DeleteCustomer
                           id={customer.id}
                           nom={customer.nom}
-                          setInfrastructureDeleted={setInfrastructureDeleted}
+                          setCustomerDeleted={setCustomerDeleted}
                         />
                       </div>
                     </div>
@@ -153,7 +172,7 @@ export default function ClientTable() {
                       </td>
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                        <div className="flex justify-end gap-3 items-center">
+                        <div className="flex justify-end gap-2 items-center">
                           <EditCustomer
                             id={infra.id}
                             nom={infra.nom}
@@ -163,12 +182,12 @@ export default function ClientTable() {
                             quartier={infra.quartier}
                             commune={infra.commune}
                           />
-                          <DeleteInfrastructure
+                          <DeleteCustomer
                             id={infra.id}
                             nom={infra.nom}
-                            setInfrastructureDeleted={setInfrastructureDeleted}
+                            setCustomerDeleted={setCustomerDeleted}
                           />
-                          <Link href={`/dashboard/infrastructures/${infra.id}`}>
+                          <Link href={`/dashboard/clients/${infra.id}`}>
                             <Eye className="h-4" />
                           </Link>
                         </div>

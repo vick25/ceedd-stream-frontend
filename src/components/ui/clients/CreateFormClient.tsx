@@ -24,11 +24,14 @@ import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { Engagement } from "next/font/google";
 interface FormData {
   nom: string;
   postnom: string;
   prenom: string;
   sexe: string;
+  titre: string;
+  engagement: boolean;
   avenue: string;
   quartier: string;
   numero: string;
@@ -46,6 +49,8 @@ const clientSchema = z.object({
   postnom: z.string().optional(),
   prenom: z.string().optional(),
   sexe: z.string().min(1, "Le sexe est requis").optional(),
+  titre: z.string().optional(),
+  engagement: z.string().optional(),
   avenue: z.string().optional(),
   quartier: z.string().min(1, "La capacité est requise").optional(),
   numero: z.string().optional(),
@@ -68,6 +73,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
       postnom: "",
       prenom: "",
       sexe: "",
+      titre: "",
+      engagement: "",
       avenue: "",
       quartier: "",
       numero: "",
@@ -91,6 +98,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
       postnom: data.postnom,
       prenom: data.prenom,
       sexe: data.sexe,
+      titre: data.titre,
+      engagement: data.engagement,
       avenue: data.avenue,
       quartier: data.quartier,
       numero: data.numero,
@@ -177,6 +186,32 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             {errors.sexe && (
               <p className="text-red-500 text-sm ">{errors.sexe.message}</p>
             )}
+          </div>
+          <div>
+            <Label htmlFor="titre">Titre:</Label>
+            <Input
+              id="titre"
+              type="text"
+              placeholder="titre"
+              {...register("titre")}
+              className={`border border-white ${
+                errors.nom ? "border border-red-500" : "border border-gray-300"
+              }`}
+            />
+            {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
+          </div>
+          <div>
+            <Label htmlFor="engagement">Engagement:</Label>
+            <Input
+              id="engagement"
+              type="checkbox"
+              placeholder="engagement"
+              {...register("engagement")}
+              className={`border border-white ${
+                errors.nom ? "border border-red-500" : "border border-gray-300"
+              }`}
+            />
+            {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>
           <div>
             <Label htmlFor="avenue">avenue : </Label>
