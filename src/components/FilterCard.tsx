@@ -76,14 +76,14 @@ export const FilterCard: React.FC<FilterCardProps> = ({
           </select>
         </div>
       </div>
-
+      <hr className="border border-gray-200" />
       {/* Feature Details Section */}
       <div className="grow mt-2 overflow-y-auto">
         {selectedFeature ? (
           <div className="animate-fade-in space-y-4">
             <div className="flex justify-between items-start">
               <h3 className="text-lg font-bold text-gray-800 leading-tight">
-                {selectedFeature.nom}
+                {selectedFeature?.type}
               </h3>
               {/* <span
                 className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${
@@ -149,12 +149,13 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     Etat infrastructure
                   </p>
                   <span
-                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${selectedFeature.etat === "bon"
-                      ? "bg-green-100 text-green-700"
-                      : selectedFeature.etat === "moyen"
+                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${
+                      selectedFeature.etat === "bon"
+                        ? "bg-green-100 text-green-700"
+                        : selectedFeature.etat === "moyen"
                         ? "bg-yellow-100 text-yellow-700"
                         : "bg-red-100 text-red-700"
-                      }`}
+                    }`}
                   >
                     {selectedFeature.etat}
                   </span>
