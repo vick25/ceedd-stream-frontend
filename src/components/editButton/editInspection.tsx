@@ -17,6 +17,7 @@ import {
 import { Button } from "../ui/button";
 import {
   useGetInfrastructure,
+  useInfrastructures,
   useUpdateInfrastructure,
 } from "../hooks/useInfrastructure";
 import {
@@ -63,6 +64,9 @@ const EditInspection = ({
   const updateMutationInspection = useUpdateInspection();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
+
+  const { data: infrastructureData, isLoading: isInfrastructureLoading } =
+    useInfrastructures();
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -185,7 +189,7 @@ const EditInspection = ({
                 required
               />
             </div>
-            <div>
+            {/* <div>
               <Label htmlFor="infrastructure">infrastructure:</Label>
               <Input
                 id="infrastructure"
@@ -195,6 +199,27 @@ const EditInspection = ({
                 onChange={handleChange}
                 required
               />
+            </div> */}
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="infrastructure_id">Infrastructure</Label>
+              <select
+                id="infrastructure_id"
+                name="infrastructure_id"
+                // {...register("infrastructure_id")}
+                className="h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm"
+              >
+                <option value="">Sélectionner une infrastructure</option>
+                {infrastructureData?.results.map((item: any) => (
+                  <option key={item.id} value={item.id}>
+                    {item.nom}
+                  </option>
+                ))}
+              </select>
+              {/* {errors.infrastructure_id && (
+                <p className="text-red-500 text-xs">
+                  {errors.infrastructure_id.message}
+                </p>
+              )} */}
             </div>
 
             <div>

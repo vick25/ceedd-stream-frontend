@@ -1,13 +1,20 @@
-
+import DeleteBailleur from "@/components/deleteButton/DeleteBailleur";
 import EditBailleur from "@/components/editButton/EditBailleur";
 import { useBailleurs } from "@/components/hooks/useBailleur";
 import Loader from "@/components/Loader";
+import { useAppStore } from "@/store/appStore";
 import { Eye } from "lucide-react";
+import { Locale, useTranslations } from "next-intl";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function BailleurTable() {
-  const [zoneContributide, setBailleur] = useState<string>("");
+  const { user, _hasHydrated, isAuthenticated } = useAppStore();
+  const router = useRouter();
+  const [locale, setLocale] = useState<Locale>("fr");
+  const t = useTranslations(locale);
+  const [bailleurDelete, setBailleurDelete] = useState<string>("");
 
   // initialize mutation
   // const { data: customers, isPending: customersIspending } = useCustomers();
@@ -16,6 +23,19 @@ export default function BailleurTable() {
 
   //useEffect
 
+  useEffect(() => {
+    if (_hasHydrated && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [_hasHydrated, isAuthenticated, router]);
+
+  if (!_hasHydrated) {
+    return <Loader />;
+  }
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
   if (bailleurIspending) {
     return <Loader />;
   }
@@ -52,11 +72,11 @@ export default function BailleurTable() {
                         nom={zone.nom}
                         sigle={zone.sigle}
                       />
-                      {/* <DeleteZoneContributide
-                          id={zone.id}
-                          nom={zone.nom}
-                          setBailleur={setBailleur}
-                        /> */}
+                      <DeleteBailleur
+                        id={zone.id}
+                        nom={zone.nom}
+                        setBailleurDelete={setBailleurDelete}
+                      />
                     </div>
                   </div>
                 </div>
@@ -104,11 +124,11 @@ export default function BailleurTable() {
                             nom={zone.nom}
                             sigle={zone.sigle}
                           />
-                          {/* <DeleteBailleur
+                          <DeleteBailleur
                             id={zone.id}
                             nom={zone.nom}
-                            setBailleur={setBailleur}
-                          /> */}
+                            setBailleurDelete={setBailleurDelete}
+                          />
                           <Link href={`/dashboard/infrastructures/${zone.id}`}>
                             <Eye className="h-4" />
                           </Link>

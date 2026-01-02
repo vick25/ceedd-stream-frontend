@@ -51,3 +51,11 @@ export const useUpdateCustomers = () => {
     },
   });
 };
+export const useCustomerDeleted = () => {
+  return useMutation({
+    mutationFn: (id: string) => serviceCustomer.deleteCustomer(id),
+    onSuccess: (response) => {
+      toast.success("Client supprimée avec succès");
+    },
+  });
+};

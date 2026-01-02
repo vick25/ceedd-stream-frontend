@@ -57,6 +57,7 @@ const EditCustomer = ({
     commune: "",
   });
   const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
   const updateMutationCustomer = useUpdateCustomers();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();

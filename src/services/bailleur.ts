@@ -22,7 +22,7 @@ export const serviceBailleur = {
   },
   async deleteBailleur(id: string) {
     const reponse = await API.delete(
-      `${API_ENDPOINTS.api}${ceedd.bailleur}${id}`
+      `${API_ENDPOINTS.api}${ceedd.bailleur}${id}/`
     );
     return reponse.data;
   },
