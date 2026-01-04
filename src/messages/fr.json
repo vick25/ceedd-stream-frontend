@@ -22,7 +22,8 @@
   "HomePage": {
     "welcome": "Bienvenue à CEEDD",
     "partner": "Nos partenaires",
-    "copyright": "{date} STREAM | CEEDD. Tous droits réservés.",
+    "partnerTrust": "Ils nous font confiance",
+    "copyright": "2025-{date} STREAM | CEEDD. Tous droits réservés.",
     "learnMore": "En savoir plus",
     "ourMission": "Notre mission",
     "missionDescription": "Des solutions de cartographie innovantes pour un monde connecté.",
@@ -42,7 +43,15 @@
     "description": "Filtrer par type d'infrastructures",
     "dateConstruction": "Date de construction",
     "capacity": "Capacité",
-    "selectMarker": "Sélectionner un marqueur sur la carte"
+    "selectMarker": "Sélectionner un marqueur sur la carte",
+    "lastUpdated": "Dernière mise à jour",
+    "infrastructureState": "État de l'infrastructure",
+    "noPhoto": "Pas de photo disponible"
+  },
+  "MapView": {
+    "capacity": "Capacité",
+    "builtOn": "Construit le",
+    "details": "Voir les détails"
   },
   "AboutPage": {
     "title": "À propos de STREAM",
