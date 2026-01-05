@@ -16,6 +16,7 @@ import {
   ScaleControl,
   TileLayer,
   useMap,
+  useMapEvents,
   ZoomControl,
 } from "react-leaflet";
 
@@ -31,6 +32,20 @@ interface LeafletMapProps {
   mapStyle: "standard" | "satellite";
 }
 
+// A component to handle map events and update coordinates
+function MapEvents({ setCoords }: { setCoords: React.Dispatch<React.SetStateAction<{ lat: number; lng: number }>> }) {
+  useMapEvents({
+    mousemove(e) {
+      // The event object 'e' has a 'latlng' property with lat and lng
+      setCoords({
+        lat: e.latlng.lat.toFixed(4) as unknown as number,
+        lng: e.latlng.lng.toFixed(4) as unknown as number,
+      });
+    },
+  });
+  return null; // This component doesn't render anything itself
+}
+
 // Hook personnalisé pour détecter si on est sur mobile
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -43,12 +58,28 @@ const useIsMobile = () => {
   return isMobile;
 };
 
+const icons = [{
+  type: "Citerne",
+  iconUrl: "/citerne.png"
+}, {
+  type: "Déversoir",
+  iconUrl: "/deversoir.png"
+}, {
+  type: "Bassin de rétention",
+  iconUrl: "/bassin_retention.png"
+}];
+
 // Icônes adaptatives
-const getCustomIcon = (isMobile: boolean) =>
+const getIconUrl = (type: string) => {
+  const iconObj = icons.find(icon => icon.type === type);
+  return iconObj ? iconObj.iconUrl : "/iconImage.png";
+};
+
+const getCustomIcon = (iconUrl: string, isMobile: boolean) =>
   new Icon({
-    iconUrl: "/iconImage.png",
-    iconSize: isMobile ? [40, 40] : [56, 56],
-    iconAnchor: isMobile ? [20, 0] : [28, 0],
+    iconUrl,
+    iconSize: isMobile ? [32, 32] : [48, 48],
+    iconAnchor: isMobile ? [16, 0] : [24, 0],
     popupAnchor: [0, 0],
   });
 
@@ -99,8 +130,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   const isMobile = useIsMobile();
   const center: [number, number] = [-2.5, 23.0];
   const zoom = isMobile ? 4 : 5; // Zoom initial dézommé sur petit écran
-
-  const icon = useMemo(() => getCustomIcon(isMobile), [isMobile]);
+  const [coords, setCoords] = useState({ lat: 0, lng: 0 });
 
   return (
     <div className="relative w-full h-full">
@@ -136,7 +166,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                 <Marker
                   key={feature.id}
                   position={[feature.lat, feature.lng]}
-                  icon={icon}
+                  icon={getCustomIcon(getIconUrl(feature.type), isMobile)}
                   eventHandlers={{
                     click: () => onFeatureClick(feature),
                     // On n'active le popup au survol que sur desktop
@@ -189,7 +219,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                   </Popup>
                 </Marker>
               )),
-            [features, selectedFeatureId, onFeatureClick, isMobile, icon],
+            [features, selectedFeatureId, onFeatureClick, isMobile],
           )}
         </MarkerClusterGroup>
 
@@ -202,7 +232,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         {/* On remet les contrôles en bas sur mobile pour l'accessibilité du pouce */}
         <ZoomControl position={isMobile ? "bottomright" : "topleft"} />
         {!isMobile && <ScaleControl position="bottomleft" imperial={false} />}
+        <MapEvents setCoords={setCoords} />
       </MapContainer>
+      <div className="hidden md:block absolute bottom-0 left-20 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
+        {`Coordinates: ${coords.lat}, ${coords.lng}`}
+      </div>
     </div>
   );
 };
