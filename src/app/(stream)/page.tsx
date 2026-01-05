@@ -15,6 +15,7 @@ import { MapFeature } from "@/types/types";
 import { Building2, Droplet, Package, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -51,12 +52,13 @@ export default function Home() {
   console.log({ infraData });
   // --- 2. ÉTATS LOCAUX ---
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
-    null
+    null,
   );
   const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [filteredFeaturesCount, setFilteredFeaturesCount] = useState<number>(0);
   const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
-    "standard"
+    "standard",
   );
 
   // --- 3. LOGIQUE DE TRANSFORMATION (RÉACTIVE) ---
@@ -145,6 +147,7 @@ export default function Home() {
   // Correction Leaflet : forcer le calcul de la taille quand les données arrivent
   useEffect(() => {
     if (filteredFeatures.length > 0) {
+      setFilteredFeaturesCount(filteredFeatures.length);
       const timer = setTimeout(() => {
         window.dispatchEvent(new Event("resize"));
       }, 200);
@@ -166,7 +169,7 @@ export default function Home() {
     { name: "leuven", logo: "/leuven.png" },
   ];
 
-  console.log("photo", photosData);
+  // console.log("photo", photosData);
   // --- 6. ÉTATS DE RENDU (CHARGEMENT / ERREUR) ---
   if (isInfraLoading || isTypesLoading) {
     return <Loader />;
@@ -212,7 +215,7 @@ export default function Home() {
         </button>
 
         {/* Overlay Contrôles et Filtres */}
-        <div className="absolute top-0 right-0 h-full w-full pointer-events-none flex flex-col items-end z-[1000] md:p-6">
+        <div className="absolute -top-6 right-0 h-full w-full pointer-events-none flex flex-col items-end z-[1000] md:p-6">
           {/* Style Map Selector */}
           <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4">
             <button
@@ -253,6 +256,7 @@ export default function Home() {
               selectedFeature={selectedFeature}
               selectedCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
+              filteredFeaturesCount={filteredFeaturesCount}
               onClose={() => setIsFilterVisible(false)}
               availableCategories={typesDisponibles}
             />
@@ -294,15 +298,17 @@ export default function Home() {
       </section>
 
       {/* Partners Section */}
-      <section className="py-10 bg-gray-50 ">
+      <section className="py-10 bg-gray-50">
         <div className="container mx-auto px-4 text-center">
-          <h3 className="text-xl font-bold mb-8">Ils nous font confiance</h3>
+          <h3 className="text-xl font-bold mb-8">{t("partnerTrust")}</h3>
           <div className="flex flex-wrap justify-center gap-8 items-centertransition-all">
             {PARTNERS.map((p) => (
-              <img
+              <Image
                 key={p.name}
                 src={p.logo}
                 alt={p.name}
+                width={80}
+                height={80}
                 className="h-10 md:h-12 object-contain"
               />
             ))}
@@ -310,6 +316,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Footer Section */}
       <Footer />
     </main>
   );
@@ -328,7 +335,7 @@ function StatCard({
   subTitle: string;
 }) {
   return (
-    <div className=" hover:bg-white border border-transparent  rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
+    <div className=" hover:bg-white border border-transparent rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
       <div className="text-blue-600 flex justify-center mb-4">{icon}</div>
       <h3 className="text-sm font-semibold tracking-wide text-blue-700 uppercase">
         {title}
