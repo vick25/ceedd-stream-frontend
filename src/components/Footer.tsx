@@ -125,9 +125,9 @@ const Footer = async () => {
         </div>
       </div>
       <div className="mt-12 pt-8 border-t border-white/10 text-center text-gray-400">
-        <p>
-          &copy; {t("Footer.copyright", { date: new Date().getFullYear() })}
-        </p>
+        <span className="text-sm">
+          &copy; 2025-{t("Footer.copyright", { date: new Date().getFullYear() })}
+        </span>
       </div>
     </footer>
   );
