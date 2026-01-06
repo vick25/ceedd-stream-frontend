@@ -4,9 +4,7 @@ import { FilterCard } from "@/components/FilterCard";
 import { useGetAllInfrastructures } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
 import { useGetPhotos } from "@/components/hooks/usePhotos";
-import {
-  useTypeInfradtructures
-} from "@/components/hooks/useTypeInfrastructure";
+import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
 import Loader from "@/components/Loader";
 import { Footer } from "@/components/MapFooter";
 import { Card } from "@/components/ui/card";
@@ -49,11 +47,15 @@ export default function Home() {
 
   // console.log({ infraData });
   // --- 2. ÉTATS LOCAUX ---
-  const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(null);
+  const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
+    null,
+  );
   const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [filteredFeaturesCount, setFilteredFeaturesCount] = useState<number>(0);
-  const [mapStyle, setMapStyle] = useState<"standard" | "satellite">("standard");
+  const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
+    "standard",
+  );
 
   // --- 3. LOGIQUE DE TRANSFORMATION (RÉACTIVE) ---
 
@@ -194,7 +196,7 @@ export default function Home() {
   return (
     <main className="min-h-screen flex flex-col">
       {/* Map Section */}
-      <section className="relative w-full h-[600px] md:h-[700px] bg-gray-200">
+      <section className="relative w-full h-150 md:h-175 bg-gray-200">
         <LeafletMap
           features={filteredFeatures}
           onFeatureClick={handleFeatureClick}
@@ -216,19 +218,21 @@ export default function Home() {
           <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4">
             <button
               onClick={() => setMapStyle("standard")}
-              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "standard"
-                ? "text-blue-600 bg-blue-50"
-                : "text-gray-500 hover:text-gray-800"
-                }`}
+              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+                mapStyle === "standard"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-500 hover:text-gray-800"
+              }`}
             >
               OSM
             </button>
             <button
               onClick={() => setMapStyle("satellite")}
-              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "satellite"
-                ? "text-blue-600 bg-blue-50"
-                : "text-gray-500 hover:text-gray-800"
-                }`}
+              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+                mapStyle === "satellite"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-500 hover:text-gray-800"
+              }`}
             >
               Satellite
             </button>
@@ -237,11 +241,12 @@ export default function Home() {
           {/* Filter Card */}
           <div
             className={`
-            w-full md:w-[380px] bg-white/95 backdrop-blur-sm shadow-2xl overflow-y-auto pointer-events-auto flex flex-col transition-transform duration-300
-            ${isFilterVisible
+            w-full md:w-95 bg-white/95 backdrop-blur-sm shadow-2xl overflow-y-auto pointer-events-auto flex flex-col transition-transform duration-300
+            ${
+              isFilterVisible
                 ? "translate-x-0"
                 : "translate-x-full md:translate-x-0 hidden md:flex"
-              }
+            }
             h-full md:h-auto md:max-h-[calc(100%-6rem)] md:rounded-xl border-t md:border border-gray-100
           `}
           >

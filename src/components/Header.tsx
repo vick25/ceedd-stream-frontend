@@ -186,7 +186,7 @@ export const Header: React.FC = () => {
 
       {/* --- Menu Mobile (Dropdown) --- */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-16 shadow-2xl z-[1200]">
+        <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-16 shadow-2xl z-1200">
           <div className="px-4 py-6 space-y-4">
             {navLinks.map((item) => {
               const isActive = pathname === item.href;
