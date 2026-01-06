@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import QueryProvider from "@/components/QueryProvider";
 import { Toaster } from "react-hot-toast";
 
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -62,6 +63,7 @@ export default async function RootLayout({ children }: Readonly<Props>) {
           </QueryProvider>
         </NextIntlClientProvider>
       </body>
+      <GoogleAnalytics gaId="G-LPX4MKCGEV" />
     </html>
   );
 }
