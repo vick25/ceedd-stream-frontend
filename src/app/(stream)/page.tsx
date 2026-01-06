@@ -205,13 +205,13 @@ export default function Home() {
         {/* Toggle Filtre Mobile */}
         <button
           onClick={() => setIsFilterVisible(!isFilterVisible)}
-          className="md:hidden absolute top-4 left-4 z-[500] bg-white p-2 rounded-md shadow-lg text-blue-600 font-bold text-sm"
+          className="md:hidden absolute top-4 left-4 z-500 bg-white p-2 rounded-md shadow-lg text-blue-600 font-bold text-sm"
         >
           {isFilterVisible ? "Masquer Info" : "Afficher Info"}
         </button>
 
         {/* Overlay Contrôles et Filtres */}
-        <div className="absolute -top-6 right-0 h-full w-full pointer-events-none flex flex-col items-end z-[1000] md:p-6">
+        <div className="absolute -top-6 right-0 h-full w-full pointer-events-none flex flex-col items-end z-1000 md:p-6">
           {/* Style Map Selector */}
           <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4">
             <button

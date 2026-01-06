@@ -1,7 +1,6 @@
-import { Facebook, Instagram, Linkedin } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
 
 const socialLinks = [
   {
@@ -87,11 +86,11 @@ const Footer = async () => {
           </h2>
           <span className="text-sm">
             Email:{" "}
-            <a href="mailto:test@gmail.com" className="hover:text-blue-500">
-              test@gmail.com
+            <a href="mailto:contact@ceeddrdc.org" className="hover:text-blue-500">
+              contact@ceeddrdc.org
             </a>
           </span>
-          <span className="text-sm">+243 (0)89 8243 566</span>
+          <span className="text-sm"><a href="tel:+243833237683">+243 (0)83 3237 683</a></span>
         </div>
         <div className="flex flex-col items-center text-gray-100  gap-4 lg:items-start">
           <h2 className="font-bold text-base py-3  lg:text-xl lg:py-4">
