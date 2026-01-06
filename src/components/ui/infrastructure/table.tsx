@@ -58,7 +58,7 @@ export default function InfrastructureTable() {
     return <Loader />;
   }
 
-  console.log({ getInfastructure });
+  // console.log({ getInfastructure });
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">

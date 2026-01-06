@@ -5,8 +5,7 @@ import { useGetAllInfrastructures } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
 import { useGetPhotos } from "@/components/hooks/usePhotos";
 import {
-  useAllTypeInfrastructure,
-  useTypeInfradtructures,
+  useTypeInfradtructures
 } from "@/components/hooks/useTypeInfrastructure";
 import Loader from "@/components/Loader";
 import { Footer } from "@/components/MapFooter";
@@ -16,7 +15,6 @@ import { Building2, Droplet, Package, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -49,17 +47,13 @@ export default function Home() {
   const { data: inspectionData } = useGetInspections();
   const { data: photosData, isPending: isPhotoPending } = useGetPhotos();
 
-  console.log({ infraData });
+  // console.log({ infraData });
   // --- 2. ÉTATS LOCAUX ---
-  const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
-    null,
-  );
+  const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(null);
   const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [filteredFeaturesCount, setFilteredFeaturesCount] = useState<number>(0);
-  const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
-    "standard",
-  );
+  const [mapStyle, setMapStyle] = useState<"standard" | "satellite">("standard");
 
   // --- 3. LOGIQUE DE TRANSFORMATION (RÉACTIVE) ---
 
@@ -98,7 +92,7 @@ export default function Home() {
       }
     });
 
-    const photoMap: Record<string, string> = {};
+    const photoMap: Record<string, string[]> = {};
 
     // On force le type en précisant que c'est un objet contenant results
     const photos = (photosData as any)?.results;
@@ -106,7 +100,9 @@ export default function Home() {
     if (Array.isArray(photos)) {
       photos.forEach((photo: any) => {
         if (photo.object_id) {
-          photoMap[photo.object_id.toString()] = photo.url;
+          const id = photo.object_id.toString();
+          if (!photoMap[id]) photoMap[id] = [];
+          photoMap[id].push(photo.url);
         }
       });
     }
@@ -115,7 +111,7 @@ export default function Home() {
       .filter((item: any) => item.latitude !== null && item.longitude !== null)
       .map((item: any) => {
         const inspectionInfo = inspectionMap[item.id.toString()];
-        const photoUrl = photoMap[item.id.toString()];
+        const photoUrls = photoMap[item.id.toString()];
 
         return {
           id: item.id.toString(),
@@ -130,7 +126,7 @@ export default function Home() {
           maxCapacity: item.capacite,
           date: inspectionInfo?.date || "Non renseignée",
           etat: inspectionInfo?.etat || "Inconnu",
-          imageUrl: photoUrl || null,
+          imageUrls: photoUrls || null,
         };
       });
   }, [infraData, inspectionData, photosData]);
@@ -220,21 +216,19 @@ export default function Home() {
           <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4">
             <button
               onClick={() => setMapStyle("standard")}
-              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
-                mapStyle === "standard"
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-500 hover:text-gray-800"
-              }`}
+              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "standard"
+                ? "text-blue-600 bg-blue-50"
+                : "text-gray-500 hover:text-gray-800"
+                }`}
             >
               OSM
             </button>
             <button
               onClick={() => setMapStyle("satellite")}
-              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
-                mapStyle === "satellite"
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-500 hover:text-gray-800"
-              }`}
+              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${mapStyle === "satellite"
+                ? "text-blue-600 bg-blue-50"
+                : "text-gray-500 hover:text-gray-800"
+                }`}
             >
               Satellite
             </button>
@@ -244,11 +238,10 @@ export default function Home() {
           <div
             className={`
             w-full md:w-[380px] bg-white/95 backdrop-blur-sm shadow-2xl overflow-y-auto pointer-events-auto flex flex-col transition-transform duration-300
-            ${
-              isFilterVisible
+            ${isFilterVisible
                 ? "translate-x-0"
                 : "translate-x-full md:translate-x-0 hidden md:flex"
-            }
+              }
             h-full md:h-auto md:max-h-[calc(100%-6rem)] md:rounded-xl border-t md:border border-gray-100
           `}
           >

@@ -10,11 +10,10 @@ import { useRouter } from "next/navigation";
 import { usePhoto } from "@/components/hooks/usePhotos";
 import { useUplaoderImage } from "@/components/importFiles";
 
-import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { useInfrastructures } from "@/components/hooks/useInfrastructure";
 import { useBailleurs } from "@/components/hooks/useBailleur";
+import { useInfrastructures } from "@/components/hooks/useInfrastructure";
 import { allawedTypesInfrastructure } from "@/types";
+import Image from "next/image";
 
 type Props = {};
 
@@ -29,7 +28,7 @@ const page = (props: Props) => {
   const [enumData, setEnumData] = useState("");
   const [infrastructures, setInfrastructures] = useState("");
   // const [isLoading, setIsLoading] = useState(false);
-  console.log(enumData);
+  // console.log(enumData);
   const mutationPhoto = usePhoto();
   const { data: infrastructureData, isPending } = useInfrastructures();
   const { data: bailleurData, isPending: isBailleurLoading } = useBailleurs();
@@ -120,11 +119,10 @@ const page = (props: Props) => {
           flex flex-col items-center justify-center w-full h-32
           border-2 border-dashed rounded-xl cursor-pointer
           transition-all duration-200
-          ${
-            urlLoading
-              ? "border-indigo-300 bg-indigo-50"
-              : "border-gray-300 bg-gray-50 group-hover:bg-white group-hover:border-indigo-400 group-hover:shadow-md"
-          }
+          ${urlLoading
+                    ? "border-indigo-300 bg-indigo-50"
+                    : "border-gray-300 bg-gray-50 group-hover:bg-white group-hover:border-indigo-400 group-hover:shadow-md"
+                  }
         `}
               >
                 {urlLoading ? (
