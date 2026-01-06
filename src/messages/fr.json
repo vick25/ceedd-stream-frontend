@@ -51,7 +51,8 @@
   "MapView": {
     "capacity": "Capacité",
     "builtOn": "Construit le",
-    "details": "Voir les détails"
+    "details": "Voir les détails",
+    "coordinates": "Coordonnées"
   },
   "AboutPage": {
     "title": "À propos de STREAM",

@@ -51,7 +51,8 @@
   "MapView": {
     "capacity": "Capacity",
     "builtOn": "Built on",
-    "details": "See details"
+    "details": "See details",
+    "coordinates": "Coordinates"
   },
   "AboutPage": {
     "title": "About STREAM",

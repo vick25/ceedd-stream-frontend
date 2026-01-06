@@ -33,7 +33,11 @@ interface LeafletMapProps {
 }
 
 // A component to handle map events and update coordinates
-function MapEvents({ setCoords }: { setCoords: React.Dispatch<React.SetStateAction<{ lat: number; lng: number }>> }) {
+function MapEvents({
+  setCoords,
+}: {
+  setCoords: React.Dispatch<React.SetStateAction<{ lat: number; lng: number }>>;
+}) {
   useMapEvents({
     mousemove(e) {
       // The event object 'e' has a 'latlng' property with lat and lng
@@ -58,20 +62,24 @@ const useIsMobile = () => {
   return isMobile;
 };
 
-const icons = [{
-  type: "Citerne",
-  iconUrl: "/citerne.png"
-}, {
-  type: "Déversoir",
-  iconUrl: "/deversoir.png"
-}, {
-  type: "Bassin de rétention",
-  iconUrl: "/bassin_retention.png"
-}];
+const icons = [
+  {
+    type: "Citerne",
+    iconUrl: "/citerne.png",
+  },
+  {
+    type: "Déversoir",
+    iconUrl: "/deversoir.png",
+  },
+  {
+    type: "Bassin de rétention",
+    iconUrl: "/bassin_retention.png",
+  },
+];
 
 // Icônes adaptatives
 const getIconUrl = (type: string) => {
-  const iconObj = icons.find(icon => icon.type === type);
+  const iconObj = icons.find((icon) => icon.type === type);
   return iconObj ? iconObj.iconUrl : "/iconImage.png";
 };
 
@@ -235,7 +243,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         <MapEvents setCoords={setCoords} />
       </MapContainer>
       <div className="hidden md:block absolute bottom-0 left-20 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
-        {`Coordinates: ${coords.lat}, ${coords.lng}`}
+        {`${t("coordinates")}: ${coords.lat}, ${coords.lng}`}
       </div>
     </div>
   );
