@@ -27,6 +27,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  console.log(selectedFeature);
+
   // Normalize images into an array even if it's just one string
   const images = selectedFeature?.imageUrls
     ? Array.isArray(selectedFeature.imageUrls)
@@ -204,7 +206,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                   </p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
-                  <p className="text-xs text-gray-400  tracking-wider font-semibold">
+                  <p className="text-xs text-gray-400 mb-1 tracking-wider font-semibold">
                     {t("infrastructureState")}
                   </p>
                   <span
@@ -225,11 +227,22 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               </div>
 
               {/* Graph */}
-              <div className="w-full sm:w-auto flex justify-center items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
-                <CylinderGraph
-                  current={selectedFeature.maxCapacity}
-                  // max={selectedFeature.maxCapacity}
-                />
+              <div className="w-full sm:w-auto flex flex-col justify-between items-center">
+                <div className="w-full sm:w-auto flex justify-center items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
+                  <CylinderGraph
+                    current={selectedFeature.maxCapacity}
+                    // max={selectedFeature.maxCapacity}
+                  />
+                </div>
+                <div className="w-full bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
+                  <p className="text-xs text-gray-400 tracking-wider font-semibold">
+                    {t("funder")}
+                  </p>
+                  <p className="font-medium text-gray-800 text-sm mt-1">
+                    {/*show the logo or the name of the funder*/}
+                    {/*{selectedFeature?.funder}*/}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

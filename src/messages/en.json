@@ -46,6 +46,7 @@
     "selectMarker": "Select a marker on the map",
     "lastUpdated": "Last updated",
     "infrastructureState": "Infrastructure state",
+    "funder": "Funder",
     "noPhoto": "No photo available"
   },
   "MapView": {

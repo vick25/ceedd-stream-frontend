@@ -46,6 +46,7 @@
     "selectMarker": "Sélectionner un marqueur sur la carte",
     "lastUpdated": "Dernière mise à jour",
     "infrastructureState": "État de l'infrastructure",
+    "funder": "Bailleur",
     "noPhoto": "Pas de photo disponible"
   },
   "MapView": {

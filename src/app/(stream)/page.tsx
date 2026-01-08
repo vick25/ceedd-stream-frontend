@@ -165,6 +165,7 @@ export default function Home() {
     { name: "ceedd", logo: "/ceedd.png" },
     { name: "aicpkk", logo: "/AICPKK.jpg" },
     { name: "leuven", logo: "/leuven.png" },
+    { name: "vliruos", logo: "/logo_vliruos.png" },
   ];
 
   // console.log("photo", photosData);

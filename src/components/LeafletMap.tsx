@@ -86,8 +86,8 @@ const getIconUrl = (type: string) => {
 const getCustomIcon = (iconUrl: string, isMobile: boolean) =>
   new Icon({
     iconUrl,
-    iconSize: isMobile ? [32, 32] : [48, 48],
-    iconAnchor: isMobile ? [16, 0] : [24, 0],
+    iconSize: isMobile ? [24, 24] : [40, 40],
+    iconAnchor: isMobile ? [12, 0] : [20, 0],
     popupAnchor: [0, 0],
   });
 
