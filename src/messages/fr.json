@@ -22,7 +22,8 @@
   "HomePage": {
     "welcome": "Bienvenue à CEEDD",
     "partner": "Nos partenaires",
-    "copyright": "{date} STREAM | CEEDD. Tous droits réservés.",
+    "partnerTrust": "Ils nous font confiance",
+    "copyright": "2025-{date} STREAM | CEEDD. Tous droits réservés.",
     "learnMore": "En savoir plus",
     "ourMission": "Notre mission",
     "missionDescription": "Des solutions de cartographie innovantes pour un monde connecté.",
@@ -42,12 +43,20 @@
     "description": "Filtrer par type d'infrastructures",
     "dateConstruction": "Date de construction",
     "capacity": "Capacité",
-    "selectMarker": "Sélectionner un marqueur sur la carte"
+    "selectMarker": "Sélectionner un marqueur sur la carte",
+    "lastUpdated": "Dernière mise à jour",
+    "infrastructureState": "État de l'infrastructure",
+    "noPhoto": "Pas de photo disponible"
+  },
+  "MapView": {
+    "capacity": "Capacité",
+    "builtOn": "Construit le",
+    "details": "Voir les détails"
   },
   "AboutPage": {
     "title": "À propos de STREAM",
     "whoWeAre": "Qui sommes-nous",
-    "whoWeAreDescription": "L’Outils d'évaluation et de gestion durables des eaux pluviales (STREAM) est un outil pour le monitoring des infrastructures installées pour la collecte, stockage, mesure des eaux de pluies en milieu urbain. Il permet de promouvoir les efforts que la population et le <link>CEEDD</link> ensemble avec le <link1>Terrafirma Rainwater collective</link1> fournissent pour réduire l’expansion et le risque de formation des nouveaux ravins dans les quartiers situés en zone collinaires. Notre objectif est d’aider les quartiers situés en zone collinaire à réaliser une transition vers des quartiers éponge capable d’absorber toutes les eaux de pluies qu’ils interceptent et ainsi accroitre leur résilience face aux évènements extrêmes de plus en plus fréquents. Mais aussi de collecter de données sur les pluies et le ruissellement pour étudier et formuler des solutions scientifiquement valide.",
+    "whoWeAreDescription": "L’Outils d'évaluation et de gestion durables des eaux pluviales (STREAM) est un outil, créé par le <link>CEEDD</link> avec l’appui du <link1>Terrafirma Rainwater collective</link1>, pour le monitoring des infrastructures installées pour la collecte, stockage, mesure des eaux de pluies en milieu urbain. Il permet de promouvoir les efforts que la population et le CEEDD ensemble avec le Terrafirma Rainwater collectiv fournissent pour réduire l’expansion et le risque de formation des nouveaux ravins dans les quartiers situés en zone collinaires et des inondations dans les zones aval. Notre objectif est d’aider les quartiers situés en zone collinaire à réaliser une transition vers des quartiers éponge capable d’absorber toutes les eaux de pluies qu’ils interceptent et ainsi accroitre leur résilience face aux évènements extrêmes de plus en plus fréquents. Mais aussi de collecter de données sur les pluies et le ruissellement pour étudier et formuler des solutions scientifiquement valide.",
     "ceeddHref": "https://www.ceeddrdc.org/",
     "terrafirmaHref": "https://www.tfrain.org/",
     "ourMission": "Notre mission",

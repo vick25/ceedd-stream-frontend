@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
             {/* Social Icons - Centrés sur mobile, à gauche sur desktop */}
             <div className="flex justify-center md:justify-start space-x-6">
               <SocialIcon
-                href="#"
+                href="https://web.facebook.com/p/CEEDD-100075980903950"
                 label="Facebook"
                 d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"
               />
@@ -111,13 +111,15 @@ const SocialIcon = ({
   label: string;
   d: string;
 }) => (
-  <a
+  <Link
     href={href}
+    target="_blank"
+    rel="no-referrer no-opener"
     className="text-gray-400 hover:text-white transition-colors p-2 bg-gray-800 rounded-full hover:bg-gray-700"
     aria-label={label}
   >
     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
       <path d={d} />
     </svg>
-  </a>
+  </Link>
 );

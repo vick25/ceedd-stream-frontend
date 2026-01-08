@@ -1,25 +1,12 @@
-// import NavMenu from "./NavMenu";
-
-// const Sidebar = () => {
-//   return (
-//     <div className="w-20 md:w-72 pt-2 py-2 min-h-screen bg-white shadow-lg">
-//       <div>
-//         <h1 className="hidden md:p-6 md:block font-semibold">Navigation</h1>
-//         <NavMenu />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Sidebar;
 "use client";
+
 import { useAppStore } from "@/store/appStore";
 import NavMenu from "./NavMenu";
 
 const Sidebar = () => {
   const { user } = useAppStore();
   return (
-    <aside className="sticky top-0 h-screen w-20 md:w-72 bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col">
+    <aside className="sticky top-0 h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] w-20 md:w-72 bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col">
       {/* Section Navigation */}
       <div className="flex-1 overflow-y-auto py-6">
         <div className="px-4 mb-4">

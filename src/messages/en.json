@@ -22,7 +22,8 @@
   "HomePage": {
     "welcome": "Welcome to CEEDD",
     "partner": "Our partners",
-    "copyright": "{date} STREAM | CEEDD. All rights reserved.",
+    "partnerTrust": "They trust us",
+    "copyright": "2025-{date} STREAM | CEEDD. All rights reserved.",
     "learnMore": "Learn More",
     "ourMission": "Our Mission",
     "missionDescription": "Innovative mapping solutions for a connected world.",
@@ -42,12 +43,20 @@
     "description": "Filter the data by the infrastructure type",
     "dateConstruction": "Date of construction",
     "capacity": "Capacity",
-    "selectMarker": "Select a marker on the map"
+    "selectMarker": "Select a marker on the map",
+    "lastUpdated": "Last updated",
+    "infrastructureState": "Infrastructure state",
+    "noPhoto": "No photo available"
+  },
+  "MapView": {
+    "capacity": "Capacity",
+    "builtOn": "Built on",
+    "details": "See details"
   },
   "AboutPage": {
     "title": "About STREAM",
     "whoWeAre": "Who We Are",
-    "whoWeAreDescription": "The Sustainable Tools for Rainwater Evaluation And Management (STREAM) is a tool for monitoring infrastructure installed for collecting, storing and measuring rainwater in urban areas. It promotes the efforts made by the population and <link>CEEDD</link>, together with the <link1>Terrafirma Rainwater Collective</link1>, to reduce the expansion and risk of new gullies forming in neighbourhoods located in hilly areas. Our goal is to help these neighbourhoods transition to sponge neighbourhoods capable of absorbing all the rainwater they intercept, and thus increase their resilience to increasingly frequent extreme events. But also to collect data on rainfall and runoff in order to study and formulate scientifically valid solutions.",
+    "whoWeAreDescription": "The Sustainable Tools for Rainwater Evaluation And Management (STREAM) is a tool built by the <link>CEEDD</link> with the support of the <link1>Terrafirma Rainwater Collective</link1>, for monitoring infrastructure installed for collecting, storing and measuring rainwater in urban areas. It promotes the efforts made by the population and CEEDD, together with the Terrafirma Rainwater Collective, to reduce the expansion and risk of new gullies forming in neighbourhoods located in hilly areas and flooding in coastal zones. Our goal is to help these neighbourhoods transition to sponge neighbourhoods capable of absorbing all the rainwater they intercept, and thus increase their resilience to increasingly frequent extreme events. But also to collect data on rainfall and runoff in order to study and formulate scientifically valid solutions.",
     "ceeddHref": "https://www.ceeddrdc.org/",
     "terrafirmaHref": "https://www.tfrain.org/",
     "ourMission": "Our Mission",

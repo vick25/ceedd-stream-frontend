@@ -6,6 +6,7 @@ import { Icon } from "leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet/dist/leaflet.css";
+import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -15,12 +16,13 @@ import {
   ScaleControl,
   TileLayer,
   useMap,
+  useMapEvents,
   ZoomControl,
 } from "react-leaflet";
 
 const MarkerClusterGroup = dynamic(
   () => import("react-leaflet-markercluster").then((mod) => mod.default),
-  { ssr: false }
+  { ssr: false },
 ) as unknown as React.ComponentType<React.PropsWithChildren<any>>;
 
 interface LeafletMapProps {
@@ -28,6 +30,20 @@ interface LeafletMapProps {
   onFeatureClick: (feature: MapFeature) => void;
   selectedFeatureId?: string;
   mapStyle: "standard" | "satellite";
+}
+
+// A component to handle map events and update coordinates
+function MapEvents({ setCoords }: { setCoords: React.Dispatch<React.SetStateAction<{ lat: number; lng: number }>> }) {
+  useMapEvents({
+    mousemove(e) {
+      // The event object 'e' has a 'latlng' property with lat and lng
+      setCoords({
+        lat: e.latlng.lat.toFixed(4) as unknown as number,
+        lng: e.latlng.lng.toFixed(4) as unknown as number,
+      });
+    },
+  });
+  return null; // This component doesn't render anything itself
 }
 
 // Hook personnalisé pour détecter si on est sur mobile
@@ -42,13 +58,29 @@ const useIsMobile = () => {
   return isMobile;
 };
 
+const icons = [{
+  type: "Citerne",
+  iconUrl: "/citerne.png"
+}, {
+  type: "Déversoir",
+  iconUrl: "/deversoir.png"
+}, {
+  type: "Bassin de rétention",
+  iconUrl: "/bassin_retention.png"
+}];
+
 // Icônes adaptatives
-const getCustomIcon = (isMobile: boolean) =>
+const getIconUrl = (type: string) => {
+  const iconObj = icons.find(icon => icon.type === type);
+  return iconObj ? iconObj.iconUrl : "/iconImage.png";
+};
+
+const getCustomIcon = (iconUrl: string, isMobile: boolean) =>
   new Icon({
-    iconUrl: "/iconImage.png",
-    iconSize: isMobile ? [40, 40] : [64, 64],
-    iconAnchor: isMobile ? [20, 40] : [40, 64],
-    popupAnchor: isMobile ? [0, -40] : [0, -64],
+    iconUrl,
+    iconSize: isMobile ? [32, 32] : [48, 48],
+    iconAnchor: isMobile ? [16, 0] : [24, 0],
+    popupAnchor: [0, 0],
   });
 
 const MapUpdater: React.FC<{
@@ -94,11 +126,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   selectedFeatureId,
   mapStyle,
 }) => {
+  const t = useTranslations("MapView");
   const isMobile = useIsMobile();
   const center: [number, number] = [-2.5, 23.0];
   const zoom = isMobile ? 4 : 5; // Zoom initial dézommé sur petit écran
-
-  const icon = useMemo(() => getCustomIcon(isMobile), [isMobile]);
+  const [coords, setCoords] = useState({ lat: 0, lng: 0 });
 
   return (
     <div className="relative w-full h-full">
@@ -134,7 +166,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                 <Marker
                   key={feature.id}
                   position={[feature.lat, feature.lng]}
-                  icon={icon}
+                  icon={getCustomIcon(getIconUrl(feature.type), isMobile)}
                   eventHandlers={{
                     click: () => onFeatureClick(feature),
                     // On n'active le popup au survol que sur desktop
@@ -144,17 +176,17 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                 >
                   <Popup closeButton={isMobile} className="custom-popup">
                     {/* Largeur adaptative : 80% de la largeur de l'écran sur mobile, fixe sur desktop */}
-                    <div className="w-[80vw] sm:w-64 max-w-300px font-sans text-gray-800 flex flex-col gap-2 p-1">
+                    <div className="w-[80vw] sm:w-64 max-w-300px font-sans text-gray-900 flex flex-col gap-2 p-1">
                       <div className="flex flex-col gap-1">
                         <span className="text-[10px] uppercase text-gray-400 font-bold">
-                          Zone
+                          Infrastructure
                         </span>
                         <strong className="text-sm md:text-base font-bold text-blue-700 leading-tight">
                           {feature.nom}
                         </strong>
                       </div>
 
-                      <hr className="border-gray-100" />
+                      <hr className="h-0.5 border-0 mb-2 bg-[linear-gradient(25deg,red_5%,yellow_60%,lime_90%,teal)]" />
 
                       <div className="grid grid-cols-2 gap-2 text-[11px] md:text-sm">
                         <div className="flex flex-col">
@@ -164,7 +196,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                           </span>
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-gray-500">Capacité</span>
+                          <span className="text-gray-500">{t("capacity")}</span>
                           <span className="font-semibold">
                             {feature.maxCapacity} m³
                           </span>
@@ -172,7 +204,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                       </div>
 
                       <div className="pt-1 text-[11px] md:text-xs text-gray-500 italic">
-                        Construit le : {displayDate(feature.date_construction)}
+                        {`${t("builtOn")} ${displayDate(feature.date_construction)}`}
                       </div>
 
                       {isMobile && (
@@ -180,14 +212,14 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                           className="mt-2 w-full bg-blue-600 text-white py-2 rounded text-xs font-bold"
                           onClick={() => onFeatureClick(feature)}
                         >
-                          Voir détails
+                          {t("details")}
                         </button>
                       )}
                     </div>
                   </Popup>
                 </Marker>
               )),
-            [features, selectedFeatureId, onFeatureClick, isMobile, icon]
+            [features, selectedFeatureId, onFeatureClick, isMobile],
           )}
         </MarkerClusterGroup>
 
@@ -200,7 +232,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         {/* On remet les contrôles en bas sur mobile pour l'accessibilité du pouce */}
         <ZoomControl position={isMobile ? "bottomright" : "topleft"} />
         {!isMobile && <ScaleControl position="bottomleft" imperial={false} />}
+        <MapEvents setCoords={setCoords} />
       </MapContainer>
+      <div className="hidden md:block absolute bottom-0 left-20 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
+        {`Coordinates: ${coords.lat}, ${coords.lng}`}
+      </div>
     </div>
   );
 };

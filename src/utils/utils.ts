@@ -146,5 +146,5 @@ export const formatDate = (dateStr: any) => {
   // Vérifie si la date est valide (getTime ne renvoie pas NaN)
   return !isNaN(date.getTime())
     ? date.toISOString().split("T")[0]
-    : "Aucune inspection";
+    : "Non fournie";
 };

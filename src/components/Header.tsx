@@ -38,7 +38,7 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className="bg-white border-b border-gray-100 sticky top-0 z-[1100] w-full">
+    <header className="bg-gray-50 border-b border-gray-100 sticky top-0 z-1100 w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 lg:h-20">
           {/* --- Gauche: Logo --- */}
@@ -53,7 +53,7 @@ export const Header: React.FC = () => {
             <span
               className={clsx(
                 "font-bold tracking-tight text-gray-900",
-                "hidden sm:inline-block text-base md:text-sm lg:text-xl"
+                "hidden sm:inline-block text-base md:text-sm lg:text-xl",
               )}
               title="Sustainable Tools for Rainwater Evaluation And Management"
             >
@@ -73,7 +73,7 @@ export const Header: React.FC = () => {
                     isActive
                       ? "font-bold text-blue-600 border-blue-600"
                       : "font-medium text-gray-900 border-transparent hover:text-blue-600"
-                  } md:text-xs lg:text-base`}
+                  } md:text-xs lg:text-sm`}
                 >
                   {item.name}
                 </Link>
@@ -83,23 +83,8 @@ export const Header: React.FC = () => {
 
           {/* --- Droite: Actions (Desktop & Tablet) --- */}
           <div className="hidden md:flex items-center md:gap-1 lg:gap-4">
-            <div className="relative flex items-center md:scale-90 lg:scale-100">
+            <div className="relative md:scale-90 lg:scale-100">
               <LocaleSwitcher />
-              <div className="pointer-events-none text-gray-500">
-                <svg
-                  className="w-3 h-3 lg:w-4 lg:h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
             </div>
 
             <div className="flex items-center gap-2 ml-1 lg:ml-4">
@@ -201,7 +186,7 @@ export const Header: React.FC = () => {
 
       {/* --- Menu Mobile (Dropdown) --- */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-16 shadow-2xl z-[1200]">
+        <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-16 shadow-2xl z-1200">
           <div className="px-4 py-6 space-y-4">
             {navLinks.map((item) => {
               const isActive = pathname === item.href;
