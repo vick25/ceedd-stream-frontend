@@ -91,7 +91,7 @@ const CreateformInfrastructure = ({
   };
 
   return (
-    <div className="w-full min-w-[50vw] lg:min-w-[800px] p-6">
+    <div className="w-full min-w-[50vw] lg:min-w-200 p-6">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 flex flex-col gap-4"

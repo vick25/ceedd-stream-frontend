@@ -16,7 +16,7 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
   // Si current = 3000, percentage = 30% (donc aligné sur le chiffre 3)
   const percentage = Math.min(
     100,
-    Math.max(0, (current / THEORETICAL_MAX) * 100)
+    Math.max(0, (current / THEORETICAL_MAX) * 100),
   );
 
   // ÉTAPE 3 : Logique de couleur demandée
@@ -29,7 +29,10 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
   const staticTicks = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
 
   return (
-    <div className="flex flex-col items-center p-2 bg-white rounded-lg inline-block">
+    <div className="flex flex-col items-center p-2 pt-6 bg-white rounded-lg relative">
+      <div className="absolute -top-2 right-0 text-sm font-bold text-gray-400 mt-2 tracking-widest">
+        m<sup>3</sup>
+      </div>
       <div className="flex items-start gap-3">
         {/* Cylindre - Plus fin (w-12) et bordure légère */}
         <div className="relative w-12 h-60 bg-gray-50 border border-gray-200 rounded-full overflow-hidden shadow-inner">
@@ -38,7 +41,7 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
             {staticTicks.map((t) => (
               <div key={t} className="w-full flex justify-center">
                 <div
-                  className={`h-[1px] bg-gray-300 ${
+                  className={`h-px bg-gray-300 ${
                     t % 5 === 0 ? "w-1/2 opacity-70" : "w-1/4 opacity-30"
                   }`}
                 ></div>
@@ -49,7 +52,7 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
           {/* Liquide dynamique */}
           <div
             className={`absolute bottom-0 left-0 w-full transition-all duration-1000 ease-out z-10 ${getColor(
-              percentage
+              percentage,
             )}`}
             style={{ height: `${percentage}%` }}
           >
@@ -71,13 +74,13 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
       </div>
 
       {/* Affichage de la valeur réelle - Taille équilibrée */}
-      <div className="mt-4 text-center">
-        <div className="text-2xl font-bold text-gray-800 tracking-tight leading-none">
+      <div className="mt-4 text-center space-x-2">
+        <span className="text-2xl font-bold text-gray-800 tracking-tight leading-none">
           {current?.toLocaleString()}
-        </div>
-        <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest">
-          {unit} ACTUEL
-        </div>
+        </span>
+        <span className="text-md font-bold text-gray-400 uppercase tracking-widest">
+          {unit}
+        </span>
       </div>
     </div>
   );

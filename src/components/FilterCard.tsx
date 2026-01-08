@@ -126,12 +126,14 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               <div className="flex-1 space-y-3">
                 <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300">
                   {images.length > 0 && images[0] ? (
-                    <Link href="#"
+                    <Link
+                      href="#"
                       scroll={false}
                       onClick={(e) => {
                         e.preventDefault(); // Prevents page jump
                         setIsModalOpen(true);
-                      }}>
+                      }}
+                    >
                       <Image
                         src={images[0]}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -206,12 +208,13 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     {t("infrastructureState")}
                   </p>
                   <span
-                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${selectedFeature.etat === "bon"
-                      ? "bg-green-100 text-green-700"
-                      : selectedFeature.etat === "moyen"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
-                      }`}
+                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${
+                      selectedFeature.etat === "bon"
+                        ? "bg-green-100 text-green-700"
+                        : selectedFeature.etat === "moyen"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
+                    }`}
                   >
                     {selectedFeature.etat}
                   </span>
@@ -225,7 +228,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               <div className="w-full sm:w-auto flex justify-center items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
                 <CylinderGraph
                   current={selectedFeature.maxCapacity}
-                  max={selectedFeature.maxCapacity}
+                  // max={selectedFeature.maxCapacity}
                 />
               </div>
             </div>
@@ -260,7 +263,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       {isModalOpen && (
         <div className="fixed inset-0 z-999 flex items-center justify-center bg-black/90 p-4">
           {/* Close Button */}
-          <button aria-label="Close"
+          <button
+            aria-label="Close"
             type="button"
             onClick={() => setIsModalOpen(false)}
             className="absolute top-6 right-6 text-white hover:text-gray-300 z-50 bg-black/20 p-2 rounded-full"
@@ -282,7 +286,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
           {/* Left Button (Only if multiple images) */}
           {images.length > 1 && (
-            <button aria-label="Go to previous image"
+            <button
+              aria-label="Go to previous image"
               type="button"
               onClick={handlePrev}
               className="absolute left-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all z-50"
@@ -316,7 +321,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
           {/* Right Button (Only if multiple images) */}
           {images.length > 1 && (
-            <button aria-label="Go to next image"
+            <button
+              aria-label="Go to next image"
               type="button"
               onClick={handleNext}
               className="absolute right-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all z-50"
