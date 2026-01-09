@@ -125,6 +125,14 @@ export default function Home() {
       .filter((item: any) => item.latitude !== null && item.longitude !== null)
       .map((item: any) => {
         const idStr = item.id.toString();
+
+        // 1. Trouver le bailleur qui finance cette infrastructure
+        const bailleurAssocie = bailleursData.results.find((b: any) =>
+          b.finances.some((f: any) => f.infrastructure.toString() === idStr)
+        );
+
+        // 2. Récupérer l'ID du bailleur pour piocher dans la photoMap
+        const bailleurId = bailleurAssocie?.id?.toString();
         return {
           id: idStr,
           lat: item.latitude,
@@ -139,10 +147,10 @@ export default function Home() {
           date: inspectionMap[idStr]?.date || "Non renseignée",
           etat: inspectionMap[idStr]?.etat || "Inconnu",
           imageUrls: photoMap[idStr] || null,
-          logoUrls: bailleursMap[idStr] || null,
+          logoUrls: bailleurId ? bailleursMap[bailleurId] : null,
         };
       });
-  }, [infraData, inspectionMap, photoMap, bailleursMap]);
+  }, [infraData, inspectionMap, photoMap, bailleursMap, bailleursData]);
 
   const filteredFeatures = useMemo(() => {
     return selectedCategory === "All"

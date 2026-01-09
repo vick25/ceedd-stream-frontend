@@ -44,10 +44,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   );
 
   const bailleurId = financeInfo?.id.toString();
-  const logoUrl =
-    selectedFeature?.logoUrls && selectedFeature.logoUrls.length > 0
-      ? selectedFeature.logoUrls[0]
-      : null;
+  const logoUrl = selectedFeature?.logoUrls?.[0] || null;
   // const finalLogo=bailleurId?bail
   const finalNom = financeInfo?.nom || financeInfo?.str || "Partenaire";
   const handleNext = () =>
@@ -253,13 +250,14 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     {t("funder")}
                   </p>
                   {logoUrl ? (
-                    <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300">
+                    <div className="relative w-full h-16 overflow-hidden">
                       <Image
                         src={logoUrl}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        alt={selectedFeature.nom}
+                        alt={finalNom}
                         fill
-                        className="object-cover"
+                        /* object-contain est essentiel pour les logos */
+                        className="object-contain object-left"
+                        sizes="100px"
                       />
                     </div>
                   ) : (
