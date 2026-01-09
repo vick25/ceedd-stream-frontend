@@ -16,7 +16,7 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
   // Si current = 3000, percentage = 30% (donc aligné sur le chiffre 3)
   const percentage = Math.min(
     100,
-    Math.max(0, (current / THEORETICAL_MAX) * 100),
+    Math.max(0, (current / THEORETICAL_MAX) * 100)
   );
 
   // ÉTAPE 3 : Logique de couleur demandée
@@ -52,7 +52,7 @@ export const CylinderGraph: React.FC<CylinderGraphProps> = ({
           {/* Liquide dynamique */}
           <div
             className={`absolute bottom-0 left-0 w-full transition-all duration-1000 ease-out z-10 ${getColor(
-              percentage,
+              percentage
             )}`}
             style={{ height: `${percentage}%` }}
           >

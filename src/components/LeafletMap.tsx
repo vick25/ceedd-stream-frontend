@@ -22,7 +22,7 @@ import {
 
 const MarkerClusterGroup = dynamic(
   () => import("react-leaflet-markercluster").then((mod) => mod.default),
-  { ssr: false },
+  { ssr: false }
 ) as unknown as React.ComponentType<React.PropsWithChildren<any>>;
 
 interface LeafletMapProps {
@@ -212,7 +212,9 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                       </div>
 
                       <div className="pt-1 text-[11px] md:text-xs text-gray-500 italic">
-                        {`${t("builtOn")} ${displayDate(feature.date_construction)}`}
+                        {`${t("builtOn")} ${displayDate(
+                          feature.date_construction
+                        )}`}
                       </div>
 
                       {isMobile && (
@@ -227,7 +229,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                   </Popup>
                 </Marker>
               )),
-            [features, selectedFeatureId, onFeatureClick, isMobile],
+            [features, selectedFeatureId, onFeatureClick, isMobile]
           )}
         </MarkerClusterGroup>
 

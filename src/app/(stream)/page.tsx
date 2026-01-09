@@ -1,122 +1,132 @@
 "use client";
 
+import { useMemo, useState, memo, useCallback } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { Building2, Droplet, Package, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
+
 import { FilterCard } from "@/components/FilterCard";
+import { useBailleurs } from "@/components/hooks/useBailleur";
 import { useGetAllInfrastructures } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
 import { useGetPhotos } from "@/components/hooks/usePhotos";
 import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
-import Loader from "@/components/Loader";
 import { Footer } from "@/components/MapFooter";
 import { Card } from "@/components/ui/card";
 import { MapFeature } from "@/types/types";
-import { Building2, Droplet, Package, Users } from "lucide-react";
-import { useTranslations } from "next-intl";
-import dynamic from "next/dynamic";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
 
-// Import dynamique de Leaflet (SSR impossible pour Leaflet)
+// 1. Composant de chargement léger pour éviter de bloquer tout l'écran
+const MapLoader = () => (
+  <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gray-100 animate-pulse">
+    <div className="text-center">
+      <div className="inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-2" />
+      <p>Chargement de la carte...</p>
+    </div>
+  </div>
+);
+
 const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gray-100">
-      Loading Map...
-    </div>
-  ),
+  loading: () => <MapLoader />,
 });
+
+const PARTNERS = [
+  { name: "terrafirma", logo: "/terrafirma.png" },
+  { name: "unikin", logo: "/unikin.jpeg" },
+  { name: "ceedd", logo: "/ceedd.png" },
+  { name: "aicpkk", logo: "/AICPKK.jpg" },
+  { name: "leuven", logo: "/leuven.png" },
+  { name: "vliruos", logo: "/logo_vliruos.png" },
+];
+// 2. Mémoïsation des composants de l'interface pour éviter les re-renders inutiles
+const StatCard = memo(({ icon, title, value, subTitle }: any) => (
+  <div className="hover:bg-white border border-transparent rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
+    <div className="text-blue-600 flex justify-center mb-4">{icon}</div>
+    <h3 className="text-sm font-semibold tracking-wide text-blue-700 uppercase">
+      {title}
+    </h3>
+    <p className="mt-2 text-4xl font-bold text-gray-900">{value}</p>
+    <p className="mt-1 text-sm text-gray-600">{subTitle}</p>
+  </div>
+));
+StatCard.displayName = "StatCard";
 
 export default function Home() {
   const t = useTranslations("HomePage");
-  const route = useRouter();
 
-  // --- 1. RÉCUPÉRATION DES DONNÉES (AUTOMATIQUE AVEC USEQUERY) ---
+  // --- RÉCUPÉRATION DES DONNÉES ---
   const {
     data: infraData,
     isLoading: isInfraLoading,
     isError: isInfraError,
   } = useGetAllInfrastructures();
-
-  // const { data: typesData, isLoading: isTypesLoading } =
-  //   useAllTypeInfrastructure();
-  const { data: typesData, isLoading: isTypesLoading } =
-    useTypeInfradtructures();
-
+  const { data: typesData } = useTypeInfradtructures();
   const { data: inspectionData } = useGetInspections();
-  const { data: photosData, isPending: isPhotoPending } = useGetPhotos();
+  const { data: photosData } = useGetPhotos();
+  const { data: bailleursData } = useBailleurs();
 
-  // console.log({ infraData });
-  // --- 2. ÉTATS LOCAUX ---
+  // --- ÉTATS LOCAUX ---
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
-    null,
+    null
   );
   const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [filteredFeaturesCount, setFilteredFeaturesCount] = useState<number>(0);
   const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
-    "standard",
+    "standard"
   );
 
-  // --- 3. LOGIQUE DE TRANSFORMATION (RÉACTIVE) ---
+  // --- OPTIMISATION DU TRAITEMENT DES DONNÉES (Performance critique) ---
 
-  // Liste des catégories pour le filtre
-
-  // Spécifiez explicitement que le retour est un tableau de chaînes : string[]
-  const typesDisponibles: string[] = useMemo(() => {
-    // 1. On vérifie que results existe et est un tableau
-    const results = typesData?.results;
-
-    if (Array.isArray(results)) {
-      return [
-        "All",
-        // 2. On mappe et on force la conversion en string
-        // 3. On utilise "as string" pour rassurer TypeScript
-        ...new Set(results.map((t: any) => t.nom as string)),
-      ];
-    }
-
-    return ["All"];
-  }, [typesData]);
-
-  // Transformation des données brutes en MapFeature[]
-  const allFeatures: MapFeature[] = useMemo(() => {
-    if (!infraData?.results) return [];
-
-    // Map des inspections pour un accès rapide par ID d'infrastructure
-    const inspectionMap: Record<string, { etat: string; date: string }> = {};
+  // Création de Maps (dictionnaires) pour un accès O(1) au lieu de O(n)
+  const inspectionMap = useMemo(() => {
+    const map: Record<string, any> = {};
     inspectionData?.results?.forEach((insp: any) => {
-      const infraId = insp.infrastructure?.id;
-      if (infraId) {
-        inspectionMap[infraId.toString()] = {
+      if (insp.infrastructure?.id) {
+        map[insp.infrastructure.id.toString()] = {
           etat: insp.etat || "Inconnu",
           date: insp.date || "N/A",
         };
       }
     });
+    return map;
+  }, [inspectionData]);
 
-    const photoMap: Record<string, string[]> = {};
+  const photoMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    (photosData as any)?.results?.forEach((photo: any) => {
+      if (photo.related_object.type === "infrastructure") {
+        const id = photo.object_id.toString();
+        if (!map[id]) map[id] = [];
+        map[id].push(photo.url);
+      }
+    });
+    return map;
+  }, [photosData]);
 
-    // On force le type en précisant que c'est un objet contenant results
-    const photos = (photosData as any)?.results;
+  const bailleursMap = useMemo(() => {
+    const map: Record<string, String[]> = {};
+    (photosData as any)?.results?.forEach((photo: any) => {
+      if (photo.related_object.type === "bailleur") {
+        const id = photo.object_id.toString();
+        if (!map[id]) map[id] = [];
+        map[id].push(photo.url);
+      }
+    });
+    return map;
+  }, [photosData]);
 
-    if (Array.isArray(photos)) {
-      photos.forEach((photo: any) => {
-        if (photo.object_id) {
-          const id = photo.object_id.toString();
-          if (!photoMap[id]) photoMap[id] = [];
-          photoMap[id].push(photo.url);
-        }
-      });
-    }
-
+  // console.log({ bailleursData });
+  // console.log({ bailleursMap });
+  // Transformation principale : légère car elle pioche dans les dictionnaires déjà prêts
+  const allFeatures = useMemo(() => {
+    if (!infraData?.results) return [];
     return infraData.results
       .filter((item: any) => item.latitude !== null && item.longitude !== null)
       .map((item: any) => {
-        const inspectionInfo = inspectionMap[item.id.toString()];
-        const photoUrls = photoMap[item.id.toString()];
-
+        const idStr = item.id.toString();
         return {
-          id: item.id.toString(),
+          id: idStr,
           lat: item.latitude,
           lng: item.longitude,
           nom: item.nom,
@@ -126,116 +136,74 @@ export default function Home() {
           date_construction: item.date_construction,
           waterVolume: item.current_volume,
           maxCapacity: item.capacite,
-          date: inspectionInfo?.date || "Non renseignée",
-          etat: inspectionInfo?.etat || "Inconnu",
-          imageUrls: photoUrls || null,
+          date: inspectionMap[idStr]?.date || "Non renseignée",
+          etat: inspectionMap[idStr]?.etat || "Inconnu",
+          imageUrls: photoMap[idStr] || null,
+          logoUrls: bailleursMap[idStr] || null,
         };
       });
-  }, [infraData, inspectionData, photosData]);
+  }, [infraData, inspectionMap, photoMap, bailleursMap]);
 
-  // Filtrage final basé sur la catégorie sélectionnée
   const filteredFeatures = useMemo(() => {
     return selectedCategory === "All"
       ? allFeatures
-      : allFeatures.filter((f) => f.type === selectedCategory);
+      : allFeatures.filter((f: any) => f.type === selectedCategory);
   }, [allFeatures, selectedCategory]);
 
-  // --- 4. EFFETS DE BORD ---
+  const typesDisponibles: any[] = useMemo(() => {
+    const results = typesData?.results;
+    return results
+      ? ["All", ...new Set(results.map((t: any) => t.nom as string))]
+      : ["All"];
+  }, [typesData]);
 
-  // Correction Leaflet : forcer le calcul de la taille quand les données arrivent
-  useEffect(() => {
-    if (filteredFeatures.length > 0) {
-      setFilteredFeaturesCount(filteredFeatures.length);
-      const timer = setTimeout(() => {
-        window.dispatchEvent(new Event("resize"));
-      }, 200);
-      return () => clearTimeout(timer);
-    }
-  }, [filteredFeatures.length]);
-
-  // --- 5. GESTION DES ACTIONS ---
-  const handleFeatureClick = (feature: MapFeature) => {
+  // --- GESTION DES ACTIONS ---
+  const handleFeatureClick = useCallback((feature: MapFeature) => {
     setSelectedFeature(feature);
     if (window.innerWidth < 768) setIsFilterVisible(true);
-  };
+  }, []);
 
-  const PARTNERS = [
-    { name: "terrafirma", logo: "/terrafirma.png" },
-    { name: "unikin", logo: "/unikin.jpeg" },
-    { name: "ceedd", logo: "/ceedd.png" },
-    { name: "aicpkk", logo: "/AICPKK.jpg" },
-    { name: "leuven", logo: "/leuven.png" },
-    { name: "vliruos", logo: "/logo_vliruos.png" },
-  ];
-
-  // console.log("photo", photosData);
-  // --- 6. ÉTATS DE RENDU (CHARGEMENT / ERREUR) ---
-  if (isInfraLoading || isTypesLoading) {
-    return <Loader />;
-  }
-
-  if (isInfraError) {
-    return (
-      <div className="flex items-center justify-center min-h-screen p-6">
-        <Card className="p-12 text-center border-gray-400 bg-gray-50 max-w-md">
-          <Package className="h-12 w-12 text-red-900 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-red-900 mb-2">
-            {t("warning")}
-          </h3>
-          <p className="text-red-600 mb-4">{t("warningMessage")}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="text-blue-600 underline font-medium"
-          >
-            {t("tryAgain")}
-          </button>
-        </Card>
-      </div>
-    );
-  }
+  // Erreur fatale
+  if (isInfraError) return <ErrorState t={t} />;
 
   return (
     <main className="min-h-screen flex flex-col">
-      {/* Map Section */}
-      <section className="relative w-full h-150 md:h-175 bg-gray-200">
-        <LeafletMap
-          features={filteredFeatures}
-          onFeatureClick={handleFeatureClick}
-          selectedFeatureId={selectedFeature?.id}
-          mapStyle={mapStyle}
-        />
+      {/* Map Section - Rendu progressif */}
+      <section className="relative w-full h-150 md:h-210 bg-gray-200">
+        {isInfraLoading ? (
+          <MapLoader />
+        ) : (
+          <LeafletMap
+            features={filteredFeatures}
+            onFeatureClick={handleFeatureClick}
+            selectedFeatureId={selectedFeature?.id}
+            mapStyle={mapStyle}
+          />
+        )}
 
-        {/* Toggle Filtre Mobile */}
-        <button
-          onClick={() => setIsFilterVisible(!isFilterVisible)}
-          className="md:hidden absolute top-4 left-4 z-500 bg-white p-2 rounded-md shadow-lg text-blue-600 font-bold text-sm"
-        >
-          {isFilterVisible ? "Masquer Info" : "Afficher Info"}
-        </button>
-
-        {/* Overlay Contrôles et Filtres */}
-        <div className="absolute -top-6 right-0 h-full w-full pointer-events-none flex flex-col items-end z-1000 md:p-6">
-          {/* Style Map Selector */}
-          <div className="pointer-events-auto bg-white rounded-lg shadow-lg border border-gray-100 p-1 flex mb-4 mr-4 md:mr-0 mt-4">
+        {/* Overlay : On garde l'UI interactive même pendant le chargement des données */}
+        <div className="absolute top-4 right-4 z-1000 flex flex-col items-end pointer-events-none">
+          <div className="pointer-events-auto bg-white/90 backdrop-blur rounded-lg shadow p-1 flex mb-4 border border-gray-100">
+            {/* Sélecteur de style simplifié */}
             <button
               onClick={() => setMapStyle("standard")}
-              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+              className={`px-4 py-1.5 text-xs font-bold rounded-md ${
                 mapStyle === "standard"
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-500 hover:text-gray-800"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-500"
               }`}
             >
               OSM
             </button>
             <button
               onClick={() => setMapStyle("satellite")}
-              className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all ${
+              className={`px-4 py-1.5 text-xs font-bold rounded-md ${
                 mapStyle === "satellite"
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-500 hover:text-gray-800"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-500"
               }`}
             >
-              Satellite
+              SATELLITE
             </button>
           </div>
 
@@ -255,7 +223,7 @@ export default function Home() {
               selectedFeature={selectedFeature}
               selectedCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
-              filteredFeaturesCount={filteredFeaturesCount}
+              filteredFeaturesCount={filteredFeatures.length}
               onClose={() => setIsFilterVisible(false)}
               availableCategories={typesDisponibles}
             />
@@ -263,17 +231,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-10 md:py-14 bg-white">
-        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-              {t("overView")}
-            </h2>
-            <p className="text-gray-600 mt-2">{t("overViewIntro")}</p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Stats Section - Toujours visible pour le SEO et le LCP */}
+      <section className="py-12 bg-white">
+        <div className="container max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <StatCard
               icon={<Users className="h-10 w-10" />}
               title="Impact"
@@ -295,7 +256,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Partners Section */}
       <section className="py-10 bg-gray-50">
         <div className="container mx-auto px-4 text-center">
@@ -315,32 +275,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer Section */}
       <Footer />
     </main>
   );
 }
 
-// Composant Interne pour les cartes de statistiques
-function StatCard({
-  icon,
-  title,
-  value,
-  subTitle,
-}: {
-  icon: any;
-  title: string;
-  value: string | number;
-  subTitle: string;
-}) {
+function ErrorState({ t }: any) {
   return (
-    <div className=" hover:bg-white border border-transparent rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
-      <div className="text-blue-600 flex justify-center mb-4">{icon}</div>
-      <h3 className="text-sm font-semibold tracking-wide text-blue-700 uppercase">
-        {title}
-      </h3>
-      <p className="mt-2 text-4xl font-bold text-gray-900">{value}</p>
-      <p className="mt-1 text-sm text-gray-600">{subTitle}</p>
+    <div className="flex items-center justify-center min-h-screen p-6">
+      <Card className="p-12 text-center max-w-md">
+        <Package className="h-12 w-12 text-red-500 mx-auto mb-4" />
+        <h3 className="text-lg font-bold">{t("warning")}</h3>
+        <p className="text-gray-600 my-2">{t("warningMessage")}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="text-blue-600 underline"
+        >
+          {t("tryAgain")}
+        </button>
+      </Card>
     </div>
   );
 }

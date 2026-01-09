@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { CylinderGraph } from "./CylinderGraph";
+import { useBailleurs } from "./hooks/useBailleur";
 
 interface FilterCardProps {
   selectedFeature: MapFeature | null;
@@ -26,7 +27,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const t = useTranslations("FilterCard");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const { data: bailleursData } = useBailleurs();
   console.log(selectedFeature);
 
   // Normalize images into an array even if it's just one string
@@ -36,6 +37,19 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       : [selectedFeature.imageUrls]
     : [];
 
+  const financeInfo = (bailleursData as any)?.results.find((b: any) =>
+    b.finances.some(
+      (f: any) => f.infrastructure.toString() === selectedFeature?.id
+    )
+  );
+
+  const bailleurId = financeInfo?.id.toString();
+  const logoUrl =
+    selectedFeature?.logoUrls && selectedFeature.logoUrls.length > 0
+      ? selectedFeature.logoUrls[0]
+      : null;
+  // const finalLogo=bailleurId?bail
+  const finalNom = financeInfo?.nom || financeInfo?.str || "Partenaire";
   const handleNext = () =>
     setCurrentIndex((prev) => (prev + 1) % images.length);
   const handlePrev = () =>
@@ -214,8 +228,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                       selectedFeature.etat === "bon"
                         ? "bg-green-100 text-green-700"
                         : selectedFeature.etat === "moyen"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
                     }`}
                   >
                     {selectedFeature.etat}
@@ -238,10 +252,22 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                   <p className="text-xs text-gray-400 tracking-wider font-semibold">
                     {t("funder")}
                   </p>
-                  <p className="font-medium text-gray-800 text-sm mt-1">
-                    {/*show the logo or the name of the funder*/}
-                    {/*{selectedFeature?.funder}*/}
-                  </p>
+                  {logoUrl ? (
+                    <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300">
+                      <Image
+                        src={logoUrl}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        alt={selectedFeature.nom}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <p className="font-medium text-gray-800 text-sm mt-1">
+                      {/*show the logo or the name of the funder*/}
+                      {finalNom}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
