@@ -28,7 +28,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { data: bailleursData } = useBailleurs();
-  console.log(selectedFeature);
+  // console.log(selectedFeature);
 
   // Normalize images into an array even if it's just one string
   const images = selectedFeature?.imageUrls
@@ -116,7 +116,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       <hr className="h-0.5 border-0 mb-2 bg-[linear-gradient(25deg,red_5%,yellow_60%,lime_90%,teal)]" />
 
       {/* Feature Details Section */}
-      <div className="grow mt-2 overflow-y-auto">
+      <div className="h-full mt-2 overflow-y-auto">
         {selectedFeature ? (
           <div className="animate-fade-in space-y-4">
             <div className="flex justify-between items-start">

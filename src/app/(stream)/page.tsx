@@ -35,7 +35,7 @@ const PARTNERS = [
   { name: "terrafirma", logo: "/terrafirma.png" },
   { name: "unikin", logo: "/unikin.jpeg" },
   { name: "ceedd", logo: "/ceedd.png" },
-  { name: "aicpkk", logo: "/AICPKK.jpg" },
+  { name: "ai cpkk", logo: "/AICPKK.jpg" },
   { name: "leuven", logo: "/leuven.png" },
   { name: "vliruos", logo: "/logo_vliruos.png" },
 ];
@@ -68,12 +68,12 @@ export default function Home() {
 
   // --- ÉTATS LOCAUX ---
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
-    null
+    null,
   );
   const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
-    "standard"
+    "standard",
   );
 
   // --- OPTIMISATION DU TRAITEMENT DES DONNÉES (Performance critique) ---
@@ -127,8 +127,8 @@ export default function Home() {
         const idStr = item.id.toString();
 
         // 1. Trouver le bailleur qui finance cette infrastructure
-        const bailleurAssocie = bailleursData.results.find((b: any) =>
-          b.finances.some((f: any) => f.infrastructure.toString() === idStr)
+        const bailleurAssocie = bailleursData?.results.find((b: any) =>
+          b.finances.some((f: any) => f.infrastructure.toString() === idStr),
         );
 
         // 2. Récupérer l'ID du bailleur pour piocher dans la photoMap
@@ -276,7 +276,8 @@ export default function Home() {
                 alt={p.name}
                 width={80}
                 height={80}
-                className="h-10 md:h-12 object-contain"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="h-12 md:h-16 object-contain"
               />
             ))}
           </div>
