@@ -244,7 +244,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         {!isMobile && <ScaleControl position="bottomleft" imperial={false} />}
         <MapEvents setCoords={setCoords} />
       </MapContainer>
-      <div className="hidden md:block absolute bottom-0 left-20 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
+      <div className="hidden md:block absolute bottom-0 left-30 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
         {`${t("coordinates")}: ${coords.lat}, ${coords.lng}`}
       </div>
     </div>

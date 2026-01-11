@@ -39,9 +39,10 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
   const financeInfo = (bailleursData as any)?.results.find((b: any) =>
     b.finances.some(
-      (f: any) => f.infrastructure.toString() === selectedFeature?.id
-    )
+      (f: any) => f.infrastructure.toString() === selectedFeature?.id,
+    ),
   );
+  // console.log({ financeInfo }, { selectedFeature });
 
   const bailleurId = financeInfo?.id.toString();
   const logoUrl =
@@ -50,6 +51,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       : null;
   // const finalLogo=bailleurId?bail
   const finalNom = financeInfo?.nom || financeInfo?.str || "Partenaire";
+
   const handleNext = () =>
     setCurrentIndex((prev) => (prev + 1) % images.length);
   const handlePrev = () =>
@@ -228,8 +230,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                       selectedFeature.etat === "bon"
                         ? "bg-green-100 text-green-700"
                         : selectedFeature.etat === "moyen"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
                     }`}
                   >
                     {selectedFeature.etat}
@@ -252,6 +254,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                   <p className="text-xs text-gray-400 tracking-wider font-semibold">
                     {t("funder")}
                   </p>
+                  {/*show the logo or the name of the funder*/}
                   {logoUrl ? (
                     <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300">
                       <Image
@@ -264,7 +267,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     </div>
                   ) : (
                     <p className="font-medium text-gray-800 text-sm mt-1">
-                      {/*show the logo or the name of the funder*/}
                       {finalNom}
                     </p>
                   )}
