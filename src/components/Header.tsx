@@ -33,8 +33,8 @@ export const Header: React.FC = () => {
   const navLinks = [
     { name: "Dashboard", href: "/home" },
     { name: `${t("about")}`, href: "/abouts" },
-    { name: `${t("donate")}`, href: "#" },
-    { name: `${t("contact")}`, href: "#" },
+    { name: `${t("donate")}`, href: "/donate" },
+    { name: `${t("contact")}`, href: "/contact" },
   ];
 
   return (

@@ -37,15 +37,17 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       : [selectedFeature.imageUrls]
     : [];
 
+  console.log({ bailleursData });
   const financeInfo = (bailleursData as any)?.results.find((b: any) =>
     b.finances.some(
-      (f: any) => f.infrastructure.toString() === selectedFeature?.id,
+      (f: any) => f.infrastructure?.id?.toString() === selectedFeature?.id,
     ),
   );
-  // console.log({ financeInfo }, { selectedFeature });
+  console.log({ financeInfo }, { selectedFeature });
 
   const bailleurId = financeInfo?.id.toString();
-  const logoUrl = selectedFeature?.logoUrls?.[0] || null;
+  // Get bailleur logo with this id
+  const logoUrl = financeInfo?.logoUrls?.[0] || null;
   // const finalLogo=bailleurId?bail
   const finalNom = financeInfo?.nom || financeInfo?.str || "Partenaire";
 

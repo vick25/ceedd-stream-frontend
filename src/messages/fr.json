@@ -78,12 +78,19 @@
     "getInTouch": "Prenez contact",
     "contactDescription": "Vous avez des questions ou souhaitez collaborer ? Contactez-nous !",
     "name": "Nom",
+    "namePlaceholder": "Votre nom",
     "email": "Email",
     "message": "Message",
+    "messagePlaceholder": "Comment pouvons-nous vous aider ?",
     "sendMessage": "Envoyer le message",
     "address": "Notre adresse",
     "phone": "Téléphone",
     "emailAddress": "Email"
+  },
+  "DonatePage": {
+    "title": "Supporter notre cause",
+    "donateDescription": "Votre contribution nous aide à maintenir nos services, déployer des équipes de terrain et vérifier les points d'eau dans les zones lointaines.",
+    "donateButton": "Faire un don maintenant"
   },
   "DashboardPage": {
     "title": "Dashboard",
