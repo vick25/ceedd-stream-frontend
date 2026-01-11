@@ -121,6 +121,7 @@ export default function Home() {
   // Transformation principale : légère car elle pioche dans les dictionnaires déjà prêts
   const allFeatures = useMemo(() => {
     if (!infraData?.results) return [];
+
     return infraData.results
       .filter((item: any) => item.latitude !== null && item.longitude !== null)
       .map((item: any) => {
@@ -128,7 +129,9 @@ export default function Home() {
 
         // 1. Trouver le bailleur qui finance cette infrastructure
         const bailleurAssocie = bailleursData?.results.find((b: any) =>
-          b.finances.some((f: any) => f.infrastructure.toString() === idStr),
+          b.finances.some(
+            (f: any) => f.infrastructure?.id?.toString() === idStr,
+          ),
         );
 
         // 2. Récupérer l'ID du bailleur pour piocher dans la photoMap
@@ -277,7 +280,7 @@ export default function Home() {
                 width={80}
                 height={80}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="h-12 md:h-16 object-contain"
+                className="h-12 md:h-16 w-auto object-contain"
               />
             ))}
           </div>

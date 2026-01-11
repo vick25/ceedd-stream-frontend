@@ -28,7 +28,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { data: bailleursData } = useBailleurs();
-  // console.log(selectedFeature);
 
   // Normalize images into an array even if it's just one string
   const images = selectedFeature?.imageUrls
@@ -37,18 +36,14 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       : [selectedFeature.imageUrls]
     : [];
 
-  console.log({ bailleursData });
   const financeInfo = (bailleursData as any)?.results.find((b: any) =>
     b.finances.some(
       (f: any) => f.infrastructure?.id?.toString() === selectedFeature?.id,
     ),
   );
-  console.log({ financeInfo }, { selectedFeature });
 
-  const bailleurId = financeInfo?.id.toString();
   // Get bailleur logo with this id
-  const logoUrl = financeInfo?.logoUrls?.[0] || null;
-  // const finalLogo=bailleurId?bail
+  const logoUrl = selectedFeature?.logoUrls?.[0] || null;
   const finalNom = financeInfo?.nom || financeInfo?.str || "Partenaire";
 
   const handleNext = () =>
@@ -56,8 +51,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const handlePrev = () =>
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
 
-  const maxCapacity = selectedFeature?.maxCapacity;
-  const volumeActuel = 4000;
+  // const maxCapacity = selectedFeature?.maxCapacity;
+  // const volumeActuel = 4000;
 
   return (
     <div className="h-full flex flex-col p-5">
@@ -235,9 +230,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                   >
                     {selectedFeature.etat}
                   </span>
-                  {/* <p className="font-medium text-gray-800 text-sm mt-1">
-                    {selectedFeature.etat}
-                  </p> */}
                 </div>
               </div>
 

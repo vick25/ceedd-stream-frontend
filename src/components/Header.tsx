@@ -48,7 +48,7 @@ export const Header: React.FC = () => {
               alt="logo"
               width={56}
               height={56}
-              className="w-8 h-8 md:w-9 lg:w-10 lg:h-10 object-cover"
+              className="w-8 md:w-9 lg:w-10 h-auto object-cover"
             />
             <span
               className={clsx(
