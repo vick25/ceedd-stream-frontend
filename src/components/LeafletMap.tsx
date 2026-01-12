@@ -91,6 +91,27 @@ const getCustomIcon = (iconUrl: string, isMobile: boolean) =>
     popupAnchor: [0, 0],
   });
 
+// Component to fit the features in the bounding box
+const FitBounds: React.FC<{ features: MapFeature[] }> = ({ features }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (features && features.length > 0) {
+      // Create an array of [lat, lng] pairs from your features
+      const bounds = features.map((f) => [f.lat, f.lng] as [number, number]);
+
+      // Fit the map to these bounds
+      map.fitBounds(bounds, {
+        padding: [50, 50],
+        maxZoom: 12,
+        duration: 1,
+      });
+    }
+  }, [features, map]);
+
+  return null;
+};
+
 const MapUpdater: React.FC<{
   selectedFeature?: MapFeature;
   isMobile: boolean;
@@ -153,6 +174,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         touchZoom={true}
         doubleClickZoom={true}
       >
+        <FitBounds features={features} />
+
         {mapStyle === "standard" ? (
           <TileLayer
             key="osm-layer"
@@ -242,8 +265,10 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         {/* On remet les contrôles en bas sur mobile pour l'accessibilité du pouce */}
         <ZoomControl position={isMobile ? "bottomright" : "topleft"} />
         {!isMobile && <ScaleControl position="bottomleft" imperial={false} />}
+
         <MapEvents setCoords={setCoords} />
       </MapContainer>
+
       <div className="hidden md:block absolute bottom-0 left-30 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
         {`${t("coordinates")}: ${coords.lat}, ${coords.lng}`}
       </div>

@@ -193,12 +193,12 @@ export default function Home() {
         )}
 
         {/* Overlay : On garde l'UI interactive même pendant le chargement des données */}
-        <div className="absolute top-4 right-4 z-1000 flex flex-col items-end pointer-events-none">
+        <div className="absolute top-3 right-4 z-1000 flex flex-col items-end pointer-events-none">
           <div className="pointer-events-auto bg-white/90 backdrop-blur rounded-lg shadow p-1 flex mb-4 border border-gray-100">
             {/* Sélecteur de style simplifié */}
             <button
               onClick={() => setMapStyle("standard")}
-              className={`px-4 py-1.5 text-xs font-bold rounded-md ${
+              className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
                 mapStyle === "standard"
                   ? "bg-blue-600 text-white"
                   : "text-gray-500"
@@ -208,7 +208,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => setMapStyle("satellite")}
-              className={`px-4 py-1.5 text-xs font-bold rounded-md ${
+              className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
                 mapStyle === "satellite"
                   ? "bg-blue-600 text-white"
                   : "text-gray-500"
