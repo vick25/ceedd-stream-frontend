@@ -4,7 +4,8 @@ import toast from "react-hot-toast";
 
 export const usePhoto = () => {
   return useMutation({
-    mutationFn: (data: { url: string }) => servicePhotos.createPhoto(data),
+    mutationFn: async (data: { url: string }) =>
+      servicePhotos.createPhoto(data),
     onSuccess: (response) => {
       toast.success("La photo uploader avec succés");
     },
@@ -13,7 +14,7 @@ export const usePhoto = () => {
 export const useGetPhotoById = (id: string) => {
   return useQuery({
     queryKey: ["photoById", id],
-    queryFn: () => servicePhotos.getPhotoById(id),
+    queryFn: async () => servicePhotos.getPhotoById(id),
     enabled: !!id,
     meta: {
       errorMessage: "Impossible de récupérer la photo",
@@ -23,7 +24,7 @@ export const useGetPhotoById = (id: string) => {
 export const useGetPhotos = () => {
   return useQuery({
     queryKey: ["photos"],
-    queryFn: () => servicePhotos.getPhotos(),
+    queryFn: async () => servicePhotos.getPhotos(),
     meta: {
       errorMessage: "Impossible de récupérer les photos",
     },

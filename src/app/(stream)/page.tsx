@@ -186,6 +186,7 @@ export default function Home() {
         ) : (
           <LeafletMap
             features={filteredFeatures}
+            selectedCategory={selectedCategory}
             onFeatureClick={handleFeatureClick}
             selectedFeatureId={selectedFeature?.id}
             mapStyle={mapStyle}

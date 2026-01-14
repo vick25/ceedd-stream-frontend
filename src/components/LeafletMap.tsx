@@ -27,6 +27,7 @@ const MarkerClusterGroup = dynamic(
 
 interface LeafletMapProps {
   features: MapFeature[];
+  selectedCategory?: string;
   onFeatureClick: (feature: MapFeature) => void;
   selectedFeatureId?: string;
   mapStyle: "standard" | "satellite";
@@ -151,6 +152,7 @@ const CtrlZoomHandler: React.FC = () => {
 
 const LeafletMap: React.FC<LeafletMapProps> = ({
   features,
+  selectedCategory,
   onFeatureClick,
   selectedFeatureId,
   mapStyle,
@@ -174,7 +176,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         touchZoom={true}
         doubleClickZoom={true}
       >
-        <FitBounds features={features} />
+        {selectedCategory !== "All" && <FitBounds features={features} />}
 
         {mapStyle === "standard" ? (
           <TileLayer
@@ -189,7 +191,6 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           />
         )}
-
         <MarkerClusterGroup>
           {useMemo(
             () =>
@@ -255,17 +256,14 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
             [features, selectedFeatureId, onFeatureClick, isMobile],
           )}
         </MarkerClusterGroup>
-
         <MapUpdater
           selectedFeature={features.find((f) => f.id === selectedFeatureId)}
           isMobile={isMobile}
         />
-
         <CtrlZoomHandler />
         {/* On remet les contrôles en bas sur mobile pour l'accessibilité du pouce */}
         <ZoomControl position={isMobile ? "bottomright" : "topleft"} />
         {!isMobile && <ScaleControl position="bottomleft" imperial={false} />}
-
         <MapEvents setCoords={setCoords} />
       </MapContainer>
 
