@@ -92,12 +92,25 @@ const getCustomIcon = (iconUrl: string, isMobile: boolean) =>
     popupAnchor: [0, 0],
   });
 
+const InvalidateSize = () => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map) return;
+    setTimeout(() => {
+      map?.invalidateSize();
+    }, 200);
+  }, [map]);
+
+  return null;
+};
+
 // Component to fit the features in the bounding box
 const FitBounds: React.FC<{ features: MapFeature[] }> = ({ features }) => {
   const map = useMap();
 
   useEffect(() => {
-    if (features && features.length > 0) {
+    if (features && features.length > 0 && map) {
       // Create an array of [lat, lng] pairs from your features
       const bounds = features.map((f) => [f.lat, f.lng] as [number, number]);
 
@@ -168,14 +181,16 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       <MapContainer
         center={center}
         zoom={zoom}
-        scrollWheelZoom={false}
-        style={{ height: "100%", width: "100%" }}
         zoomControl={false}
+        scrollWheelZoom={false}
         // On remplace tap par dragging pour améliorer l'expérience mobile
         dragging={true}
         touchZoom={true}
         doubleClickZoom={true}
+        style={{ height: "100%", width: "100%" }}
       >
+        <InvalidateSize />
+
         {selectedCategory !== "All" && <FitBounds features={features} />}
 
         {mapStyle === "standard" ? (
