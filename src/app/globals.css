@@ -37,14 +37,13 @@ a {
   width: 602px;
   height: 700px;
 }
-/* select:hover {
-  background-color: #a0aec0;
-} */
+.leaflet-container {
+  touch-action: none;
+  overscroll-behavior: none;
+}
 select,
 select::picker(select) {
   appearance: none;
-}
-select::picker(select) {
   background-color: whitesmoke;
   border: 1px solid #a3a3a3;
   border-radius: 10px;
@@ -52,6 +51,6 @@ select::picker(select) {
   background-position: left center;
   background-size: 10px;
 }
-select :hover {
+select option:hover {
   background-color: #a0aec0;
 }
