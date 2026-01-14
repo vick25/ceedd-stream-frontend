@@ -27,6 +27,7 @@ const MarkerClusterGroup = dynamic(
 
 interface LeafletMapProps {
   features: MapFeature[];
+  selectedCategory?: string;
   onFeatureClick: (feature: MapFeature) => void;
   selectedFeatureId?: string;
   mapStyle: "standard" | "satellite";
@@ -91,12 +92,25 @@ const getCustomIcon = (iconUrl: string, isMobile: boolean) =>
     popupAnchor: [0, 0],
   });
 
+const InvalidateSize = () => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map) return;
+    setTimeout(() => {
+      map?.invalidateSize();
+    }, 200);
+  }, [map]);
+
+  return null;
+};
+
 // Component to fit the features in the bounding box
 const FitBounds: React.FC<{ features: MapFeature[] }> = ({ features }) => {
   const map = useMap();
 
   useEffect(() => {
-    if (features && features.length > 0) {
+    if (features && features.length > 0 && map) {
       // Create an array of [lat, lng] pairs from your features
       const bounds = features.map((f) => [f.lat, f.lng] as [number, number]);
 
@@ -151,6 +165,7 @@ const CtrlZoomHandler: React.FC = () => {
 
 const LeafletMap: React.FC<LeafletMapProps> = ({
   features,
+  selectedCategory,
   onFeatureClick,
   selectedFeatureId,
   mapStyle,
@@ -166,15 +181,17 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       <MapContainer
         center={center}
         zoom={zoom}
-        scrollWheelZoom={false}
-        style={{ height: "100%", width: "100%" }}
         zoomControl={false}
+        scrollWheelZoom={false}
         // On remplace tap par dragging pour améliorer l'expérience mobile
         dragging={true}
         touchZoom={true}
         doubleClickZoom={true}
+        style={{ height: "100%", width: "100%" }}
       >
-        <FitBounds features={features} />
+        <InvalidateSize />
+
+        {selectedCategory !== "All" && <FitBounds features={features} />}
 
         {mapStyle === "standard" ? (
           <TileLayer
@@ -189,7 +206,6 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           />
         )}
-
         <MarkerClusterGroup>
           {useMemo(
             () =>
@@ -255,17 +271,14 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
             [features, selectedFeatureId, onFeatureClick, isMobile],
           )}
         </MarkerClusterGroup>
-
         <MapUpdater
           selectedFeature={features.find((f) => f.id === selectedFeatureId)}
           isMobile={isMobile}
         />
-
         <CtrlZoomHandler />
         {/* On remet les contrôles en bas sur mobile pour l'accessibilité du pouce */}
         <ZoomControl position={isMobile ? "bottomright" : "topleft"} />
         {!isMobile && <ScaleControl position="bottomleft" imperial={false} />}
-
         <MapEvents setCoords={setCoords} />
       </MapContainer>
 

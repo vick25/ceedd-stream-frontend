@@ -4,13 +4,13 @@ import toast from "react-hot-toast";
 
 export const useBailleurs = () => {
   return useQuery({
-    queryFn: serviceBailleur.getBailleurs,
+    queryFn: async () => serviceBailleur.getBailleurs(),
     queryKey: ["bailleurs"],
   });
 };
 export const useCreateBailleurs = () => {
   return useMutation({
-    mutationFn: (data: any) => serviceBailleur.createBailleur(data),
+    mutationFn: async (data: any) => serviceBailleur.createBailleur(data),
     onSuccess: (response) => {
       toast.success("Le bailleur a été crée avec succées");
     },
@@ -21,7 +21,7 @@ export const useCreateBailleurs = () => {
 };
 export const useUpdateBailleurs = () => {
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: any }) =>
+    mutationFn: async ({ id, data }: { id: string; data: any }) =>
       serviceBailleur.updateBailleur(id, data),
     onSuccess: (response) => {
       toast.success("Le bailleur a été mis à jour avec succées");
@@ -34,7 +34,7 @@ export const useUpdateBailleurs = () => {
 
 export const useDeleteBailleurs = () => {
   return useMutation({
-    mutationFn: (id: string) => serviceBailleur.deleteBailleur(id),
+    mutationFn: async (id: string) => serviceBailleur.deleteBailleur(id),
     onSuccess: (response) => {
       toast.success("Le bailleur a été supprimé avec succées");
     },

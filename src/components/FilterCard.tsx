@@ -55,65 +55,51 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   // const volumeActuel = 4000;
 
   return (
-    <div className="h-full flex flex-col p-5">
-      {/* Header of Card */}
-      <div className="flex justify-between items-center mb-3 pb-2 border-b border-gray-100">
-        <h2 className="text-lg font-bold text-gray-900">{t("title")}</h2>
-        <button
-          type="button"
-          onClick={onClose}
-          title="Close map options"
-          className="md:hidden text-gray-400 hover:text-gray-600"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+    <div className="h-full max-h-full flex flex-col p-5 overflow-hidden">
+      <div className="sticky top-0 z-20 pb-3 bg-white/95 backdrop-blur-sm">
+        {/* Header of Card */}
+        <div className="flex justify-between items-center mb-3 pb-2 border-b border-gray-100">
+          <h2 className="text-lg font-bold text-gray-900">{t("title")}</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            title="Close map options"
+            className="md:hidden text-gray-400 hover:text-gray-600"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
-
-      {/* Filter Section */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <label
-            htmlFor="category-select"
-            className="text-sm font-semibold text-gray-700"
-          >
-            {t("description")}
-          </label>
-          <label className="text-sm font-semibold text-red-700">
-            {filteredFeaturesCount}
-          </label>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-        <div className="relative">
+
+        {/* Filter Section */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <label htmlFor="category-select" className="text-sm font-semibold text-gray-700">
+              {t("description")}
+            </label>
+            <label className="text-sm font-semibold text-red-700">
+              {filteredFeaturesCount}
+            </label>
+          </div>
+
           <select
             id="category-select"
             value={selectedCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
-            className="block w-full pl-3 pr-10 py-3 text-base border-gray-300 bg-gray-50 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg shadow-sm border cursor-pointer hover:bg-white transition-colors"
+            className="block w-full pl-3 pr-10 py-3 text-base border-gray-300 bg-gray-50 rounded-lg border cursor-pointer focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm shadow-sm hover:bg-white transition-colors"
           >
-            {availableCategories.map((cat: any) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
+            {availableCategories.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
         </div>
+
+        <hr className="h-0.5 border-0 bg-[linear-gradient(25deg,red_5%,yellow_60%,lime_90%,teal)]" />
       </div>
 
-      <hr className="h-0.5 border-0 mb-2 bg-[linear-gradient(25deg,red_5%,yellow_60%,lime_90%,teal)]" />
-
       {/* Feature Details Section */}
-      <div className="h-full mt-2 overflow-y-auto">
+      <div className="flex-1 mt-2 overflow-y-auto overscroll-contain">
         {selectedFeature ? (
           <div className="animate-fade-in space-y-4">
             <div className="flex justify-between items-start">
@@ -191,6 +177,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     {selectedFeature.nom}
                   </p>
                 </div>
+
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
                     {t("dateConstruction")}
@@ -220,13 +207,12 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     {t("infrastructureState")}
                   </p>
                   <span
-                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${
-                      selectedFeature.etat === "bon"
-                        ? "bg-green-100 text-green-700"
-                        : selectedFeature.etat === "moyen"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
-                    }`}
+                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${selectedFeature.etat === "bon"
+                      ? "bg-green-100 text-green-700"
+                      : selectedFeature.etat === "moyen"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                      }`}
                   >
                     {selectedFeature.etat}
                   </span>
@@ -234,11 +220,11 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               </div>
 
               {/* Graph */}
-              <div className="w-full sm:w-auto flex flex-col justify-between items-center">
+              <div className="w-full sm:w-auto flex flex-col justify-between items-center gap-3">
                 <div className="w-full sm:w-auto flex justify-center items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
                   <CylinderGraph
                     current={selectedFeature.maxCapacity}
-                    // max={selectedFeature.maxCapacity}
+                  // max={selectedFeature.maxCapacity}
                   />
                 </div>
                 <div className="w-full bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
@@ -267,7 +253,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-48 text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50/50">
+          <div className="flex flex-col items-center justify-center h-full text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50/50">
             <svg
               className="w-10 h-10 mb-2 text-gray-300"
               fill="none"

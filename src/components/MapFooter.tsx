@@ -20,7 +20,7 @@ export const Footer: React.FC = () => {
                   alt="Streams Logo"
                   width={48}
                   height={48}
-                  className="object-contain"
+                  className="w-auto h-auto object-contain"
                 />
               </div>
               <span className="font-bold text-lg lg:text-xl tracking-tight leading-tight">
