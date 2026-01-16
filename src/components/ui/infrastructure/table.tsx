@@ -8,13 +8,14 @@ import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
 
-import { Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Button } from "../button";
 // import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
 
 export default function InfrastructureTable() {
-  const [getInfastructure, setGetInfrastructure] = useState<
+  const [getInfrastructure, setGetInfrastructure] = useState<
     InfrastructureTypes[]
   >([]);
 
@@ -24,7 +25,8 @@ export default function InfrastructureTable() {
   const [infrastructureDeleted, setInfrastructureDeleted] =
     useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageItems = 20;
   // initialize mutation
 
   const mutationInfranstructure = useGetInfrastructure();
@@ -54,17 +56,24 @@ export default function InfrastructureTable() {
     }
   }, [mutationInfranstructure.data]);
 
+  const totalPages = Math.ceil(getInfrastructure.length / pageItems);
+  const startIndex = (currentPage - 1) * pageItems;
+  const pageInfrastructures = getInfrastructure.slice(
+    startIndex,
+    startIndex + pageItems
+  );
+
   if (mutationInfranstructure.isPending) {
     return <Loader />;
   }
 
-  // console.log({ getInfastructure });
+  // console.log({ getInfrastructure });
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden">
-            {getInfastructure?.map((infrastructure: any) => {
+            {pageInfrastructures?.map((infrastructure: any) => {
               return (
                 <Link
                   key={infrastructure.id}
@@ -130,6 +139,30 @@ export default function InfrastructureTable() {
                 </Link>
               );
             })}
+
+            <div className="flex justify-between items-center">
+              <div>
+                Page {currentPage} de {totalPages}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
 
           <table className="hidden  min-w-full text-gray-900  lg:table">
@@ -166,8 +199,8 @@ export default function InfrastructureTable() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {getInfastructure.length > 0 ? (
-                getInfastructure?.map((infra) => {
+              {pageInfrastructures.length > 0 ? (
+                pageInfrastructures?.map((infra) => {
                   //jointure
 
                   // const zone = zones[infra?.zone?.toString()];
@@ -247,6 +280,31 @@ export default function InfrastructureTable() {
               )}
             </tbody>
           </table>
+          <div className="flex justify-between items-center w-full px-6 py-4">
+            <div>
+              Page {currentPage} de {totalPages}
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className="cursor-pointer border border-blue-300 hover:bg-blue-300 hover:text-white"
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className="cursor-pointer border border-blue-300 hover:bg-blue-300 hover:text-white"
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
