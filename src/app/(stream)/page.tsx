@@ -75,6 +75,8 @@ export default function Home() {
   const [mapStyle, setMapStyle] = useState<"standard" | "satellite">(
     "standard",
   );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   // --- OPTIMISATION DU TRAITEMENT DES DONNÉES (Performance critique) ---
 
@@ -171,11 +173,31 @@ export default function Home() {
   // --- GESTION DES ACTIONS ---
   const handleFeatureClick = useCallback((feature: MapFeature) => {
     setSelectedFeature(feature);
+    setSearchQuery("");
     if (window.innerWidth < 768) setIsFilterVisible(true);
   }, []);
 
   // Erreur fatale
   if (isInfraError) return <ErrorState t={t} />;
+
+  // Search logic
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    return filteredFeatures
+      .filter(
+        (f: MapFeature) =>
+          f.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          f.type.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+      .slice(0, 5);
+  }, [searchQuery]);
+
+  const handleSearchResultClick = (feature: MapFeature) => {
+    setSelectedFeature(feature);
+    setSearchQuery("");
+    setIsSearchFocused(false);
+    setIsFilterVisible(true);
+  };
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -186,53 +208,112 @@ export default function Home() {
           selectedCategory={selectedCategory}
           onFeatureClick={handleFeatureClick}
           selectedFeatureId={selectedFeature?.id}
+          isSearchFocused={isSearchFocused}
           mapStyle={mapStyle}
         />
         {isInfraLoading && <MapLoader />}
 
         {/* Overlay : On garde l'UI interactive même pendant le chargement des données */}
         <div className="absolute top-3 right-4 bottom-32 z-1000 flex flex-col items-end pointer-events-none">
-          {/* Sélecteur de style simplifié */}
-          <div className="pointer-events-auto bg-white/90 backdrop-blur rounded-lg shadow p-1 flex mb-4 border border-gray-100">
-            <button
-              onClick={() => setMapStyle("standard")}
-              className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${mapStyle === "standard"
-                ? "bg-blue-600 text-white"
-                : "text-gray-500"
-                }`}
-            >
-              OSM
-            </button>
-            <button
-              onClick={() => setMapStyle("satellite")}
-              className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${mapStyle === "satellite"
-                ? "bg-blue-600 text-white"
-                : "text-gray-500"
-                }`}
-            >
-              SATELLITE
-            </button>
-          </div>
+          {/* Search & Style Controls (Top Right) */}
+          <div className="absolute top-3 right-3 z-1500 pointer-events-auto flex flex-col items-end gap-3">
+            <div className="flex gap-3">
+              {/* Search Bar */}
+              <div className="relative w-64 md:w-80 group">
+                <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 flex items-center px-4 py-1 transition-all focus-within:ring-2 focus-within:ring-blue-400">
+                  <svg
+                    className="w-5 h-5 text-gray-400 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder={t("search")}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setIsSearchFocused(true)}
+                    onBlur={() =>
+                      setTimeout(() => setIsSearchFocused(false), 200)
+                    }
+                    className="w-full py-2 bg-transparent border-none outline-none text-sm font-bold text-gray-800 placeholder:text-gray-400"
+                  />
+                </div>
 
-          {/* Filter Card */}
-          <div
-            className={`
+                {/* Search Results Dropdown */}
+                {isSearchFocused && searchResults.length > 0 && (
+                  <div className="absolute top-full right-0 mt-2 w-full bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                    {searchResults.map((res: MapFeature) => (
+                      <button
+                        key={res.id}
+                        onClick={() => handleSearchResultClick(res)}
+                        className="w-full px-5 py-3 text-left hover:bg-blue-50 transition-colors flex flex-col border-b border-gray-50 last:border-none"
+                      >
+                        <span className="text-xs font-black text-blue-600 uppercase tracking-widest">
+                          {res.type}
+                        </span>
+                        <span className="text-sm font-bold text-gray-800 line-clamp-1">
+                          {res.nom}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Sélecteur de style simplifié */}
+              <div className="pointer-events-auto bg-white/90 backdrop-blur rounded-lg shadow p-1 flex mb-4 border border-gray-100">
+                <button
+                  onClick={() => setMapStyle("standard")}
+                  className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
+                    mapStyle === "standard"
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-500"
+                  }`}
+                >
+                  OSM
+                </button>
+                <button
+                  onClick={() => setMapStyle("satellite")}
+                  className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
+                    mapStyle === "satellite"
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-500"
+                  }`}
+                >
+                  SATELLITE
+                </button>
+              </div>
+            </div>
+
+            {/* Filter Card */}
+            <div
+              className={`
             w-full md:w-95 bg-white/95 backdrop-blur-sm shadow-2xl pointer-events-auto flex flex-col transition-transform duration-300
-            ${isFilterVisible
+            ${
+              isFilterVisible
                 ? "translate-x-0"
                 : "translate-x-full md:translate-x-0 hidden md:flex"
-              }
+            }
             h-full md:max-h-full rounded-lg md:rounded-xl border-t md:border border-gray-100
           `}
-          >
-            <FilterCard
-              selectedFeature={selectedFeature}
-              selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
-              filteredFeaturesCount={filteredFeatures.length}
-              onClose={() => setIsFilterVisible(false)}
-              availableCategories={typesDisponibles}
-            />
+            >
+              <FilterCard
+                selectedFeature={selectedFeature}
+                selectedCategory={selectedCategory}
+                onCategoryChange={setSelectedCategory}
+                filteredFeaturesCount={filteredFeatures.length}
+                onClose={() => setIsFilterVisible(false)}
+                availableCategories={typesDisponibles}
+              />
+            </div>
           </div>
         </div>
       </section>

@@ -30,6 +30,7 @@ interface LeafletMapProps {
   selectedCategory?: string;
   onFeatureClick: (feature: MapFeature) => void;
   selectedFeatureId?: string;
+  isSearchFocused: boolean;
   mapStyle: "standard" | "satellite";
 }
 
@@ -128,18 +129,20 @@ const FitBounds: React.FC<{ features: MapFeature[] }> = ({ features }) => {
 
 const MapUpdater: React.FC<{
   selectedFeature?: MapFeature;
+  isSearchFocused: boolean;
   isMobile: boolean;
-}> = ({ selectedFeature, isMobile }) => {
+}> = ({ selectedFeature, isSearchFocused, isMobile }) => {
   const map = useMap();
   useEffect(() => {
     if (selectedFeature) {
+      console.log(isSearchFocused);
       // Zoom plus faible sur mobile pour garder du contexte
       const currentZoom = map.getZoom();
       map.flyTo([selectedFeature.lat, selectedFeature.lng], currentZoom, {
         duration: 1.5,
       });
     }
-  }, [selectedFeature, map]);
+  }, [selectedFeature, isSearchFocused, map]);
   return null;
 };
 
@@ -168,6 +171,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   selectedCategory,
   onFeatureClick,
   selectedFeatureId,
+  isSearchFocused,
   mapStyle,
 }) => {
   const t = useTranslations("MapView");
@@ -273,6 +277,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         </MarkerClusterGroup>
         <MapUpdater
           selectedFeature={features.find((f) => f.id === selectedFeatureId)}
+          isSearchFocused
           isMobile={isMobile}
         />
         <CtrlZoomHandler />

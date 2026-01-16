@@ -36,7 +36,8 @@
     "water": "Eau fonctionnelle",
     "warning": "Erreur de chargement",
     "warningMessage": "Une erreur s'est produite lors de la récupération des données.",
-    "tryAgain": "Essayer de nouveau"
+    "tryAgain": "Essayer de nouveau",
+    "search": "Rechercher par type ou nom..."
   },
   "FilterCard": {
     "title": "Options de filtrage",

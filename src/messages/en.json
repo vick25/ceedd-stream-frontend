@@ -36,7 +36,8 @@
     "water": "Used water",
     "warning": "Error loading",
     "warningMessage": "An error occurred while retrieving the data.",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "search": "Search by type or name..."
   },
   "FilterCard": {
     "title": "Map Options",
