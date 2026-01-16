@@ -72,94 +72,105 @@ export default function InfrastructureTable() {
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-          <div className="lg:hidden">
-            {pageInfrastructures?.map((infrastructure: any) => {
-              return (
+          <div className="lg:hidden space-y-4 px-2">
+            {pageInfrastructures?.map((infra: any) => (
+              <div
+                key={infra.id}
+                className="relative w-full rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+              >
+                {/* Zone cliquable pour voir les détails */}
                 <Link
-                  key={infrastructure.id}
-                  href={`/dashboard/infrastructures/${infrastructure.id}`}
+                  href={`/dashboard/infrastructures/${infra.id}`}
+                  className="block p-5"
                 >
-                  <div className="mb-2 w-full rounded-md bg-white p-4">
-                    <div className="flex items-center justify-between border-b pb-4">
-                      <div>
-                        <div className="mb-2 flex items-center gap-3">
-                          {/* <Image
-                        src={invoice.image_url}
-                        className="mr-2 rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${invoice.name}'s profile picture`}
-                      /> */}
-                          {/* <p>{invoice.name}</p> */}
-                          <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Nom</span>
-                            <p>{infrastructure.nom}</p>
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Capacité</span>
-                            <p>{infrastructure.capacite}</p>
-                          </div>
-                        </div>
-                        {/* <p className="text-sm text-gray-500"></p> */}
-                      </div>
-                      {/* <InvoiceStatus status={invoice.status} /> */}
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold uppercase tracking-wider text-blue-500 mb-1">
+                        Infrastructure
+                      </span>
+                      <h3 className="text-lg font-bold text-gray-900 leading-tight">
+                        {infra.nom}
+                      </h3>
                     </div>
-                    <div className="flex w-full items-center justify-between pt-4">
-                      <div>
-                        <p className="text-xl font-medium">
-                          {/* Propriétaire : {infrastructure?.client?.nom} */}
-                          {infrastructure?.client?.nom || "Aucun propriétaire"}
-                        </p>
-                      </div>
-                      <div className="flex justify-end gap-2">
-                        <EditInfrastructure
-                          id={infrastructure.id}
-                          nom={infrastructure.nom}
-                          type_infrastructure={
-                            infrastructure.type_infrastructure
-                          }
-                          date_construction={infrastructure.date_construction}
-                          latitude={infrastructure.latitude}
-                          longitude={infrastructure.longitude}
-                          capacite={infrastructure.capacite}
-                          unite={infrastructure.unite}
-                          // zone={infrastructure.zone}
-                          client={infrastructure.client}
-                          isOpen={isOpen}
-                          setIsOpen={setIsOpen}
-                        />
-                        <DeleteInfrastructure
-                          id={infrastructure.id}
-                          nom={infrastructure.nom}
-                          setInfrastructureDeleted={setInfrastructureDeleted}
-                        />
-                      </div>
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                      <Eye className="h-5 w-5 text-gray-400" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-gray-400 uppercase font-medium">
+                        Capacité
+                      </p>
+                      <p className="text-sm font-semibold text-gray-700">
+                        {infra.capacite}{" "}
+                        <span className="text-xs font-normal text-gray-500">
+                          {infra.unite}
+                        </span>
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-400 uppercase font-medium">
+                        Propriétaire
+                      </p>
+                      <p className="text-sm font-semibold text-gray-700 truncate">
+                        {infra?.client?.nom || "Non assigné"}
+                      </p>
                     </div>
                   </div>
                 </Link>
-              );
-            })}
 
-            <div className="flex justify-between items-center">
-              <div>
-                Page {currentPage} de {totalPages}
+                {/* Barre d'actions (Séparée du Link) */}
+                <div className="flex items-center justify-end gap-3 px-5 py-3 bg-gray-50/50 border-t border-gray-100">
+                  <EditInfrastructure
+                    id={infra.id}
+                    nom={infra.nom}
+                    type_infrastructure={infra.type_infrastructure}
+                    date_construction={infra.date_construction}
+                    latitude={infra.latitude}
+                    longitude={infra.longitude}
+                    capacite={infra.capacite}
+                    unite={infra.unite}
+                    client={infra.client}
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                  />
+                  <DeleteInfrastructure
+                    id={infra.id}
+                    nom={infra.nom}
+                    setInfrastructureDeleted={setInfrastructureDeleted}
+                  />
+                </div>
               </div>
-              <div className="flex items-center gap-2">
+            ))}
+
+            {/* Pagination Mobile Améliorée */}
+            <div className="flex flex-col items-center gap-4 py-8">
+              <div className="text-sm font-medium text-gray-500">
+                Page{" "}
+                <span className="text-blue-600 font-bold">{currentPage}</span>{" "}
+                sur {totalPages}
+              </div>
+              <div className="flex items-center gap-3 w-full max-w-xs">
                 <Button
                   variant="outline"
-                  size="icon"
-                  onClick={() => setCurrentPage(currentPage - 1)}
+                  className="flex-1 rounded-full border-blue-200"
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
                   disabled={currentPage === 1}
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-4 w-4 mr-1" /> Précédent
                 </Button>
                 <Button
                   variant="outline"
-                  size="icon"
-                  onClick={() => setCurrentPage(currentPage + 1)}
+                  className="flex-1 rounded-full border-blue-200"
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
                   disabled={currentPage === totalPages}
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  Suivant <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </div>
             </div>
@@ -280,7 +291,7 @@ export default function InfrastructureTable() {
               )}
             </tbody>
           </table>
-          <div className="flex justify-between items-center w-full px-6 py-4">
+          {/* <div className="hidden lg:flex justify-between items-center w-full px-6 py-4">
             <div>
               Page {currentPage} de {totalPages}
             </div>
@@ -302,6 +313,34 @@ export default function InfrastructureTable() {
                 disabled={currentPage === totalPages}
               >
                 <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div> */}
+          {/* Pagination Mobile Améliorée */}
+          <div className="hidden lg:flex justify-between items-center w-full px-6 py-8">
+            <div className="text-sm font-medium text-gray-500">
+              Page{" "}
+              <span className="text-blue-600 font-bold">{currentPage}</span> sur{" "}
+              {totalPages}
+            </div>
+            <div className="flex items-center gap-3 w-full max-w-xs">
+              <Button
+                variant="outline"
+                className="flex-1 rounded-full border-blue-200"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" /> Précédent
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1 rounded-full border-blue-200"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
+                Suivant <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
           </div>
