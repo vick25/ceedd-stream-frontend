@@ -64,6 +64,8 @@ const page = (props: Props) => {
     };
 
     await mutationPhoto.mutateAsync(payload);
+    setEnumData("");
+    setInfrastructures("");
   };
   // const
   useEffect(() => {
