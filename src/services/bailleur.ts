@@ -10,19 +10,19 @@ export const serviceBailleur = {
   async createBailleur(data: any) {
     const response = await API.post(
       `${API_ENDPOINTS.api}${ceedd.bailleur}`,
-      data
+      data,
     );
     return response.data;
   },
   async updateBailleur(id: string, data: any) {
     const response = API.put(
       `${API_ENDPOINTS.api}${ceedd.bailleur}${id}/`,
-      data
+      data,
     );
   },
   async deleteBailleur(id: string) {
     const reponse = await API.delete(
-      `${API_ENDPOINTS.api}${ceedd.bailleur}${id}/`
+      `${API_ENDPOINTS.api}${ceedd.bailleur}${id}/`,
     );
     return reponse.data;
   },

@@ -22,7 +22,7 @@ import {
 
 const MarkerClusterGroup = dynamic(
   () => import("react-leaflet-markercluster").then((mod) => mod.default),
-  { ssr: false }
+  { ssr: false },
 ) as unknown as React.ComponentType<React.PropsWithChildren<any>>;
 
 interface LeafletMapProps {
@@ -99,12 +99,12 @@ const MapUpdater: React.FC<{
   useEffect(() => {
     if (selectedFeature) {
       // Zoom plus faible sur mobile pour garder du contexte
-      const zoomLevel = isMobile ? 13 : 15;
-      map.flyTo([selectedFeature.lat, selectedFeature.lng], zoomLevel, {
+      const currentZoom = map.getZoom();
+      map.flyTo([selectedFeature.lat, selectedFeature.lng], currentZoom, {
         duration: 1.5,
       });
     }
-  }, [selectedFeature, map, isMobile]);
+  }, [selectedFeature, map]);
   return null;
 };
 
@@ -213,7 +213,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
                       <div className="pt-1 text-[11px] md:text-xs text-gray-500 italic">
                         {`${t("builtOn")} ${displayDate(
-                          feature.date_construction
+                          feature.date_construction,
                         )}`}
                       </div>
 
@@ -229,7 +229,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                   </Popup>
                 </Marker>
               )),
-            [features, selectedFeatureId, onFeatureClick, isMobile]
+            [features, selectedFeatureId, onFeatureClick, isMobile],
           )}
         </MarkerClusterGroup>
 
@@ -244,7 +244,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         {!isMobile && <ScaleControl position="bottomleft" imperial={false} />}
         <MapEvents setCoords={setCoords} />
       </MapContainer>
-      <div className="hidden md:block absolute bottom-0 left-20 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
+      <div className="hidden md:block absolute bottom-0 left-30 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
         {`${t("coordinates")}: ${coords.lat}, ${coords.lng}`}
       </div>
     </div>

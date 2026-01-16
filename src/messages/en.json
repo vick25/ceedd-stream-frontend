@@ -78,12 +78,19 @@
     "getInTouch": "Get in Touch",
     "contactDescription": "Have questions or want to collaborate? Reach out to us!",
     "name": "Name",
+    "namePlaceholder": "Your name",
     "email": "Email",
     "message": "Message",
+    "messagePlaceholder": "How can we help?",
     "sendMessage": "Send Message",
     "address": "Our Address",
     "phone": "Phone",
     "emailAddress": "Email"
+  },
+  "DonatePage": {
+    "title": "Support Our Cause",
+    "donateDescription": "Your contribution helps us maintain our services, deploy field teams, and verify water points in remote areas.",
+    "donateButton": "Donate Now"
   },
   "DashboardPage": {
     "title": "Dashboard",

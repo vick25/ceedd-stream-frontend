@@ -33,8 +33,8 @@ export const Header: React.FC = () => {
   const navLinks = [
     { name: "Dashboard", href: "/home" },
     { name: `${t("about")}`, href: "/abouts" },
-    { name: `${t("donate")}`, href: "#" },
-    { name: `${t("contact")}`, href: "#" },
+    { name: `${t("donate")}`, href: "/donate" },
+    { name: `${t("contact")}`, href: "/contact" },
   ];
 
   return (
@@ -48,7 +48,7 @@ export const Header: React.FC = () => {
               alt="logo"
               width={56}
               height={56}
-              className="w-8 h-8 md:w-9 lg:w-10 lg:h-10 object-cover"
+              className="w-8 md:w-9 lg:w-10 h-auto object-cover"
             />
             <span
               className={clsx(

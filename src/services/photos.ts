@@ -1,7 +1,7 @@
 import { ceedd } from "@/utils/apiRoutes";
 import { API_ENDPOINTS } from "@/utils/constants";
 import API from "./api";
-import { useGetPhotoById } from "@/components/hooks/usePhotos";
+
 interface PhotoData {
   url: string;
 }

@@ -28,7 +28,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { data: bailleursData } = useBailleurs();
-  console.log(selectedFeature);
 
   // Normalize images into an array even if it's just one string
   const images = selectedFeature?.imageUrls
@@ -39,21 +38,21 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
   const financeInfo = (bailleursData as any)?.results.find((b: any) =>
     b.finances.some(
-      (f: any) => f.infrastructure.toString() === selectedFeature?.id
-    )
+      (f: any) => f.infrastructure?.id?.toString() === selectedFeature?.id,
+    ),
   );
 
-  const bailleurId = financeInfo?.id.toString();
+  // Get bailleur logo with this id
   const logoUrl = selectedFeature?.logoUrls?.[0] || null;
-  // const finalLogo=bailleurId?bail
   const finalNom = financeInfo?.nom || financeInfo?.str || "Partenaire";
+
   const handleNext = () =>
     setCurrentIndex((prev) => (prev + 1) % images.length);
   const handlePrev = () =>
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
 
-  const maxCapacity = selectedFeature?.maxCapacity;
-  const volumeActuel = 4000;
+  // const maxCapacity = selectedFeature?.maxCapacity;
+  // const volumeActuel = 4000;
 
   return (
     <div className="h-full flex flex-col p-5">
@@ -114,7 +113,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       <hr className="h-0.5 border-0 mb-2 bg-[linear-gradient(25deg,red_5%,yellow_60%,lime_90%,teal)]" />
 
       {/* Feature Details Section */}
-      <div className="grow mt-2 overflow-y-auto">
+      <div className="h-full mt-2 overflow-y-auto">
         {selectedFeature ? (
           <div className="animate-fade-in space-y-4">
             <div className="flex justify-between items-start">
@@ -225,15 +224,12 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                       selectedFeature.etat === "bon"
                         ? "bg-green-100 text-green-700"
                         : selectedFeature.etat === "moyen"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
                     }`}
                   >
                     {selectedFeature.etat}
                   </span>
-                  {/* <p className="font-medium text-gray-800 text-sm mt-1">
-                    {selectedFeature.etat}
-                  </p> */}
                 </div>
               </div>
 
@@ -249,6 +245,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                   <p className="text-xs text-gray-400 tracking-wider font-semibold">
                     {t("funder")}
                   </p>
+                  {/*show the logo or the name of the funder*/}
                   {logoUrl ? (
                     <div className="relative w-full h-16 overflow-hidden">
                       <Image
@@ -262,7 +259,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     </div>
                   ) : (
                     <p className="font-medium text-gray-800 text-sm mt-1">
-                      {/*show the logo or the name of the funder*/}
                       {finalNom}
                     </p>
                   )}
