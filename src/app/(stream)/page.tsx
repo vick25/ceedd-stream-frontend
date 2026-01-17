@@ -246,7 +246,7 @@ export default function Home() {
                   onBlur={() =>
                     setTimeout(() => setIsSearchFocused(false), 200)
                   }
-                  className="w-full py-2 bg-transparent border-none outline-none text-sm font-bold text-gray-800 placeholder:text-gray-400"
+                  className="w-full py-2 bg-transparent border-none outline-none text-sm font-semibold text-gray-800 placeholder:text-gray-400"
                 />
               </div>
 
