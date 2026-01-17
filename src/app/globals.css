@@ -91,6 +91,19 @@ select option:hover {
   background-color: #a0aec0;
 }
 
+body[data-scroll-locked] {
+  margin-right: 0px !important; /* For LTR layout */
+  margin-left: 0px !important; /* For RTL layout */
+  overflow: visible !important;
+}
+
+/*OR Use more specific selectors:*/
+html body[data-scroll-locked] {
+  margin-right: 0px !important; /* For LTR layout */
+  margin-left: 0px !important; /* For RTL layout */
+  overflow: visible !important;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
