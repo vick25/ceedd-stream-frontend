@@ -77,6 +77,7 @@ export default function Home() {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [zoomToFeature, setZoomToFeature] = useState(false);
 
   // --- OPTIMISATION DU TRAITEMENT DES DONNÉES (Performance critique) ---
 
@@ -174,6 +175,7 @@ export default function Home() {
   const handleFeatureClick = useCallback((feature: MapFeature) => {
     setSelectedFeature(feature);
     setSearchQuery("");
+    setZoomToFeature(false); // Don't zoom when clicking on map marker
     if (window.innerWidth < 768) setIsFilterVisible(true);
   }, []);
 
@@ -196,6 +198,7 @@ export default function Home() {
     setSelectedFeature(feature);
     setSearchQuery("");
     setIsSearchFocused(false);
+    setZoomToFeature(true); // Zoom when clicking from search result
     setIsFilterVisible(true);
   };
 
@@ -209,6 +212,7 @@ export default function Home() {
           onFeatureClick={handleFeatureClick}
           selectedFeatureId={selectedFeature?.id}
           mapStyle={mapStyle}
+          zoomToFeature={zoomToFeature}
         />
         {isInfraLoading && <MapLoader />}
 

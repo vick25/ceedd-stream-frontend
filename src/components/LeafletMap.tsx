@@ -31,6 +31,7 @@ interface LeafletMapProps {
   onFeatureClick: (feature: MapFeature) => void;
   selectedFeatureId?: string;
   mapStyle: "standard" | "satellite";
+  zoomToFeature?: boolean;
 }
 
 // A component to handle map events and update coordinates
@@ -129,17 +130,22 @@ const FitBounds: React.FC<{ features: MapFeature[] }> = ({ features }) => {
 const MapUpdater: React.FC<{
   selectedFeature?: MapFeature;
   isMobile: boolean;
-}> = ({ selectedFeature, isMobile }) => {
+  zoomToFeature?: boolean;
+}> = ({ selectedFeature, isMobile, zoomToFeature }) => {
   const map = useMap();
   useEffect(() => {
     if (selectedFeature) {
-      // Zoom plus faible sur mobile pour garder du contexte
-      const currentZoom = map.getZoom();
-      map.flyTo([selectedFeature.lat, selectedFeature.lng], currentZoom, {
+      const targetZoom = zoomToFeature
+        ? isMobile
+          ? 14
+          : 16
+        : map.getZoom();
+
+      map.flyTo([selectedFeature.lat, selectedFeature.lng], targetZoom, {
         duration: 1.5,
       });
     }
-  }, [selectedFeature, map]);
+  }, [selectedFeature, map, zoomToFeature, isMobile]);
   return null;
 };
 
@@ -169,6 +175,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   onFeatureClick,
   selectedFeatureId,
   mapStyle,
+  zoomToFeature,
 }) => {
   const t = useTranslations("MapView");
   const isMobile = useIsMobile();
@@ -274,6 +281,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         <MapUpdater
           selectedFeature={features.find((f) => f.id === selectedFeatureId)}
           isMobile={isMobile}
+          zoomToFeature={zoomToFeature}
         />
         <CtrlZoomHandler />
         {/* On remet les contrôles en bas sur mobile pour l'accessibilité du pouce */}

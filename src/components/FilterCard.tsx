@@ -134,9 +134,9 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     >
                       <Image
                         src={images[0]}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         alt={selectedFeature.nom}
                         fill
+                        sizes="256px"
                         className="object-cover"
                       />
                       {/* Optional: Show "Count" overlay if multiple images exist */}
