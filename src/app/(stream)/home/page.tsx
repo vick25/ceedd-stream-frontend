@@ -54,9 +54,8 @@ const ResultCard: React.FC<{
   color: "blue" | "green";
 }> = ({ title, volume, details, color }) => (
   <div
-    className={`bg-white rounded-xl shadow-lg p-6 flex flex-col justify-center items-center h-40 border-t-4 ${
-      color === "blue" ? "border-blue-500" : "border-green-500"
-    }`}
+    className={`bg-white rounded-xl shadow-lg p-6 flex flex-col justify-center items-center h-40 border-t-4 ${color === "blue" ? "border-blue-500" : "border-green-500"
+      }`}
   >
     <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
     <h3 className="text-4xl font-extrabold text-gray-800 mb-3">
@@ -304,9 +303,8 @@ const Dashboard: React.FC = () => {
     // Nous rendons le succès prioritaire sur toute autre vérification, car si les données sont là, elles doivent s'afficher.
     if (hasVolumeData(locationData)) {
       const { commune, quartier, avenue } = locationFilters;
-      const details = `Filtres: ${commune || "Tous"}, ${quartier || "Tous"}, ${
-        avenue || "Toutes"
-      }`;
+      const details = `Filtres: ${commune || "Tous"}, ${quartier || "Tous"}, ${avenue || "Toutes"
+        }`;
       return (
         <ResultCard
           title={`Capacité Totale (${commune || "Global"})`}
@@ -584,7 +582,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* SECTION RÉSULTATS */}
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4 relative pb-2 after:absolute after:left-0 after:bottom-0 after:h-0.75 after:w-full after:content-[''] after:bg-[linear-gradient(25deg,red_5%,yellow_60%,lime_90%,teal)]">
           {t("synthese")}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

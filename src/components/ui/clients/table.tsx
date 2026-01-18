@@ -4,13 +4,14 @@ import { useCustomers } from "@/components/hooks/useCustomer";
 import EditCustomer from "@/components/editButton/EditCustomer";
 import Loader from "@/components/Loader";
 import { Client } from "@/types/infrastructure";
-import { Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import DeleteCustomer from "@/components/deleteButton/DeleteCustomer";
 import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/appStore";
 import { Locale, useTranslations } from "next-intl";
+import { Button } from "../button";
 
 export default function ClientTable() {
   const [getClients, setGetClients] = useState<Client[]>([]);
@@ -18,8 +19,11 @@ export default function ClientTable() {
   const [clientNames, setClientNames] = useState<Record<string, string>>({});
   const [typeInfras, setTypeInfras] = useState<Record<string, string>>({});
   const [zones, setZones] = useState<Record<string, string>>({});
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [infrastructureDeleted, setInfrastructureDeleted] =
     useState<string>("");
+
   const [isOpen, setIsOpen] = useState(false);
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
@@ -27,12 +31,12 @@ export default function ClientTable() {
   const t = useTranslations(locale);
   // initialize mutation
   const { data: customers, isPending: customersIspending } = useCustomers();
-  //   const mutationInfranstructure = useGetInfrastructure();
-  //   const mutationCustomer = useGetCustomer();
-  //   const mutationTypeInfrastructure = useAllTypeInfrastructure();
-  //   const mutationZone = useZoneContributive();
-
+  const pageItems = 30;
   //useEffect
+  const allResults = customers?.results || [];
+  const totalPages = Math.ceil(allResults.length / pageItems);
+  const tabIndex = (currentPage - 1) * pageItems;
+  const pageCustomers = allResults.slice(tabIndex, tabIndex + pageItems);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -54,66 +58,97 @@ export default function ClientTable() {
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-          <div className="lg:hidden">
-            {customers?.results.map((customer: any) => {
-              return (
-                <Link
-                  key={customer.id}
-                  href={`/dashboard/infrastructures/${customer.id}`}
-                >
-                  <div className="mb-2 w-full rounded-md bg-white p-4">
-                    <div className="flex items-center justify-between border-b pb-4">
-                      <div>
-                        <div className="mb-2 flex items-center gap-3">
-                          {/* <Image
-                        src={invoice.image_url}
-                        className="mr-2 rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${invoice.name}'s profile picture`}
-                      /> */}
-                          {/* <p>{invoice.name}</p> */}
-                          <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Noms</span>
-                            <p>{customer.nom}</p>
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            <span className="font-semibold">Prénom</span>
-                            <p>{customer.prenom}</p>
-                          </div>
-                        </div>
-                        {/* <p className="text-sm text-gray-500"></p> */}
-                      </div>
-                      {/* <InvoiceStatus status={invoice.status} /> */}
-                    </div>
-                    <div className="flex w-full items-center justify-between pt-4">
-                      <div>
-                        <p className="text-xl font-medium">
-                          Adresse : {customer.avenue},{customer.quartier},
-                          {customer.commune}
-                        </p>
-                      </div>
-                      <div className="flex justify-end gap-2">
-                        <EditCustomer
-                          id={customer.id}
-                          nom={customer.nom}
-                          prenom={customer.prenom}
-                          sexe={customer.sexe}
-                          avenue={customer.avenue}
-                          quartier={customer.quartier}
-                          commune={customer.commune}
-                        />
-                        <DeleteCustomer
-                          id={customer.id}
-                          nom={customer.nom}
-                          setCustomerDeleted={setCustomerDeleted}
-                        />
-                      </div>
-                    </div>
+          <div className="lg:hidden space-y-4 px-2">
+            {pageCustomers.map((customer: any) => (
+              <div
+                key={customer.id}
+                className="relative w-full rounded-xl bg-white p-5 shadow-sm border border-gray-100"
+              >
+                {/* Header : Nom et Prénom */}
+                <div className="flex items-start justify-between border-b border-gray-50 pb-3">
+                  <div className="flex flex-col">
+                    <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
+                      Client
+                    </span>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {customer.nom} {customer.prenom}
+                    </h3>
+                    <span className="text-sm text-gray-500 italic">
+                      {customer.sexe}
+                    </span>
                   </div>
-                </Link>
-              );
-            })}
+
+                  {/* Lien de vue rapide (Icon Eye) */}
+                  <Link
+                    href={`/dashboard/clients/${customer.id}`}
+                    className="p-2 bg-blue-50 rounded-full text-blue-600 hover:bg-blue-100 transition-colors"
+                  >
+                    <Eye className="h-5 w-5" />
+                  </Link>
+                </div>
+
+                {/* Body : Adresse */}
+                <div className="py-4">
+                  <span className="text-xs font-medium text-gray-400">
+                    Localisation
+                  </span>
+                  <p className="text-sm text-gray-700 leading-relaxed mt-1">
+                    {customer.avenue}, {customer.quartier}, <br />
+                    <span className="font-medium text-gray-900">
+                      {customer.commune}
+                    </span>
+                  </p>
+                </div>
+
+                {/* Footer : Actions */}
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-50">
+                  <EditCustomer
+                    id={customer.id}
+                    nom={customer.nom}
+                    prenom={customer.prenom}
+                    sexe={customer.sexe}
+                    avenue={customer.avenue}
+                    quartier={customer.quartier}
+                    commune={customer.commune}
+                  />
+                  <DeleteCustomer
+                    id={customer.id}
+                    nom={customer.nom}
+                    setCustomerDeleted={setCustomerDeleted}
+                  />
+                </div>
+              </div>
+            ))}
+
+            {/* Pagination Mobile */}
+            <div className="flex flex-col items-center gap-4 py-6">
+              <span className="text-sm text-gray-500 font-medium">
+                Page <span className="text-blue-600">{currentPage}</span> sur{" "}
+                {totalPages}
+              </span>
+              <div className="flex gap-4">
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="flex-1 px-8 rounded-full border-blue-200 shadow-sm"
+                >
+                  <ChevronLeft className="mr-2 h-4 w-4" /> Précédent
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="flex-1 px-8 rounded-full border-blue-200 shadow-sm"
+                >
+                  Suivant <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
 
           <table className="hidden  min-w-full text-gray-900  lg:table">
@@ -138,8 +173,8 @@ export default function ClientTable() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {customers.results.length > 0 ? (
-                customers?.results.map((infra: any) => {
+              {pageCustomers.length > 0 ? (
+                pageCustomers.map((infra: any) => {
                   //jointure
 
                   // const zone = zones[infra?.zone?.toString()];
@@ -204,6 +239,33 @@ export default function ClientTable() {
               )}
             </tbody>
           </table>
+          <div className="hidden lg:flex justify-between items-center w-full px-6 py-8">
+            <div className="text-sm font-medium text-gray-500">
+              Page{" "}
+              <span className="text-blue-600 font-bold">{currentPage}</span> sur{" "}
+              {totalPages}
+            </div>
+            <div className="flex items-center gap-3 w-full max-w-xs">
+              <Button
+                variant="outline"
+                className="flex-1 rounded-full border-blue-200"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" /> Précédent
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1 rounded-full border-blue-200"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
+                Suivant <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

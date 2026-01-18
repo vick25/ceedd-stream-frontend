@@ -1,20 +1,14 @@
 "use client";
-import { Nav } from "@/components/Nav";
-import { useInfrastructureStore } from "@/store/infrastructure";
-import { PieChart } from "@/components/charts/PieChart";
-import { BarChart } from "@/components/charts/BarChart";
-import { Heatmap } from "@/components/charts/Heatmap";
-import { InfrastructureMap } from "@/components/InfrastructureMap";
 // import { DashboardStats } from "@/types/infrastructure";
-import { useTranslations, Locale } from "@/lib/i18n";
-import { useEffect, useMemo, useState } from "react";
-import { useInfrastructures } from "@/components/hooks/useInfrastructure";
-import { Building, Building2, User } from "lucide-react";
 import { useCustomers } from "@/components/hooks/useCustomer";
+import { useInfrastructures } from "@/components/hooks/useInfrastructure";
+import { Locale, useTranslations } from "@/lib/i18n";
+import { Building2, User } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { useRouter } from "next/navigation";
+import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
 import { useAppStore } from "@/store/appStore";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
   const [locale, setLocale] = useState<Locale>("fr");
@@ -26,7 +20,8 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const { data: clients, isPending: isClientsPending } = useCustomers();
-
+  const { data: typesInfrastructure, isPending: isTypePending } = useTypeInfradtructures();
+  // console.log({ typesInfrastructure });
   const stats = useMemo(() => {
     // const total = infrastructures.count;
     if (!infrastructures || !infrastructures.results) {
@@ -41,10 +36,17 @@ export default function DashboardPage() {
         totalClients: 0,
       };
     }
+
+    if (typesInfrastructure || typesInfrastructure.results) {
+      return {
+        totalTypeInfrastructure: 0,
+      };
+    }
     const infrastructureList = infrastructures.results;
     // const testTotal = infrastructureList.length;
 
     const total = infrastructures.count || infrastructureList.length;
+
     const clientList = clients.results;
 
     const ClientsCount = clients.count || clients.length;
@@ -68,17 +70,7 @@ export default function DashboardPage() {
       <main className="container py-6 space-y-6 min-h-screen">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">{t.navigation.dashboard}</h1>
-          <div className="flex gap-2">
-            {/* <button
-              onClick={() => setLocale(locale === "fr" ? "en" : "fr")}
-              className="bg-gray-200 px-3 py-2 rounded"
-            >
-              {locale === "fr" ? "EN" : "FR"}
-            </button> */}
-            {/* <button className="bg-blue-600 text-white px-3 py-2 rounded">
-              Nouvelle infrastructure
-            </button> */}
-          </div>
+          <div className="flex gap-2"></div>
         </div>
 
         {/* KPI Cards */}
@@ -107,20 +99,13 @@ export default function DashboardPage() {
                 {t.dashboard.totalInfrastructures}
               </div>
               <div className="text-3xl font-bold text-green-600 flex items-center justify-center">
-                {stats.totalInfrastructures}
+                {/* {stats.totalInfrastructures} */}
+                {infrastructures.count}
               </div>
             </div>
           )}
 
-          {/* <div className="p-4 rounded-lg border bg-white">
-            <div className="text-sm text-gray-500">
-              {t.dashboard.coveragePercentage}
-            </div>
-            <div className="text-3xl font-bold text-green-600">
-             {stats.coveragePercentage}%
-            </div>
-          </div>  */}
-          {isInfrastructuresPending ? (
+          {isTypePending ? (
             <div className="p-4 rounded-lg border border-gray-200 bg-white animate-pulse">
               {/* Ligne du haut : Icône + Titre */}
               <div className="flex items-center gap-3 mb-3">
@@ -141,8 +126,8 @@ export default function DashboardPage() {
               <div className="text-sm text-gray-500">
                 {t.dashboard.typeInfrastructures}
               </div>
-              <div className="text-3xl font-bold text-purple-600">
-                {/* {stats.populationImpacted.toLocaleString()} */}
+              <div className="text-3xl font-bold text-purple-600 flex items-center justify-center">
+                {typesInfrastructure.count}
               </div>
             </div>
           )}
@@ -169,7 +154,8 @@ export default function DashboardPage() {
                 {t.dashboard.totalClients}
               </div>
               <div className="text-3xl font-bold text-orange-600 flex items-center justify-center">
-                {stats.totalClients}
+                {/* {stats.totalClients} */}
+                {clients.count}
               </div>
             </div>
           )}
