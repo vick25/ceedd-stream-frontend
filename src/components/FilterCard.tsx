@@ -1,5 +1,6 @@
 import { MapFeature } from "@/types/types";
 import { formatDate } from "@/utils/utils";
+import { CldImage } from 'next-cloudinary';
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -132,11 +133,14 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                         setIsModalOpen(true);
                       }}
                     >
-                      <Image
+                      <CldImage
                         src={images[0]}
                         alt={selectedFeature.nom}
-                        fill
+                        width="800"
+                        height="600"
+                        crop="fill"
                         sizes="256px"
+                        gravity="auto"
                         className="object-cover"
                       />
                       {/* Optional: Show "Count" overlay if multiple images exist */}
@@ -329,12 +333,15 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
           {/* Large Image Container */}
           <div className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center">
-            <Image
+            <CldImage
               src={images[currentIndex]}
               alt={`${selectedFeature?.nom} - ${currentIndex + 1}`}
-              fill
+              width="800"
+              height="600"
+              crop="fill"
+              gravity="auto"
               className="object-contain" // Keeps image in perspective
-              priority
+            // priority
             />
           </div>
 
