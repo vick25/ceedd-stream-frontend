@@ -217,12 +217,12 @@ export default function Home() {
         {isInfraLoading && <MapLoader />}
 
         {/* Overlay : On garde l'UI interactive même pendant le chargement des données */}
-        <div className="absolute top-3 right-4 bottom-32 z-1000 flex flex-col items-end pointer-events-auto gap-3">
+        <div className="absolute top-3 right-4 bottom-64 md:bottom-32 z-1000 flex flex-col items-end pointer-events-auto gap-3">
           {/* Search & Style Controls (Top Right) */}
           {/* <div className="absolute top-3 right-3 bottom-32 z-1500 pointer-events-auto flex flex-col items-end gap-3"> */}
           <div className="flex gap-3">
             {/* Search Bar */}
-            <div className="relative w-64 md:w-80 group">
+            <div className="relative w-56 md:w-72 group">
               <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 flex items-center px-4 py-1 transition-all focus-within:ring-2 focus-within:ring-blue-400">
                 <svg
                   className="w-5 h-5 text-gray-400 mr-2"
@@ -297,7 +297,7 @@ export default function Home() {
           {/* Filter Card */}
           <div
             className={`
-            w-full md:w-95 bg-white/95 backdrop-blur-sm shadow-2xl pointer-events-auto flex flex-col transition-transform duration-300
+            w-85 md:w-95 bg-white/95 backdrop-blur-sm shadow-2xl pointer-events-auto flex flex-col transition-transform duration-300
             ${isFilterVisible
                 ? "translate-x-0"
                 : "translate-x-full md:translate-x-0 hidden md:flex"
