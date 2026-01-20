@@ -3,6 +3,7 @@
 import { MapFeature } from "@/types/types";
 import { displayDate } from "@/utils/utils";
 import { Icon } from "leaflet";
+import L from "leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet/dist/leaflet.css";
@@ -85,13 +86,24 @@ const getIconUrl = (type: string) => {
   return iconObj ? iconObj.iconUrl : "/iconImage.png";
 };
 
-const getCustomIcon = (iconUrl: string, isMobile: boolean) =>
-  new Icon({
-    iconUrl,
-    iconSize: isMobile ? [24, 24] : [40, 40],
-    iconAnchor: isMobile ? [12, 0] : [20, 0],
-    popupAnchor: [0, 0],
+// const getCustomIcon = (iconUrl: string, isMobile: boolean) =>
+//   new Icon({
+//     iconUrl,
+//     iconSize: isMobile ? [24, 24] : [40, 40],
+//     iconAnchor: isMobile ? [12, 0] : [20, 0],
+//     popupAnchor: [0, 0],
+//   });
+
+// Helper function to create the custom DivIcon
+const createCustomIcon = (imagePath: string, isMobile: boolean) => {
+  return L.divIcon({
+    className: "custom-div-icon", // Wrapper class
+    html: `<div class='marker-pin'><img src="${imagePath}" alt="${imagePath}" /></div>`,
+    iconSize: isMobile ? [24, 24] : [50, 50],
+    iconAnchor: isMobile ? [12, 24] : [25, 50], // Bottom tip of the pin
+    popupAnchor: isMobile ? [0, -30] : [0, -45], // Where popup opens relative to anchor
   });
+};
 
 const InvalidateSize = () => {
   const map = useMap();
@@ -135,11 +147,7 @@ const MapUpdater: React.FC<{
   const map = useMap();
   useEffect(() => {
     if (selectedFeature) {
-      const targetZoom = zoomToFeature
-        ? isMobile
-          ? 14
-          : 16
-        : map.getZoom();
+      const targetZoom = zoomToFeature ? (isMobile ? 14 : 16) : map.getZoom();
 
       map.flyTo([selectedFeature.lat, selectedFeature.lng], targetZoom, {
         duration: 1.5,
@@ -220,7 +228,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                 <Marker
                   key={feature.id}
                   position={[feature.lat, feature.lng]}
-                  icon={getCustomIcon(getIconUrl(feature.type), isMobile)}
+                  icon={createCustomIcon(getIconUrl(feature.type), isMobile)}
                   eventHandlers={{
                     click: () => onFeatureClick(feature),
                     // On n'active le popup au survol que sur desktop
