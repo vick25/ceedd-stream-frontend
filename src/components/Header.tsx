@@ -64,9 +64,9 @@ export const Header: React.FC = () => {
             <Image
               src="/streamlogo.png"
               alt="logo"
-              width={56}
+              width={52}
               height={56}
-              className="w-8 md:w-9 lg:w-10 h-auto object-cover"
+              className="w-8 md:w-9 lg:w-10 h-auto"
             />
             <span
               className={clsx(

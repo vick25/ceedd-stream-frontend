@@ -259,7 +259,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                         alt={finalNom}
                         fill
                         /* object-contain est essentiel pour les logos */
-                        className="object-contain object-left"
+                        className="object-contain"
                         sizes="100px"
                       />
                     </div>

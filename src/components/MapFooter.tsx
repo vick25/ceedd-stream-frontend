@@ -18,9 +18,9 @@ export const Footer: React.FC = () => {
                 <Image
                   src="/streamlogo.png"
                   alt="Streams Logo"
-                  width={48}
+                  width={45}
                   height={48}
-                  className="w-auto h-auto object-contain"
+                  className="h-auto"
                 />
               </div>
               <span className="font-bold text-lg lg:text-xl tracking-tight leading-tight">
