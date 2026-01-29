@@ -300,7 +300,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
       {/*Modal div to display the images */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-999 flex items-center justify-center bg-black/90 p-4">
+        <div className="fixed inset-0 z-999 flex items-center justify-center bg-black/90 p-4 rounded-md">
           {/* Close Button */}
           <button
             aria-label="Close"
