@@ -205,7 +205,7 @@ export default function Home() {
   return (
     <main className="min-h-screen flex flex-col">
       {/* Map Section - Rendu progressif */}
-      <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden bg-gray-200">
+      <section className="relative w-full h-dvh md:h-[calc(100vh-80px)] overflow-hidden bg-gray-200">
         <LeafletMap
           features={filteredFeatures}
           selectedCategory={selectedCategory}
@@ -217,11 +217,11 @@ export default function Home() {
         {isInfraLoading && <MapLoader />}
 
         {/* Overlay : On garde l'UI interactive même pendant le chargement des données */}
-        <div className="absolute top-3 right-4 bottom-64 md:bottom-32 z-1000 flex flex-col items-end pointer-events-auto gap-3">
+        <div className="absolute top-3 right-4 bottom-56 md:bottom-32 z-1000 flex flex-col items-end pointer-events-none gap-3">
           {/* Search & Style Controls (Top Right) */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 pointer-events-auto">
             {/* Search Bar */}
-            <div className="relative w-64 md:w-72 group">
+            <div className="relative w-64 md:w-72 group pointer-events-auto">
               <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 flex items-center px-4 py-1 transition-all focus-within:ring-2 focus-within:ring-blue-400">
                 <svg
                   className="w-5 h-5 text-gray-400 mr-2"
@@ -274,19 +274,21 @@ export default function Home() {
             <div className="pointer-events-auto bg-white/90 backdrop-blur rounded-lg shadow p-1 flex mb-4 border border-gray-100">
               <button
                 onClick={() => setMapStyle("standard")}
-                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${mapStyle === "standard"
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-500"
-                  }`}
+                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
+                  mapStyle === "standard"
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-500"
+                }`}
               >
                 OSM
               </button>
               <button
                 onClick={() => setMapStyle("satellite")}
-                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${mapStyle === "satellite"
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-500"
-                  }`}
+                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
+                  mapStyle === "satellite"
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-500"
+                }`}
               >
                 SATELLITE
               </button>
@@ -297,10 +299,11 @@ export default function Home() {
           <div
             className={`
             w-85 md:w-95 bg-white/95 backdrop-blur-sm shadow-2xl pointer-events-auto flex flex-col transition-transform duration-300
-            ${isFilterVisible
+            ${
+              isFilterVisible
                 ? "translate-x-0"
                 : "translate-x-full md:translate-x-0 hidden md:flex"
-              }
+            }
             h-full md:max-h-full rounded-lg md:rounded-xl border-t md:border border-gray-100
           `}
           >
