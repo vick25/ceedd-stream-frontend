@@ -203,9 +203,9 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col">
+    <main className="flex flex-col min-h-dvh">
       {/* Map Section - Rendu progressif */}
-      <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden bg-gray-200">
+      <section className="relative w-full h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] overflow-hidden bg-gray-200">
         <LeafletMap
           features={filteredFeatures}
           selectedCategory={selectedCategory}
