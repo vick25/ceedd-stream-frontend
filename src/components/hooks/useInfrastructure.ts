@@ -3,7 +3,7 @@ import {
   InfrastructureFilters,
   InfrastructureSearch,
 } from "@/types/infrastructure";
-import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDebounce } from "./useDebounce";
