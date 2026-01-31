@@ -22,7 +22,7 @@ export const useAllTypeInfrastructure = () => {
   });
 };
 
-export const useTypeInfradtructures = () => {
+export const useTypeInfrastructures = () => {
   return useQuery({
     queryKey: ["type_infrastructures"],
     queryFn: () => serviceTypeInfrastructure.getTypeInfrastructureAll(),
