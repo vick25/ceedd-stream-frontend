@@ -64,6 +64,8 @@ const page = (props: Props) => {
     };
 
     await mutationPhoto.mutateAsync(payload);
+    setEnumData("");
+    setInfrastructures("");
   };
   // const
   useEffect(() => {
@@ -119,10 +121,11 @@ const page = (props: Props) => {
           flex flex-col items-center justify-center w-full h-32
           border-2 border-dashed rounded-xl cursor-pointer
           transition-all duration-200
-          ${urlLoading
-                    ? "border-indigo-300 bg-indigo-50"
-                    : "border-gray-300 bg-gray-50 group-hover:bg-white group-hover:border-indigo-400 group-hover:shadow-md"
-                  }
+          ${
+            urlLoading
+              ? "border-indigo-300 bg-indigo-50"
+              : "border-gray-300 bg-gray-50 group-hover:bg-white group-hover:border-indigo-400 group-hover:shadow-md"
+          }
         `}
               >
                 {urlLoading ? (
@@ -364,6 +367,7 @@ const page = (props: Props) => {
               src={localPreview}
               alt="Aperçu de la photo"
               fill
+              unoptimized
               className="transition-opacity duration-300 object-cover"
             />
           ) : (

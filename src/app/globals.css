@@ -1,57 +1,222 @@
 @import "tailwindcss";
-:root {
-  --header-h: 74px;
-  --header-hm: 64px;
-  --menu-mobile: 56px;
-  --menu-mobil-sm: 64px;
-  --text-color-title: #005c99;
+@import "tw-animate-css";
 
-  --size-container: 420px;
-  ---z-index: 999;
+@custom-variant dark (&:is(.dark *));
+:root {
+    --header-h: 74px;
+    --header-hm: 64px;
+    --menu-mobile: 56px;
+    --menu-mobil-sm: 64px;
+    --text-color-title: #005c99;
+
+    --size-container: 420px;
+    ---z-index: 999;
+    --radius: 0.625rem;
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
 }
 
 html,
 body,
 #__next {
-  height: 100%;
-  font-family: "Poppins", sans-serif;
-  font-size: 1rem;
+    height: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
 a {
-  /* @apply text-blue-600 hover:text-blue-700 underline; */
-  text-decoration: none;
+    /* @apply text-blue-600 hover:text-blue-700 underline; */
+    text-decoration: none;
 }
 
 .container {
-  /* max-w-6xl */
-  @apply mx-auto px-0;
+    /* max-w-6xl */
+    @apply mx-auto px-0;
 }
 .section {
-  @apply px-6;
+    @apply px-6;
 }
 .zindex {
-  z-index: 9999;
+    z-index: 9999;
 }
 .size {
-  width: 602px;
-  height: 700px;
+    width: 602px;
+    height: 700px;
 }
-/* select:hover {
-  background-color: #a0aec0;
-} */
+/*.leaflet-container {
+  touch-action: none;
+  overscroll-behavior: none;
+}*/
 select,
 select::picker(select) {
-  appearance: none;
+    appearance: none;
+    background-color: whitesmoke;
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    padding: 0.53rem;
+    background-position: left center;
+    background-size: 10px;
 }
-select::picker(select) {
-  background-color: whitesmoke;
-  border: 1px solid #a3a3a3;
-  border-radius: 10px;
-  padding: 0.53rem;
-  background-position: left center;
-  background-size: 10px;
+select option:hover {
+    background-color: #a0aec0;
 }
-select :hover {
-  background-color: #a0aec0;
+
+body[data-scroll-locked] {
+    margin-right: 0px !important; /* For LTR layout */
+    margin-left: 0px !important; /* For RTL layout */
+    overflow: visible !important;
+}
+
+/*OR Use more specific selectors:*/
+html body[data-scroll-locked] {
+    margin-right: 0px !important; /* For LTR layout */
+    margin-left: 0px !important; /* For RTL layout */
+    overflow: visible !important;
+}
+
+/* The container for the marker */
+.custom-div-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* The teardrop pin shape */
+.marker-pin {
+    width: 50px;
+    height: 50px;
+    border-radius: 50% 50% 50% 0;
+    background: #3f51b5; /* Change pin color here */
+    position: absolute;
+    transform: rotate(-45deg);
+    left: 50%;
+    top: 50%;
+    margin: -25px 0 0 -25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* The icon image inside the pin */
+.marker-pin img {
+    width: 28px;
+    height: 28px;
+    transform: rotate(45deg); /* Rotate back to upright */
+    object-fit: contain;
+}
+
+@theme inline {
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+    --radius-3xl: calc(var(--radius) + 12px);
+    --radius-4xl: calc(var(--radius) + 16px);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+}
+
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
 }

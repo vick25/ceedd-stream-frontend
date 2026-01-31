@@ -1,30 +1,37 @@
-import { serviceinfrastructure } from "@/services/infrastructure";
+import { serviceInfrastructure } from "@/services/infrastructure";
 import {
   InfrastructureFilters,
   InfrastructureSearch,
 } from "@/types/infrastructure";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDebounce } from "./useDebounce";
 
 export const useGetInfrastructure = () => {
   return useMutation({
-    mutationFn: serviceinfrastructure.getInfrastructure,
+    mutationFn: serviceInfrastructure.getInfrastructure,
     onSuccess: (response: any) => {},
   });
 };
 
 export const useGetAllInfrastructures = () => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["allInfrastructures"],
-    queryFn: () => serviceinfrastructure.getInfrastructure(),
+    queryFn: async ({ pageParam = 0 }) =>
+      serviceInfrastructure.getInfrastructure(pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.next) return undefined;
+      const url = new URL(lastPage.next);
+      return Number(url.searchParams.get("offset"));
+    },
   });
 };
 
 export const useCreateInfrastructure = () => {
   return useMutation({
-    mutationFn: (data: any) => serviceinfrastructure.createInfrastructure(data),
+    mutationFn: (data: any) => serviceInfrastructure.createInfrastructure(data),
     onSuccess: (response) => {
       toast.success("Infrastructure créée avec succès");
     },
@@ -37,7 +44,7 @@ export const useCreateInfrastructure = () => {
 export const useUpdateInfrastructure = () => {
   return useMutation({
     mutationFn: ({ data, id }: { data: any; id: any }) =>
-      serviceinfrastructure.updateInfrastructure(data, id),
+      serviceInfrastructure.updateInfrastructure(data, id),
     onSuccess: (response) => {
       // console.log(response);
       toast.success("Mise à jour de l'infrastructure réussie.");
@@ -51,21 +58,21 @@ export const useUpdateInfrastructure = () => {
 export const useInfrastructures = () => {
   return useQuery({
     queryKey: ["infrastructures"],
-    queryFn: () => serviceinfrastructure.getInfrastructure(),
+    queryFn: () => serviceInfrastructure.getInfrastructure(),
   });
 };
 
 export const useGetInfrastructureById = (id: string) => {
   return useQuery({
     queryKey: ["infrastructureById", id],
-    queryFn: () => serviceinfrastructure.getInfrastructureById(id),
+    queryFn: () => serviceInfrastructure.getInfrastructureById(id),
     enabled: !!id,
   });
 };
 
 export const useInfrastructureDeleted = () => {
   return useMutation({
-    mutationFn: (id: string) => serviceinfrastructure.deleteInfrastructure(id),
+    mutationFn: (id: string) => serviceInfrastructure.deleteInfrastructure(id),
     onSuccess: (response) => {
       toast.success("Infrastructure supprimée avec succès");
     },
@@ -76,16 +83,16 @@ type InfrastructureResponse = InfrastructureSearch;
 
 export const useInfrastructureByAdresse = (
   searchTerm: string,
-  delay: number = 400
+  delay: number = 400,
 ) => {
   const debounceTerm = useDebounce(searchTerm, delay);
 
-  const isSearchearDebounce = debounceTerm.length >= 3;
+  const isSearchDebounce = debounceTerm.length >= 3;
   const query = useQuery<InfrastructureResponse, Error>({
     queryKey: ["infrastructureSearch", debounceTerm],
-    queryFn: () =>
-      serviceinfrastructure.getInfrastrucureByAdresse(debounceTerm),
-    enabled: isSearchearDebounce,
+    queryFn: async () =>
+      serviceInfrastructure.getInfrastrucureByAdresse(debounceTerm),
+    enabled: isSearchDebounce,
     staleTime: 1000 * 60 * 5,
   });
   useEffect(() => {
@@ -100,19 +107,19 @@ export const useInfrastructureByAdresse = (
 type InfrastructureResponseLocation = InfrastructureSearch;
 export const useInfrastructureByAdresseLocation = (
   locationFilters: InfrastructureFilters,
-  runSearch: boolean
+  runSearch: boolean,
 ) => {
   const queryKey = ["infrastructureLocation", locationFilters];
 
   const isFilterSelected = Object.values(locationFilters).some(
-    (value) => value !== ""
+    (value) => value !== "",
   );
   const isEnabled = runSearch && isFilterSelected;
 
   const query = useQuery<InfrastructureResponseLocation, Error>({
     queryKey: queryKey,
-    queryFn: () =>
-      serviceinfrastructure.getInfrastructureByadresseLocation(locationFilters),
+    queryFn: async () =>
+      serviceInfrastructure.getInfrastructureByadresseLocation(locationFilters),
     enabled: isEnabled,
     staleTime: 1000 * 60 * 5,
   });
@@ -129,19 +136,19 @@ type InfrastructureResponseDate = InfrastructureSearch;
 
 export const useInfrastructureVolumeByDate = (
   dateFilters: InfrastructureFilters,
-  runSearch: boolean
+  runSearch: boolean,
 ) => {
   const queryKey = ["infrastructureLocation", dateFilters];
 
   const isFilterSelected = Object.values(dateFilters).some(
-    (value) => value !== ""
+    (value) => value !== "",
   );
   const isEnabled = runSearch && isFilterSelected;
 
   const query = useQuery<InfrastructureResponseLocation, Error>({
     queryKey: queryKey,
-    queryFn: () =>
-      serviceinfrastructure.getInfrastructureVolumeByDate(dateFilters),
+    queryFn: async () =>
+      serviceInfrastructure.getInfrastructureVolumeByDate(dateFilters),
     enabled: isEnabled,
     staleTime: 1000 * 60 * 5,
   });

@@ -20,14 +20,14 @@ const links = [
     href: "/dashboard",
   },
   {
-    icon: Building2,
-    name: "Infrastructure",
-    href: "/dashboard/infrastructures",
-  },
-  {
     icon: User,
     name: "Client",
     href: "/dashboard/clients",
+  },
+  {
+    icon: Building2,
+    name: "Infrastructure",
+    href: "/dashboard/infrastructures",
   },
   {
     icon: Landmark,
@@ -42,7 +42,7 @@ const links = [
   {
     icon: Globe,
     name: "Zone contributive",
-    href: "/dashboard/zonecontibutives",
+    href: "/dashboard/zonecontributives",
   },
   {
     icon: Images,
@@ -50,6 +50,7 @@ const links = [
     href: "/dashboard/photos",
   },
 ];
+
 export default function NavMenu() {
   const pathName = usePathname();
   return (

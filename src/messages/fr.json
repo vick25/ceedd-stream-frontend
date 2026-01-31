@@ -29,6 +29,7 @@
     "missionDescription": "Des solutions de cartographie innovantes pour un monde connecté.",
     "all": "Tous",
     "dataLoading": "Chargement des données...",
+    "mapLoading": "Chargement de la carte...",
     "overView": "Aperçu global",
     "overViewIntro": "Données en temps réel sur l’état et l’impact des infrastructures de gestion des eaux.",
     "currentMonitoring": "Actuellement en monitoring",
@@ -36,7 +37,8 @@
     "water": "Eau fonctionnelle",
     "warning": "Erreur de chargement",
     "warningMessage": "Une erreur s'est produite lors de la récupération des données.",
-    "tryAgain": "Essayer de nouveau"
+    "tryAgain": "Essayer de nouveau",
+    "search": "Rechercher par type ou nom..."
   },
   "FilterCard": {
     "title": "Options de filtrage",
@@ -46,12 +48,14 @@
     "selectMarker": "Sélectionner un marqueur sur la carte",
     "lastUpdated": "Dernière mise à jour",
     "infrastructureState": "État de l'infrastructure",
+    "funder": "Bailleur",
     "noPhoto": "Pas de photo disponible"
   },
   "MapView": {
     "capacity": "Capacité",
     "builtOn": "Construit le",
-    "details": "Voir les détails"
+    "details": "Voir les détails",
+    "coordinates": "Coordonnées"
   },
   "AboutPage": {
     "title": "À propos de STREAM",
@@ -76,12 +80,19 @@
     "getInTouch": "Prenez contact",
     "contactDescription": "Vous avez des questions ou souhaitez collaborer ? Contactez-nous !",
     "name": "Nom",
+    "namePlaceholder": "Votre nom",
     "email": "Email",
     "message": "Message",
+    "messagePlaceholder": "Comment pouvons-nous vous aider ?",
     "sendMessage": "Envoyer le message",
     "address": "Notre adresse",
     "phone": "Téléphone",
     "emailAddress": "Email"
+  },
+  "DonatePage": {
+    "title": "Supporter notre cause",
+    "donateDescription": "Votre contribution nous aide à maintenir nos services, déployer des équipes de terrain et vérifier les points d'eau dans les zones lointaines.",
+    "donateButton": "Faire un don maintenant"
   },
   "DashboardPage": {
     "title": "Dashboard",

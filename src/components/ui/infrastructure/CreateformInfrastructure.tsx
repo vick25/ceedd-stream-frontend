@@ -1,11 +1,11 @@
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 import { useCustomers } from "@/components/hooks/useCustomer";
 import { useCreateInfrastructure } from "@/components/hooks/useInfrastructure";
 import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
 import { useZoneContributives } from "@/components/hooks/useZoneContributive";
-import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -91,21 +91,22 @@ const CreateformInfrastructure = ({
   };
 
   return (
-    <div className=" w-full min-w-[50vw] lg:min-w-[800px] p-6">
+    <div className="w-full min-w-[50vw] lg:min-w-200 p-6">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 flex flex-col gap-4"
       >
         <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
-            <Label htmlFor="nom"> Nom:</Label>
+            <Label htmlFor="nom">Nom :</Label>
             <Input
               id="nom"
               type="text"
               placeholder="nom"
               {...register("nom")}
-              className={`border border-gray-300 ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border border-gray-300 ${
+                errors.nom ? "border border-red-500" : "border border-gray-300"
+              }`}
             />
             {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
@@ -117,10 +118,11 @@ const CreateformInfrastructure = ({
             </Label>
             <select
               {...register("type_infrastructure_id")}
-              className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.type_infrastructure_id
+              className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.type_infrastructure_id
                   ? "border border-red-500 "
                   : "border border-gray-500"
-                }`}
+              }`}
             >
               <option value="">Selectionnez</option>
               {typeInfrastructure?.results.map((type: any) => (
@@ -136,7 +138,7 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="date_construction">date Construction:</Label>
+            <Label htmlFor="date_construction">Date Construction :</Label>
             <Input
               id="date_construction"
               type="date"
@@ -149,7 +151,7 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="latitude">Latitude : </Label>
+            <Label htmlFor="latitude">Latitude :</Label>
             <Input
               id="latitude"
               type="text"
@@ -162,7 +164,7 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="longitude">Longitude : </Label>
+            <Label htmlFor="longitude">Longitude :</Label>
             <Input
               id="longitude"
               type="text"
@@ -175,7 +177,7 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="capacite">Capacite : </Label>
+            <Label htmlFor="capacite">Capacité :</Label>
             <Input
               id="capacite"
               type="number"
@@ -188,7 +190,7 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="unite">Unite (L): </Label>
+            <Label htmlFor="unite">Unite (L/m3) :</Label>
             <Input
               id="unite"
               type="text"
@@ -201,7 +203,7 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="zone">Zone : </Label>
+            <Label htmlFor="zone">Zone :</Label>
             <select
               {...register("zone")}
               className="flex border border-gray-300 h-10 w-full rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
@@ -221,10 +223,11 @@ const CreateformInfrastructure = ({
             <Label htmlFor="client_id">Client :</Label>
             <select
               {...register("client_id")}
-              className={`flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.client_id
+              className={`flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.client_id
                   ? "border border-red-500 "
                   : "border border-gray-300"
-                }`}
+              }`}
             >
               <option value="">Selectionnez</option>
               {customersData?.results.map((type: any) => (

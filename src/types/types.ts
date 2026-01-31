@@ -12,6 +12,7 @@ export interface MapFeature {
   date: string;
   etat: string;
   imageUrls: [string] | null;
+  logoUrls: [string] | null;
 }
 
 export interface StatItem {

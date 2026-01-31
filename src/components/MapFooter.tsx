@@ -14,13 +14,13 @@ export const Footer: React.FC = () => {
           {/* Section Gauche: Brand & Mission */}
           <div className="flex flex-col items-center md:items-start space-y-6">
             <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="relative w-16 h-16 bg-white rounded-full p-2 flex items-center justify-center shrink-0">
+              <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center shrink-0">
                 <Image
                   src="/streamlogo.png"
                   alt="Streams Logo"
-                  width={48}
+                  width={45}
                   height={48}
-                  className="object-contain"
+                  className="h-auto w-auto"
                 />
               </div>
               <span className="font-bold text-lg lg:text-xl tracking-tight leading-tight">

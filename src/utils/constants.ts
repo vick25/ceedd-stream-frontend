@@ -3,6 +3,15 @@ export const API_ENDPOINTS = {
   apiAuth: "/api",
 };
 
+export const PARTNERS = [
+  { name: "terrafirma", logo: "/terrafirma.png" },
+  { name: "unikin", logo: "/unikin.jpeg" },
+  { name: "ceedd", logo: "/ceedd.png" },
+  { name: "ai cpkk", logo: "/AICPKK.jpg" },
+  { name: "leuven", logo: "/leuven.png" },
+  { name: "vliruos", logo: "/logo_vliruos.png" },
+];
+
 export const MONTHS = [
   { value: "01", label: "Janvier" },
   { value: "02", label: "Février" },

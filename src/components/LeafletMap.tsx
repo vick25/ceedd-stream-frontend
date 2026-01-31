@@ -2,7 +2,8 @@
 
 import { MapFeature } from "@/types/types";
 import { displayDate } from "@/utils/utils";
-import { Icon } from "leaflet";
+// import { Icon } from "leaflet";
+import L from "leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet/dist/leaflet.css";
@@ -27,13 +28,19 @@ const MarkerClusterGroup = dynamic(
 
 interface LeafletMapProps {
   features: MapFeature[];
+  selectedCategory?: string;
   onFeatureClick: (feature: MapFeature) => void;
   selectedFeatureId?: string;
   mapStyle: "standard" | "satellite";
+  zoomToFeature?: boolean;
 }
 
 // A component to handle map events and update coordinates
-function MapEvents({ setCoords }: { setCoords: React.Dispatch<React.SetStateAction<{ lat: number; lng: number }>> }) {
+function MapEvents({
+  setCoords,
+}: {
+  setCoords: React.Dispatch<React.SetStateAction<{ lat: number; lng: number }>>;
+}) {
   useMapEvents({
     mousemove(e) {
       // The event object 'e' has a 'latlng' property with lat and lng
@@ -58,45 +65,100 @@ const useIsMobile = () => {
   return isMobile;
 };
 
-const icons = [{
-  type: "Citerne",
-  iconUrl: "/citerne.png"
-}, {
-  type: "Déversoir",
-  iconUrl: "/deversoir.png"
-}, {
-  type: "Bassin de rétention",
-  iconUrl: "/bassin_retention.png"
-}];
+const icons = [
+  {
+    type: "Citerne",
+    iconUrl: "/citerne.png",
+  },
+  {
+    type: "Déversoir",
+    iconUrl: "/deversoir.png",
+  },
+  {
+    type: "Bassin de rétention",
+    iconUrl: "/bassin_retention.png",
+  },
+];
 
 // Icônes adaptatives
 const getIconUrl = (type: string) => {
-  const iconObj = icons.find(icon => icon.type === type);
+  const iconObj = icons.find((icon) => icon.type === type);
   return iconObj ? iconObj.iconUrl : "/iconImage.png";
 };
 
-const getCustomIcon = (iconUrl: string, isMobile: boolean) =>
-  new Icon({
-    iconUrl,
-    iconSize: isMobile ? [32, 32] : [48, 48],
-    iconAnchor: isMobile ? [16, 0] : [24, 0],
-    popupAnchor: [0, 0],
-  });
+// const getCustomIcon = (iconUrl: string, isMobile: boolean) =>
+//   new Icon({
+//     iconUrl,
+//     iconSize: isMobile ? [24, 24] : [40, 40],
+//     iconAnchor: isMobile ? [12, 0] : [20, 0],
+//     popupAnchor: [0, 0],
+//   });
 
+// Helper function to create the custom DivIcon
+const createCustomIcon = (imagePath: string, isMobile: boolean) => {
+  return L.divIcon({
+    className: "custom-div-icon", // Wrapper class
+    html: `<div class='marker-pin'><img src="${imagePath}" alt="${imagePath}" /></div>`,
+    iconSize: isMobile ? [24, 24] : [50, 50],
+    iconAnchor: isMobile ? [12, 24] : [25, 50], // Bottom tip of the pin
+    popupAnchor: isMobile ? [0, -30] : [0, -45], // Where popup opens relative to anchor
+  });
+};
+
+// Component to invalidate the map size
+const InvalidateSize = () => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map) return;
+    setTimeout(() => {
+      map?.invalidateSize();
+    }, 200);
+  }, [map]);
+
+  return null;
+};
+
+// Component to fit the features in the bounding box
+const FitBounds: React.FC<{ features: MapFeature[] }> = ({ features }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (features && features.length > 0 && map) {
+      // Create an array of [lat, lng] pairs from your features
+      const bounds = features.map((f) => [f.lat, f.lng] as [number, number]);
+
+      // Fit the map to these bounds
+      map.fitBounds(bounds, {
+        padding: [50, 50],
+        maxZoom: 12,
+        duration: 1,
+      });
+    }
+  }, [features, map]);
+
+  return null;
+};
+
+// Component to update the map features
 const MapUpdater: React.FC<{
   selectedFeature?: MapFeature;
   isMobile: boolean;
-}> = ({ selectedFeature, isMobile }) => {
+  zoomToFeature?: boolean;
+}> = ({ selectedFeature, isMobile, zoomToFeature }) => {
   const map = useMap();
   useEffect(() => {
     if (selectedFeature) {
-      // Zoom plus faible sur mobile pour garder du contexte
-      const zoomLevel = isMobile ? 13 : 15;
-      map.flyTo([selectedFeature.lat, selectedFeature.lng], zoomLevel, {
+      const targetZoom = zoomToFeature ? (isMobile ? 14 : 16) : map.getZoom();
+
+      map.flyTo([selectedFeature.lat, selectedFeature.lng], targetZoom, {
         duration: 1.5,
       });
     }
-  }, [selectedFeature, map, isMobile]);
+    return () => {
+      null;
+    };
+  }, [selectedFeature, map, zoomToFeature, isMobile]);
   return null;
 };
 
@@ -122,9 +184,11 @@ const CtrlZoomHandler: React.FC = () => {
 
 const LeafletMap: React.FC<LeafletMapProps> = ({
   features,
+  selectedCategory,
   onFeatureClick,
   selectedFeatureId,
   mapStyle,
+  zoomToFeature,
 }) => {
   const t = useTranslations("MapView");
   const isMobile = useIsMobile();
@@ -137,14 +201,18 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       <MapContainer
         center={center}
         zoom={zoom}
-        scrollWheelZoom={false}
-        style={{ height: "100%", width: "100%" }}
         zoomControl={false}
+        scrollWheelZoom={false}
         // On remplace tap par dragging pour améliorer l'expérience mobile
         dragging={true}
         touchZoom={true}
         doubleClickZoom={true}
+        style={{ height: "100dvh", width: "100%" }}
       >
+        <InvalidateSize />
+
+        {selectedCategory !== "All" && <FitBounds features={features} />}
+
         {mapStyle === "standard" ? (
           <TileLayer
             key="osm-layer"
@@ -158,7 +226,6 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           />
         )}
-
         <MarkerClusterGroup>
           {useMemo(
             () =>
@@ -166,7 +233,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                 <Marker
                   key={feature.id}
                   position={[feature.lat, feature.lng]}
-                  icon={getCustomIcon(getIconUrl(feature.type), isMobile)}
+                  icon={createCustomIcon(getIconUrl(feature.type), isMobile)}
                   eventHandlers={{
                     click: () => onFeatureClick(feature),
                     // On n'active le popup au survol que sur desktop
@@ -204,7 +271,9 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
                       </div>
 
                       <div className="pt-1 text-[11px] md:text-xs text-gray-500 italic">
-                        {`${t("builtOn")} ${displayDate(feature.date_construction)}`}
+                        {`${t("builtOn")} ${displayDate(
+                          feature.date_construction,
+                        )}`}
                       </div>
 
                       {isMobile && (
@@ -222,20 +291,20 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
             [features, selectedFeatureId, onFeatureClick, isMobile],
           )}
         </MarkerClusterGroup>
-
         <MapUpdater
           selectedFeature={features.find((f) => f.id === selectedFeatureId)}
           isMobile={isMobile}
+          zoomToFeature={zoomToFeature}
         />
-
         <CtrlZoomHandler />
         {/* On remet les contrôles en bas sur mobile pour l'accessibilité du pouce */}
         <ZoomControl position={isMobile ? "bottomright" : "topleft"} />
         {!isMobile && <ScaleControl position="bottomleft" imperial={false} />}
         <MapEvents setCoords={setCoords} />
       </MapContainer>
-      <div className="hidden md:block absolute bottom-0 left-20 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
-        {`Coordinates: ${coords.lat}, ${coords.lng}`}
+
+      <div className="hidden md:block absolute bottom-0 left-30 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
+        {`${t("coordinates")}: ${coords.lat}, ${coords.lng}`}
       </div>
     </div>
   );

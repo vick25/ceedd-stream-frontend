@@ -1,10 +1,12 @@
 import { MapFeature } from "@/types/types";
 import { formatDate } from "@/utils/utils";
+import { CldImage } from "next-cloudinary";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { CylinderGraph } from "./CylinderGraph";
+import { useBailleurs } from "./hooks/useBailleur";
 
 interface FilterCardProps {
   selectedFeature: MapFeature | null;
@@ -26,6 +28,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const t = useTranslations("FilterCard");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { data: bailleursData } = useBailleurs();
 
   // Normalize images into an array even if it's just one string
   const images = selectedFeature?.imageUrls
@@ -34,74 +37,85 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       : [selectedFeature.imageUrls]
     : [];
 
+  const financeInfo = (bailleursData as any)?.results.find((b: any) =>
+    b.finances.some(
+      (f: any) => f.infrastructure?.id?.toString() === selectedFeature?.id,
+    ),
+  );
+
+  // Get bailleur logo with this id
+  const logoUrl = selectedFeature?.logoUrls?.[0] || null;
+  const finalNom = financeInfo?.nom || financeInfo?.str || "Partenaire";
+
   const handleNext = () =>
     setCurrentIndex((prev) => (prev + 1) % images.length);
   const handlePrev = () =>
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
 
-  const maxCapacity = selectedFeature?.maxCapacity;
-  const volumeActuel = 4000;
+  // const maxCapacity = selectedFeature?.maxCapacity;
+  // const volumeActuel = 4000;
 
   return (
-    <div className="h-full flex flex-col p-5">
-      {/* Header of Card */}
-      <div className="flex justify-between items-center mb-3 pb-2 border-b border-gray-100">
-        <h2 className="text-lg font-bold text-gray-900">{t("title")}</h2>
-        <button
-          type="button"
-          onClick={onClose}
-          title="Close map options"
-          className="md:hidden text-gray-400 hover:text-gray-600"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+    <div className="h-full max-h-full flex flex-col p-5 overflow-hidden">
+      <div className="sticky top-0 z-20 pb-3 bg-white/95 backdrop-blur-sm">
+        {/* Header of Card */}
+        <div className="flex justify-between items-center mb-3 pb-2 border-b border-gray-100">
+          <h2 className="text-lg font-bold text-gray-900">{t("title")}</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            title="Close map options"
+            className="md:hidden text-gray-400 hover:text-gray-600"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
-
-      {/* Filter Section */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <label
-            htmlFor="category-select"
-            className="text-sm font-semibold text-gray-700"
-          >
-            {t("description")}
-          </label>
-          <label className="text-sm font-semibold text-red-700">
-            {filteredFeaturesCount}
-          </label>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
-        <div className="relative">
+
+        {/* Filter Section */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <label
+              htmlFor="category-select"
+              className="text-sm font-semibold text-gray-700"
+            >
+              {t("description")}
+            </label>
+            <label className="text-sm font-semibold text-red-700">
+              {filteredFeaturesCount}
+            </label>
+          </div>
+
           <select
             id="category-select"
             value={selectedCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
-            className="block w-full pl-3 pr-10 py-3 text-base border-gray-300 bg-gray-50 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg shadow-sm border cursor-pointer hover:bg-white transition-colors"
+            className="block w-full pl-3 pr-10 py-3 text-base border-gray-300 bg-gray-50 rounded-lg border cursor-pointer focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm shadow-sm hover:bg-white transition-colors"
           >
-            {availableCategories.map((cat: any) => (
+            {availableCategories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
               </option>
             ))}
           </select>
         </div>
+
+        <hr className="h-0.5 border-0 bg-[linear-gradient(25deg,red_5%,yellow_60%,lime_90%,teal)]" />
       </div>
 
-      <hr className="h-0.5 border-0 mb-2 bg-[linear-gradient(25deg,red_5%,yellow_60%,lime_90%,teal)]" />
-
       {/* Feature Details Section */}
-      <div className="grow mt-2 overflow-y-auto">
+      <div className="flex-1 mt-2 overflow-y-auto overscroll-contain">
         {selectedFeature ? (
           <div className="animate-fade-in space-y-4">
             <div className="flex justify-between items-start">
@@ -126,18 +140,23 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               <div className="flex-1 space-y-3">
                 <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300">
                   {images.length > 0 && images[0] ? (
-                    <Link href="#"
+                    <Link
+                      href="#"
                       scroll={false}
                       onClick={(e) => {
                         e.preventDefault(); // Prevents page jump
                         setIsModalOpen(true);
-                      }}>
-                      <Image
+                      }}
+                    >
+                      <CldImage
                         src={images[0]}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         alt={selectedFeature.nom}
-                        fill
-                        className="object-cover"
+                        width="800"
+                        height="600"
+                        crop="fill"
+                        sizes="256px"
+                        gravity="auto"
+                        className="object-cover max-w-full cursor-pointer"
                       />
                       {/* Optional: Show "Count" overlay if multiple images exist */}
                       {images.length > 1 && (
@@ -177,6 +196,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     {selectedFeature.nom}
                   </p>
                 </div>
+
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
                     {t("dateConstruction")}
@@ -202,36 +222,58 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                   </p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
-                  <p className="text-xs text-gray-400  tracking-wider font-semibold">
+                  <p className="text-xs text-gray-400 mb-1 tracking-wider font-semibold">
                     {t("infrastructureState")}
                   </p>
                   <span
-                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${selectedFeature.etat === "bon"
-                      ? "bg-green-100 text-green-700"
-                      : selectedFeature.etat === "moyen"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
-                      }`}
+                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${
+                      selectedFeature.etat === "bon"
+                        ? "bg-green-100 text-green-700"
+                        : selectedFeature.etat === "moyen"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
+                    }`}
                   >
                     {selectedFeature.etat}
                   </span>
-                  {/* <p className="font-medium text-gray-800 text-sm mt-1">
-                    {selectedFeature.etat}
-                  </p> */}
                 </div>
               </div>
 
               {/* Graph */}
-              <div className="w-full sm:w-auto flex justify-center items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
-                <CylinderGraph
-                  current={selectedFeature.maxCapacity}
-                  max={selectedFeature.maxCapacity}
-                />
+              <div className="w-full sm:w-auto flex flex-col justify-between items-center gap-3">
+                <div className="w-full sm:w-auto flex justify-center items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
+                  <CylinderGraph
+                    current={selectedFeature.maxCapacity}
+                    // max={selectedFeature.maxCapacity}
+                  />
+                </div>
+                <div className="w-full bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
+                  <p className="text-xs text-gray-400 tracking-wider font-semibold">
+                    {t("funder")}
+                  </p>
+                  {/*show the logo or the name of the funder*/}
+                  {logoUrl ? (
+                    <div className="relative w-full h-16 overflow-hidden">
+                      <Image
+                        src={logoUrl}
+                        alt={finalNom}
+                        fill
+                        /* object-contain est essentiel pour les logos */
+                        className="object-contain"
+                        sizes="100px"
+                      />
+                    </div>
+                  ) : (
+                    <p className="font-medium text-gray-800 text-sm mt-1">
+                      {finalNom}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-48 text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50/50">
+          <div className="flex flex-col items-center justify-center h-full text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50/50">
             <svg
               className="w-10 h-10 mb-2 text-gray-300"
               fill="none"
@@ -258,9 +300,10 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
       {/*Modal div to display the images */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-999 flex items-center justify-center bg-black/90 p-4">
+        <div className="fixed inset-0 z-999 flex items-center justify-center bg-black/90 p-4 rounded-md">
           {/* Close Button */}
-          <button aria-label="Close"
+          <button
+            aria-label="Close"
             type="button"
             onClick={() => setIsModalOpen(false)}
             className="absolute top-6 right-6 text-white hover:text-gray-300 z-50 bg-black/20 p-2 rounded-full"
@@ -282,7 +325,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
           {/* Left Button (Only if multiple images) */}
           {images.length > 1 && (
-            <button aria-label="Go to previous image"
+            <button
+              aria-label="Go to previous image"
               type="button"
               onClick={handlePrev}
               className="absolute left-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all z-50"
@@ -305,18 +349,22 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
           {/* Large Image Container */}
           <div className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center">
-            <Image
+            <CldImage
               src={images[currentIndex]}
               alt={`${selectedFeature?.nom} - ${currentIndex + 1}`}
-              fill
-              className="object-contain" // Keeps image in perspective
-              priority
+              width="800"
+              height="600"
+              crop="fill"
+              gravity="auto"
+              className="object-contain rounded-md" // Keeps image in perspective
+              // priority
             />
           </div>
 
           {/* Right Button (Only if multiple images) */}
           {images.length > 1 && (
-            <button aria-label="Go to next image"
+            <button
+              aria-label="Go to next image"
               type="button"
               onClick={handleNext}
               className="absolute right-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all z-50"
