@@ -207,7 +207,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         dragging={true}
         touchZoom={true}
         doubleClickZoom={true}
-        style={{ height: "100dvh", width: "100%" }}
+        style={{ height: "100%", width: "100%" }}
       >
         <InvalidateSize />
 
@@ -303,7 +303,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         <MapEvents setCoords={setCoords} />
       </MapContainer>
 
-      <div className="hidden md:block absolute bottom-0 left-30 bg-white border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
+      <div className="hidden md:block absolute bottom-0 left-32 bg-white/70 text-gray-700 border border-gray-300 mb-1 px-1 text-sm font-mono z-400">
         {`${t("coordinates")}: ${coords.lat}, ${coords.lng}`}
       </div>
     </div>
