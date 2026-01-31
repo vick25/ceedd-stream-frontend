@@ -29,6 +29,7 @@
     "missionDescription": "Innovative mapping solutions for a connected world.",
     "all": "All",
     "dataLoading": "Loading data...",
+    "mapLoading": "Loading map...",
     "overView": "Global view",
     "overViewIntro": "Real-time data on the status and impact of water infrastructure.",
     "currentMonitoring": "Currently monitoring",

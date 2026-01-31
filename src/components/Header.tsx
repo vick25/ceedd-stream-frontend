@@ -87,7 +87,7 @@ export const Header: React.FC = () => {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`transition-colors pb-1 border-b-2 ${
+                  className={`transition-colors border-b-2 ${
                     isActive
                       ? "font-bold text-blue-600 border-blue-600"
                       : "font-medium text-gray-900 border-transparent hover:text-blue-600"

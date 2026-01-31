@@ -29,6 +29,7 @@
     "missionDescription": "Des solutions de cartographie innovantes pour un monde connecté.",
     "all": "Tous",
     "dataLoading": "Chargement des données...",
+    "mapLoading": "Chargement de la carte...",
     "overView": "Aperçu global",
     "overViewIntro": "Données en temps réel sur l’état et l’impact des infrastructures de gestion des eaux.",
     "currentMonitoring": "Actuellement en monitoring",
