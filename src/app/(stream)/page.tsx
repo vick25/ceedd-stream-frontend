@@ -4,21 +4,22 @@ import { Building2, Droplet, Package, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { FilterCard } from "@/components/FilterCard";
 import { useBailleurs } from "@/components/hooks/useBailleur";
 import { useGetAllInfrastructures } from "@/components/hooks/useInfrastructure";
 import { useGetInspections } from "@/components/hooks/useInspection";
 import { useGetPhotos } from "@/components/hooks/usePhotos";
-import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
+import { useTypeInfrastructures } from "@/components/hooks/useTypeInfrastructure";
 import { Footer } from "@/components/MapFooter";
 import { Card } from "@/components/ui/card";
 import { MapFeature } from "@/types/types";
+import { PARTNERS } from "@/utils/constants";
 
 // 1. Composant de chargement léger pour éviter de bloquer tout l'écran
 const MapLoader = () => (
-  <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gray-100 animate-pulse">
+  <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gray-100">
     <div className="text-center">
       <div className="inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-2" />
       <p>Chargement de la carte...</p>
@@ -31,14 +32,6 @@ const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
   loading: () => <MapLoader />,
 });
 
-const PARTNERS = [
-  { name: "terrafirma", logo: "/terrafirma.png" },
-  { name: "unikin", logo: "/unikin.jpeg" },
-  { name: "ceedd", logo: "/ceedd.png" },
-  { name: "ai cpkk", logo: "/AICPKK.jpg" },
-  { name: "leuven", logo: "/leuven.png" },
-  { name: "vliruos", logo: "/logo_vliruos.png" },
-];
 // 2. Mémoïsation des composants de l'interface pour éviter les re-renders inutiles
 const StatCard = memo(({ icon, title, value, subTitle }: any) => (
   <div className="hover:bg-white border border-transparent rounded-2xl p-8 text-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl group">
@@ -58,10 +51,13 @@ export default function Home() {
   // --- RÉCUPÉRATION DES DONNÉES ---
   const {
     data: infraData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     isLoading: isInfraLoading,
     isError: isInfraError,
   } = useGetAllInfrastructures();
-  const { data: typesData } = useTypeInfradtructures();
+  const { data: typesData } = useTypeInfrastructures();
   const { data: inspectionData } = useGetInspections();
   const { data: photosData } = useGetPhotos();
   const { data: bailleursData } = useBailleurs();
@@ -78,6 +74,8 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [zoomToFeature, setZoomToFeature] = useState(false);
+
+  const totalCount = infraData?.pages?.[0]?.count ?? 0; // Infrastructures total count
 
   // --- OPTIMISATION DU TRAITEMENT DES DONNÉES (Performance critique) ---
 
@@ -119,44 +117,51 @@ export default function Home() {
     return map;
   }, [photosData]);
 
-  // console.log({ bailleursData });
-  // console.log({ bailleursMap });
   // Transformation principale : légère car elle pioche dans les dictionnaires déjà prêts
   const allFeatures = useMemo(() => {
-    if (!infraData?.results) return [];
+    if (!infraData?.pages) return [];
 
-    return infraData.results
-      .filter((item: any) => item.latitude !== null && item.longitude !== null)
-      .map((item: any) => {
-        const idStr = item.id.toString();
+    return infraData.pages.flatMap((page: any) =>
+      page.results
+        .filter(
+          (item: any) => item.latitude !== null && item.longitude !== null,
+        )
+        .map((item: any) => {
+          const idStr = item.id.toString();
 
-        // 1. Trouver le bailleur qui finance cette infrastructure
-        const bailleurAssocie = bailleursData?.results.find((b: any) =>
-          b.finances.some(
-            (f: any) => f.infrastructure?.id?.toString() === idStr,
-          ),
-        );
+          // 1. Trouver le bailleur qui finance cette infrastructure
+          const bailleurAssocie = bailleursData?.results.find((b: any) =>
+            b.finances.some(
+              (f: any) => f.infrastructure?.id?.toString() === idStr,
+            ),
+          );
 
-        // 2. Récupérer l'ID du bailleur pour piocher dans la photoMap
-        const bailleurId = bailleurAssocie?.id?.toString();
-        return {
-          id: idStr,
-          lat: item.latitude,
-          lng: item.longitude,
-          nom: item.nom,
-          type: item.type_infrastructure?.nom,
-          location: item.city,
-          lastVerification: item.last_update_date,
-          date_construction: item.date_construction,
-          waterVolume: item.current_volume,
-          maxCapacity: item.capacite,
-          date: inspectionMap[idStr]?.date || "Non renseignée",
-          etat: inspectionMap[idStr]?.etat || "Inconnu",
-          imageUrls: photoMap[idStr] || null,
-          logoUrls: bailleurId ? bailleursMap[bailleurId] : null,
-        };
-      });
+          // 2. Récupérer l'ID du bailleur pour piocher dans la photoMap
+          const bailleurId = bailleurAssocie?.id?.toString();
+          return {
+            id: idStr,
+            lat: item.latitude,
+            lng: item.longitude,
+            nom: item.nom,
+            type: item.type_infrastructure?.nom,
+            location: item.city,
+            lastVerification: item.last_update_date,
+            date_construction: item.date_construction,
+            waterVolume: item.current_volume,
+            maxCapacity: item.capacite,
+            date: inspectionMap[idStr]?.date || "Non renseignée",
+            etat: inspectionMap[idStr]?.etat || "Inconnu",
+            imageUrls: photoMap[idStr] || null,
+            logoUrls: bailleurId ? bailleursMap[bailleurId] : null,
+          };
+        }),
+    );
   }, [infraData, inspectionMap, photoMap, bailleursMap, bailleursData]);
+
+  useEffect(() => {
+    if (!hasNextPage || isFetchingNextPage) return;
+    fetchNextPage();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const filteredFeatures = useMemo(() => {
     return selectedCategory === "All"
@@ -274,21 +279,19 @@ export default function Home() {
             <div className="pointer-events-auto bg-white/90 backdrop-blur rounded-lg shadow p-1 flex mb-4 border border-gray-100">
               <button
                 onClick={() => setMapStyle("standard")}
-                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
-                  mapStyle === "standard"
+                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${mapStyle === "standard"
                     ? "bg-blue-600 text-white"
                     : "text-gray-500"
-                }`}
+                  }`}
               >
                 OSM
               </button>
               <button
                 onClick={() => setMapStyle("satellite")}
-                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
-                  mapStyle === "satellite"
+                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${mapStyle === "satellite"
                     ? "bg-blue-600 text-white"
                     : "text-gray-500"
-                }`}
+                  }`}
               >
                 SATELLITE
               </button>
@@ -299,11 +302,10 @@ export default function Home() {
           <div
             className={`
             w-85 md:w-95 bg-white/95 backdrop-blur-sm shadow-2xl pointer-events-auto flex flex-col transition-transform duration-300
-            ${
-              isFilterVisible
+            ${isFilterVisible
                 ? "translate-x-0"
                 : "translate-x-full md:translate-x-0 hidden md:flex"
-            }
+              }
             h-full md:max-h-full rounded-lg md:rounded-xl border-t md:border border-gray-100
           `}
           >
@@ -332,7 +334,7 @@ export default function Home() {
             <StatCard
               icon={<Building2 className="h-10 w-10" />}
               title={t("currentMonitoring")}
-              value={infraData?.count || 0}
+              value={totalCount}
               subTitle="Infrastructures"
             />
             <StatCard
@@ -349,11 +351,11 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center">
           <h3 className="text-xl font-bold mb-8">{t("partnerTrust")}</h3>
           <div className="flex flex-wrap justify-center gap-8 items-centertransition-all">
-            {PARTNERS.map((p) => (
+            {PARTNERS.map((partner) => (
               <Image
-                key={p.name}
-                src={p.logo}
-                alt={p.name}
+                key={partner.name}
+                src={partner.logo}
+                alt={partner.name}
                 width={80}
                 height={80}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

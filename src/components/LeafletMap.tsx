@@ -2,7 +2,7 @@
 
 import { MapFeature } from "@/types/types";
 import { displayDate } from "@/utils/utils";
-import { Icon } from "leaflet";
+// import { Icon } from "leaflet";
 import L from "leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
@@ -105,6 +105,7 @@ const createCustomIcon = (imagePath: string, isMobile: boolean) => {
   });
 };
 
+// Component to invalidate the map size
 const InvalidateSize = () => {
   const map = useMap();
 
@@ -139,6 +140,7 @@ const FitBounds: React.FC<{ features: MapFeature[] }> = ({ features }) => {
   return null;
 };
 
+// Component to update the map features
 const MapUpdater: React.FC<{
   selectedFeature?: MapFeature;
   isMobile: boolean;
@@ -153,6 +155,9 @@ const MapUpdater: React.FC<{
         duration: 1.5,
       });
     }
+    return () => {
+      null;
+    };
   }, [selectedFeature, map, zoomToFeature, isMobile]);
   return null;
 };
@@ -202,7 +207,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         dragging={true}
         touchZoom={true}
         doubleClickZoom={true}
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: "100dvh", width: "100%" }}
       >
         <InvalidateSize />
 

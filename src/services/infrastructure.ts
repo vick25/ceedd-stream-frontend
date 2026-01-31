@@ -18,17 +18,16 @@ interface InfrastructureData {
   client: string;
 }
 
-export const serviceinfrastructure = {
-  async getInfrastructure(): Promise<any> {
+export const serviceInfrastructure = {
+  async getInfrastructure(offset: number = 0): Promise<any> {
     const response = await API.get<InfrastructureTypes[]>(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}`,
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}?limit=100&offset=${offset}`,
     );
-
     return response.data;
   },
   async getInfrastructureById(id: string): Promise<any> {
     const response = await API.get(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`,
     );
     return response.data;
   },
@@ -44,7 +43,6 @@ export const serviceinfrastructure = {
       `${API_ENDPOINTS.api}${ceedd.infrastructure}${id}/`,
       data,
     );
-
     return response.data;
   },
   async deleteInfrastructure(id: string): Promise<any> {
@@ -64,7 +62,6 @@ export const serviceinfrastructure = {
         },
       },
     );
-    // console.log(response.data);
     return response.data;
   },
   async getInfrastructureByadresseLocation(
