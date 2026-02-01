@@ -5,10 +5,11 @@ import { useInfrastructures } from "@/components/hooks/useInfrastructure";
 import { Locale, useTranslations } from "@/lib/i18n";
 import { Building2, User } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-
-import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
+//
+// import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
+import { useTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
 
 export default function DashboardPage() {
   const [locale, setLocale] = useState<Locale>("fr");
@@ -18,42 +19,42 @@ export default function DashboardPage() {
   const { data: infrastructures, isPending: isInfrastructuresPending } =
     useInfrastructures();
   const router = useRouter();
-
+  console.log({ infrastructures });
   const { data: clients, isPending: isClientsPending } = useCustomers();
-  const { data: typesInfrastructure, isPending: isTypePending } = useTypeInfradtructures();
+  const { data: typesInfrastructure, isPending: isTypePending } =
+    useTypeInfrastructure();
   // console.log({ typesInfrastructure });
   const stats = useMemo(() => {
     // const total = infrastructures.count;
-    if (!infrastructures || !infrastructures.results) {
-      return {
-        totalInfrastructures: 0,
-        totalCapacity: 0,
-        totalInvestement: 0,
-      };
+    const defaultStats = {
+      totalInfrastructures: 0,
+      totalCapacity: 0,
+      totalClients: 0,
+      totalInvestement: 0,
+    };
+    if (
+      !infrastructures ||
+      !infrastructures?.results ||
+      !clients ||
+      !clients.results
+    ) {
+      return defaultStats;
     }
-    if (!clients || !clients.results) {
-      return {
-        totalClients: 0,
-      };
-    }
+    // if (!clients || !clients.results) {
+    //   return {
+    //     totalClients: 0,
+    //   };
+    // }
 
-    if (typesInfrastructure || typesInfrastructure.results) {
-      return {
-        totalTypeInfrastructure: 0,
-      };
-    }
-    const infrastructureList = infrastructures.results;
-    // const testTotal = infrastructureList.length;
-
-    const total = infrastructures.count || infrastructureList.length;
-
-    const clientList = clients.results;
-
-    const ClientsCount = clients.count || clients.length;
+    // 3. On calcule les valeurs seulement si les données existent
+    const infraResults = infrastructures?.results || [];
+    const clientResults = clients?.results || [];
 
     return {
-      totalInfrastructures: total,
-      totalClients: ClientsCount,
+      ...defaultStats, // On garde les zéros par défaut pour la sécurité
+      totalInfrastructures: infrastructures?.count || infraResults.length,
+      totalClients: clients?.count || clientResults.length,
+      // Ajoutez ici vos autres calculs (investissements, etc.)
     };
   }, [infrastructures, clients]);
 
@@ -127,7 +128,7 @@ export default function DashboardPage() {
                 {t.dashboard.typeInfrastructures}
               </div>
               <div className="text-3xl font-bold text-purple-600 flex items-center justify-center">
-                {typesInfrastructure.count}
+                {typesInfrastructure?.length}
               </div>
             </div>
           )}
