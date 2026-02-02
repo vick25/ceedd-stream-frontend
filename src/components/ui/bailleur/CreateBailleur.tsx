@@ -1,37 +1,18 @@
-import React, { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useEffect } from "react";
 
-import { Button } from "@/components/ui/button";
-import {
-  useCreateInfrastructure,
-  useInfrastructures,
-} from "@/components/hooks/useInfrastructure";
-import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  useCreateCustomers,
-  useCustomers,
-} from "@/components/hooks/useCustomer";
-import { useAppStore } from "@/store/appStore";
-import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { useAppStore } from "@/store/appStore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { useCreateZoneContributives } from "@/components/hooks/useZoneContributive";
 import {
-  useBailleurs,
-  useCreateBailleurs,
+  useCreateBailleurs
 } from "@/components/hooks/useBailleur";
 interface FormData {
   nom: string;
@@ -68,7 +49,7 @@ const CreateBailleur = ({ onFormSuccess }: BailleurFormProps) => {
 
   const mutationCreateBailleurs = useCreateBailleurs();
 
-    const onSubmit = async (data: BailleurFormData) => {
+  const onSubmit = async (data: BailleurFormData) => {
     // Handle form submission logic here
     const payload = {
       nom: data.nom,
@@ -104,13 +85,12 @@ const CreateBailleur = ({ onFormSuccess }: BailleurFormProps) => {
               type="text"
               placeholder="nom"
               {...register("nom")}
-              className={`border border-white ${
-                errors.nom
+              className={`border border-white ${errors.nom
                   ? "border border-red-500"
                   : touchedFields.nom
-                  ? "border border-green-600"
-                  : "border border-gray-300"
-              }`}
+                    ? "border border-green-600"
+                    : "border border-gray-300"
+                }`}
             />
             {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>

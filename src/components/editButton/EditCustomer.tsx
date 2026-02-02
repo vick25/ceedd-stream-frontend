@@ -1,35 +1,22 @@
+import { useAppStore } from "@/store/appStore";
+import { IconButton } from "@radix-ui/themes";
+import { useQueryClient } from "@tanstack/react-query";
+import { PencilLine } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import {
+  useUpdateCustomers
+} from "../hooks/useCustomer";
+import Loader from "../Loader";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { IconButton } from "@radix-ui/themes";
-import { PencilLine } from "lucide-react";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import {
-  Client,
-  InfrastructureTypes,
-  // zone_contributive,
-} from "@/types/infrastructure";
-import { Button } from "../ui/button";
-import {
-  useGetInfrastructure,
-  useUpdateInfrastructure,
-} from "../hooks/useInfrastructure";
-import {
-  useCustomers,
-  useGetCustomer,
-  useUpdateCustomers,
-} from "../hooks/useCustomer";
-import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
-import { Skeleton } from "../ui/skeleton";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useAppStore } from "@/store/appStore";
-import Loader from "../Loader";
+import { Label } from "../ui/label";
 interface ClientProps {
   id: string;
   nom: string;

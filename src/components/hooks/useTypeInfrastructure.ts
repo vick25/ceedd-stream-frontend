@@ -1,7 +1,6 @@
 import { serviceTypeInfrastructure } from "@/services/typeInfrastructure";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { any } from "zod";
 
 export const useTypeInfrastructure = () => {
   return useMutation({
