@@ -4,23 +4,11 @@ import { Label } from "@/components/ui/label";
 
 import { useCustomers } from "@/components/hooks/useCustomer";
 import { useCreateInfrastructure } from "@/components/hooks/useInfrastructure";
-// import { useTypeInfrastructures } from "@/components/hooks/useTypeInfrastructure";
 import { useZoneContributives } from "@/components/hooks/useZoneContributive";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useTypeInfrastructures } from "@/components/hooks/useTypeInfrastructure";
-interface FormData {
-  nom: string;
-  type_infrastructure_id: string;
-  date_construction: string;
-  latitude: string;
-  longitude: string;
-  capacite: string;
-  unite: string;
-  zone: string;
-  client_id: string;
-}
+
 const infrastructureSchema = z.object({
   nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
   type_infrastructure_id: z
@@ -105,9 +93,8 @@ const CreateformInfrastructure = ({
               type="text"
               placeholder="nom"
               {...register("nom")}
-              className={`border border-gray-300 ${
-                errors.nom ? "border border-red-500" : "border border-gray-300"
-              }`}
+              className={`border border-gray-300 ${errors.nom ? "border border-red-500" : "border border-gray-300"
+                }`}
             />
             {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
@@ -119,11 +106,10 @@ const CreateformInfrastructure = ({
             </Label>
             <select
               {...register("type_infrastructure_id")}
-              className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.type_infrastructure_id
-                  ? "border border-red-500 "
-                  : "border border-gray-500"
-              }`}
+              className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.type_infrastructure_id
+                ? "border border-red-500 "
+                : "border border-gray-500"
+                }`}
             >
               <option value="">Selectionnez</option>
               {typeInfrastructure?.results.map((type: any) => (
@@ -224,11 +210,10 @@ const CreateformInfrastructure = ({
             <Label htmlFor="client_id">Client :</Label>
             <select
               {...register("client_id")}
-              className={`flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.client_id
-                  ? "border border-red-500 "
-                  : "border border-gray-300"
-              }`}
+              className={`flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.client_id
+                ? "border border-red-500 "
+                : "border border-gray-300"
+                }`}
             >
               <option value="">Selectionnez</option>
               {customersData?.results.map((type: any) => (

@@ -9,9 +9,9 @@ import toast from "react-hot-toast";
 import { useDebounce } from "./useDebounce";
 
 export const useGetInfrastructure = () => {
-  return useMutation({
-    mutationFn: serviceInfrastructure.getInfrastructure,
-    onSuccess: (response: any) => {},
+  return useQuery({
+    queryFn: async () => serviceInfrastructure.getInfrastructure(),
+    queryKey: ["infrastructure"],
   });
 };
 

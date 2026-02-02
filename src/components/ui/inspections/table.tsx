@@ -1,7 +1,4 @@
-// import Deleteinspstructure from "@/components/deleteButton/Deletei";
-
 import Loader from "@/components/Loader";
-
 import DeleteInspection from "@/components/deleteButton/DeleteInspection";
 import EditInspection from "@/components/editButton/editInspection";
 import { useGetInspections } from "@/components/hooks/useInspection";

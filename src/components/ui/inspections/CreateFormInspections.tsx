@@ -15,14 +15,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-interface FormData {
-  date: string;
-  etat: string;
-  inspecteur: string;
-  commentaire: string;
-  prochain_controle: string;
-  infrastructure_id: string;
-}
 
 interface CreateFormInspectionsProps {
   onFormSuccess: () => void;

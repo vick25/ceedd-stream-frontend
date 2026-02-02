@@ -22,39 +22,37 @@ export default function InfrastructureTable() {
   const [clientNames, setClientNames] = useState<Record<string, string>>({});
   const [typeInfras, setTypeInfras] = useState<Record<string, string>>({});
   const [zones, setZones] = useState<Record<string, string>>({});
-  const [infrastructureDeleted, setInfrastructureDeleted] =
-    useState<string>("");
+  const [infrastructureDeleted, setInfrastructureDeleted] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const pageItems = 20;
-  // initialize mutation
 
-  const mutationInfranstructure = useGetInfrastructure();
+  // initialize mutation
+  const mutationInfrastructure = useGetInfrastructure();
   const mutationCustomer = useGetCustomer();
   const mutationTypeInfrastructure = useAllTypeInfrastructure();
   const mutationZone = useZoneContributive();
 
   //useEffect
-
   useEffect(() => {
-    mutationInfranstructure.mutate();
+    // mutationInfrastructure.mutate();
     mutationCustomer.mutate();
     mutationTypeInfrastructure.mutate();
   }, [
-    mutationInfranstructure.mutate,
+    // mutationInfrastructure.mutate,
     mutationCustomer.mutate,
     mutationTypeInfrastructure.mutate,
   ]);
 
   useEffect(() => {
     if (
-      mutationInfranstructure.data &&
-      mutationInfranstructure.data.results.length > 0
+      mutationInfrastructure.data &&
+      mutationInfrastructure.data.results.length > 0
     ) {
-      const convertInfrastructure = mutationInfranstructure.data.results;
+      const convertInfrastructure = mutationInfrastructure.data.results;
       setGetInfrastructure(convertInfrastructure);
     }
-  }, [mutationInfranstructure.data]);
+  }, [mutationInfrastructure.data]);
 
   const totalPages = Math.ceil(getInfrastructure.length / pageItems);
   const startIndex = (currentPage - 1) * pageItems;
@@ -63,7 +61,7 @@ export default function InfrastructureTable() {
     startIndex + pageItems
   );
 
-  if (mutationInfranstructure.isPending) {
+  if (mutationInfrastructure.isPending) {
     return <Loader />;
   }
 

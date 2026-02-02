@@ -5,9 +5,7 @@ import { useInfrastructures } from "@/components/hooks/useInfrastructure";
 import { Locale, useTranslations } from "@/lib/i18n";
 import { Building2, User } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-//
-// import { useTypeInfrastructures } from "@/components/hooks/useTypeInfrastructure";
-import { useTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
+
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 
@@ -21,8 +19,7 @@ export default function DashboardPage() {
   const router = useRouter();
   console.log({ infrastructures });
   const { data: clients, isPending: isClientsPending } = useCustomers();
-  const { data: typesInfrastructure, isPending: isTypePending } =
-    useTypeInfrastructure();
+  const { data: typesInfrastructure, isPending: isTypePending } = useTypeInfrastructures();
   // console.log({ typesInfrastructure });
   const stats = useMemo(() => {
     // const total = infrastructures.count;
