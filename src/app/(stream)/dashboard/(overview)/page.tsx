@@ -6,10 +6,10 @@ import { Locale, useTranslations } from "@/lib/i18n";
 import { Building2, User } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 //
-// import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
+// import { useTypeInfrastructures } from "@/components/hooks/useTypeInfrastructure";
+import { useTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
-import { useTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
 
 export default function DashboardPage() {
   const [locale, setLocale] = useState<Locale>("fr");

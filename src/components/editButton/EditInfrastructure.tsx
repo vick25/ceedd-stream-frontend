@@ -1,10 +1,10 @@
 import { useAppStore } from "@/store/appStore";
 import {
   Client,
-  InfrastructureTypes,
-  Type_infrastructure,
+  Type_infrastructure
 } from "@/types/infrastructure";
 import { IconButton } from "@radix-ui/themes";
+import { useQueryClient } from "@tanstack/react-query";
 import { PencilLine } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ import {
   useGetInfrastructure,
   useUpdateInfrastructure,
 } from "../hooks/useInfrastructure";
-import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
+import { useTypeInfrastructures } from "../hooks/useTypeInfrastructure";
 import Loader from "../Loader";
 import { Button } from "../ui/button";
 import {
@@ -25,7 +25,6 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
 interface InfrastructureTypesProps {
   id: string;
   nom: string;
@@ -80,7 +79,7 @@ const EditInfrastructure = ({
   const {
     data: typeInfrastructureData,
     isLoading: IsTypeInfrastructureLoading,
-  } = useTypeInfradtructures();
+  } = useTypeInfrastructures();
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -142,7 +141,6 @@ const EditInfrastructure = ({
     longitude,
     capacite,
     unite,
-
     client,
   ]);
 

@@ -1,34 +1,20 @@
-import React, { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useEffect } from "react";
 
-import { Button } from "@/components/ui/button";
 import {
-  useCreateInfrastructure,
-  useInfrastructures,
+  useInfrastructures
 } from "@/components/hooks/useInfrastructure";
-import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  useCreateCustomers,
-  useCustomers,
-} from "@/components/hooks/useCustomer";
-import { useAppStore } from "@/store/appStore";
-import { useRouter } from "next/navigation";
-import Loader from "@/components/Loader";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { etat_ravin } from "@/types/infrastructure";
 import { useCreateZoneContributives } from "@/components/hooks/useZoneContributive";
+import Loader from "@/components/Loader";
+import { Button } from "@/components/ui/button";
+import { useAppStore } from "@/store/appStore";
+import { etat_ravin } from "@/types/infrastructure";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 interface FormData {
   nom: string;
   superficie: string;
@@ -122,9 +108,8 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
               type="text"
               placeholder="nom"
               {...register("nom")}
-              className={`border border-white ${
-                errors.nom ? "border border-red-500" : "border border-gray-300"
-              }`}
+              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
+                }`}
             />
             {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
@@ -137,11 +122,10 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
             <select
               id="etat_ravin"
               {...register("etat_ravin")}
-              className={`flex h-10 w-full rounded-md   bg-background px-3 py-2 text-sm ring-offset-background  file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.etat_ravin
+              className={`flex h-10 w-full rounded-md   bg-background px-3 py-2 text-sm ring-offset-background  file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.etat_ravin
                   ? "border border-red-500 "
                   : "border border-gray-300"
-              }`}
+                }`}
             >
               <option value={etat_ravin.SELECTIONNEZ} disabled>
                 Selectionnez un ravin
