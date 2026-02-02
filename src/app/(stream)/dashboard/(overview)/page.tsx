@@ -28,6 +28,7 @@ export default function DashboardPage() {
     // const total = infrastructures.count;
     const defaultStats = {
       totalInfrastructures: 0,
+      totalTypeInfrastructures: 0,
       totalCapacity: 0,
       totalClients: 0,
       totalInvestement: 0,
@@ -36,7 +37,9 @@ export default function DashboardPage() {
       !infrastructures ||
       !infrastructures?.results ||
       !clients ||
-      !clients.results
+      !clients.results ||
+      !typesInfrastructure ||
+      !typesInfrastructure.results
     ) {
       return defaultStats;
     }
@@ -49,11 +52,14 @@ export default function DashboardPage() {
     // 3. On calcule les valeurs seulement si les données existent
     const infraResults = infrastructures?.results || [];
     const clientResults = clients?.results || [];
+    const typeInfrastructuresResults = typesInfrastructure?.results || [];
 
     return {
       ...defaultStats, // On garde les zéros par défaut pour la sécurité
       totalInfrastructures: infrastructures?.count || infraResults.length,
       totalClients: clients?.count || clientResults.length,
+      totalTypeInfrastructures:
+        typesInfrastructure?.count || typeInfrastructuresResults.length,
       // Ajoutez ici vos autres calculs (investissements, etc.)
     };
   }, [infrastructures, clients]);
@@ -128,7 +134,7 @@ export default function DashboardPage() {
                 {t.dashboard.typeInfrastructures}
               </div>
               <div className="text-3xl font-bold text-purple-600 flex items-center justify-center">
-                {typesInfrastructure?.length}
+                {typesInfrastructure?.count}
               </div>
             </div>
           )}
