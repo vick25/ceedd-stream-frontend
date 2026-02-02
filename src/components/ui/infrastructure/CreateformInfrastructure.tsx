@@ -4,11 +4,12 @@ import { Label } from "@/components/ui/label";
 
 import { useCustomers } from "@/components/hooks/useCustomer";
 import { useCreateInfrastructure } from "@/components/hooks/useInfrastructure";
-import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
+// import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
 import { useZoneContributives } from "@/components/hooks/useZoneContributive";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useTypeInfrastructures } from "@/components/hooks/useTypeInfrastructure";
 interface FormData {
   nom: string;
   type_infrastructure_id: string;
@@ -65,7 +66,7 @@ const CreateformInfrastructure = ({
 
   const mutationCreateInfrastructure = useCreateInfrastructure();
   // const [isOpen,setIsOpen]=useState(false)
-  const { data: typeInfrastructure, isLoading } = useTypeInfradtructures();
+  const { data: typeInfrastructure, isLoading } = useTypeInfrastructures();
   const { data: customersData, isLoading: isCustomersLoading } = useCustomers();
   // const {data:zonesData,isLoading:isZonesLoading}=useZone()
   const { data: zoneData, isLoading: isLoandingZone } = useZoneContributives();
