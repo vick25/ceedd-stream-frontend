@@ -222,7 +222,7 @@ export default function Home() {
         {isInfraLoading && <MapLoader />}
 
         {/* Overlay : On garde l'UI interactive même pendant le chargement des données */}
-        <div className="absolute top-3 right-4 bottom-42 md:bottom-32 z-1000 flex flex-col items-end pointer-events-none gap-3">
+        <div className="absolute top-3 right-4 bottom-56 md:bottom-32 z-1000 flex flex-col items-end pointer-events-none gap-3">
           {/* Search & Style Controls (Top Right) */}
           <div className="flex gap-3 pointer-events-auto">
             {/* Search Bar */}
@@ -280,8 +280,8 @@ export default function Home() {
               <button
                 onClick={() => setMapStyle("standard")}
                 className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${mapStyle === "standard"
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-500"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-500"
                   }`}
               >
                 OSM
@@ -289,8 +289,8 @@ export default function Home() {
               <button
                 onClick={() => setMapStyle("satellite")}
                 className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${mapStyle === "satellite"
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-500"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-500"
                   }`}
               >
                 SATELLITE
