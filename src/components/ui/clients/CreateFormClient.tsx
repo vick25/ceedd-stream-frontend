@@ -13,20 +13,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-interface FormData {
-  nom: string;
-  postnom: string;
-  prenom: string;
-  sexe: string;
-  titre: string;
-  engagement: boolean;
-  avenue: string;
-  quartier: string;
-  numero: string;
-  telephone: string;
-  email: string;
-  commune: string;
-}
 
 interface CreateFormClientProps {
   onFormSuccess: () => void;
@@ -160,9 +146,9 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             <select
               id="sexe"
               {...register("sexe")}
-              className={`flex h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.sexe
-                ? "border border-red-500 "
-                : "border border-gray-200"
+              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.sexe
+                  ? "border border-red-500 "
+                  : "border border-gray-200"
                 }`}
             >
               <option value="M">M</option>

@@ -1,15 +1,13 @@
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-import { Callout, IconButton } from "@radix-ui/themes";
-import { InfoIcon, Trash } from "lucide-react";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
-import { useInfrastructureDeleted } from "../hooks/useInfrastructure";
-import { useCustomerDeleted } from "../hooks/useCustomer";
-import { boolean } from "zod";
+import { Callout, IconButton } from "@radix-ui/themes";
 import { useQueryClient } from "@tanstack/react-query";
+import { InfoIcon, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useCustomerDeleted } from "../hooks/useCustomer";
+import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 type props = {
   id: string;

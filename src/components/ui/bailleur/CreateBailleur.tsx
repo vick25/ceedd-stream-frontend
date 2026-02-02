@@ -4,7 +4,6 @@ import { useEffect } from "react";
 
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
-import { useAppStore } from "@/store/appStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";

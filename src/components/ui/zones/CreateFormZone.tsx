@@ -15,14 +15,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-interface FormData {
-  nom: string;
-  superficie: string;
-  etat_ravin: string;
-  description: string;
-  geom: string;
-  shapefile_id: number;
-}
 
 interface ZoneFormClientProps {
   onFormSuccess: () => void;
@@ -122,9 +114,9 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
             <select
               id="etat_ravin"
               {...register("etat_ravin")}
-              className={`flex h-10 w-full rounded-md   bg-background px-3 py-2 text-sm ring-offset-background  file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.etat_ravin
-                  ? "border border-red-500 "
-                  : "border border-gray-300"
+              className={`flex h-10 w-full rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.etat_ravin
+                ? "border border-red-500"
+                : "border border-gray-300"
                 }`}
             >
               <option value={etat_ravin.SELECTIONNEZ} disabled>

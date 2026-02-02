@@ -111,13 +111,13 @@ const EditInfrastructure = ({
     if (id) {
       await updateMutationInfrastructure.mutateAsync({ data: dataToSend, id });
 
-      mutationInfrastructure.mutate();
+      // mutationInfrastructure.mutate();
       setIsOpen(false);
     }
   };
-  useEffect(() => {
-    mutationInfrastructure.mutate();
-  }, []);
+  // useEffect(() => {
+  //   mutationInfrastructure.mutate();
+  // }, []);
 
   useEffect(() => {
     if (id) {
@@ -172,7 +172,7 @@ const EditInfrastructure = ({
         <DialogTitle>Modifier l'infrastructure</DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}
-          <form className="space-y-3 " onSubmit={handleSubmit}>
+          <form className="space-y-3" onSubmit={handleSubmit}>
             <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="nom">Nom Infrastructure:</Label>
