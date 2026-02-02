@@ -13,10 +13,7 @@ import * as z from "zod";
 import {
   useCreateBailleurs
 } from "@/components/hooks/useBailleur";
-interface FormData {
-  nom: string;
-  sigle: string;
-}
+import { useAppStore } from "@/store/appStore";
 
 interface BailleurFormProps {
   onFormSuccess: () => void;
@@ -85,10 +82,10 @@ const CreateBailleur = ({ onFormSuccess }: BailleurFormProps) => {
               placeholder="nom"
               {...register("nom")}
               className={`border border-white ${errors.nom
-                  ? "border border-red-500"
-                  : touchedFields.nom
-                    ? "border border-green-600"
-                    : "border border-gray-300"
+                ? "border border-red-500"
+                : touchedFields.nom
+                  ? "border border-green-600"
+                  : "border border-gray-300"
                 }`}
             />
             {errors.nom && (

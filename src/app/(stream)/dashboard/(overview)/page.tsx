@@ -2,13 +2,12 @@
 // import { DashboardStats } from "@/types/infrastructure";
 import { useCustomers } from "@/components/hooks/useCustomer";
 import { useInfrastructures } from "@/components/hooks/useInfrastructure";
-import { Locale, useTranslations } from "@/lib/i18n";
-import { Building2, User } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-
 import { useTypeInfrastructures } from "@/components/hooks/useTypeInfrastructure";
+import { Locale, useTranslations } from "@/lib/i18n";
 import { useAppStore } from "@/store/appStore";
+import { Building2, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 export default function DashboardPage() {
   const [locale, setLocale] = useState<Locale>("fr");
