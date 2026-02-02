@@ -1,38 +1,24 @@
+import { useAppStore } from "@/store/appStore";
+import { displayDate } from "@/utils/utils";
+import { IconButton } from "@radix-ui/themes";
+import { useQueryClient } from "@tanstack/react-query";
+import { PencilLine } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import {
+  useInfrastructures
+} from "../hooks/useInfrastructure";
+import { useUpdateInspection } from "../hooks/useInspection";
+import Loader from "../Loader";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { IconButton } from "@radix-ui/themes";
-import { PencilLine } from "lucide-react";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import {
-  Client,
-  InfrastructureTypes,
-  // zone_contributive,
-} from "@/types/infrastructure";
-import { Button } from "../ui/button";
-import {
-  useGetInfrastructure,
-  useInfrastructures,
-  useUpdateInfrastructure,
-} from "../hooks/useInfrastructure";
-import {
-  useCustomers,
-  useGetCustomer,
-  useUpdateCustomers,
-} from "../hooks/useCustomer";
-import { useTypeInfradtructures } from "../hooks/useTypeInfrastructure";
-import { Skeleton } from "../ui/skeleton";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useAppStore } from "@/store/appStore";
-import Loader from "../Loader";
-import { displayDate } from "@/utils/utils";
-import { useUpdateInspection } from "../hooks/useInspection";
+import { Label } from "../ui/label";
 interface InspectionProps {
   id: string;
   date: Date;

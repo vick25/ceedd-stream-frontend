@@ -1,44 +1,17 @@
-import React, { useEffect, useState } from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-
-import { Button } from "@/components/ui/button";
-import { useCreateInfrastructure } from "@/components/hooks/useInfrastructure";
-import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  useCreateCustomers,
-  useCustomers,
+  useCreateCustomers
 } from "@/components/hooks/useCustomer";
-import { useAppStore } from "@/store/appStore";
-import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { Engagement } from "next/font/google";
-interface FormData {
-  nom: string;
-  postnom: string;
-  prenom: string;
-  sexe: string;
-  titre: string;
-  engagement: boolean;
-  avenue: string;
-  quartier: string;
-  numero: string;
-  telephone: string;
-  email: string;
-  commune: string;
-}
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAppStore } from "@/store/appStore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 interface CreateFormClientProps {
   onFormSuccess: () => void;
@@ -137,9 +110,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="text"
               placeholder="nom"
               {...register("nom")}
-              className={`border border-white ${
-                errors.nom ? "border border-red-500" : "border border-gray-300"
-              }`}
+              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
+                }`}
             />
             {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
@@ -162,9 +134,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="prenom"
               placeholder="prenom"
               {...register("prenom")}
-              className={`border border-white ${
-                errors.nom ? "border border-red-500" : "border border-gray-300"
-              }`}
+              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
+                }`}
             />
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>
@@ -174,11 +145,10 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             <select
               id="sexe"
               {...register("sexe")}
-              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.sexe
-                  ? "border border-red-500 "
-                  : "border border-gray-200"
-              }`}
+              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.sexe
+                ? "border border-red-500 "
+                : "border border-gray-200"
+                }`}
             >
               <option value="M">M</option>
               <option value="F">F</option>
@@ -194,9 +164,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="text"
               placeholder="titre"
               {...register("titre")}
-              className={`border border-white ${
-                errors.nom ? "border border-red-500" : "border border-gray-300"
-              }`}
+              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
+                }`}
             />
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>
@@ -207,9 +176,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="checkbox"
               placeholder="engagement"
               {...register("engagement")}
-              className={`border border-white ${
-                errors.nom ? "border border-red-500" : "border border-gray-300"
-              }`}
+              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
+                }`}
             />
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>

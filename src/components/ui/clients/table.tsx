@@ -1,16 +1,14 @@
-import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
-import { useCustomers } from "@/components/hooks/useCustomer";
-
+import DeleteCustomer from "@/components/deleteButton/DeleteCustomer";
 import EditCustomer from "@/components/editButton/EditCustomer";
+import { useCustomers } from "@/components/hooks/useCustomer";
 import Loader from "@/components/Loader";
+import { useAppStore } from "@/store/appStore";
 import { Client } from "@/types/infrastructure";
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import DeleteCustomer from "@/components/deleteButton/DeleteCustomer";
-import { useRouter } from "next/navigation";
-import { useAppStore } from "@/store/appStore";
 import { Locale, useTranslations } from "next-intl";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "../button";
 
 export default function ClientTable() {

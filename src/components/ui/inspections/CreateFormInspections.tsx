@@ -1,42 +1,20 @@
-import React, { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useEffect } from "react";
 
-import { Button } from "@/components/ui/button";
 import {
-  useCreateInfrastructure,
-  useInfrastructures,
+  useInfrastructures
 } from "@/components/hooks/useInfrastructure";
-import { useTypeInfradtructures } from "@/components/hooks/useTypeInfrastructure";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  useCreateCustomers,
-  useCustomers,
-} from "@/components/hooks/useCustomer";
-import { useAppStore } from "@/store/appStore";
-import { useRouter } from "next/navigation";
-import Loader from "@/components/Loader";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { inspection } from "@/types/infrastructure";
 import { useCreateInspection } from "@/components/hooks/useInspection";
-interface FormData {
-  date: string;
-  etat: string;
-  inspecteur: string;
-  commentaire: string;
-  prochain_controle: string;
-  infrastructure_id: string;
-}
+import Loader from "@/components/Loader";
+import { Button } from "@/components/ui/button";
+import { useAppStore } from "@/store/appStore";
+import { inspection } from "@/types/infrastructure";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 interface CreateFormInspectionsProps {
   onFormSuccess: () => void;
