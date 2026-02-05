@@ -1,6 +1,5 @@
 import { serviceCustomer } from "@/services/customer";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { error } from "console";
 import toast from "react-hot-toast";
 
 export const useCustomer = () => {

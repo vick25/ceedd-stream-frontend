@@ -4,14 +4,12 @@ import {
   Type_infrastructure
 } from "@/types/infrastructure";
 import { IconButton } from "@radix-ui/themes";
-import { useQueryClient } from "@tanstack/react-query";
 import { PencilLine } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useCustomers } from "../hooks/useCustomer";
 import {
-  useGetInfrastructure,
-  useUpdateInfrastructure,
+  useUpdateInfrastructure
 } from "../hooks/useInfrastructure";
 import { useTypeInfrastructures } from "../hooks/useTypeInfrastructure";
 import Loader from "../Loader";
@@ -39,6 +37,7 @@ interface InfrastructureTypesProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
+
 const EditInfrastructure = ({
   id,
   nom,
@@ -61,17 +60,17 @@ const EditInfrastructure = ({
     unite: "",
     client_id: "",
   });
-  const data = {
-    ...formData,
-  };
-  const [customers, setCustomers] = useState<Client[]>([]);
+  // const data = {
+  //   ...formData,
+  // };
+  // const [customers, setCustomers] = useState<Client[]>([]);
   // const [zones, setZones] = useState<zone_contributive[]>([]);
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
-  const queryClient = useQueryClient();
-  const mutationInfrastructure = useGetInfrastructure();
+  // const queryClient = useQueryClient();
+  // const mutationInfrastructure = useGetInfrastructure();
 
   const updateMutationInfrastructure = useUpdateInfrastructure();
 

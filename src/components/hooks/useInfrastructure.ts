@@ -10,8 +10,8 @@ import { useDebounce } from "./useDebounce";
 
 export const useGetInfrastructure = () => {
   return useQuery({
-    queryFn: async () => serviceInfrastructure.getInfrastructure(),
     queryKey: ["infrastructure"],
+    queryFn: async () => serviceInfrastructure.getInfrastructure(),
   });
 };
 

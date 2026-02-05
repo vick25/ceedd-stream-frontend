@@ -45,10 +45,16 @@ const LocaleSwitcher = () => {
         <SelectValue placeholder="Lang" />
       </SelectTrigger>
       <SelectContent className="z-1200">
-        <SelectItem value="en" className="font-bold">
+        <SelectItem
+          value="en"
+          className={`font-bold ${locale === "en" ? "text-red-600" : ""}`}
+        >
           EN
         </SelectItem>
-        <SelectItem value="fr" className="font-bold">
+        <SelectItem
+          value="fr"
+          className={`font-bold ${locale === "fr" ? "text-red-600" : ""}`}
+        >
           FR
         </SelectItem>
       </SelectContent>
