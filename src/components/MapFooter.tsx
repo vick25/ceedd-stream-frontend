@@ -69,7 +69,7 @@ export const Footer: React.FC = () => {
                   alt="CEEDD logo"
                   width={120}
                   height={60}
-                  className="h-16 w-auto object-contain filter brightness-110"
+                  className="h-16 w-auto object-contain filter brightness-110 rounded-lg"
                 />
               </Link>
               <Link
@@ -82,7 +82,7 @@ export const Footer: React.FC = () => {
                   alt="TerraFirma Logo"
                   width={120}
                   height={60}
-                  className="h-12 w-auto object-contain"
+                  className="h-12 w-auto object-contain rounded-lg"
                 />
               </Link>
             </div>

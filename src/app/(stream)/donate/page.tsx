@@ -1,4 +1,4 @@
-import Footer from "@/components/Footer";
+import { Footer } from "@/components/MapFooter";
 import { getTranslations } from "next-intl/server";
 
 export default async function DonatePage() {
