@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import QueryProvider from "@/components/QueryProvider";
 import { Toaster } from "react-hot-toast";
 
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -21,9 +21,29 @@ type Props = {
 };
 
 export const metadata: Metadata = {
-  title: "CEEDD-STREAM",
+  title: "CEEDD-STREAM | Suivi des Infrastructures Hydrauliques en RDC",
   description:
-    "CEEDD est une Organisation Non Gouvernementale de droit Congolais qui œuvre dans le secteur de la gestion durable des ressources environnementales pour le développement durable de la RDC",
+    "ONG CEEDD : Experts en gestion durable des ressources en RDC. Plateforme STREAM pour le suivi SIG des eaux pluviales et la lutte contre l'érosion à Kinshasa.",
+  keywords: [
+    "CEEDD rdc",
+    "Plateforme de suivi des infrastructures hydrauliques",
+    "Reporting impact projets eau et assainissement",
+    "Digitalisation des données SIG pour ONG",
+    "Gestion résiliente des eaux pluviales en milieu urbain",
+    "Cartographie interactive infrastructures de drainage",
+    "Erosion universite de Kinshasa",
+    "Water management DRC",
+    "Sustainable tools for rainwater evaluation",
+  ],
+  openGraph: {
+    title: "CEEDD-STREAM | Innovation SIG pour l'eau en RDC",
+    description:
+      "Digitaliser la gestion des eaux pluviales pour un développement durable.",
+    url: "https://stream.ceeddrdc.org",
+    siteName: "CEEDD STREAM",
+    locale: "fr_FR",
+    type: "website",
+  },
 };
 
 export default async function RootLayout({ children }: Readonly<Props>) {
