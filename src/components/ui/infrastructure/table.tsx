@@ -8,13 +8,17 @@ import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
 
-import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "../button";
+import { Select } from "@/components/select";
+import { useAppStore } from "@/store/appStore";
 // import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
 
 export default function InfrastructureTable() {
+  const { searchTerms, setSearchTerms, searchTypes, setSearchTypes } =
+    useAppStore();
   const [getInfrastructure, setGetInfrastructure] = useState<
     InfrastructureTypes[]
   >([]);
@@ -22,9 +26,11 @@ export default function InfrastructureTable() {
   const [clientNames, setClientNames] = useState<Record<string, string>>({});
   const [typeInfras, setTypeInfras] = useState<Record<string, string>>({});
   const [zones, setZones] = useState<Record<string, string>>({});
-  const [infrastructureDeleted, setInfrastructureDeleted] = useState<string>("");
+  const [infrastructureDeleted, setInfrastructureDeleted] =
+    useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  // const [searchTerms, setSearchTerms] = useState("");
   const pageItems = 20;
 
   // initialize mutation
@@ -54,12 +60,36 @@ export default function InfrastructureTable() {
     }
   }, [mutationInfrastructure.data]);
 
-  const totalPages = Math.ceil(getInfrastructure.length / pageItems);
+  const filterData = getInfrastructure.filter((infra) => {
+    // 1. On prépare les termes (minuscules et sans espaces inutiles)
+    const term = searchTerms?.toLowerCase().trim() || "";
+    const typeFilter = searchTypes || "";
+
+    // 2. Vérification du texte (Nom infrastructure ou Nom client)
+    // Si term est vide, on valide par défaut (true)
+    const matchSearchTerms =
+      term === "" ||
+      infra.nom?.toLowerCase().includes(term) ||
+      infra.client?.nom?.toLowerCase().includes(term);
+
+    // 3. Vérification du Type (Select)
+    // Si typeFilter est vide, on valide par défaut (true)
+    const matchSelectType =
+      typeFilter === "" || infra.type_infrastructure?.nom === typeFilter;
+
+    // L'infrastructure doit remplir les DEUX conditions
+    return matchSearchTerms && matchSelectType;
+  });
+  const totalPages = Math.ceil(filterData.length / pageItems);
   const startIndex = (currentPage - 1) * pageItems;
-  const pageInfrastructures = getInfrastructure.slice(
+  const pageInfrastructures = filterData.slice(
     startIndex,
-    startIndex + pageItems
+    startIndex + pageItems,
   );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerms]);
 
   if (mutationInfrastructure.isPending) {
     return <Loader />;
@@ -67,8 +97,61 @@ export default function InfrastructureTable() {
 
   // console.log({ getInfrastructure });
   return (
-    <div className="mt-6 flow-root">
+    <div className="mt-4 flow-root">
       <div className="inline-block min-w-full align-middle">
+        <div className="flex flex-col md:justify-between md:flex-row md:items-center  w-full  mb-6">
+          <div className="relative w-full mb-4 md:w-1/2  md:p-3">
+            <input
+              placeholder="recherche par nom ou par nom du propriétaire"
+              name="searchTerms"
+              value={searchTerms}
+              onChange={(e) => setSearchTerms(e.target.value)}
+              className="w-full border p-4 rounded-xl"
+            />
+            {/* <Search className="absolute top-7 right-5 text-gray-500 cursor-pointer" /> */}
+            <div className="absolute top-5 right-5 md:top-7 md:right-7 text-gray-500">
+              {searchTerms ? (
+                <X
+                  className="h-5 w-5 cursor-pointer hover:text-red-500"
+                  onClick={() => setSearchTerms("")}
+                />
+              ) : (
+                <Search className="h-5 w-5" />
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-col  md:items-center gap-2">
+            <select
+              name=""
+              id=""
+              className="flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="">Selectionnez par Date</option>
+            </select>
+            <div className="relative flex items-center">
+              <select
+                value={searchTypes}
+                onChange={(e) => setSearchTypes(e.target.value)}
+                className="border border-gray-300 h-10 w-full rounded-md bg-background px-3 py-2 text-sm pr-8"
+              >
+                <option value="">Tous les types</option>
+                {mutationTypeInfrastructure.data?.results.map((type: any) => (
+                  <option key={type.id} value={type.nom}>
+                    {type.nom}
+                  </option>
+                ))}
+              </select>
+
+              {/* Si searchTypes n'est pas vide, on affiche la croix */}
+              {searchTypes && (
+                <X
+                  className="absolute right-7 h-4 w-4 text-gray-400 cursor-pointer hover:text-red-500"
+                  onClick={() => setSearchTypes("")}
+                />
+              )}
+            </div>
+          </div>
+        </div>
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden space-y-4 px-2">
             {pageInfrastructures?.map((infra: any) => (

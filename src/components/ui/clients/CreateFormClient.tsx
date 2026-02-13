@@ -2,9 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect } from "react";
 
-import {
-  useCreateCustomers
-} from "@/components/hooks/useCustomer";
+import { useCreateCustomers } from "@/components/hooks/useCustomer";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/store/appStore";
@@ -112,12 +110,12 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="text"
               placeholder="nom"
               {...register("nom")}
-              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border border-white  "border border-gray-300"
+                `}
             />
-            {errors.nom && (
+            {/* {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
-            )}
+            )} */}
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="postnom">Postnom</Label>
@@ -175,8 +173,9 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="checkbox"
               placeholder="engagement"
               {...register("engagement")}
-              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border border-white ${
+                errors.nom ? "border border-red-500" : "border border-gray-300"
+              }`}
             />
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>

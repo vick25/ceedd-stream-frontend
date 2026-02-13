@@ -11,6 +11,7 @@ interface AppState {
   isAuthenticated: boolean;
   _hasHydrated: boolean;
   searchTerms: string;
+  searchTypes: string;
   searchResults: InfrastructureSearch | null;
   // searchResults: InfrastructureTypes[];
 
@@ -18,6 +19,7 @@ interface AppState {
   setHasHydrated: () => void;
   logout: () => void;
   setSearchTerms: (term: string) => void;
+  setSearchTypes: (term: string) => void;
   // setSearchResults: (results: InfrastructureTypes[]) => void;
   setSearchResults: (results: InfrastructureSearch | null) => void;
 }
@@ -30,6 +32,8 @@ export const useAppStore = create<AppState>()(
         isAuthenticated: false,
         _hasHydrated: false,
         searchTerms: "",
+        searchTypes: "",
+        setSearchTypes: (term) => set({ searchTypes: term }),
         setSearchTerms: (term) =>
           set({
             searchTerms: term,
@@ -46,7 +50,7 @@ export const useAppStore = create<AppState>()(
               isAuthenticated: !!user,
             },
             false,
-            "setUser"
+            "setUser",
           ),
         logout: () =>
           set({ user: null, isAuthenticated: false }, false, "logout"),
@@ -62,7 +66,7 @@ export const useAppStore = create<AppState>()(
         onRehydrateStorage: () => (state) => {
           state?.setHasHydrated();
         },
-      }
-    )
-  )
+      },
+    ),
+  ),
 );

@@ -42,7 +42,7 @@ const page = (props: Props) => {
   }
   return (
     <main className="container py-6 space-y-6 min-h-screen">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-center gap-4 md:justify-between md:flex-row">
         <h1 className="text-2xl font-semibold">{t.navigation.dashboard}</h1>
         <div className="flex gap-2">
           {/* <button
@@ -77,7 +77,9 @@ const page = (props: Props) => {
 
       {/* KPI Cards */}
       <div className="w-full bg-white rounded-lg shadow-xl p-6">
-        <Table />
+        <div className="overflow-x-auto w-full">
+          <Table />
+        </div>
       </div>
     </main>
   );
