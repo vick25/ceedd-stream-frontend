@@ -1,8 +1,6 @@
 "use client";
 
 import Loader from "@/components/Loader";
-import SearchInputWithAutocomplete from "@/components/SearchInputWithAutocomplete";
-import SearchResultsList from "@/components/SearchResultsList";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,7 +8,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import CreateFormInfrastructure from "@/components/ui/infrastructure/CreateFormInfrastructure";
 import Table from "@/components/ui/infrastructure/table";
@@ -64,7 +62,8 @@ const page = (props: Props) => {
                 variant="outline"
                 className="hover:bg-blue-50 px-3 py-2 flex gap-4 border border-gray-300"
               >
-                <PlusCircle />Nouvelle infrastructure
+                <PlusCircle />
+                Nouvelle infrastructure
               </Button>
             </DialogTrigger>
             <DialogContent className=" bg-white z-9999 max-w-2xl md:max-w-4xl">
@@ -72,7 +71,7 @@ const page = (props: Props) => {
                 <DialogTitle>Ajouter une Nouvelle Infrastructure </DialogTitle>
                 <DialogDescription>Renseigner les détails.</DialogDescription>
               </DialogHeader>
-              <div className="space-y-4 py-4  overflow-y-auto max-h-[70vh]">
+              <div className="space-y-4 overflow-y-auto max-h-[70vh]">
                 <CreateFormInfrastructure open={isOpen} setOpen={setIsOpen} />
               </div>
             </DialogContent>

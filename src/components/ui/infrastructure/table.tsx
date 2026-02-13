@@ -8,12 +8,11 @@ import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
 
+import { useAppStore } from "@/store/appStore";
 import { ChevronLeft, ChevronRight, Eye, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "../button";
-import { Select } from "@/components/select";
-import { useAppStore } from "@/store/appStore";
 // import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
 
 export default function InfrastructureTable() {
@@ -121,13 +120,13 @@ export default function InfrastructureTable() {
             </div>
           </div>
           <div className="flex flex-col md:flex-col  md:items-center gap-2">
-            <select
+            {/*<select
               name=""
               id=""
               className="flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             >
               <option value="">Selectionnez par Date</option>
-            </select>
+            </select>*/}
             <div className="relative flex items-center">
               <select
                 value={searchTypes}
