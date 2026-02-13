@@ -17,7 +17,8 @@ import { useAppStore } from "@/store/appStore";
 // import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
 
 export default function InfrastructureTable() {
-  const { searchTerms, setSearchTerms } = useAppStore();
+  const { searchTerms, setSearchTerms, searchTypes, setSearchTypes } =
+    useAppStore();
   const [getInfrastructure, setGetInfrastructure] = useState<
     InfrastructureTypes[]
   >([]);
@@ -60,13 +61,24 @@ export default function InfrastructureTable() {
   }, [mutationInfrastructure.data]);
 
   const filterData = getInfrastructure.filter((infra) => {
-    if (!searchTerms || searchTerms.trim() === "") return true;
+    // 1. On prépare les termes (minuscules et sans espaces inutiles)
+    const term = searchTerms?.toLowerCase().trim() || "";
+    const typeFilter = searchTypes || "";
 
-    const term = searchTerms.toLocaleLowerCase();
-    return (
-      infra.nom?.toLocaleLowerCase().includes(term) ||
-      infra.client?.nom?.toLowerCase().includes(term)
-    );
+    // 2. Vérification du texte (Nom infrastructure ou Nom client)
+    // Si term est vide, on valide par défaut (true)
+    const matchSearchTerms =
+      term === "" ||
+      infra.nom?.toLowerCase().includes(term) ||
+      infra.client?.nom?.toLowerCase().includes(term);
+
+    // 3. Vérification du Type (Select)
+    // Si typeFilter est vide, on valide par défaut (true)
+    const matchSelectType =
+      typeFilter === "" || infra.type_infrastructure?.nom === typeFilter;
+
+    // L'infrastructure doit remplir les DEUX conditions
+    return matchSearchTerms && matchSelectType;
   });
   const totalPages = Math.ceil(filterData.length / pageItems);
   const startIndex = (currentPage - 1) * pageItems;
@@ -87,8 +99,8 @@ export default function InfrastructureTable() {
   return (
     <div className="mt-4 flow-root">
       <div className="inline-block min-w-full align-middle">
-        <div className="flex justify-between items-center  w-full  mb-6">
-          <div className="relative w-1/2 p-3">
+        <div className="flex flex-col md:justify-between md:flex-row md:items-center  w-full  mb-6">
+          <div className="relative w-full mb-4 md:w-1/2  md:p-3">
             <input
               placeholder="recherche par nom ou par nom du propriétaire"
               name="searchTerms"
@@ -97,7 +109,7 @@ export default function InfrastructureTable() {
               className="w-full border p-4 rounded-xl"
             />
             {/* <Search className="absolute top-7 right-5 text-gray-500 cursor-pointer" /> */}
-            <div className="absolute top-7 right-7 text-gray-500">
+            <div className="absolute top-5 right-5 md:top-7 md:right-7 text-gray-500">
               {searchTerms ? (
                 <X
                   className="h-5 w-5 cursor-pointer hover:text-red-500"
@@ -108,7 +120,7 @@ export default function InfrastructureTable() {
               )}
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col md:flex-col  md:items-center gap-2">
             <select
               name=""
               id=""
@@ -116,13 +128,28 @@ export default function InfrastructureTable() {
             >
               <option value="">Selectionnez par Date</option>
             </select>
-            <select
-              name=""
-              id=""
-              className="flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <option value="">Selectionnez par Type</option>
-            </select>
+            <div className="relative flex items-center">
+              <select
+                value={searchTypes}
+                onChange={(e) => setSearchTypes(e.target.value)}
+                className="border border-gray-300 h-10 w-full rounded-md bg-background px-3 py-2 text-sm pr-8"
+              >
+                <option value="">Tous les types</option>
+                {mutationTypeInfrastructure.data?.results.map((type: any) => (
+                  <option key={type.id} value={type.nom}>
+                    {type.nom}
+                  </option>
+                ))}
+              </select>
+
+              {/* Si searchTypes n'est pas vide, on affiche la croix */}
+              {searchTypes && (
+                <X
+                  className="absolute right-7 h-4 w-4 text-gray-400 cursor-pointer hover:text-red-500"
+                  onClick={() => setSearchTypes("")}
+                />
+              )}
+            </div>
           </div>
         </div>
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
