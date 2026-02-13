@@ -2,9 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect } from "react";
 
-import {
-  useCreateCustomers
-} from "@/components/hooks/useCustomer";
+import { useCreateCustomers } from "@/components/hooks/useCustomer";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/store/appStore";
@@ -111,12 +109,12 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="text"
               placeholder="nom"
               {...register("nom")}
-              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border border-white  "border border-gray-300"
+                `}
             />
-            {errors.nom && (
+            {/* {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
-            )}
+            )} */}
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="postnom">postnom </Label>
@@ -135,8 +133,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="prenom"
               placeholder="prenom"
               {...register("prenom")}
-              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border   "border border-gray-300"
+              `}
             />
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>
@@ -146,10 +144,11 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             <select
               id="sexe"
               {...register("sexe")}
-              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.sexe
+              className={`flex h-10 w-full rounded-md border border-gray-200   bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.sexe
                   ? "border border-red-500 "
                   : "border border-gray-200"
-                }`}
+              }`}
             >
               <option value="M">M</option>
               <option value="F">F</option>
@@ -165,8 +164,9 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="text"
               placeholder="titre"
               {...register("titre")}
-              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border border-white ${
+                errors.nom ? "border border-red-500" : "border border-gray-300"
+              }`}
             />
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>
@@ -177,8 +177,9 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               type="checkbox"
               placeholder="engagement"
               {...register("engagement")}
-              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border border-white ${
+                errors.nom ? "border border-red-500" : "border border-gray-300"
+              }`}
             />
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>

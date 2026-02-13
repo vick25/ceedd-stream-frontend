@@ -4,7 +4,7 @@ import { useCustomers } from "@/components/hooks/useCustomer";
 import Loader from "@/components/Loader";
 import { useAppStore } from "@/store/appStore";
 import { Client } from "@/types/infrastructure";
-import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, Search, X } from "lucide-react";
 import { Locale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { Button } from "../button";
 
 export default function ClientTable() {
+  const { searchTerms, setSearchTerms } = useAppStore();
   const [getClients, setGetClients] = useState<Client[]>([]);
   const [customerDelete, setCustomerDeleted] = useState<string>("");
   const [clientNames, setClientNames] = useState<Record<string, string>>({});
@@ -32,9 +33,26 @@ export default function ClientTable() {
   const pageItems = 30;
   //useEffect
   const allResults = customers?.results || [];
-  const totalPages = Math.ceil(allResults.length / pageItems);
+
+  const filterData = allResults.filter((custom: any) => {
+    // 1. On prépare le terme de recherche
+    const term = searchTerms.toLowerCase().trim();
+
+    // 2. Si pas de recherche, on garde tout
+    if (term === "") return true;
+
+    // 3. On sécurise l'accès au nom et on normalise la casse
+    // On transforme custom.nom en String au cas où ce serait un nombre ou autre
+    const customerName = String(custom.nom || "").toLowerCase();
+    const customerPrenom = term === "" || custom.prenom.toLowerCase();
+    const matchName =
+      customerName.includes(term) || customerPrenom.includes(term);
+
+    return matchName;
+  });
+  const totalPages = Math.ceil(filterData.length / pageItems);
   const tabIndex = (currentPage - 1) * pageItems;
-  const pageCustomers = allResults.slice(tabIndex, tabIndex + pageItems);
+  const pageCustomers = filterData.slice(tabIndex, tabIndex + pageItems);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -55,6 +73,59 @@ export default function ClientTable() {
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
+        <div className="flex flex-col md:justify-between md:flex-row md:items-center  w-full  mb-6">
+          <div className="relative w-full mb-4 md:w-wull  md:p-3">
+            <input
+              placeholder="recherche par nom ou prenom"
+              name="searchTerms"
+              value={searchTerms}
+              onChange={(e) => setSearchTerms(e.target.value)}
+              className="w-full border p-4 rounded-xl"
+            />
+            {/* <Search className="absolute top-7 right-5 text-gray-500 cursor-pointer" /> */}
+            <div className="absolute top-5 right-5 md:top-7 md:right-7 text-gray-500">
+              {searchTerms ? (
+                <X
+                  className="h-5 w-5 cursor-pointer hover:text-red-500"
+                  onClick={() => setSearchTerms("")}
+                />
+              ) : (
+                <Search className="h-5 w-5" />
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-col  md:items-center gap-2">
+            {/* <select
+              name=""
+              id=""
+              className="flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="">Selectionnez par Date</option>
+            </select> */}
+            {/* <div className="relative flex items-center">
+                      <select
+                        value={searchTypes}
+                        onChange={(e) => setSearchTypes(e.target.value)}
+                        className="border border-gray-300 h-10 w-full rounded-md bg-background px-3 py-2 text-sm pr-8"
+                      >
+                        <option value="">Tous les types</option>
+                        {mutationTypeInfrastructure.data?.results.map((type: any) => (
+                          <option key={type.id} value={type.nom}>
+                            {type.nom}
+                          </option>
+                        ))}
+                      </select>
+        
+                     
+                      {searchTypes && (
+                        <X
+                          className="absolute right-7 h-4 w-4 text-gray-400 cursor-pointer hover:text-red-500"
+                          onClick={() => setSearchTypes("")}
+                        />
+                      )}
+                    </div> */}
+          </div>
+        </div>
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden space-y-4 px-2">
             {pageCustomers.map((customer: any) => (
