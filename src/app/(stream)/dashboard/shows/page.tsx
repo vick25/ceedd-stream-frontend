@@ -1,20 +1,7 @@
 "use client";
+
 import { Locale, useTranslations } from "@/lib/i18n";
-import { PlusCircle } from "lucide-react";
-import React, { useState } from "react";
-import Table from "@/components/ui/infrastructure/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import CreateformInfrastructure from "@/components/ui/infrastructure/CreateformInfrastructure";
-import { useParams } from "next/navigation";
-import { InfrastructureDetailsProps } from "@/types";
+import { useState } from "react";
 
 type Props = {};
 
@@ -64,7 +51,7 @@ const InfrastructureDetails = () => {
                 <input
                   type="file"
                   className="hidden"
-                  // onChange={handleImageUpload}
+                // onChange={handleImageUpload}
                 />
               </label>
 

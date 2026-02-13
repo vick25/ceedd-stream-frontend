@@ -1,9 +1,7 @@
 "use client";
 
-import { Locale, useTranslations } from "@/lib/i18n";
-import { PlusCircle } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import Table from "@/components/ui/inspections/table";
+import Loader from "@/components/Loader";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,13 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import CreateformInfrastructure from "@/components/ui/infrastructure/CreateformInfrastructure";
-import CreateFormClient from "@/components/ui/clients/CreateFormClient";
-import { useAppStore } from "@/store/appStore";
-import { useRouter } from "next/navigation";
-import Loader from "@/components/Loader";
 import CreateFormInspections from "@/components/ui/inspections/CreateFormInspections";
+import Table from "@/components/ui/inspections/table";
+import { Locale, useTranslations } from "@/lib/i18n";
+import { useAppStore } from "@/store/appStore";
+import { PlusCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type Props = {};
 
@@ -60,13 +58,13 @@ const page = (props: Props) => {
                 variant="outline"
                 className="hover:bg-blue-50 px-3 py-2 flex gap-4 border border-gray-300"
               >
-                <PlusCircle /> Nouvelle Inspection
+                <PlusCircle />Nouvelle Inspection
               </Button>
             </DialogTrigger>
-            <DialogContent className=" bg-white z-9999 max-w-2xl md:max-w-3xl ">
+            <DialogContent className="bg-white z-9999 max-w-2xl md:max-w-3xl ">
               <DialogHeader>
                 <DialogTitle>Ajouter une nouvelle inspection </DialogTitle>
-                <DialogDescription>Voici les détails.</DialogDescription>
+                <DialogDescription>Renseigner les détails.</DialogDescription>
               </DialogHeader>
               {/* <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]"> */}
               <CreateFormInspections onFormSuccess={() => setIsClosed(false)} />

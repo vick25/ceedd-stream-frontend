@@ -10,16 +10,16 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const infrastructureSchema = z.object({
-  nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
+  nom: z.string().trim().min(3, "Le nom doit contenir au moins 3 caractères"),
   type_infrastructure_id: z
-    .string()
+    .string().trim()
     .min(1, "Le type d'infrastructure est requis"),
   date_construction: z.string().min(1, "La date de construction est requise"),
-  latitude: z.string().min(1, "La latitude est requise"),
-  longitude: z.string().min(1, "La longitude est requise"),
-  capacite: z.string().min(1, "La capacité est requise"),
-  unite: z.string().min(1, "L'unité est requise"),
-  zone: z.string().min(1, "Veuillez sélectionner une zone."),
+  latitude: z.string().trim().min(1, "La latitude est requise"),
+  longitude: z.string().trim().min(1, "La longitude est requise"),
+  capacite: z.string().trim().min(1, "La capacité est requise"),
+  unite: z.string().trim().min(1, "L'unité est requise"),
+  zone: z.string().optional(),
   client_id: z.string().min(1, "Veuillez sélectionner un client."),
 });
 type CreateformInfrastructureProps = {
@@ -29,7 +29,7 @@ type CreateformInfrastructureProps = {
 
 type InfrastructureFormData = z.infer<typeof infrastructureSchema>;
 
-const CreateformInfrastructure = ({
+const CreateFormInfrastructure = ({
   open,
   setOpen,
 }: CreateformInfrastructureProps) => {
@@ -87,11 +87,31 @@ const CreateformInfrastructure = ({
       >
         <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
-            <Label htmlFor="nom">Nom :</Label>
+            <Label htmlFor="client_id">Client<span className="text-red-500">*</span></Label>
+            <select
+              {...register("client_id")}
+              className={`flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.client_id
+                ? "border border-red-500 "
+                : "border border-gray-300"
+                }`}
+            >
+              <option value="">Selectionnez</option>
+              {customersData?.results.map((type: any) => (
+                <option key={type.id} value={type.id}>
+                  {type.nom}
+                </option>
+              ))}
+            </select>
+            {errors.client_id && (
+              <p className="text-red-500 text-sm">{errors.client_id.message}</p>
+            )}
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="nom">Nom/Code infrastructure<span className="text-red-500">*</span></Label>
             <Input
               id="nom"
               type="text"
-              placeholder="nom"
+              placeholder="nom ou code de l'infrastructure"
               {...register("nom")}
               className={`border border-gray-300 ${errors.nom ? "border border-red-500" : "border border-gray-300"
                 }`}
@@ -101,9 +121,7 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="type_infrastructure_id_id">
-              Type infrastructure :
-            </Label>
+            <Label htmlFor="type_infrastructure_id_id">Type infrastructure<span className="text-red-500">*</span></Label>
             <select
               {...register("type_infrastructure_id")}
               className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.type_infrastructure_id
@@ -125,7 +143,7 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="date_construction">Date Construction :</Label>
+            <Label htmlFor="date_construction">Date construction<span className="text-red-500">*</span></Label>
             <Input
               id="date_construction"
               type="date"
@@ -134,11 +152,11 @@ const CreateformInfrastructure = ({
               className="flex h-10 w-full border border-gray-300 rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.date_construction && (
-              <p>{errors.date_construction?.message}</p>
+              <p className="text-red-500 text-sm">{errors.date_construction?.message}</p>
             )}
           </div>
           <div>
-            <Label htmlFor="latitude">Latitude :</Label>
+            <Label htmlFor="latitude">Latitude<span className="text-red-500">*</span></Label>
             <Input
               id="latitude"
               type="text"
@@ -151,7 +169,7 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="longitude">Longitude :</Label>
+            <Label htmlFor="longitude">Longitude<span className="text-red-500">*</span></Label>
             <Input
               id="longitude"
               type="text"
@@ -164,11 +182,11 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="capacite">Capacité :</Label>
+            <Label htmlFor="capacite">Capacité<span className="text-red-500">*</span></Label>
             <Input
               id="capacite"
               type="number"
-              placeholder="capacite"
+              placeholder="capacité"
               {...register("capacite")}
               className="flex h-10 w-full border border-gray-300 rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
@@ -177,12 +195,12 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="unite">Unite (L/m3) :</Label>
+            <Label htmlFor="unite">Unité (L/m<sup>3</sup>)<span className="text-red-500">*</span></Label>
             <Input
               id="unite"
               type="text"
               {...register("unite")}
-              placeholder="unite"
+              placeholder="unité"
               className="flex h-10 w-full border border-gray-300 rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.unite && (
@@ -190,7 +208,7 @@ const CreateformInfrastructure = ({
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="zone">Zone :</Label>
+            <Label htmlFor="zone">Zone</Label>
             <select
               {...register("zone")}
               className="flex border border-gray-300 h-10 w-full rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
@@ -202,36 +220,17 @@ const CreateformInfrastructure = ({
                 </option>
               ))}
             </select>
-            {errors.zone && (
+            {/* {errors.zone && (
               <p className="text-red-500 text-sm">{errors.zone.message}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="client_id">Client :</Label>
-            <select
-              {...register("client_id")}
-              className={`flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.client_id
-                ? "border border-red-500 "
-                : "border border-gray-300"
-                }`}
-            >
-              <option value="">Selectionnez</option>
-              {customersData?.results.map((type: any) => (
-                <option key={type.id} value={type.id}>
-                  {type.nom}
-                </option>
-              ))}
-            </select>
-            {errors.client_id && (
-              <p className="text-red-500 text-sm">{errors.client_id.message}</p>
-            )}
+            )} */}
           </div>
         </div>
-        <div className="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
+        <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-200">
           {/* Bouton Annuler */}
           <Button
             type="button"
             className="w-fit bg-gray-600 hover:bg-gray-700 text-gray-100 px-5 py-2 h-auto text-sm font-medium"
+            onClick={() => setOpen(false)}
           >
             Annuler
           </Button>
@@ -252,4 +251,4 @@ const CreateformInfrastructure = ({
   );
 };
 
-export default CreateformInfrastructure;
+export default CreateFormInfrastructure;
