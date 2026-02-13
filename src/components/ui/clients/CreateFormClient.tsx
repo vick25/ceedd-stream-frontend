@@ -19,18 +19,18 @@ interface CreateFormClientProps {
 }
 
 const clientSchema = z.object({
-  nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
-  postnom: z.string().optional(),
-  prenom: z.string().optional(),
+  nom: z.string().trim().min(3, "Le nom doit contenir au moins 3 caractères."),
+  postnom: z.string().trim().optional(),
+  prenom: z.string().trim().optional(),
   sexe: z.string().min(1, "Le sexe est requis").optional(),
-  titre: z.string().optional(),
-  engagement: z.string().optional(),
-  avenue: z.string().optional(),
-  quartier: z.string().min(1, "La capacité est requise").optional(),
-  numero: z.string().optional(),
-  telephone: z.string().optional(),
-  email: z.string().optional(),
-  commune: z.string().min(1, "Veuillez veuillez entrer une commune."),
+  titre: z.string().trim().optional(),
+  engagement: z.string().trim().optional(),
+  avenue: z.string().trim().optional(),
+  quartier: z.string().trim().optional(),
+  numero: z.string().trim().optional(),
+  telephone: z.string().trim().optional(),
+  email: z.string().trim().optional(),
+  commune: z.string().trim().min(1, "Veuillez veuillez entrer une commune."),
 });
 
 type ClientFormData = z.infer<typeof clientSchema>;
@@ -100,12 +100,13 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
   if (!isAuthenticated || !user) {
     return null;
   }
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
-            <Label htmlFor="nom"> Nom:</Label>
+            <Label htmlFor="nom">Nom<span className="text-red-500">*</span></Label>
             <Input
               id="nom"
               type="text"
@@ -119,59 +120,56 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="postnom">postnom </Label>
+            <Label htmlFor="postnom">Postnom</Label>
             <Input
               id="postnom"
               type="text"
               placeholder="postnom"
               {...register("postnom")}
-              className={`border border-gray-200 `}
+              className={`border border-gray-200`}
             />
           </div>
           <div>
-            <Label htmlFor="prenom">prenom:</Label>
+            <Label htmlFor="prenom">Prenom</Label>
             <Input
               id="prenom"
               type="prenom"
               placeholder="prenom"
               {...register("prenom")}
-              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border border-gray-200`}
             />
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>
-          <div className="flex flex-col gap-4">
-            <Label htmlFor="sexe">sexe </Label>
-
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="sexe">Sexe</Label>
             <select
               id="sexe"
               {...register("sexe")}
-              className={`flex h-10 w-full rounded-md border border-gray-200  border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.sexe
-                  ? "border border-red-500 "
-                  : "border border-gray-200"
+              className={`flex h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.sexe
+                ? "border border-red-500"
+                : "border border-gray-200"
                 }`}
             >
-              <option value="M">M</option>
-              <option value="F">F</option>
+              <option value="M">Homme</option>
+              <option value="F">Femme</option>
             </select>
             {errors.sexe && (
               <p className="text-red-500 text-sm ">{errors.sexe.message}</p>
             )}
           </div>
           <div>
-            <Label htmlFor="titre">Titre:</Label>
+            <Label htmlFor="titre">Titre</Label>
             <Input
               id="titre"
               type="text"
               placeholder="titre"
               {...register("titre")}
-              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border border-gray-200`}
             />
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>
           <div>
-            <Label htmlFor="engagement">Engagement:</Label>
+            <Label htmlFor="engagement">Engagement</Label>
             <Input
               id="engagement"
               type="checkbox"
@@ -183,20 +181,33 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
           </div>
           <div>
-            <Label htmlFor="avenue">avenue : </Label>
+            <Label htmlFor="numero">Numéro</Label>
+            <Input
+              id="numero"
+              type="text"
+              {...register("numero")}
+              placeholder="numero"
+              className="border border-gray-200"
+            />
+            {errors.numero && (
+              <p className="text-red-500 text-sm">{errors.numero.message}</p>
+            )}
+          </div>
+          <div>
+            <Label htmlFor="avenue">Avenue</Label>
             <Input
               id="avenue"
               type="avenue"
               placeholder="avenue"
               {...register("avenue")}
-              className="border-gray-200  border"
+              className="border-gray-200 border"
             />
             {/* {errors.avenue && (
               <p className="text-red-500 text-sm">{errors.avenue.message}</p>
             )} */}
           </div>
           <div>
-            <Label htmlFor="quartier">quartier : </Label>
+            <Label htmlFor="quartier">Quartier</Label>
             <Input
               id="quartier"
               type="text"
@@ -209,46 +220,33 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             )} */}
           </div>
           <div>
-            <Label htmlFor="commune">commune : </Label>
+            <Label htmlFor="commune">Commune<span className="text-red-500">*</span></Label>
             <Input
               id="commune"
               type="text"
               placeholder="commune"
               {...register("commune")}
-              className="border border-gray-200 "
+              className="border border-gray-200"
             />
-            {/* {errors.commune && (
+            {errors.commune && (
               <p className="text-red-500 text-sm">{errors.commune.message}</p>
-            )} */}
-          </div>
-          <div>
-            <Label htmlFor="numero">numero : </Label>
-            <Input
-              id="numero"
-              type="text"
-              {...register("numero")}
-              placeholder="numero"
-              className="border border-gray-200 "
-            />
-            {errors.numero && (
-              <p className="text-red-500 text-sm">{errors.numero.message}</p>
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="telephone">Telephone : </Label>
+            <Label htmlFor="telephone">Téléphone</Label>
             <Input
-              id="telephone"
+              id="téléphone"
               type="text"
               {...register("telephone")}
               placeholder="telephone"
-              className="border border-gray-200 "
+              className="border border-gray-200"
             />
             {/* {errors.telephone && (
               <p className="text-red-500 text-sm">{errors.telephone.message}</p>
             )} */}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="email">email :</Label>
+            <Label htmlFor="email">E-mail</Label>
             <Input
               id="email"
               type="text"
@@ -261,10 +259,11 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             )} */}
           </div>
         </div>
-        <div className=" w-full flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
+        <div className="w-full flex items-center justify-end gap-3 mt-1 pt-6 border-t border-gray-200">
           <Button
             type="button"
             className="w-fit bg-gray-600 hover:bg-gray-700 text-gray-100 px-5 py-2 h-auto text-sm font-medium"
+            onClick={onFormSuccess}
           >
             Annuler
           </Button>

@@ -1,8 +1,8 @@
 "use client";
 
-import { Locale, useTranslations } from "@/lib/i18n";
-import { PlusCircle } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import Loader from "@/components/Loader";
+import { Button } from "@/components/ui/button";
+import CreateFormClient from "@/components/ui/clients/CreateFormClient";
 import Table from "@/components/ui/clients/table";
 import {
   Dialog,
@@ -12,12 +12,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import CreateformInfrastructure from "@/components/ui/infrastructure/CreateformInfrastructure";
-import CreateFormClient from "@/components/ui/clients/CreateFormClient";
+import { Locale, useTranslations } from "@/lib/i18n";
 import { useAppStore } from "@/store/appStore";
+import { PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Loader from "@/components/Loader";
+import { useEffect, useState } from "react";
 
 type Props = {};
 
@@ -65,7 +64,7 @@ const page = (props: Props) => {
             <DialogContent className=" bg-white z-9999 max-w-2xl md:max-w-4xl ">
               <DialogHeader>
                 <DialogTitle>Ajouter un Nouveau client </DialogTitle>
-                <DialogDescription>Voici les détails.</DialogDescription>
+                <DialogDescription>Renseigner les détails</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]">
                 <CreateFormClient onFormSuccess={() => setIsClosed(false)} />
