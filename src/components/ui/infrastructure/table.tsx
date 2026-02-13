@@ -8,13 +8,16 @@ import { useZoneContributive } from "@/components/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
 
-import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "../button";
+import { Select } from "@/components/select";
+import { useAppStore } from "@/store/appStore";
 // import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
 
 export default function InfrastructureTable() {
+  const { searchTerms, setSearchTerms } = useAppStore();
   const [getInfrastructure, setGetInfrastructure] = useState<
     InfrastructureTypes[]
   >([]);
@@ -22,9 +25,11 @@ export default function InfrastructureTable() {
   const [clientNames, setClientNames] = useState<Record<string, string>>({});
   const [typeInfras, setTypeInfras] = useState<Record<string, string>>({});
   const [zones, setZones] = useState<Record<string, string>>({});
-  const [infrastructureDeleted, setInfrastructureDeleted] = useState<string>("");
+  const [infrastructureDeleted, setInfrastructureDeleted] =
+    useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  // const [searchTerms, setSearchTerms] = useState("");
   const pageItems = 20;
 
   // initialize mutation
@@ -54,12 +59,25 @@ export default function InfrastructureTable() {
     }
   }, [mutationInfrastructure.data]);
 
-  const totalPages = Math.ceil(getInfrastructure.length / pageItems);
+  const filterData = getInfrastructure.filter((infra) => {
+    if (!searchTerms || searchTerms.trim() === "") return true;
+
+    const term = searchTerms.toLocaleLowerCase();
+    return (
+      infra.nom?.toLocaleLowerCase().includes(term) ||
+      infra.client?.nom?.toLowerCase().includes(term)
+    );
+  });
+  const totalPages = Math.ceil(filterData.length / pageItems);
   const startIndex = (currentPage - 1) * pageItems;
-  const pageInfrastructures = getInfrastructure.slice(
+  const pageInfrastructures = filterData.slice(
     startIndex,
-    startIndex + pageItems
+    startIndex + pageItems,
   );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerms]);
 
   if (mutationInfrastructure.isPending) {
     return <Loader />;
@@ -67,8 +85,46 @@ export default function InfrastructureTable() {
 
   // console.log({ getInfrastructure });
   return (
-    <div className="mt-6 flow-root">
+    <div className="mt-4 flow-root">
       <div className="inline-block min-w-full align-middle">
+        <div className="flex justify-between items-center  w-full  mb-6">
+          <div className="relative w-1/2 p-3">
+            <input
+              placeholder="recherche par nom ou par nom du propriétaire"
+              name="searchTerms"
+              value={searchTerms}
+              onChange={(e) => setSearchTerms(e.target.value)}
+              className="w-full border p-4 rounded-xl"
+            />
+            {/* <Search className="absolute top-7 right-5 text-gray-500 cursor-pointer" /> */}
+            <div className="absolute top-7 right-7 text-gray-500">
+              {searchTerms ? (
+                <X
+                  className="h-5 w-5 cursor-pointer hover:text-red-500"
+                  onClick={() => setSearchTerms("")}
+                />
+              ) : (
+                <Search className="h-5 w-5" />
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              name=""
+              id=""
+              className="flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="">Selectionnez par Date</option>
+            </select>
+            <select
+              name=""
+              id=""
+              className="flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="">Selectionnez par Type</option>
+            </select>
+          </div>
+        </div>
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden space-y-4 px-2">
             {pageInfrastructures?.map((infra: any) => (

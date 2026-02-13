@@ -79,16 +79,10 @@ const page = (props: Props) => {
           {/* <button className="bg-blue-600 text-white px-3 py-2 rounded flex flex-row gap-4 items-center"></button> */}
         </div>
       </div>
-      <div>
-        <SearchInputWithAutocomplete />
-      </div>
+      <div>{/* <SearchInputWithAutocomplete /> */}</div>
       {/* KPI Cards */}
       <div className="w-full bg-white rounded-lg shadow-xl p-6">
-        {isSearching ? (
-          <SearchResultsList results={searchResults} searchTerm={searchTerms} />
-        ) : (
-          <Table />
-        )}
+        <Table />
       </div>
     </main>
   );
