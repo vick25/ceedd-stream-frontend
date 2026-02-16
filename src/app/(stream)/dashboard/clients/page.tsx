@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 
 type Props = {};
 
-const page = (props: Props) => {
+const ClientPage = (props: Props) => {
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
   const [locale, setLocale] = useState<Locale>("fr");
@@ -40,6 +40,7 @@ const page = (props: Props) => {
   if (!isAuthenticated || !user) {
     return null;
   }
+
   return (
     <main className="container py-6 space-y-6 min-h-screen">
       <div className="flex flex-col items-center gap-4 md:justify-between md:flex-row">
@@ -58,12 +59,12 @@ const page = (props: Props) => {
                 variant="outline"
                 className="hover:bg-blue-50 px-3 py-2 flex gap-4 border border-gray-300"
               >
-                <PlusCircle /> Nouveau Client
+                <PlusCircle />Nouveau client
               </Button>
             </DialogTrigger>
-            <DialogContent className=" bg-white z-9999 max-w-2xl md:max-w-4xl ">
+            <DialogContent className="bg-white z-9999 max-w-2xl md:max-w-4xl">
               <DialogHeader>
-                <DialogTitle>Ajouter un Nouveau client </DialogTitle>
+                <DialogTitle>Ajouter un Nouveau client</DialogTitle>
                 <DialogDescription>Renseigner les détails</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]">
@@ -85,4 +86,4 @@ const page = (props: Props) => {
   );
 };
 
-export default page;
+export default ClientPage;

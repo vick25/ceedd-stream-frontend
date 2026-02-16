@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 
 type Props = {};
 
-const page = (props: Props) => {
+const InfrastructurePage = (props: Props) => {
   const { user, _hasHydrated, isAuthenticated, searchResults, searchTerms } =
     useAppStore();
   const router = useRouter();
@@ -66,9 +66,9 @@ const page = (props: Props) => {
                 Nouvelle infrastructure
               </Button>
             </DialogTrigger>
-            <DialogContent className=" bg-white z-9999 max-w-2xl md:max-w-4xl">
+            <DialogContent className="bg-white z-9999 max-w-2xl md:max-w-4xl">
               <DialogHeader>
-                <DialogTitle>Ajouter une Nouvelle Infrastructure </DialogTitle>
+                <DialogTitle>Ajouter une Nouvelle Infrastructure</DialogTitle>
                 <DialogDescription>Renseigner les détails.</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 overflow-y-auto max-h-[70vh]">
@@ -90,4 +90,4 @@ const page = (props: Props) => {
   );
 };
 
-export default page;
+export default InfrastructurePage;

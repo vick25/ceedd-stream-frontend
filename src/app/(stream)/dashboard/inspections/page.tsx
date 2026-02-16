@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 
 type Props = {};
 
-const page = (props: Props) => {
+const InspectionPage = (props: Props) => {
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
   const [locale, setLocale] = useState<Locale>("fr");
@@ -58,12 +58,12 @@ const page = (props: Props) => {
                 variant="outline"
                 className="hover:bg-blue-50 px-3 py-2 flex gap-4 border border-gray-300"
               >
-                <PlusCircle />Nouvelle Inspection
+                <PlusCircle />Nouvelle inspection
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-white z-9999 max-w-2xl md:max-w-3xl ">
+            <DialogContent className="bg-white z-9999 max-w-2xl md:max-w-3xl">
               <DialogHeader>
-                <DialogTitle>Ajouter une nouvelle inspection </DialogTitle>
+                <DialogTitle>Ajouter une nouvelle inspection</DialogTitle>
                 <DialogDescription>Renseigner les détails.</DialogDescription>
               </DialogHeader>
               {/* <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]"> */}
@@ -83,4 +83,4 @@ const page = (props: Props) => {
   );
 };
 
-export default page;
+export default InspectionPage;

@@ -1,14 +1,12 @@
 import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
 import EditInfrastructure from "@/components/editButton/EditInfrastructure";
+import Loader from "@/components/Loader";
 import { useGetCustomer } from "@/hooks/useCustomer";
 import { useGetInfrastructure } from "@/hooks/useInfrastructure";
 import { useAllTypeInfrastructure } from "@/hooks/useTypeInfrastructure";
-
 import { useZoneContributive } from "@/hooks/useZoneContributive";
-import Loader from "@/components/Loader";
-import { InfrastructureTypes } from "@/types/infrastructure";
-
 import { useAppStore } from "@/store/appStore";
+import { InfrastructureTypes } from "@/types/infrastructure";
 import { ChevronLeft, ChevronRight, Eye, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";

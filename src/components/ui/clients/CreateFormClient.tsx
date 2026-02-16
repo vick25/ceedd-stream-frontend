@@ -1,37 +1,19 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useEffect } from "react";
-
-import { useCreateCustomers } from "@/hooks/useCustomer";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useCreateCustomers } from "@/hooks/useCustomer";
+import { ClientFormData, clientSchema } from "@/lib/schema";
 import { useAppStore } from "@/store/appStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 
 interface CreateFormClientProps {
   onFormSuccess: () => void;
 }
-
-const clientSchema = z.object({
-  nom: z.string().trim().min(3, "Le nom doit contenir au moins 3 caractères."),
-  postnom: z.string().trim().optional(),
-  prenom: z.string().trim().optional(),
-  sexe: z.string().min(1, "Le sexe est requis").optional(),
-  titre: z.string().trim().optional(),
-  engagement: z.string().trim().optional(),
-  avenue: z.string().trim().optional(),
-  quartier: z.string().trim().optional(),
-  numero: z.string().trim().optional(),
-  telephone: z.string().trim().optional(),
-  email: z.string().trim().optional(),
-  commune: z.string().trim().min(1, "Veuillez veuillez entrer une commune."),
-});
-
-type ClientFormData = z.infer<typeof clientSchema>;
 
 const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
   const {
@@ -144,9 +126,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
           <select
             id="sexe"
             {...register("sexe", { required: true })}
-            className={`flex h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-              errors.sexe ? "border border-red-500" : "border border-gray-200"
-            }`}
+            className={`flex h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.sexe ? "border border-red-500" : "border border-gray-200"
+              }`}
           >
             <option value="M">Homme</option>
             <option value="F">Femme</option>
@@ -175,9 +156,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             type="checkbox"
             placeholder="engagement"
             {...register("engagement")}
-            className={`border border-white ${
-              errors.nom ? "border border-red-500" : "border border-gray-300"
-            }`}
+            className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
+              }`}
           />
           {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
         </div>

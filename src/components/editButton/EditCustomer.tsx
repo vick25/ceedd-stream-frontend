@@ -1,12 +1,10 @@
+import { useUpdateCustomers } from "@/hooks/useCustomer";
 import { useAppStore } from "@/store/appStore";
 import { IconButton } from "@radix-ui/themes";
 import { useQueryClient } from "@tanstack/react-query";
 import { PencilLine } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import {
-  useUpdateCustomers
-} from "../hooks/useCustomer";
 import Loader from "../Loader";
 import { Button } from "../ui/button";
 import {
@@ -17,6 +15,7 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+
 interface ClientProps {
   id: string;
   nom: string;
@@ -49,9 +48,8 @@ const EditCustomer = ({
   const updateMutationCustomer = useUpdateCustomers();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -115,9 +113,9 @@ const EditCustomer = ({
         <DialogTitle>Modifier le client</DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}
-          <form className="space-y-3 " onSubmit={handleSubmit}>
+          <form className="space-y-3" onSubmit={handleSubmit}>
             <div>
-              <Label htmlFor="nom">Nom :</Label>
+              <Label htmlFor="nom">Nom</Label>
               <Input
                 id="nom"
                 name="nom"
@@ -128,7 +126,7 @@ const EditCustomer = ({
               />
             </div>
             <div>
-              <Label htmlFor="prenom">Prénom:</Label>
+              <Label htmlFor="prenom">Prénom</Label>
               <Input
                 id="prenom"
                 name="prenom"
@@ -139,7 +137,7 @@ const EditCustomer = ({
               />
             </div>
             <div>
-              <Label htmlFor="sexe">Sexe:</Label>
+              <Label htmlFor="sexe">Sexe</Label>
               <Input
                 id="sexe"
                 name="sexe"
@@ -150,7 +148,7 @@ const EditCustomer = ({
               />
             </div>
             <div>
-              <Label htmlFor="avenue">Avenue:</Label>
+              <Label htmlFor="avenue">Avenue</Label>
               <Input
                 id="avenue"
                 name="avenue"
@@ -161,7 +159,7 @@ const EditCustomer = ({
               />
             </div>
             <div>
-              <Label htmlFor="quartier">Quartier:</Label>
+              <Label htmlFor="quartier">Quartier</Label>
               <Input
                 id="quartier"
                 name="quartier"
@@ -172,7 +170,7 @@ const EditCustomer = ({
               />
             </div>
             <div>
-              <Label htmlFor="commune">Commune:</Label>
+              <Label htmlFor="commune">Commune</Label>
               <Input
                 id="commune"
                 name="commune"
@@ -186,7 +184,6 @@ const EditCustomer = ({
             <div>
               <Button
                 type="submit"
-                size="lg"
                 //   disabled={createDeliveryMutation.isPending}
                 className="w-full bg-green-600 text-gray-200"
                 disabled={updateMutationCustomer.isPending}
@@ -194,7 +191,7 @@ const EditCustomer = ({
                 {updateMutationCustomer.isPending
                   ? "Chargement ..."
                   : "Mettre à jour le client"}
-              </Button>{" "}
+              </Button>
             </div>
           </form>
         </div>

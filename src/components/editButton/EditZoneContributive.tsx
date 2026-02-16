@@ -1,3 +1,4 @@
+import { useUpdateZoneContributive } from "@/hooks/useZoneContributive";
 import { useAppStore } from "@/store/appStore";
 import { IconButton } from "@radix-ui/themes";
 import { useQueryClient } from "@tanstack/react-query";
@@ -5,7 +6,6 @@ import { PencilLine } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Loader from "../Loader";
-import { useUpdateZoneContributive } from "../hooks/useZoneContributive";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -15,6 +15,7 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+
 interface ClientProps {
   id: string;
   nom: string;
@@ -32,10 +33,8 @@ const EditZoneContributide = ({
 }: ClientProps) => {
   const [formData, setFormData] = useState({
     nom: "",
-
     etat_ravin: "",
     description: "",
-
     shapefile_id: "",
   });
 
@@ -45,15 +44,14 @@ const EditZoneContributide = ({
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -100,12 +98,12 @@ const EditZoneContributide = ({
         </IconButton>
       </DialogTrigger>
       <DialogContent className="bg-white z-9999 ">
-        <DialogTitle>Modifier la Zone </DialogTitle>
+        <DialogTitle>Modifier la Zone</DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}
-          <form className="space-y-3 " onSubmit={handleSubmit}>
+          <form className="space-y-3" onSubmit={handleSubmit}>
             <div>
-              <Label htmlFor="nom">Nom :</Label>
+              <Label htmlFor="nom">Nom</Label>
               <Input
                 id="nom"
                 name="nom"
@@ -117,13 +115,15 @@ const EditZoneContributide = ({
             </div>
 
             <div>
-              <Label htmlFor="etat_ravin">etat_ravin:</Label>
+              <Label htmlFor="etat_ravin">Etat du ravin</Label>
               <select name="etat_ravin" id="etat_ravin">
                 <option value="Bon">Bon</option>
+                <option value="Moyen">Moyen</option>
+                <option value="Mauvais">Mauvais</option>
               </select>
             </div>
             <div>
-              <Label htmlFor="avenue">Description:</Label>
+              <Label htmlFor="avenue">Description</Label>
               <Input
                 id="description"
                 name="description"
@@ -135,7 +135,7 @@ const EditZoneContributide = ({
             </div>
 
             <div>
-              <Label htmlFor="shapefile_id">Shapefile:</Label>
+              <Label htmlFor="shapefile_id">Shapefile</Label>
               <Input
                 id="shapefile_id"
                 name="shapefile_id"
@@ -148,7 +148,6 @@ const EditZoneContributide = ({
             <div>
               <Button
                 type="submit"
-                size="lg"
                 //   disabled={createDeliveryMutation.isPending}
                 className="w-full bg-green-600 text-gray-200"
                 disabled={updateMutationZoneContributive.isPending}
@@ -156,7 +155,7 @@ const EditZoneContributide = ({
                 {updateMutationZoneContributive.isPending
                   ? "Chargement ..."
                   : "Mettre à jour la zone"}
-              </Button>{" "}
+              </Button>
             </div>
           </form>
         </div>

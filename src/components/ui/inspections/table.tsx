@@ -1,6 +1,6 @@
 import Loader from "@/components/Loader";
 import DeleteInspection from "@/components/deleteButton/DeleteInspection";
-import EditInspection from "@/components/editButton/editInspection";
+import EditInspection from "@/components/editButton/EditInspection";
 import { useGetInspections } from "@/hooks/useInspection";
 import { displayDate } from "@/utils/utils";
 import { Eye } from "lucide-react";
@@ -14,14 +14,11 @@ export default function InspectionTable() {
   const [inspstructureDeleted, setInspectionDeleted] = useState<string>("");
 
   // initialize mutation
-  const { data: inspections, isPending: inspectionsIspending } =
-    useGetInspections();
+  const { data: inspections, isPending: inspectionsIspending } = useGetInspections();
   //   const mutationinspnstructure = useGetinspstructure();
   //   const mutationCustomer = useGetCustomer();
   //   const mutationTypeinspstructure = useAllTypeinspstructure();
   //   const mutationZone = useZoneContributive();
-
-  //useEffect
 
   if (inspectionsIspending) {
     return <Loader />;

@@ -1,37 +1,21 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useEffect } from "react";
-
-import { useInfrastructures } from "@/hooks/useInfrastructure";
-import { useCreateInspection } from "@/hooks/useInspection";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useInfrastructures } from "@/hooks/useInfrastructure";
+import { useCreateInspection } from "@/hooks/useInspection";
+import { InspectionFormData, inspectionSchema } from "@/lib/schema";
 import { useAppStore } from "@/store/appStore";
 import { inspection } from "@/types/infrastructure";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 
 interface CreateFormInspectionsProps {
   onFormSuccess: () => void;
 }
-
-const inspectionSchema = z.object({
-  date: z.string().min(3, "Le date doit contenir au moins 3 caractères"),
-  etat: z
-    .string()
-    .refine((val) => Object.values(inspection).includes(val as inspection), {
-      message: "Veuillez sélectionner un état valide.",
-    }),
-  inspecteur: z.string().optional(),
-  commentaire: z.string().min(1, "Le commentaire est requis").optional(),
-  prochain_controle: z.string().optional(),
-  infrastructure_id: z.string().min(1, "La capacité est requise").optional(),
-});
-
-type InspectionFormData = z.infer<typeof inspectionSchema>;
 
 const CreateFormInspections = ({
   onFormSuccess,

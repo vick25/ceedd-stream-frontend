@@ -1,3 +1,4 @@
+import { useUpdateBailleurs } from "@/hooks/useBailleur";
 import { useAppStore } from "@/store/appStore";
 import { IconButton } from "@radix-ui/themes";
 import { useQueryClient } from "@tanstack/react-query";
@@ -5,7 +6,6 @@ import { PencilLine } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Loader from "../Loader";
-import { useUpdateBailleurs } from "../hooks/useBailleur";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -85,12 +85,12 @@ const EditBailleur = ({ id, nom, sigle }: BailleurProps) => {
         </IconButton>
       </DialogTrigger>
       <DialogContent className="bg-white z-9999 ">
-        <DialogTitle>Modifier le Bailleur </DialogTitle>
+        <DialogTitle>Modifier le Bailleur</DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
           {" "}
-          <form className="space-y-3 " onSubmit={handleSubmit}>
+          <form className="space-y-3" onSubmit={handleSubmit}>
             <div>
-              <Label htmlFor="nom">Nom :</Label>
+              <Label htmlFor="nom">Nom</Label>
               <Input
                 id="nom"
                 name="nom"
@@ -101,7 +101,7 @@ const EditBailleur = ({ id, nom, sigle }: BailleurProps) => {
               />
             </div>
             <div>
-              <Label htmlFor="sigle">sigle:</Label>
+              <Label htmlFor="sigle">Sigle</Label>
               <Input
                 id="sigle"
                 name="sigle"
@@ -115,7 +115,6 @@ const EditBailleur = ({ id, nom, sigle }: BailleurProps) => {
             <div>
               <Button
                 type="submit"
-                size="lg"
                 //   disabled={createDeliveryMutation.isPending}
                 className="w-full bg-green-600 text-gray-200"
                 disabled={updateBailleurs.isPending}
@@ -123,7 +122,7 @@ const EditBailleur = ({ id, nom, sigle }: BailleurProps) => {
                 {updateBailleurs.isPending
                   ? "Chargement ..."
                   : "Mettre à jour le bailleur"}
-              </Button>{" "}
+              </Button>
             </div>
           </form>
         </div>

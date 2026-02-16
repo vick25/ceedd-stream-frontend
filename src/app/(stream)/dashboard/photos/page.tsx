@@ -7,8 +7,8 @@ import Loader from "@/components/Loader";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 
-import { usePhoto } from "@/hooks/usePhotos";
 import { useUplaoderImage } from "@/components/importFiles";
+import { usePhoto } from "@/hooks/usePhotos";
 
 import { useBailleurs } from "@/hooks/useBailleur";
 import { useInfrastructures } from "@/hooks/useInfrastructure";
@@ -17,7 +17,7 @@ import Image from "next/image";
 
 type Props = {};
 
-const page = (props: Props) => {
+const Photosage = (props: Props) => {
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
   const [locale, setLocale] = useState<Locale>("fr");
@@ -121,11 +121,10 @@ const page = (props: Props) => {
           flex flex-col items-center justify-center w-full h-32
           border-2 border-dashed rounded-xl cursor-pointer
           transition-all duration-200
-          ${
-            urlLoading
-              ? "border-indigo-300 bg-indigo-50"
-              : "border-gray-300 bg-gray-50 group-hover:bg-white group-hover:border-indigo-400 group-hover:shadow-md"
-          }
+          ${urlLoading
+                    ? "border-indigo-300 bg-indigo-50"
+                    : "border-gray-300 bg-gray-50 group-hover:bg-white group-hover:border-indigo-400 group-hover:shadow-md"
+                  }
         `}
               >
                 {urlLoading ? (
@@ -326,8 +325,7 @@ const page = (props: Props) => {
       active:translate-y-0
       focus:ring-4 focus:ring-indigo-500/30 focus:outline-none
       disabled:bg-gray-300 disabled:translate-y-0 disabled:shadow-none
-      transition-all duration-200
-    "
+      transition-all duration-200"
           >
             {mutationPhoto.isPending ? (
               <span className="flex items-center gap-2">
@@ -358,9 +356,8 @@ const page = (props: Props) => {
           </button>
         </form>
         <div
-          className=" w-full max-w-sm h-64 border-2 border-gray-200 rounded-xl overflow-hidden shadow-inner
-                flex items-center  bg-gray-100 relative
-            "
+          className="w-full max-w-sm h-64 border-2 border-gray-200 rounded-xl overflow-hidden shadow-inner
+                flex items-center bg-gray-100 relative"
         >
           {localPreview ? (
             <Image
@@ -383,4 +380,4 @@ const page = (props: Props) => {
   );
 };
 
-export default page;
+export default Photosage;

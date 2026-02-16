@@ -1,3 +1,8 @@
+import { useCustomers } from "@/hooks/useCustomer";
+import {
+  useUpdateInfrastructure
+} from "@/hooks/useInfrastructure";
+import { useTypeInfrastructures } from "@/hooks/useTypeInfrastructure";
 import { useAppStore } from "@/store/appStore";
 import {
   Client,
@@ -7,11 +12,6 @@ import { IconButton } from "@radix-ui/themes";
 import { PencilLine } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useCustomers } from "../hooks/useCustomer";
-import {
-  useUpdateInfrastructure
-} from "../hooks/useInfrastructure";
-import { useTypeInfrastructures } from "../hooks/useTypeInfrastructure";
 import Loader from "../Loader";
 import { Button } from "../ui/button";
 import {
@@ -23,6 +23,7 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";
+
 interface InfrastructureTypesProps {
   id: string;
   nom: string;
@@ -174,7 +175,7 @@ const EditInfrastructure = ({
           <form className="space-y-3" onSubmit={handleSubmit}>
             <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="nom">Nom Infrastructure:</Label>
+                <Label htmlFor="nom">Nom infrastructure</Label>
                 <Input
                   id="nom"
                   name="nom"
@@ -186,7 +187,7 @@ const EditInfrastructure = ({
               </div>
               <div>
                 <Label htmlFor="type_infrastructure">
-                  Type Infrastructure:
+                  Type Infrastructure
                 </Label>
                 {IsTypeInfrastructureLoading ? (
                   <Skeleton className=" flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" />
@@ -198,7 +199,7 @@ const EditInfrastructure = ({
                     id="type_infrastructure"
                     className=" flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <option value="">Selectionnez </option>
+                    <option value="">Selectionnez</option>
                     {typeInfrastructureData?.results.map((type: any) => (
                       <option key={type.id} value={type.id}>
                         {type.nom}
@@ -208,7 +209,7 @@ const EditInfrastructure = ({
                 )}
               </div>
               <div>
-                <Label htmlFor="date_construction">Date construction:</Label>
+                <Label htmlFor="date_construction">Date construction</Label>
                 <Input
                   id="date_construction"
                   name="date_construction"
@@ -219,7 +220,7 @@ const EditInfrastructure = ({
                 />
               </div>
               <div>
-                <Label htmlFor="latitude">Latitude:</Label>
+                <Label htmlFor="latitude">Latitude</Label>
                 <Input
                   id="latitude"
                   name="latitude"
@@ -230,7 +231,7 @@ const EditInfrastructure = ({
                 />
               </div>
               <div>
-                <Label htmlFor="longitude">Longitude:</Label>
+                <Label htmlFor="longitude">Longitude</Label>
                 <Input
                   id="longitude"
                   name="longitude"
@@ -241,7 +242,7 @@ const EditInfrastructure = ({
                 />
               </div>
               <div>
-                <Label htmlFor="capacite">Capacite:</Label>
+                <Label htmlFor="capacite">Capacité</Label>
                 <Input
                   id="capacite"
                   name="capacite"
@@ -252,7 +253,7 @@ const EditInfrastructure = ({
                 />
               </div>
               <div>
-                <Label htmlFor="unite">unite:</Label>
+                <Label htmlFor="unite">Unité</Label>
                 <Input
                   id="unite"
                   name="unite"
@@ -276,9 +277,9 @@ const EditInfrastructure = ({
               </select>
             </div> */}
               <div>
-                <Label htmlFor="client">Propriétaire:</Label>
+                <Label htmlFor="client">Propriétaire</Label>
                 {isLoading ? (
-                  <Skeleton className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 " />
+                  <Skeleton className="h-10 w-full rounded-md border border-input bg-background px-3 py-2" />
                 ) : (
                   <select
                     name="client_id"
@@ -287,7 +288,7 @@ const EditInfrastructure = ({
                     onChange={handleChange}
                     className=" flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <option value="">Selectionnez </option>
+                    <option value="">Selectionnez</option>
                     {CustomerData?.results?.map((cust: any) => (
                       <option key={cust.id} value={cust.id}>
                         {cust.nom}
@@ -307,15 +308,14 @@ const EditInfrastructure = ({
               </Button>
               <Button
                 type="submit"
-                size="lg"
                 //   disabled={createDeliveryMutation.isPending}
                 className="w-fit bg-blue-600 text-gray-200"
                 disabled={updateMutationInfrastructure.isPending}
               >
                 {updateMutationInfrastructure.isPending
                   ? "Chargement ..."
-                  : "Mettre à jour Infrastructure"}
-              </Button>{" "}
+                  : "Mettre à jour infrastructure"}
+              </Button>
             </div>
           </form>
         </div>

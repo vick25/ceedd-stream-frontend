@@ -1,7 +1,7 @@
 import DeleteBailleur from "@/components/deleteButton/DeleteBailleur";
 import EditBailleur from "@/components/editButton/EditBailleur";
-import { useBailleurs } from "@/hooks/useBailleur";
 import Loader from "@/components/Loader";
+import { useBailleurs } from "@/hooks/useBailleur";
 import { useAppStore } from "@/store/appStore";
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { Locale, useTranslations } from "next-intl";

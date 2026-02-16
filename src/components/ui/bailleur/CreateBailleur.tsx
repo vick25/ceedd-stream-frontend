@@ -1,18 +1,15 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useEffect } from "react";
-
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useCreateBailleurs } from "@/hooks/useBailleur";
+import { BailleurFormData, bailleurSchema } from "@/lib/schema";
+import { useAppStore } from "@/store/appStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-
-import { useCreateBailleurs } from "@/hooks/useBailleur";
-import { useAppStore } from "@/store/appStore";
-import { BailleurFormData, bailleurSchema } from "@/lib/schema";
 
 interface BailleurFormProps {
   onFormSuccess: () => void;
@@ -72,13 +69,12 @@ const CreateBailleur = ({ onFormSuccess }: BailleurFormProps) => {
             type="text"
             placeholder="nom"
             {...register("nom", { required: true })}
-            className={`border border-white ${
-              errors.nom
+            className={`border border-white ${errors.nom
                 ? "border border-red-500"
                 : touchedFields.nom
                   ? "border border-green-600"
                   : "border border-gray-300"
-            }`}
+              }`}
           />
           {errors.nom && (
             <span className="text-red-500 text-sm">{errors.nom.message}</span>

@@ -1,9 +1,7 @@
 "use client";
 
-import { Locale, useTranslations } from "@/lib/i18n";
-import { PlusCircle } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import Table from "@/components/ui/zones/table";
+import Loader from "@/components/Loader";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,16 +10,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-
 import CreateFormZone from "@/components/ui/zones/CreateFormZone";
+import Table from "@/components/ui/zones/table";
+import { Locale, useTranslations } from "@/lib/i18n";
 import { useAppStore } from "@/store/appStore";
+import { PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Loader from "@/components/Loader";
+import { useEffect, useState } from "react";
 
 type Props = {};
 
-const page = (props: Props) => {
+const ZoneContributivesPage = (props: Props) => {
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
   const [locale, setLocale] = useState<Locale>("fr");
@@ -41,6 +40,7 @@ const page = (props: Props) => {
   if (!isAuthenticated || !user) {
     return null;
   }
+
   return (
     <main className="container py-6 space-y-6 min-h-screen">
       <div className="flex items-center justify-between">
@@ -59,13 +59,13 @@ const page = (props: Props) => {
                 variant="outline"
                 className="hover:bg-blue-50 px-3 py-2 flex gap-4 border border-gray-300"
               >
-                <PlusCircle /> Nouvelle Zone
+                <PlusCircle />Nouvelle zone
               </Button>
             </DialogTrigger>
-            <DialogContent className=" bg-white z-9999 ">
+            <DialogContent className="bg-white z-9999">
               <DialogHeader>
                 <DialogTitle>
-                  Ajouter une nouvelle Zone Contributive{" "}
+                  Ajouter une nouvelle Zone Contributive
                 </DialogTitle>
                 <DialogDescription>Voici les détails.</DialogDescription>
               </DialogHeader>
@@ -86,4 +86,4 @@ const page = (props: Props) => {
   );
 };
 
-export default page;
+export default ZoneContributivesPage;

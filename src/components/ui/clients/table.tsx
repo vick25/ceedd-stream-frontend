@@ -1,7 +1,7 @@
 import DeleteCustomer from "@/components/deleteButton/DeleteCustomer";
 import EditCustomer from "@/components/editButton/EditCustomer";
-import { useCustomers } from "@/hooks/useCustomer";
 import Loader from "@/components/Loader";
+import { useCustomers } from "@/hooks/useCustomer";
 import { useAppStore } from "@/store/appStore";
 import { Client } from "@/types/infrastructure";
 import { ChevronLeft, ChevronRight, Eye, Search, X } from "lucide-react";
@@ -76,7 +76,7 @@ export default function ClientTable() {
         <div className="flex flex-col md:justify-between md:flex-row md:items-center  w-full  mb-6">
           <div className="relative w-full mb-4 md:w-wull  md:p-3">
             <input
-              placeholder="recherche par nom ou prenom"
+              placeholder="Recherchez par nom ou prenom"
               name="searchTerms"
               value={searchTerms}
               onChange={(e) => setSearchTerms(e.target.value)}
@@ -94,7 +94,7 @@ export default function ClientTable() {
               )}
             </div>
           </div>
-          <div className="flex flex-col md:flex-col  md:items-center gap-2">
+          <div className="flex flex-col md:flex-col md:items-center gap-2">
             {/* <select
               name=""
               id=""

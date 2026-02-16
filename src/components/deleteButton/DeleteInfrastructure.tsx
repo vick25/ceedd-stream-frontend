@@ -1,12 +1,12 @@
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { useInfrastructureDeleted } from "@/hooks/useInfrastructure";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { Callout, IconButton } from "@radix-ui/themes";
 import { InfoIcon, Trash } from "lucide-react";
-import { DialogTitle } from "@radix-ui/react-dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
-import { useInfrastructureDeleted } from "../hooks/useInfrastructure";
+import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 type props = {
   id: string;
@@ -44,7 +44,7 @@ const DeleteInfrastructure = ({ id, nom, setInfrastructureDeleted }: props) => {
         <IconButton
           variant="surface"
           color="red"
-          className="px-3 py-2 rounded-md border border-gray-200  "
+          className="px-3 py-2 rounded-md border border-gray-200"
         >
           <Trash size={20} className="text-red-600" />
         </IconButton>
@@ -57,12 +57,12 @@ const DeleteInfrastructure = ({ id, nom, setInfrastructureDeleted }: props) => {
           </Callout.Icon>
           <Callout.Text className="text-sm">
             Pour supprimer l'infrastructure, entrer:
-            <strong>supprimer l'infrastructure {nom} </strong>puis cliquer sur
+            <strong>supprimer l'infrastructure {nom}</strong> puis cliquer sur
             supprimer
           </Callout.Text>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <Label htmlFor="nom">Nom :</Label>
+              <Label htmlFor="nom">Nom</Label>
               <Input id="nom" name="nom" type="text" onChange={handleChange} />
             </div>
             <Button
@@ -75,7 +75,7 @@ const DeleteInfrastructure = ({ id, nom, setInfrastructureDeleted }: props) => {
             >
               {mutationDeleteInfrastructure.isPending
                 ? "Chargement ..."
-                : " Supprimer"}
+                : "Supprimer"}
             </Button>
           </form>
         </Callout.Root>

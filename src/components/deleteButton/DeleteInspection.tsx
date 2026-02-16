@@ -1,18 +1,19 @@
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { useInfrastructureDeleted } from "@/hooks/useInfrastructure";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { Callout, IconButton } from "@radix-ui/themes";
 import { InfoIcon, Trash } from "lucide-react";
-import { DialogTitle } from "@radix-ui/react-dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
-import { useInfrastructureDeleted } from "../hooks/useInfrastructure";
+import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 type props = {
   id: string;
   inspecteur: string;
   setInspectionDeleted: (id: string) => void;
 };
+
 const DeleteInspection = ({ id, inspecteur, setInspectionDeleted }: props) => {
   const [formData, setFormData] = useState({
     inspecteur: "",
@@ -44,7 +45,7 @@ const DeleteInspection = ({ id, inspecteur, setInspectionDeleted }: props) => {
         <IconButton
           variant="surface"
           color="red"
-          className="px-3 py-2 rounded-md border border-gray-200  "
+          className="px-3 py-2 rounded-md border border-gray-200"
         >
           <Trash size={20} className="text-red-600" />
         </IconButton>
@@ -62,7 +63,7 @@ const DeleteInspection = ({ id, inspecteur, setInspectionDeleted }: props) => {
           </Callout.Text>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <Label htmlFor="inspecteur">inspecteur :</Label>
+              <Label htmlFor="inspecteur">Inspecteur</Label>
               <Input
                 id="inspecteur"
                 name="inspecteur"
@@ -75,13 +76,13 @@ const DeleteInspection = ({ id, inspecteur, setInspectionDeleted }: props) => {
               disabled={
                 mutationDeleteInspection.isPending ||
                 formData.inspecteur !==
-                  `supprimer l'infrastructure ${inspecteur}`
+                `supprimer l'infrastructure ${inspecteur}`
               }
               className="bg-green-600 text-white"
             >
               {mutationDeleteInspection.isPending
                 ? "Chargement ..."
-                : " Supprimer"}
+                : "Supprimer"}
             </Button>
           </form>
         </Callout.Root>

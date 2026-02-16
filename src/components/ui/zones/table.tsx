@@ -1,7 +1,7 @@
-import DeleteZoneContributide from "@/components/deleteButton/DeleteZoneContributide";
-import EditZoneContributide from "@/components/editButton/EditZoneContributide";
-import { useZoneContributives } from "@/hooks/useZoneContributive";
+import DeleteZoneContributive from "@/components/deleteButton/DeleteZoneContributive";
+import EditZoneContributive from "@/components/editButton/EditZoneContributive";
 import Loader from "@/components/Loader";
+import { useZoneContributives } from "@/hooks/useZoneContributive";
 import { Zone_contributive } from "@/types/infrastructure";
 import { Eye } from "lucide-react";
 import Link from "next/link";
@@ -15,12 +15,7 @@ export default function ZoneTable() {
   const [zones, setZones] = useState<Record<string, string>>({});
   const [zoneContributide, setZoneContributide] = useState<string>("");
 
-  // initialize mutation
-  // const { data: customers, isPending: customersIspending } = useCustomers();
-
   const { data: zonesData, isPending: zoneIspending } = useZoneContributives();
-
-  //useEffect
 
   if (zoneIspending) {
     return <Loader />;
@@ -61,14 +56,14 @@ export default function ZoneTable() {
                         </p>
                       </div>
                       <div className="flex justify-end gap-2">
-                        <EditZoneContributide
+                        <EditZoneContributive
                           id={zone.id}
                           nom={zone.nom}
                           etat_ravin={zone.etat_ravin}
                           description={zone.description}
                           shapefile_id={zone.shapefile_id}
                         />
-                        <DeleteZoneContributide
+                        <DeleteZoneContributive
                           id={zone.id}
                           nom={zone.nom}
                           setZoneContributide={setZoneContributide}
@@ -87,18 +82,15 @@ export default function ZoneTable() {
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   Nom
                 </th>
-
                 <th scope="col" className="px-3 py-5 font-medium">
                   Etat du ravin
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Description
                 </th>
-
                 <th scope="col" className="px-3 py-5 font-medium">
                   Lié au shapefile
                 </th>
-
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -132,25 +124,23 @@ export default function ZoneTable() {
                         {zone.etat_ravin}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        {" "}
                         {zone.description}
                       </td>
 
                       <td className="whitespace-nowrap px-3 py-3">
-                        {" "}
                         {zone.shapefile_id}
                       </td>
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3 items-center">
-                          <EditZoneContributide
+                          <EditZoneContributive
                             id={zone.id}
                             nom={zone.nom}
                             etat_ravin={zone.etat_ravin}
                             description={zone.description}
                             shapefile_id={zone.shapefile_id}
                           />
-                          <DeleteZoneContributide
+                          <DeleteZoneContributive
                             id={zone.id}
                             nom={zone.nom}
                             setZoneContributide={setZoneContributide}

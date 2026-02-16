@@ -1,9 +1,9 @@
+import { useCustomerDeleted } from "@/hooks/useCustomer";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Callout, IconButton } from "@radix-ui/themes";
 import { useQueryClient } from "@tanstack/react-query";
 import { InfoIcon, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useCustomerDeleted } from "../hooks/useCustomer";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Input } from "../ui/input";
@@ -68,12 +68,12 @@ const DeleteCustomer = ({ id, nom, setCustomerDeleted }: props) => {
           </Callout.Icon>
           <Callout.Text className="text-sm">
             Pour supprimer le client, entrer:
-            <strong>supprimer le client {nom} </strong>puis cliquer sur
+            <strong>supprimer le client {nom}</strong> puis cliquer sur
             supprimer
           </Callout.Text>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <Label htmlFor="nom">Nom :</Label>
+              <Label htmlFor="nom">Nom</Label>
               <Input id="nom" name="nom" type="text" onChange={handleChange} />
             </div>
             <Button
@@ -86,7 +86,7 @@ const DeleteCustomer = ({ id, nom, setCustomerDeleted }: props) => {
             >
               {mutationDeleteCustomer.isPending
                 ? "Chargement ..."
-                : " Supprimer"}
+                : "Supprimer"}
             </Button>
           </form>
         </Callout.Root>

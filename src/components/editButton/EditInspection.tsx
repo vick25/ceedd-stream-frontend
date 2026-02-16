@@ -1,3 +1,5 @@
+import { useInfrastructures } from "@/hooks/useInfrastructure";
+import { useUpdateInspection } from "@/hooks/useInspection";
 import { useAppStore } from "@/store/appStore";
 import { displayDate } from "@/utils/utils";
 import { IconButton } from "@radix-ui/themes";
@@ -5,10 +7,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { PencilLine } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import {
-  useInfrastructures
-} from "../hooks/useInfrastructure";
-import { useUpdateInspection } from "../hooks/useInspection";
 import Loader from "../Loader";
 import { Button } from "../ui/button";
 import {
@@ -19,6 +17,7 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+
 interface InspectionProps {
   id: string;
   date: Date;
@@ -116,12 +115,11 @@ const EditInspection = ({
         </IconButton>
       </DialogTrigger>
       <DialogContent className="bg-white z-9999 ">
-        <DialogTitle>Modifier modifier une inspection</DialogTitle>
+        <DialogTitle>Modifier l'inspection</DialogTitle>
         <div className="overflow-y-auto max-h-[80vh]">
-          {" "}
-          <form className="space-y-3 " onSubmit={handleSubmit}>
+          <form className="space-y-3" onSubmit={handleSubmit}>
             <div>
-              <Label htmlFor="date">date :</Label>
+              <Label htmlFor="date">Date</Label>
               <Input
                 id="date"
                 name="date"
@@ -132,7 +130,7 @@ const EditInspection = ({
               />
             </div>
             <div>
-              <Label htmlFor="etat">Prédate:</Label>
+              <Label htmlFor="etat">Prédate</Label>
               <Input
                 id="etat"
                 name="etat"
@@ -143,7 +141,7 @@ const EditInspection = ({
               />
             </div>
             <div>
-              <Label htmlFor="inspection">inspection:</Label>
+              <Label htmlFor="inspection">Inspection</Label>
               <Input
                 id="inspection"
                 name="inspection"
@@ -154,7 +152,7 @@ const EditInspection = ({
               />
             </div>
             <div>
-              <Label htmlFor="commentaire">commentaire:</Label>
+              <Label htmlFor="commentaire">Commentaire</Label>
               <Input
                 id="commentaire"
                 name="commentaire"
@@ -165,7 +163,7 @@ const EditInspection = ({
               />
             </div>
             <div>
-              <Label htmlFor="prochain_controle">prochain_controle:</Label>
+              <Label htmlFor="prochain_controle">Prochain contrôle</Label>
               <Input
                 id="prochain_controle"
                 name="prochain_controle"
@@ -211,15 +209,14 @@ const EditInspection = ({
             <div>
               <Button
                 type="submit"
-                size="lg"
                 //   disabled={createDeliveryMutation.isPending}
                 className="w-full bg-green-600 text-gray-200"
                 disabled={updateMutationInspection.isPending}
               >
                 {updateMutationInspection.isPending
                   ? "Chargement ..."
-                  : "Mettre à jour  l'inspection"}
-              </Button>{" "}
+                  : "Mettre à jour l'inspection"}
+              </Button>
             </div>
           </form>
         </div>

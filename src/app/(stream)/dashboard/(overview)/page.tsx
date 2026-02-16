@@ -1,5 +1,5 @@
 "use client";
-// import { DashboardStats } from "@/types/infrastructure";
+
 import { useCustomers } from "@/hooks/useCustomer";
 import { useInfrastructures } from "@/hooks/useInfrastructure";
 import { useTypeInfrastructures } from "@/hooks/useTypeInfrastructure";
@@ -17,11 +17,8 @@ export default function DashboardPage() {
   const { data: infrastructures, isPending: isInfrastructuresPending } =
     useInfrastructures();
   const router = useRouter();
-  console.log({ infrastructures });
   const { data: clients, isPending: isClientsPending } = useCustomers();
-  const { data: typesInfrastructure, isPending: isTypePending } =
-    useTypeInfrastructures();
-  // console.log({ typesInfrastructure });
+  const { data: typesInfrastructure, isPending: isTypePending } = useTypeInfrastructures();
   const stats = useMemo(() => {
     // const total = infrastructures.count;
     const defaultStats = {
@@ -69,7 +66,7 @@ export default function DashboardPage() {
   }, [_hasHydrated, isAuthenticated, router]);
 
   return (
-    <div>
+    <>
       {/* <Nav /> */}
 
       <main className="container py-6 space-y-6 min-h-screen">
@@ -79,7 +76,7 @@ export default function DashboardPage() {
         </div>
 
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {isInfrastructuresPending ? (
             // <Skeleton className="p-4 rounded-lg border border-gray-200 bg-gray-400 animate-pulse transition-all ease-in-out 5s" />
             <div className="p-4 rounded-lg border border-gray-200 bg-white animate-pulse">
@@ -98,7 +95,7 @@ export default function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="p-4 rounded-lg border border-gray-200 bg-white">
+            <div className="flex flex-col justify-between p-4 rounded-lg border border-gray-200 bg-white">
               <div className="text-sm text-gray-500 flex items-center gap-3">
                 <Building2 className="text-green-800" />{" "}
                 {t.dashboard.totalInfrastructures}
@@ -127,7 +124,7 @@ export default function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="p-4 rounded-lg border border-gray-200 bg-white">
+            <div className="flex flex-col justify-between p-4 rounded-lg border border-gray-200 bg-white">
               <div className="text-sm text-gray-500">
                 {t.dashboard.typeInfrastructures}
               </div>
@@ -153,7 +150,7 @@ export default function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="p-4 rounded-lg border border-gray-200 bg-white">
+            <div className="flex flex-col justify-between p-4 rounded-lg border border-gray-200 bg-white">
               <div className="text-sm text-gray-500 flex items-center gap-3">
                 <User className="text-orange-600" />
                 {t.dashboard.totalClients}
@@ -181,7 +178,7 @@ export default function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="p-4 rounded-lg border border-gray-200 bg-white">
+            <div className="flex flex-col justify-between p-4 rounded-lg border border-gray-200 bg-white">
               <div className="text-sm text-gray-500">
                 {t.dashboard.totalInvestment}
               </div>
@@ -226,7 +223,7 @@ export default function DashboardPage() {
           />
         </div> */}
       </main>
-    </div>
+    </>
   );
 }
 
