@@ -1,6 +1,6 @@
 import DeleteCustomer from "@/components/deleteButton/DeleteCustomer";
 import EditCustomer from "@/components/editButton/EditCustomer";
-import { useCustomers } from "@/components/hooks/useCustomer";
+import { useCustomers } from "@/hooks/useCustomer";
 import Loader from "@/components/Loader";
 import { useAppStore } from "@/store/appStore";
 import { Client } from "@/types/infrastructure";
@@ -115,8 +115,8 @@ export default function ClientTable() {
                           </option>
                         ))}
                       </select>
-        
-                     
+
+
                       {searchTypes && (
                         <X
                           className="absolute right-7 h-4 w-4 text-gray-400 cursor-pointer hover:text-red-500"

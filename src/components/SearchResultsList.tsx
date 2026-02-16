@@ -14,7 +14,7 @@ const SearchResultsList: React.FC<SearchResultProps> = ({
   if (!results || results.total_volume === 0) {
     <div className="text-center p-10 bg-gray-50 rounded-lg shadow-inner">
       <h2 className="text-xl font-semibold text-gray-700 mb-2">
-        Aucun résultat trouvé
+        Aucun résultat trouvé!
       </h2>
       <p className="text-gray-500">
         La recherche pour **"{searchTerm}"** n'a retourné aucune infrastructure.
@@ -25,7 +25,7 @@ const SearchResultsList: React.FC<SearchResultProps> = ({
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-medium text-gray-800">
-        Capacite total de citerne installer à :{" "}
+        Capacité totale de citerne installée à :{" "}
         <span className="font-bold text-indigo-600">"{searchTerm}"</span> (
         {results?.total_volume} m3)
       </h2>

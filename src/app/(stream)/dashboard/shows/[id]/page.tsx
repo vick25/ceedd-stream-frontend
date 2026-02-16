@@ -1,5 +1,5 @@
 "use client";
-import { useGetInfrastructureById } from "@/components/hooks/useInfrastructure";
+import { useGetInfrastructureById } from "@/hooks/useInfrastructure";
 import { Locale, useTranslations } from "@/lib/i18n";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -45,7 +45,7 @@ const InfrastructureDetails = () => {
                 <input
                   type="file"
                   className="hidden"
-                // onChange={handleImageUpload}
+                  // onChange={handleImageUpload}
                 />
               </label>
 

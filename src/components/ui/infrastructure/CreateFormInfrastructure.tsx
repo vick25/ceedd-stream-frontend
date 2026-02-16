@@ -1,7 +1,7 @@
-import { useCustomers } from "@/components/hooks/useCustomer";
-import { useCreateInfrastructure } from "@/components/hooks/useInfrastructure";
-import { useTypeInfrastructures } from "@/components/hooks/useTypeInfrastructure";
-import { useZoneContributives } from "@/components/hooks/useZoneContributive";
+import { useCustomers } from "@/hooks/useCustomer";
+import { useCreateInfrastructure } from "@/hooks/useInfrastructure";
+import { useTypeInfrastructures } from "@/hooks/useTypeInfrastructure";
+import { useZoneContributives } from "@/hooks/useZoneContributive";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,8 @@ import * as z from "zod";
 const infrastructureSchema = z.object({
   nom: z.string().trim().min(3, "Le nom doit contenir au moins 3 caractères"),
   type_infrastructure_id: z
-    .string().trim()
+    .string()
+    .trim()
     .min(1, "Le type d'infrastructure est requis"),
   date_construction: z.string().min(1, "La date de construction est requise"),
   latitude: z.string().trim().min(1, "La latitude est requise"),
@@ -87,13 +88,16 @@ const CreateFormInfrastructure = ({
       >
         <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
-            <Label htmlFor="client_id">Client<span className="text-red-500">*</span></Label>
+            <Label htmlFor="client_id">
+              Client<span className="text-red-500">*</span>
+            </Label>
             <select
               {...register("client_id")}
-              className={`flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.client_id
-                ? "border border-red-500 "
-                : "border border-gray-300"
-                }`}
+              className={`flex border border-gray-300 h-10 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.client_id
+                  ? "border border-red-500 "
+                  : "border border-gray-300"
+              }`}
             >
               <option value="">Selectionnez</option>
               {customersData?.results.map((type: any) => (
@@ -107,27 +111,33 @@ const CreateFormInfrastructure = ({
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="nom">Nom/Code infrastructure<span className="text-red-500">*</span></Label>
+            <Label htmlFor="nom">
+              Nom/Code infrastructure<span className="text-red-500">*</span>
+            </Label>
             <Input
               id="nom"
               type="text"
               placeholder="nom ou code de l'infrastructure"
               {...register("nom")}
-              className={`border border-gray-300 ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border border-gray-300 ${
+                errors.nom ? "border border-red-500" : "border border-gray-300"
+              }`}
             />
             {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="type_infrastructure_id_id">Type infrastructure<span className="text-red-500">*</span></Label>
+            <Label htmlFor="type_infrastructure_id_id">
+              Type infrastructure<span className="text-red-500">*</span>
+            </Label>
             <select
               {...register("type_infrastructure_id")}
-              className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.type_infrastructure_id
-                ? "border border-red-500 "
-                : "border border-gray-500"
-                }`}
+              className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.type_infrastructure_id
+                  ? "border border-red-500 "
+                  : "border border-gray-500"
+              }`}
             >
               <option value="">Selectionnez</option>
               {typeInfrastructure?.results.map((type: any) => (
@@ -143,7 +153,9 @@ const CreateFormInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="date_construction">Date construction<span className="text-red-500">*</span></Label>
+            <Label htmlFor="date_construction">
+              Date construction<span className="text-red-500">*</span>
+            </Label>
             <Input
               id="date_construction"
               type="date"
@@ -152,11 +164,15 @@ const CreateFormInfrastructure = ({
               className="flex h-10 w-full border border-gray-300 rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.date_construction && (
-              <p className="text-red-500 text-sm">{errors.date_construction?.message}</p>
+              <p className="text-red-500 text-sm">
+                {errors.date_construction?.message}
+              </p>
             )}
           </div>
           <div>
-            <Label htmlFor="latitude">Latitude<span className="text-red-500">*</span></Label>
+            <Label htmlFor="latitude">
+              Latitude<span className="text-red-500">*</span>
+            </Label>
             <Input
               id="latitude"
               type="text"
@@ -169,7 +185,9 @@ const CreateFormInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="longitude">Longitude<span className="text-red-500">*</span></Label>
+            <Label htmlFor="longitude">
+              Longitude<span className="text-red-500">*</span>
+            </Label>
             <Input
               id="longitude"
               type="text"
@@ -182,7 +200,9 @@ const CreateFormInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="capacite">Capacité<span className="text-red-500">*</span></Label>
+            <Label htmlFor="capacite">
+              Capacité<span className="text-red-500">*</span>
+            </Label>
             <Input
               id="capacite"
               type="number"
@@ -195,7 +215,9 @@ const CreateFormInfrastructure = ({
             )}
           </div>
           <div>
-            <Label htmlFor="unite">Unité (L/m<sup>3</sup>)<span className="text-red-500">*</span></Label>
+            <Label htmlFor="unite">
+              Unité (L/m<sup>3</sup>)<span className="text-red-500">*</span>
+            </Label>
             <Input
               id="unite"
               type="text"

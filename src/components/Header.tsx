@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import { useAppStore } from "@/store/appStore";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useLogOut } from "./hooks/useAuth";
+import { useLogOut } from "@/hooks/useAuth";
 import LocaleSwitcher from "./Locale-switcher";
 import {
   DropdownMenu,

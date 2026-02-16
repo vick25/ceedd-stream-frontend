@@ -10,24 +10,17 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import {
-  useCreateBailleurs
-} from "@/components/hooks/useBailleur";
+import { useCreateBailleurs } from "@/hooks/useBailleur";
 import { useAppStore } from "@/store/appStore";
+import { BailleurFormData, bailleurSchema } from "@/lib/schema";
 
 interface BailleurFormProps {
   onFormSuccess: () => void;
 }
 
-const bailleurSchema = z.object({
-  nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
-  sigle: z.string().optional(),
-});
-
-type BailleurFormData = z.infer<typeof bailleurSchema>;
-
 const CreateBailleur = ({ onFormSuccess }: BailleurFormProps) => {
   const {
+    reset,
     register,
     handleSubmit,
     formState: { errors, touchedFields },
@@ -45,13 +38,11 @@ const CreateBailleur = ({ onFormSuccess }: BailleurFormProps) => {
 
   const mutationCreateBailleurs = useCreateBailleurs();
 
-  const onSubmit = async (data: BailleurFormData) => {
+  const formSubmit = async (data: BailleurFormData) => {
     // Handle form submission logic here
-    const payload = {
-      nom: data.nom,
-      sigle: data.sigle,
-    };
+    const payload = { ...data };
     await mutationCreateBailleurs.mutateAsync(payload);
+    reset();
 
     await queryClient.invalidateQueries({ queryKey: ["bailleurs"] });
     onFormSuccess();
@@ -70,52 +61,50 @@ const CreateBailleur = ({ onFormSuccess }: BailleurFormProps) => {
   if (!isAuthenticated || !user) {
     return null;
   }
+
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-2 flex flex-col gap-3">
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="nom"> Nom:</Label>
-            <Input
-              id="nom"
-              type="text"
-              placeholder="nom"
-              {...register("nom")}
-              className={`border border-white ${errors.nom
+    <form onSubmit={handleSubmit(formSubmit)}>
+      <div className="space-y-2 flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="nom">Nom</Label>
+          <Input
+            id="nom"
+            type="text"
+            placeholder="nom"
+            {...register("nom", { required: true })}
+            className={`border border-white ${
+              errors.nom
                 ? "border border-red-500"
                 : touchedFields.nom
                   ? "border border-green-600"
                   : "border border-gray-300"
-                }`}
-            />
-            {errors.nom && (
-              <p className="text-red-500 text-sm">{errors.nom.message}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="sigle">sigle </Label>
-            <Input
-              id="sigle"
-              type="text"
-              placeholder="sigle"
-              {...register("sigle")}
-              className={`border border-gray-200 `}
-            />
-          </div>
-
-          <Button
-            type="submit"
-            size="lg"
-            disabled={mutationCreateBailleurs.isPending}
-            className="w-full bg-green-600 text-gray-200"
-          >
-            {mutationCreateBailleurs.isPending
-              ? "Chargement..."
-              : " Ajouter Zone"}
-          </Button>
+            }`}
+          />
+          {errors.nom && (
+            <span className="text-red-500 text-sm">{errors.nom.message}</span>
+          )}
         </div>
-      </form>
-    </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="sigle">Sigle</Label>
+          <Input
+            id="sigle"
+            type="text"
+            placeholder="sigle"
+            {...register("sigle")}
+            className={`border border-gray-200 `}
+          />
+        </div>
+
+        <Button
+          type="submit"
+          size="lg"
+          disabled={mutationCreateBailleurs.isPending}
+          className="w-full bg-green-600 text-gray-200"
+        >
+          {mutationCreateBailleurs.isPending ? "Chargement..." : "Ajouter Zone"}
+        </Button>
+      </div>
+    </form>
   );
 };
 

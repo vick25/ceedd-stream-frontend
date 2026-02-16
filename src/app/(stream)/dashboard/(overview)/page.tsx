@@ -1,8 +1,8 @@
 "use client";
 // import { DashboardStats } from "@/types/infrastructure";
-import { useCustomers } from "@/components/hooks/useCustomer";
-import { useInfrastructures } from "@/components/hooks/useInfrastructure";
-import { useTypeInfrastructures } from "@/components/hooks/useTypeInfrastructure";
+import { useCustomers } from "@/hooks/useCustomer";
+import { useInfrastructures } from "@/hooks/useInfrastructure";
+import { useTypeInfrastructures } from "@/hooks/useTypeInfrastructure";
 import { Locale, useTranslations } from "@/lib/i18n";
 import { useAppStore } from "@/store/appStore";
 import { Building2, User } from "lucide-react";
@@ -19,7 +19,8 @@ export default function DashboardPage() {
   const router = useRouter();
   console.log({ infrastructures });
   const { data: clients, isPending: isClientsPending } = useCustomers();
-  const { data: typesInfrastructure, isPending: isTypePending } = useTypeInfrastructures();
+  const { data: typesInfrastructure, isPending: isTypePending } =
+    useTypeInfrastructures();
   // console.log({ typesInfrastructure });
   const stats = useMemo(() => {
     // const total = infrastructures.count;

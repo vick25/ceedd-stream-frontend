@@ -2,10 +2,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect } from "react";
 
-import {
-  useInfrastructures
-} from "@/components/hooks/useInfrastructure";
-import { useCreateZoneContributives } from "@/components/hooks/useZoneContributive";
+import { useInfrastructures } from "@/hooks/useInfrastructure";
+import { useCreateZoneContributives } from "@/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/store/appStore";
@@ -100,8 +98,9 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
               type="text"
               placeholder="nom"
               {...register("nom")}
-              className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
-                }`}
+              className={`border border-white ${
+                errors.nom ? "border border-red-500" : "border border-gray-300"
+              }`}
             />
             {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
@@ -114,10 +113,11 @@ const CreateFormClient = ({ onFormSuccess }: ZoneFormClientProps) => {
             <select
               id="etat_ravin"
               {...register("etat_ravin")}
-              className={`flex h-10 w-full rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.etat_ravin
-                ? "border border-red-500"
-                : "border border-gray-300"
-                }`}
+              className={`flex h-10 w-full rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.etat_ravin
+                  ? "border border-red-500"
+                  : "border border-gray-300"
+              }`}
             >
               <option value={etat_ravin.SELECTIONNEZ} disabled>
                 Selectionnez un ravin

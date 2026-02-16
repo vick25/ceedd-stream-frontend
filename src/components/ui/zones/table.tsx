@@ -1,13 +1,8 @@
-
 import DeleteZoneContributide from "@/components/deleteButton/DeleteZoneContributide";
 import EditZoneContributide from "@/components/editButton/EditZoneContributide";
-import {
-  useZoneContributives
-} from "@/components/hooks/useZoneContributive";
+import { useZoneContributives } from "@/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
-import {
-  Zone_contributive
-} from "@/types/infrastructure";
+import { Zone_contributive } from "@/types/infrastructure";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";

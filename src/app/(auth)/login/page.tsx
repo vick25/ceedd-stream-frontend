@@ -25,17 +25,11 @@ const LoginPage = () => {
   const router = useRouter();
   const loginMutation = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     await loginMutation.mutateAsync(formData);
     router.push("/dashboard");
-
-    // try {
-
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,10 +41,13 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-dvh flex items-center justify-center">
       <Card className="w-full max-w-md bg-white shadow-sm border border-gray-300">
         <CardHeader className="space-y-1 flex flex-col gap-2 text-left">
-          <Link href="/" className="flex text-gray-700 text-xs items-center hover:text-gray-900 hover:font-medium">
+          <Link
+            href="/"
+            className="flex text-gray-700 text-xs items-center hover:text-gray-900 hover:font-medium"
+          >
             <ArrowBigLeft className="text-gray-700 w-4 h-4 mr-1" />
             Retour
           </Link>

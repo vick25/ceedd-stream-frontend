@@ -17,7 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useLogOut } from "./hooks/useAuth";
+import { useLogOut } from "@/hooks/useAuth";
 import { Input } from "./ui/input";
 
 export function Nav() {
@@ -93,7 +93,7 @@ export function Nav() {
         "h-14 lg:h-20", // Hauteur par défaut et pour grand écran
         isScrolled
           ? "border-b border-gray-100 bg-white shadow-lg"
-          : "bg-white py-3 sm:py-4 border-b border-gray-100"
+          : "bg-white py-3 sm:py-4 border-b border-gray-100",
       )}
     >
       <nav className="section max-w-9xl h-full flex items-center justify-around px-4 sm:px-6 lg:px-24">
@@ -113,7 +113,7 @@ export function Nav() {
             <span
               className={clsx(
                 "font-bold text-xl tracking-tight text-gray-800 max-w-xs", // Correction de la couleur et taille pour la lisibilité
-                "hidden sm:inline" // Masquer sur les très petits écrans si nécessaire
+                "hidden sm:inline", // Masquer sur les très petits écrans si nécessaire
               )}
             >
               {/* Sustainable Tools for Rainwater Evaluation And Management */}
@@ -260,8 +260,9 @@ export function Nav() {
 
         {/* Navigation Mobile (Menu Coulissant) */}
         <div
-          className={`lg:hidden fixed z-40 inset-0 pt-14 sm:pt-16 bg-white transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+          className={`lg:hidden fixed z-40 inset-0 pt-14 sm:pt-16 bg-white transform transition-transform duration-300 ${
+            isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         >
           <div className="h-full overflow-y-auto py-4 px-3 sm:py-6 sm:px-4 flex flex-col gap-4">
             {/* Recherche mobile (optionnel) */}

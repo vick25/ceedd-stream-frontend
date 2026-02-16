@@ -57,7 +57,7 @@ export default function MonitoringPage() {
             />
             {/* Cartes d'infos en bas */}
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-4 z-10">
-              <div className="bg-white rounded-lg shadow p-4 min-w-[220px]">
+              <div className="bg-white rounded-lg shadow p-4 min-w-55">
                 <div className="font-bold text-gray-700">N4162</div>
                 <div className="text-xs text-gray-500">Pickup Location</div>
                 <div className="text-sm">35th Ave NF, Seattle</div>
@@ -71,7 +71,7 @@ export default function MonitoringPage() {
           </section>
 
           {/* Right panel */}
-          <aside className="w-[340px] bg-white border-l flex flex-col">
+          <aside className="w-85 bg-white border-l flex flex-col">
             {/* Filtres et recherche */}
             <div className="flex items-center px-6 py-4 border-b">
               <select className="border rounded px-2 py-1 text-sm mr-2">
@@ -126,5 +126,3 @@ export default function MonitoringPage() {
     </div>
   );
 }
-
-

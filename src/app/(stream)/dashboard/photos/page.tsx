@@ -7,11 +7,11 @@ import Loader from "@/components/Loader";
 import { useAppStore } from "@/store/appStore";
 import { useRouter } from "next/navigation";
 
-import { usePhoto } from "@/components/hooks/usePhotos";
+import { usePhoto } from "@/hooks/usePhotos";
 import { useUplaoderImage } from "@/components/importFiles";
 
-import { useBailleurs } from "@/components/hooks/useBailleur";
-import { useInfrastructures } from "@/components/hooks/useInfrastructure";
+import { useBailleurs } from "@/hooks/useBailleur";
+import { useInfrastructures } from "@/hooks/useInfrastructure";
 import { allawedTypesInfrastructure } from "@/types";
 import Image from "next/image";
 

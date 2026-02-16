@@ -1,10 +1,10 @@
 import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure";
 import EditInfrastructure from "@/components/editButton/EditInfrastructure";
-import { useGetCustomer } from "@/components/hooks/useCustomer";
-import { useGetInfrastructure } from "@/components/hooks/useInfrastructure";
-import { useAllTypeInfrastructure } from "@/components/hooks/useTypeInfrastructure";
+import { useGetCustomer } from "@/hooks/useCustomer";
+import { useGetInfrastructure } from "@/hooks/useInfrastructure";
+import { useAllTypeInfrastructure } from "@/hooks/useTypeInfrastructure";
 
-import { useZoneContributive } from "@/components/hooks/useZoneContributive";
+import { useZoneContributive } from "@/hooks/useZoneContributive";
 import Loader from "@/components/Loader";
 import { InfrastructureTypes } from "@/types/infrastructure";
 

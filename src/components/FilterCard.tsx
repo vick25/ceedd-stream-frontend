@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { CylinderGraph } from "./CylinderGraph";
-import { useBailleurs } from "./hooks/useBailleur";
+import { useBailleurs } from "@/hooks/useBailleur";
 
 interface FilterCardProps {
   selectedFeature: MapFeature | null;

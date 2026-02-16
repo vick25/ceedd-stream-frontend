@@ -2,7 +2,7 @@ import { Poppins } from "next/font/google";
 import "../globals.css";
 
 import { Header } from "@/components/Header";
-import QueryProvider from "@/components/QueryProvider";
+import QueryProvider from "@/lib/QueryProvider";
 import { Toaster } from "react-hot-toast";
 
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -25,7 +25,16 @@ export const metadata: Metadata = {
   description:
     "ONG CEEDD : Experts en gestion durable des ressources en RDC. Plateforme STREAM pour le suivi SIG des eaux pluviales et la lutte contre l'érosion à Kinshasa.",
   creator: "CEEDD RDC",
-  authors: [{ name: "Victor Kadiata", url: "https://www.linkedin.com/in/victor-kadiata/" }, { name: "Patrick Kudiatu", url: "https://www.linkedin.com/in/patrick-kudiatu/" }],
+  authors: [
+    {
+      name: "Victor Kadiata",
+      url: "https://www.linkedin.com/in/victor-kadiata/",
+    },
+    {
+      name: "Patrick Kudiatu",
+      url: "https://www.linkedin.com/in/patrick-kudiatu/",
+    },
+  ],
   publisher: "CEEDD RDC",
   applicationName: "CEEDD STREAM",
   keywords: [

@@ -1,6 +1,6 @@
 import DeleteBailleur from "@/components/deleteButton/DeleteBailleur";
 import EditBailleur from "@/components/editButton/EditBailleur";
-import { useBailleurs } from "@/components/hooks/useBailleur";
+import { useBailleurs } from "@/hooks/useBailleur";
 import Loader from "@/components/Loader";
 import { useAppStore } from "@/store/appStore";
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
@@ -155,7 +155,8 @@ export default function BailleurTable() {
                   }}
                   disabled={currentPage === 1}
                 >
-                  <ChevronLeft className="h-4 w-4 mr-1" /> Précédent
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  Précédent
                 </Button>
                 <Button
                   variant="outline"
@@ -166,13 +167,14 @@ export default function BailleurTable() {
                   }}
                   disabled={currentPage === totalPages}
                 >
-                  Suivant <ChevronRight className="h-4 w-4 ml-1" />
+                  Suivant
+                  <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </div>
             </div>
           </div>
 
-          <table className="hidden  min-w-full text-gray-900  lg:table">
+          <table className="hidden min-w-full text-gray-900 lg:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
@@ -181,7 +183,6 @@ export default function BailleurTable() {
                 <th scope="col" className="px-3 py-5 font-medium">
                   Sigle
                 </th>
-
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -196,14 +197,11 @@ export default function BailleurTable() {
                       className="w-full border-b border-b-gray-300 py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                        <div className="flex items-center gap-3">
-                          {zone.nom}
-                        </div>
+                        {zone.nom}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
                         {zone.sigle}
                       </td>
-
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3 items-center">
                           <EditBailleur
@@ -227,7 +225,7 @@ export default function BailleurTable() {
               ) : (
                 <tr>
                   <td className="w-full text-center">
-                    <p>il n'y a aucune infrastructure</p>
+                    <p>Il n'y a aucun bailleur</p>
                   </td>
                 </tr>
               )}
@@ -250,7 +248,8 @@ export default function BailleurTable() {
                 }}
                 disabled={currentPage === 1}
               >
-                <ChevronLeft className="h-4 w-4 mr-1" /> Précédent
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Précédent
               </Button>
               <Button
                 variant="outline"
@@ -261,7 +260,8 @@ export default function BailleurTable() {
                 }}
                 disabled={currentPage === totalPages}
               >
-                Suivant <ChevronRight className="h-4 w-4 ml-1" />
+                Suivant
+                <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
           </div>

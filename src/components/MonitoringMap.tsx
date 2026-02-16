@@ -4,9 +4,9 @@ import "leaflet/dist/leaflet.css";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 import { CircleMarker, MapContainer, TileLayer } from "react-leaflet";
-import { useGetCustomer } from "./hooks/useCustomer";
-import { useGetInfrastructure } from "./hooks/useInfrastructure";
-import { useAllTypeInfrastructure } from "./hooks/useTypeInfrastructure";
+import { useGetCustomer } from "@/hooks/useCustomer";
+import { useGetInfrastructure } from "@/hooks/useInfrastructure";
+import { useAllTypeInfrastructure } from "@/hooks/useTypeInfrastructure";
 import Loader from "./Loader";
 
 type MonitoringMapProps = {
@@ -67,8 +67,8 @@ export default function MonitoringMapPage({
       selected === "Tous"
         ? allInfrastructures
         : allInfrastructures.filter(
-          (infra) => infra.type_infrastructure.nom === selected,
-        ),
+            (infra) => infra.type_infrastructure.nom === selected,
+          ),
     );
   };
 
@@ -86,10 +86,11 @@ export default function MonitoringMapPage({
           <button
             onClick={() => setMapStyle("standard")}
             className={`px-3 py-2 text-sm font-semibold transition flex-1 text-center whitespace-nowrap
-      ${mapStyle === "standard"
-                ? "bg-white text-blue-700"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-              }`}
+      ${
+        mapStyle === "standard"
+          ? "bg-white text-blue-700"
+          : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+      }`}
           >
             Map
           </button>
@@ -97,10 +98,11 @@ export default function MonitoringMapPage({
           <button
             onClick={() => setMapStyle("satellite")}
             className={`px-3 py-2 text-sm font-semibold transition flex-1 text-center whitespace-nowrap
-      ${mapStyle === "satellite"
-                ? "bg-white text-blue-700"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-              }`}
+      ${
+        mapStyle === "satellite"
+          ? "bg-white text-blue-700"
+          : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+      }`}
           >
             Satellite
           </button>

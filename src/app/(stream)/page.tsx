@@ -7,11 +7,11 @@ import Image from "next/image";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { FilterCard } from "@/components/FilterCard";
-import { useBailleurs } from "@/components/hooks/useBailleur";
-import { useGetAllInfrastructures } from "@/components/hooks/useInfrastructure";
-import { useGetInspections } from "@/components/hooks/useInspection";
-import { useGetPhotos } from "@/components/hooks/usePhotos";
-import { useTypeInfrastructures } from "@/components/hooks/useTypeInfrastructure";
+import { useBailleurs } from "@/hooks/useBailleur";
+import { useGetAllInfrastructures } from "@/hooks/useInfrastructure";
+import { useGetInspections } from "@/hooks/useInspection";
+import { useGetPhotos } from "@/hooks/usePhotos";
+import { useTypeInfrastructures } from "@/hooks/useTypeInfrastructure";
 import { Footer } from "@/components/MapFooter";
 import { Card } from "@/components/ui/card";
 import { MapFeature } from "@/types/types";
@@ -279,19 +279,21 @@ export default function Home() {
             <div className="pointer-events-auto bg-white/90 backdrop-blur rounded-lg shadow p-1 flex mb-4 border border-gray-100">
               <button
                 onClick={() => setMapStyle("standard")}
-                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${mapStyle === "standard"
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-500"
-                  }`}
+                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
+                  mapStyle === "standard"
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-500"
+                }`}
               >
                 OSM
               </button>
               <button
                 onClick={() => setMapStyle("satellite")}
-                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${mapStyle === "satellite"
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-500"
-                  }`}
+                className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
+                  mapStyle === "satellite"
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-500"
+                }`}
               >
                 SATELLITE
               </button>
@@ -302,10 +304,11 @@ export default function Home() {
           <div
             className={`
             w-85 md:w-95 bg-white/95 backdrop-blur-sm shadow-2xl pointer-events-auto flex flex-col transition-transform duration-300
-            ${isFilterVisible
+            ${
+              isFilterVisible
                 ? "translate-x-0"
                 : "translate-x-full md:translate-x-0 hidden md:flex"
-              }
+            }
             h-full md:max-h-full rounded-lg md:rounded-xl border-t md:border border-gray-100
           `}
           >

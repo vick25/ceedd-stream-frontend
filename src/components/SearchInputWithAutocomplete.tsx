@@ -1,6 +1,6 @@
 import { useAppStore } from "@/store/appStore";
 import React, { useEffect, useState } from "react";
-import { useInfrastructureByAdresse } from "./hooks/useInfrastructure";
+import { useInfrastructureByAdresse } from "@/hooks/useInfrastructure";
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import {

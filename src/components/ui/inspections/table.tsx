@@ -1,7 +1,7 @@
 import Loader from "@/components/Loader";
 import DeleteInspection from "@/components/deleteButton/DeleteInspection";
 import EditInspection from "@/components/editButton/editInspection";
-import { useGetInspections } from "@/components/hooks/useInspection";
+import { useGetInspections } from "@/hooks/useInspection";
 import { displayDate } from "@/utils/utils";
 import { Eye } from "lucide-react";
 import Link from "next/link";
@@ -26,6 +26,7 @@ export default function InspectionTable() {
   if (inspectionsIspending) {
     return <Loader />;
   }
+
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">

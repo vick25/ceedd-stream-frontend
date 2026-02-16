@@ -2,10 +2,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect } from "react";
 
-import {
-  useInfrastructures
-} from "@/components/hooks/useInfrastructure";
-import { useCreateInspection } from "@/components/hooks/useInspection";
+import { useInfrastructures } from "@/hooks/useInfrastructure";
+import { useCreateInspection } from "@/hooks/useInspection";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/store/appStore";
