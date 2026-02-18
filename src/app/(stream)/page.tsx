@@ -224,7 +224,7 @@ export default function Home() {
         {/* Overlay : On garde l'UI interactive même pendant le chargement des données */}
         <div className="absolute top-3 right-4 bottom-56 md:bottom-32 z-1000 flex flex-col items-end pointer-events-none gap-3">
           {/* Search & Style Controls (Top Right) */}
-          <div className="flex flex-col items-center md:flex-row gap-3 pointer-events-auto">
+          <div className="flex flex-col items-center md:flex-row md:items-center gap-3 pointer-events-auto">
             {/* Search Bar */}
             <div className="relative w-64 md:w-72 group pointer-events-auto">
               <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 flex items-center px-4 py-1 transition-all focus-within:ring-2 focus-within:ring-blue-400">
