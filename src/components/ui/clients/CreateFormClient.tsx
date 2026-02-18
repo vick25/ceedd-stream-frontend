@@ -22,7 +22,7 @@ const clientSchema = z.object({
   prenom: z.string().trim().optional(),
   sexe: z.string().min(1, "Le sexe est requis").optional(),
   titre: z.string().trim().optional(),
-  engagement: z.string().trim().optional(),
+  engagement: z.any(),
   avenue: z.string().trim().optional(),
   quartier: z.string().trim().optional(),
   numero: z.string().trim().optional(),
@@ -55,6 +55,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
       commune: "",
     },
   });
+
+  console.log("Erreurs actuelles:", errors);
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
@@ -104,7 +106,9 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
-            <Label htmlFor="nom">Nom<span className="text-red-500">*</span></Label>
+            <Label htmlFor="nom">
+              Nom<span className="text-red-500">*</span>
+            </Label>
             <Input
               id="nom"
               type="text"
@@ -143,10 +147,9 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             <select
               id="sexe"
               {...register("sexe")}
-              className={`flex h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.sexe
-                ? "border border-red-500"
-                : "border border-gray-200"
-                }`}
+              className={`flex h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.sexe ? "border border-red-500" : "border border-gray-200"
+              }`}
             >
               <option value="M">Homme</option>
               <option value="F">Femme</option>
@@ -164,7 +167,7 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               {...register("titre")}
               className={`border border-gray-200`}
             />
-            {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
+            {errors.prenom && <p>{errors.prenom?.message}</p>}
           </div>
           <div>
             <Label htmlFor="engagement">Engagement</Label>
@@ -174,10 +177,16 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               placeholder="engagement"
               {...register("engagement")}
               className={`border border-white ${
-                errors.nom ? "border border-red-500" : "border border-gray-300"
+                errors.engagement
+                  ? "border border-red-500"
+                  : "border border-gray-300"
               }`}
             />
-            {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
+            {errors.engagement && (
+              <p className="text-red-500 text-xs">
+                {String(errors.engagement.message)}
+              </p>
+            )}
           </div>
           <div>
             <Label htmlFor="numero">Numéro</Label>
@@ -201,9 +210,9 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               {...register("avenue")}
               className="border-gray-200 border"
             />
-            {/* {errors.avenue && (
+            {errors.avenue && (
               <p className="text-red-500 text-sm">{errors.avenue.message}</p>
-            )} */}
+            )}
           </div>
           <div>
             <Label htmlFor="quartier">Quartier</Label>
@@ -214,12 +223,14 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               {...register("quartier")}
               className="border border-gray-200 "
             />
-            {/* {errors.quartier && (
+            {errors.quartier && (
               <p className="text-red-500 text-sm">{errors.quartier.message}</p>
-            )} */}
+            )}
           </div>
           <div>
-            <Label htmlFor="commune">Commune<span className="text-red-500">*</span></Label>
+            <Label htmlFor="commune">
+              Commune<span className="text-red-500">*</span>
+            </Label>
             <Input
               id="commune"
               type="text"
@@ -240,9 +251,9 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               placeholder="telephone"
               className="border border-gray-200"
             />
-            {/* {errors.telephone && (
+            {errors.telephone && (
               <p className="text-red-500 text-sm">{errors.telephone.message}</p>
-            )} */}
+            )}
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="email">E-mail</Label>
@@ -253,9 +264,9 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
               placeholder="email"
               className="border border-gray-200 "
             />
-            {/* {errors.email && (
+            {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )} */}
+            )}
           </div>
         </div>
         <div className="w-full flex items-center justify-end gap-3 mt-1 pt-6 border-t border-gray-200">
