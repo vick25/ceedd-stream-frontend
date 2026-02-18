@@ -16,7 +16,7 @@ export const clientSchema = z.object({
   prenom: z.string().trim().optional(),
   sexe: z.string().min(1, "Le sexe est requis").optional(),
   titre: z.string().trim().optional(),
-  engagement: z.string().trim().optional(),
+  engagement: z.any(),
   avenue: z.string().trim().optional(),
   quartier: z.string().trim().optional(),
   numero: z.string().trim().optional(),

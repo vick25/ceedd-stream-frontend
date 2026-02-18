@@ -37,6 +37,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
       commune: "",
     },
   });
+
+  console.log("Erreurs actuelles:", errors);
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
@@ -86,19 +88,18 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
     <form onSubmit={handleSubmit(formSubmit)}>
       <div className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1">
-          <Label htmlFor="nom">
-            Nom<span className="text-red-500">*</span>
-          </Label>
+          <Label htmlFor="nom">Nom<span className="text-red-500">*</span></Label>
           <Input
             id="nom"
             type="text"
             placeholder="nom"
-            {...register("nom", { required: true })}
-            className={`border border-gray-200`}
+            {...register("nom")}
+            className={`border border-white  "border border-gray-300"
+                `}
           />
-          {errors.nom && (
-            <span className="text-red-500 text-sm">{errors.nom?.message}</span>
-          )}
+          {/* {errors.nom && (
+              <p className="text-red-500 text-sm">{errors.nom.message}</p>
+            )} */}
         </div>
         <div className="flex flex-col gap-1">
           <Label htmlFor="postnom">Postnom</Label>
@@ -125,17 +126,17 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
           <Label htmlFor="sexe">Sexe</Label>
           <select
             id="sexe"
-            {...register("sexe", { required: true })}
-            className={`flex h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.sexe ? "border border-red-500" : "border border-gray-200"
+            {...register("sexe")}
+            className={`flex h-10 w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.sexe
+              ? "border border-red-500"
+              : "border border-gray-200"
               }`}
           >
             <option value="M">Homme</option>
             <option value="F">Femme</option>
           </select>
           {errors.sexe && (
-            <span className="text-red-500 text-sm ">
-              {errors.sexe?.message}
-            </span>
+            <p className="text-red-500 text-sm ">{errors.sexe.message}</p>
           )}
         </div>
         <div>
@@ -147,7 +148,7 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             {...register("titre")}
             className={`border border-gray-200`}
           />
-          {/* {errors.prenom && <p>{errors.titre?.message}</p>} */}
+          {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
         </div>
         <div>
           <Label htmlFor="engagement">Engagement</Label>
@@ -156,8 +157,7 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             type="checkbox"
             placeholder="engagement"
             {...register("engagement")}
-            className={`border border-white ${errors.nom ? "border border-red-500" : "border border-gray-300"
-              }`}
+            className={"border border-white"}
           />
           {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
         </div>
@@ -259,7 +259,7 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
         >
           {mutationCreateCustomers.isPending
             ? "Chargement..."
-            : " Ajouter Client"}
+            : "Ajouter Client"}
         </Button>
       </div>
     </form>
