@@ -276,7 +276,7 @@ export default function Home() {
             </div>
 
             {/* Sélecteur de style simplifié */}
-            <div className="pointer-events-auto bg-white/90 backdrop-blur rounded-lg shadow p-1 flex mb-4 border border-gray-100">
+            <div className="pointer-events-auto bg-white/90 backdrop-blur rounded-lg shadow p-1 flex  border border-gray-100">
               <button
                 onClick={() => setMapStyle("standard")}
                 className={`px-4 py-1.5 text-xs font-bold rounded-md cursor-pointer ${
