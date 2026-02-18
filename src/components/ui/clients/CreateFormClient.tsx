@@ -94,12 +94,11 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             type="text"
             placeholder="nom"
             {...register("nom")}
-            className={`border border-white  "border border-gray-300"
-                `}
+            className={`border border-gray-300`}
           />
-          {/* {errors.nom && (
+          {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
-            )} */}
+            )}
         </div>
         <div className="flex flex-col gap-1">
           <Label htmlFor="postnom">Postnom</Label>
@@ -108,7 +107,7 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             type="text"
             placeholder="postnom"
             {...register("postnom")}
-            className={`border border-gray-200`}
+            className={`borderborder-gray-200`}
           />
         </div>
         <div>
@@ -118,12 +117,12 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             type="prenom"
             placeholder="prenom"
             {...register("prenom")}
-            className={`border border-gray-200`}
+            className={`borderborder-gray-200`}
           />
           {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
         </div>
         <div className="flex flex-col gap-3">
-          <Label htmlFor="sexe">Sexe</Label>
+          <Label htmlFor="sexe">Sexe<span className="text-red-500">*</span></Label>
           <select
             id="sexe"
             {...register("sexe")}
@@ -146,7 +145,7 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             type="text"
             placeholder="titre"
             {...register("titre")}
-            className={`border border-gray-200`}
+            className={`borderborder-gray-200`}
           />
           {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
         </div>
@@ -157,7 +156,7 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             type="checkbox"
             placeholder="engagement"
             {...register("engagement")}
-            className={"border border-white"}
+            className={"borderborder-white"}
           />
           {/* {errors.prenom && <p>{errors.prenom?.message}</p>} */}
         </div>
@@ -167,8 +166,8 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
             id="numero"
             type="text"
             {...register("numero")}
-            placeholder="numero"
-            className="border border-gray-200"
+            placeholder="numéro"
+            className="borderborder-gray-200"
           />
           {errors.numero && (
             <p className="text-red-500 text-sm">{errors.numero.message}</p>
@@ -218,10 +217,10 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
         <div className="flex flex-col gap-1">
           <Label htmlFor="telephone">Téléphone</Label>
           <Input
-            id="téléphone"
+            id="telephone"
             type="text"
             {...register("telephone")}
-            placeholder="telephone"
+            placeholder="téléphone"
             className="border border-gray-200"
           />
           {/* {errors.telephone && (
