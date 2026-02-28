@@ -8,10 +8,10 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDebounce } from "./useDebounce";
 
-export const useGetInfrastructure = () => {
+export const useGetInfrastructure = (offset: number) => {
   return useQuery({
-    queryKey: ["infrastructure"],
-    queryFn: async () => serviceInfrastructure.getInfrastructure(),
+    queryKey: ["infrastructure", offset],
+    queryFn: async () => serviceInfrastructure.getInfrastructure(offset),
   });
 };
 

@@ -16,9 +16,9 @@ import { Button } from "../button";
 export default function InfrastructureTable() {
   const { searchTerms, setSearchTerms, searchTypes, setSearchTypes } =
     useAppStore();
-  const [getInfrastructure, setGetInfrastructure] = useState<
-    InfrastructureTypes[]
-  >([]);
+  // const [getInfrastructure, setGetInfrastructure] = useState<
+  //   InfrastructureTypes[]
+  // >([]);
 
   const [clientNames, setClientNames] = useState<Record<string, string>>({});
   const [typeInfras, setTypeInfras] = useState<Record<string, string>>({});
@@ -30,34 +30,28 @@ export default function InfrastructureTable() {
   // const [searchTerms, setSearchTerms] = useState("");
   const pageItems = 20;
 
+  const offset = (currentPage - 1) * pageItems;
   // initialize mutation
-  const mutationInfrastructure = useGetInfrastructure();
+  const { data, isLoading, error } = useGetInfrastructure(offset);
   const mutationCustomer = useGetCustomer();
   const mutationTypeInfrastructure = useAllTypeInfrastructure();
   const mutationZone = useZoneContributive();
 
   //useEffect
+
   useEffect(() => {
-    // mutationInfrastructure.mutate();
     mutationCustomer.mutate();
     mutationTypeInfrastructure.mutate();
-  }, [
-    // mutationInfrastructure.mutate,
-    mutationCustomer.mutate,
-    mutationTypeInfrastructure.mutate,
-  ]);
+  }, []);
 
-  useEffect(() => {
-    if (
-      mutationInfrastructure.data &&
-      mutationInfrastructure.data.results.length > 0
-    ) {
-      const convertInfrastructure = mutationInfrastructure.data.results;
-      setGetInfrastructure(convertInfrastructure);
-    }
-  }, [mutationInfrastructure.data]);
+  //le donnees viennent directement de data
 
-  const filterData = getInfrastructure.filter((infra) => {
+  const getInfrastructure = data?.results || [];
+  const totatlCount = data?.count || 0;
+
+  const totalPages = Math.ceil(totatlCount / pageItems);
+
+  const filterData = getInfrastructure.filter((infra: InfrastructureTypes) => {
     // 1. On prépare les termes (minuscules et sans espaces inutiles)
     const term = searchTerms?.toLowerCase().trim() || "";
     const typeFilter = searchTypes || "";
@@ -77,18 +71,18 @@ export default function InfrastructureTable() {
     // L'infrastructure doit remplir les DEUX conditions
     return matchSearchTerms && matchSelectType;
   });
-  const totalPages = Math.ceil(filterData.length / pageItems);
-  const startIndex = (currentPage - 1) * pageItems;
-  const pageInfrastructures = filterData.slice(
-    startIndex,
-    startIndex + pageItems,
-  );
+  // const totalPages = Math.ceil(filterData.length / pageItems);
+  // const startIndex = (currentPage - 1) * pageItems;
+  // const pageInfrastructures = filterData.slice(
+  //   startIndex,
+  //   startIndex + pageItems,
+  // );
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerms]);
+  }, [searchTerms, searchTypes]);
 
-  if (mutationInfrastructure.isPending) {
+  if (isLoading) {
     return <Loader />;
   }
 
@@ -151,7 +145,7 @@ export default function InfrastructureTable() {
         </div>
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden space-y-4 px-2">
-            {pageInfrastructures?.map((infra: any) => (
+            {filterData?.map((infra: any) => (
               <div
                 key={infra.id}
                 className="relative w-full rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
@@ -288,8 +282,8 @@ export default function InfrastructureTable() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {pageInfrastructures.length > 0 ? (
-                pageInfrastructures?.map((infra) => {
+              {filterData.length > 0 ? (
+                filterData?.map((infra: any) => {
                   //jointure
 
                   // const zone = zones[infra?.zone?.toString()];
