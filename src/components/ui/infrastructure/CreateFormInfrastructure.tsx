@@ -1,3 +1,4 @@
+import OptionSelect from "@/components/OptionSelect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -6,12 +7,19 @@ import { useCreateInfrastructure } from "@/hooks/useInfrastructure";
 import { useTypeInfrastructures } from "@/hooks/useTypeInfrastructure";
 import { useZoneContributives } from "@/hooks/useZoneContributive";
 import { InfrastructureFormData, infrastructureSchema } from "@/lib/schema";
+import { useAppStore } from "@/store/appStore";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 type CreateformInfrastructureProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
+};
+
+type Option = {
+  value: string;
+  label: string;
 };
 
 const CreateFormInfrastructure = ({
@@ -33,10 +41,11 @@ const CreateFormInfrastructure = ({
       capacite: "",
       unite: "",
       zone: "",
-      client_id: "",
     },
   });
 
+  const { searchTerms, setSearchTerms } = useAppStore();
+  const [selectCustomer, setSelectCustomer] = useState<Option | null>(null);
   const mutationCreateInfrastructure = useCreateInfrastructure();
   // const [isOpen,setIsOpen]=useState(false)
   const { data: typeInfrastructure, isLoading } = useTypeInfrastructures();
@@ -56,14 +65,34 @@ const CreateFormInfrastructure = ({
       capacite: Number(data.capacite),
       unite: data.unite,
       zone: data.zone,
-      client_id: data.client_id,
+      client_id: selectCustomer?.value,
     };
     // console.log({ payload });
-
+    // console.log("Données du formulaire:", payload);
     await mutationCreateInfrastructure.mutateAsync(payload);
     setOpen(false);
   };
 
+  const rawData = customersData?.results || [];
+
+  // transformation des données brutes en format compatible select {value,labe}
+
+  const formattedCustomers = rawData.map((customer: any) => ({
+    value: customer.id.toString(),
+    label: customer.nom,
+  }));
+
+  // fonction de recherche demandée par AsyncSelect
+
+  const loadOptions = (inputValue: string): Promise<Option[]> => {
+    return new Promise((resolve) => {
+      const term = inputValue.trim().toLowerCase();
+      const filtered = formattedCustomers.filter((option: Option) =>
+        option.label.toLowerCase().includes(term),
+      );
+      resolve(filtered);
+    });
+  };
   return (
     <div className="w-full min-w-[50vw] lg:min-w-200 p-6">
       <form
@@ -75,25 +104,14 @@ const CreateFormInfrastructure = ({
             <Label htmlFor="client_id">
               Client<span className="text-red-500">*</span>
             </Label>
-            <select
-              autoComplete="on"
-              {...register("client_id")}
-              className={`flex border border-gray-300 h-10 w-full rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.client_id
-                  ? "border border-red-500 "
-                  : "border border-gray-300"
-              }`}
-            >
-              <option value="">Selectionnez</option>
-              {customersData?.results.map((customer) => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.nom}
-                </option>
-              ))}
-            </select>
-            {errors.client_id && (
-              <p className="text-red-500 text-sm">{errors.client_id.message}</p>
-            )}
+
+            <OptionSelect
+              value={selectCustomer}
+              onChange={(option: any) => setSelectCustomer(option)}
+              loadOptions={loadOptions}
+              placeholder="Chercher un client .."
+              defaultOptions={formattedCustomers.slice(0, 10)}
+            />
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="nom">
@@ -104,9 +122,8 @@ const CreateFormInfrastructure = ({
               type="text"
               placeholder="nom ou code de l'infrastructure"
               {...register("nom")}
-              className={`border border-gray-300 ${
-                errors.nom ? "border border-red-500" : "border border-gray-300"
-              }`}
+              className={`border border-gray-300 ${errors.nom ? "border border-red-500" : "border border-gray-300"
+                }`}
             />
             {errors.nom && (
               <p className="text-red-500 text-sm">{errors.nom.message}</p>
@@ -118,11 +135,10 @@ const CreateFormInfrastructure = ({
             </Label>
             <select
               {...register("type_infrastructure_id")}
-              className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.type_infrastructure_id
+              className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.type_infrastructure_id
                   ? "border border-red-500 "
                   : "border border-gray-500"
-              }`}
+                }`}
             >
               <option value="">Selectionnez</option>
               {typeInfrastructure?.results.map((type: any) => (
