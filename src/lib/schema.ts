@@ -40,7 +40,7 @@ export const infrastructureSchema = z.object({
   capacite: z.string().trim().min(1, "La capacité est requise"),
   unite: z.string().trim().min(1, "L'unité est requise"),
   zone: z.string().optional(),
-  client_id: z.string().min(1, "Veuillez sélectionner un client."),
+  // client_id: z.string().min(1, "Veuillez sélectionner un client."),
 });
 
 export type InfrastructureFormData = z.infer<typeof infrastructureSchema>;
