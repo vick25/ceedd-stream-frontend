@@ -157,7 +157,7 @@ export default function DashboardPage() {
               </div>
               <div className="text-3xl font-bold text-orange-600 flex items-center justify-center">
                 {/* {stats.totalClients} */}
-                {clients.count}
+                {clients?.count || 0}
               </div>
             </div>
           )}
