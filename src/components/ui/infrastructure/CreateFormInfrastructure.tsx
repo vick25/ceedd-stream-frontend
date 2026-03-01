@@ -83,7 +83,6 @@ const CreateFormInfrastructure = ({
   }));
 
   // fonction de recherche demandée par AsyncSelect
-
   const loadOptions = (inputValue: string): Promise<Option[]> => {
     return new Promise((resolve) => {
       const term = inputValue.trim().toLowerCase();
@@ -93,6 +92,7 @@ const CreateFormInfrastructure = ({
       resolve(filtered);
     });
   };
+
   return (
     <div className="w-full min-w-[50vw] lg:min-w-200 p-6">
       <form
@@ -104,12 +104,11 @@ const CreateFormInfrastructure = ({
             <Label htmlFor="client_id">
               Client<span className="text-red-500">*</span>
             </Label>
-
             <OptionSelect
               value={selectCustomer}
               onChange={(option: any) => setSelectCustomer(option)}
               loadOptions={loadOptions}
-              placeholder="Chercher un client .."
+              placeholder="Chercher un client ..."
               defaultOptions={formattedCustomers.slice(0, 10)}
             />
           </div>
@@ -136,8 +135,8 @@ const CreateFormInfrastructure = ({
             <select
               {...register("type_infrastructure_id")}
               className={`flex h-10 w-full  rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${errors.type_infrastructure_id
-                  ? "border border-red-500 "
-                  : "border border-gray-500"
+                ? "border border-red-500 "
+                : "border border-gray-500"
                 }`}
             >
               <option value="">Selectionnez</option>
