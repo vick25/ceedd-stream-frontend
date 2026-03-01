@@ -77,8 +77,8 @@ const CreateFormInfrastructure = ({
 
   // transformation des données brutes en format compatible select {value,labe}
 
-  const formattedCustomers = rawData.map((customer: any) => ({
-    value: customer.id.toString(),
+  const formattedCustomers = rawData.map((customer) => ({
+    value: customer.id,
     label: customer.nom,
   }));
 
