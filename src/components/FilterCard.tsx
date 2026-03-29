@@ -1,3 +1,4 @@
+import { useBailleurs } from "@/hooks/useBailleur";
 import { MapFeature } from "@/types/types";
 import { formatDate } from "@/utils/utils";
 import { CldImage } from "next-cloudinary";
@@ -6,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { CylinderGraph } from "./CylinderGraph";
-import { useBailleurs } from "@/hooks/useBailleur";
 
 interface FilterCardProps {
   selectedFeature: MapFeature | null;
@@ -226,13 +226,12 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     {t("infrastructureState")}
                   </p>
                   <span
-                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${
-                      selectedFeature.etat === "bon"
-                        ? "bg-green-100 text-green-700"
-                        : selectedFeature.etat === "moyen"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
-                    }`}
+                    className={`px-2 py-1 text-xs rounded-full font-bold whitespace-nowrap ${selectedFeature.etat === "bon"
+                      ? "bg-green-100 text-green-700"
+                      : selectedFeature.etat === "moyen"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                      }`}
                   >
                     {selectedFeature.etat}
                   </span>
@@ -244,7 +243,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                 <div className="w-full sm:w-auto flex justify-center items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
                   <CylinderGraph
                     current={selectedFeature.maxCapacity}
-                    // max={selectedFeature.maxCapacity}
+                  // max={selectedFeature.maxCapacity}
                   />
                 </div>
                 <div className="w-full bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
@@ -357,7 +356,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               crop="fill"
               gravity="auto"
               className="object-contain rounded-md" // Keeps image in perspective
-              // priority
+            // priority
             />
           </div>
 
