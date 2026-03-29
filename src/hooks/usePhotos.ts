@@ -1,5 +1,5 @@
 import { servicePhotos } from "@/services/photos";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 export const usePhoto = () => {
@@ -22,9 +22,15 @@ export const useGetPhotoById = (id: string) => {
   });
 };
 export const useGetPhotos = () => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["photos"],
-    queryFn: async () => servicePhotos.getPhotos(),
+    queryFn: async ({ pageParam = 0 }) => servicePhotos.getPhotos(pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.next) return undefined;
+      const url = new URL(lastPage.next);
+      return Number(url.searchParams.get("offset"));
+    },
     meta: {
       errorMessage: "Impossible de récupérer les photos",
     },

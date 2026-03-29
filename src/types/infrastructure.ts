@@ -116,8 +116,8 @@ export interface Inspection {
 }
 export interface Photo {
   id: string;
-  entite_type: string;
-  entite_id: string;
+  content_type: string;
+  object_id: string;
   url: string;
   description: string;
   date_prise: string;

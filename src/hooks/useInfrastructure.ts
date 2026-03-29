@@ -11,7 +11,7 @@ import { useDebounce } from "./useDebounce";
 export const useGetInfrastructure = (offset: number) => {
   return useQuery({
     queryKey: ["infrastructure", offset],
-    queryFn: async () => serviceInfrastructure.getInfrastructure(offset),
+    queryFn: async () => serviceInfrastructure.getInfrastructures(offset),
   });
 };
 
@@ -19,7 +19,7 @@ export const useGetAllInfrastructures = () => {
   return useInfiniteQuery({
     queryKey: ["allInfrastructures"],
     queryFn: async ({ pageParam = 0 }) =>
-      serviceInfrastructure.getInfrastructure(pageParam),
+      serviceInfrastructure.getInfrastructures(pageParam),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       if (!lastPage.next) return undefined;
@@ -58,7 +58,7 @@ export const useUpdateInfrastructure = () => {
 export const useInfrastructures = () => {
   return useQuery({
     queryKey: ["infrastructures"],
-    queryFn: () => serviceInfrastructure.getInfrastructure(),
+    queryFn: () => serviceInfrastructure.getInfrastructures(),
   });
 };
 

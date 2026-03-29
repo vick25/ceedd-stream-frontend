@@ -19,9 +19,9 @@ interface InfrastructureData {
 }
 
 export const serviceInfrastructure = {
-  async getInfrastructure(offset: number = 0): Promise<any> {
+  async getInfrastructures(offset: number = 0): Promise<any> {
     const response = await API.get<InfrastructureTypes[]>(
-      `${API_ENDPOINTS.api}${ceedd.infrastructure}?limit=100&offset=${offset}`,
+      `${API_ENDPOINTS.api}${ceedd.infrastructure}?limit=30&offset=${offset}`,
     );
     return response.data;
   },

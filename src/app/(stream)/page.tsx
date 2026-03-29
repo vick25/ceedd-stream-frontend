@@ -7,13 +7,13 @@ import Image from "next/image";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { FilterCard } from "@/components/FilterCard";
+import { Footer } from "@/components/MapFooter";
+import { Card } from "@/components/ui/card";
 import { useBailleurs } from "@/hooks/useBailleur";
 import { useGetAllInfrastructures } from "@/hooks/useInfrastructure";
 import { useGetInspections } from "@/hooks/useInspection";
 import { useGetPhotos } from "@/hooks/usePhotos";
 import { useTypeInfrastructures } from "@/hooks/useTypeInfrastructure";
-import { Footer } from "@/components/MapFooter";
-import { Card } from "@/components/ui/card";
 import { MapFeature } from "@/types/types";
 import { PARTNERS } from "@/utils/constants";
 
@@ -59,7 +59,12 @@ export default function Home() {
   } = useGetAllInfrastructures();
   const { data: typesData } = useTypeInfrastructures();
   const { data: inspectionData } = useGetInspections();
-  const { data: photosData } = useGetPhotos();
+  const {
+    data: photosData,
+    fetchNextPage: fetchPhotos,
+    hasNextPage: hasNextPhotos,
+    isFetchingNextPage: isFetchingNextPagePhotos,
+  } = useGetPhotos();
   const { data: bailleursData } = useBailleurs();
 
   // --- ÉTATS LOCAUX ---
@@ -93,39 +98,56 @@ export default function Home() {
     return map;
   }, [inspectionData]);
 
-  const photoMap = useMemo(() => {
-    const map: Record<string, string[]> = {};
-    (photosData as any)?.results?.forEach((photo: any) => {
-      if (photo.related_object.type === "infrastructure") {
-        const id = photo.object_id.toString();
-        if (!map[id]) map[id] = [];
-        map[id].push(photo.url);
-      }
-    });
-    return map;
+  // Flatten all pages into a single array of photos
+  const allPhotos = useMemo(() => {
+    if (!photosData?.pages) return [];
+    return photosData.pages.flatMap((page: any) => page.results || []);
   }, [photosData]);
 
-  const bailleursMap = useMemo(() => {
-    const map: Record<string, String[]> = {};
-    (photosData as any)?.results?.forEach((photo: any) => {
-      if (photo.related_object.type === "bailleur") {
+  const photoMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    allPhotos.forEach((photo: any) => {
+      if (photo.related_object?.type === "infrastructure") {
         const id = photo.object_id.toString();
         if (!map[id]) map[id] = [];
         map[id].push(photo.url);
       }
     });
     return map;
-  }, [photosData]);
+  }, [allPhotos]);
+
+  const bailleursMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    allPhotos.forEach((photo: any) => {
+      if (photo.related_object?.type === "bailleur") {
+        const id = photo.object_id.toString();
+        if (!map[id]) map[id] = [];
+        map[id].push(photo.url);
+      }
+    });
+    return map;
+  }, [allPhotos]);
 
   // Transformation principale : légère car elle pioche dans les dictionnaires déjà prêts
   const allFeatures = useMemo(() => {
     if (!infraData?.pages) return [];
+
+    // Deduplicate by ID to avoid duplicate keys
+    const seen = new Set<string>();
 
     return infraData.pages.flatMap((page: any) =>
       page.results
         .filter(
           (item: any) => item.latitude !== null && item.longitude !== null,
         )
+        .filter((item: any) => {
+          const idStr = item.id.toString();
+          if (seen.has(idStr)) {
+            return false; // Skip duplicates
+          }
+          seen.add(idStr);
+          return true;
+        })
         .map((item: any) => {
           const idStr = item.id.toString();
 
@@ -162,6 +184,11 @@ export default function Home() {
     if (!hasNextPage || isFetchingNextPage) return;
     fetchNextPage();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  useEffect(() => {
+    if (!hasNextPhotos || isFetchingNextPagePhotos) return;
+    fetchPhotos();
+  }, [hasNextPhotos, isFetchingNextPagePhotos, fetchPhotos]);
 
   const filteredFeatures = useMemo(() => {
     return selectedCategory === "All"
