@@ -94,7 +94,7 @@ export default function InfrastructureTable() {
   return (
     <div ref={topRef} className="mt-4 flow-root scroll-mt-6">
       <div className="inline-block min-w-full align-middle">
-        <div className="flex flex-col md:justify-between md:flex-row md:items-center  w-full  mb-6">
+        <div className="sticky top-0 z-10 flex flex-col md:justify-between md:flex-row md:items-center w-full mb-6 bg-white">
           <div className="relative w-full mb-4 md:w-1/2  md:p-3">
             <input
               placeholder="recherche par nom ou par nom du propriétaire"

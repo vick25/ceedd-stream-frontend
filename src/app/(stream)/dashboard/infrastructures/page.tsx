@@ -45,8 +45,8 @@ const InfrastructurePage = (props: Props) => {
   const isSearching = searchTerms && searchTerms.length > 0;
 
   return (
-    <main className="container py-6 space-y-6 min-h-screen">
-      <div className="flex flex-col items-center gap-4 md:justify-between md:flex-row">
+    <main className="container h-full min-h-0 flex flex-col gap-6 py-6">
+      <div className="flex shrink-0 flex-col items-center gap-4 md:justify-between md:flex-row">
         <h1 className="text-2xl font-semibold">{t.navigation.dashboard}</h1>
         <div className="flex gap-2">
           {/* <button
@@ -81,8 +81,8 @@ const InfrastructurePage = (props: Props) => {
       </div>
       <div>{/* <SearchInputWithAutocomplete /> */}</div>
       {/* KPI Cards */}
-      <div className="w-full bg-white rounded-lg shadow-xl p-6">
-        <div className="overflow-x-auto w-full">
+      <div className="w-full min-h-0 flex-1 overflow-auto bg-white rounded-lg shadow-xl p-6">
+        <div className="w-full">
           <Table />
         </div>
       </div>

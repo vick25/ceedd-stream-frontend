@@ -6,7 +6,7 @@ import NavMenu from "./NavMenu";
 const Sidebar = () => {
   const { user } = useAppStore();
   return (
-    <aside className="sticky top-0 h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] w-20 md:w-72 bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col">
+    <aside className="sticky top-0 h-dvh shrink-0 w-20 md:w-72 bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col">
       {/* Section Navigation */}
       <div className="flex-1 overflow-y-auto py-6">
         <div className="px-4 mb-4">

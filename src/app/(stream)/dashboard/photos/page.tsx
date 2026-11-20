@@ -83,8 +83,8 @@ const Photosage = (props: Props) => {
   }
 
   return (
-    <main className="container py-6 space-y-8 min-h-screen">
-      <div className="flex items-center justify-between">
+    <main className="container h-full min-h-0 flex flex-col gap-8 py-6">
+      <div className="flex shrink-0 items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-800">
           {t.navigation.dashboard}
         </h1>
