@@ -16,6 +16,16 @@ export const useAllBailleurs = () => {
   });
 };
 
+// Détails d'un bailleur. Clé en "bailleurs" : EditBailleur invalide déjà
+// ["bailleurs"], la fiche se met donc à jour après une modification.
+export const useGetBailleurById = (id: string) => {
+  return useQuery({
+    queryKey: ["bailleurs", "detail", id],
+    queryFn: () => serviceBailleur.getBailleurById(id),
+    enabled: !!id,
+  });
+};
+
 export const useBailleurs = () => {
   return useQuery({
     queryFn: async () => serviceBailleur.getBailleurs(),

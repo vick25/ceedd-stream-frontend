@@ -7,6 +7,12 @@ export const serviceBailleur = {
     const response = await API.get(`${API_ENDPOINTS.api}${ceedd.bailleur}`);
     return response.data;
   },
+  async getBailleurById(id: string): Promise<any> {
+    const response = await API.get(
+      `${API_ENDPOINTS.api}${ceedd.bailleur}${id}/`,
+    );
+    return response.data;
+  },
   async createBailleur(data: any) {
     const response = await API.post(
       `${API_ENDPOINTS.api}${ceedd.bailleur}`,

@@ -125,6 +125,14 @@ export default function BailleurTable() {
 
                 {/* Barre d'actions (Séparée du contenu) */}
                 <div className="flex items-center justify-end gap-3 px-5 py-3 bg-gray-50/50 border-t border-gray-100">
+                  {/* sur mobile aussi : accès à la fiche */}
+                  <Link
+                    href={`/dashboard/bailleurs/${bailleur.id}`}
+                    aria-label={`Voir la fiche de ${bailleur.nom}`}
+                    className="p-2 bg-blue-50 rounded-full text-blue-600 hover:bg-blue-100 transition-colors"
+                  >
+                    <Eye className="h-4 w-4" />
+                  </Link>
                   <EditBailleur
                     id={bailleur.id}
                     nom={bailleur.nom}
@@ -181,7 +189,10 @@ export default function BailleurTable() {
                             nom={zone.nom}
                             setBailleurDelete={setBailleurDelete}
                           />
-                          <Link href={`/dashboard/infrastructures/${zone.id}`}>
+                          <Link
+                            href={`/dashboard/bailleurs/${zone.id}`}
+                            aria-label={`Voir la fiche de ${zone.nom}`}
+                          >
                             <Eye className="h-4" />
                           </Link>
                         </div>

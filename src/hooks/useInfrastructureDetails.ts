@@ -31,6 +31,21 @@ export const useInfrastructureInspections = (infraId: string) =>
         ),
   });
 
+// Photos rattachées à n'importe quel objet (photo.related_object.type) :
+// "infrastructure", "bailleur"… Même cache ["photos", "all"] partout.
+export const useRelatedPhotos = (type: string, objectId: string) =>
+  useQuery({
+    queryKey: ["photos", "all"],
+    queryFn: () => fetchAllPages(`${API_ENDPOINTS.api}${ceedd.photo}`),
+    enabled: !!objectId,
+    select: (photos: any[]) =>
+      photos.filter(
+        (photo) =>
+          photo.related_object?.type === type &&
+          String(photo.object_id) === objectId,
+      ),
+  });
+
 export const useInfrastructurePhotos = (infraId: string) =>
   useQuery({
     queryKey: ["photos", "all"],
