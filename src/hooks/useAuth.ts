@@ -1,4 +1,5 @@
 import { authService } from "@/services/auth";
+import { setToken } from "@/lib/session";
 import { useAppStore } from "@/store/appStore";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -10,7 +11,7 @@ export const useAuth = () => {
     mutationFn: (credentials: any) => authService.login(credentials),
     onSuccess: ({ user, access }: any) => {
       setUser(user);
-      localStorage.setItem("ceeAuth-token", access);
+      setToken(access);
       toast.success("Connexion réussie!");
     },
     onError: (error: any) => {

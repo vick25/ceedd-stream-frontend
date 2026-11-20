@@ -26,6 +26,8 @@ const ClientPage = (props: Props) => {
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
   const [isClosed, setIsClosed] = useState(false);
+  // id du dernier client créé, transmis à la table pour l'afficher et le surligner
+  const [createdClientId, setCreatedClientId] = useState<string | null>(null);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -68,7 +70,14 @@ const ClientPage = (props: Props) => {
                 <DialogDescription>Renseigner les détails</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]">
-                <CreateFormClient onFormSuccess={() => setIsClosed(false)} />
+                <CreateFormClient
+                  onFormSuccess={(createdClient) => {
+                    setIsClosed(false);
+                    if (createdClient?.id) {
+                      setCreatedClientId(String(createdClient.id));
+                    }
+                  }}
+                />
               </div>
             </DialogContent>
           </Dialog>
@@ -79,7 +88,7 @@ const ClientPage = (props: Props) => {
       {/* KPI Cards */}
       <div className="w-full bg-white rounded-lg shadow-xl p-6">
         <div className="overflow-x-auto w-full">
-          <Table />
+          <Table createdClientId={createdClientId} />
         </div>
       </div>
     </main>

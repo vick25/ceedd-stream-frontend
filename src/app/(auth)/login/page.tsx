@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { useAuth } from "@/hooks/useAuth";
 import { ArrowBigLeft, Lock, User } from "lucide-react";
 import Link from "next/link";
@@ -81,12 +82,13 @@ const LoginPage = () => {
                 Mot de passe
               </Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
+                {/* z-10 : l'icône cadenas reste au-dessus du champ */}
+                <Lock className="absolute left-3 top-3 z-10 h-4 w-4 text-muted-foreground" />
+                <PasswordInput
                   id="password"
                   name="password"
-                  type="password"
                   placeholder="*******"
+                  autoComplete="current-password"
                   className="pl-9 border border-gray-300"
                   value={formData.password}
                   onChange={handleChange}

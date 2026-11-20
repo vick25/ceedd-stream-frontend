@@ -152,7 +152,7 @@ export default function InfrastructureTable() {
               >
                 {/* Zone cliquable pour voir les détails */}
                 <Link
-                  href={`/dashboard/infrastructures/${infra.id}`}
+                  href={`/dashboard/shows/${infra.id}`}
                   className="block p-5"
                 >
                   <div className="flex justify-between items-start mb-4">

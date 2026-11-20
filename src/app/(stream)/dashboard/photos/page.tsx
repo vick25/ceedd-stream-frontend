@@ -111,7 +111,7 @@ const Photosage = (props: Props) => {
                 name="url"
                 id="url"
                 className="hidden"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/webp"
                 onChange={uploadUrl}
               />
 

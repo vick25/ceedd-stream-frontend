@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCreateCustomers } from "@/hooks/useCustomer";
 import { ClientFormData, clientSchema } from "@/lib/schema";
+import { Client } from "@/types/infrastructure";
 import { useAppStore } from "@/store/appStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -12,7 +13,8 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface CreateFormClientProps {
-  onFormSuccess: () => void;
+  // reçoit le client créé (renvoyé par l'API) ; rien en cas d'annulation
+  onFormSuccess: (createdClient?: Client) => void;
 }
 
 const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
@@ -38,7 +40,6 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
     },
   });
 
-  console.log("Erreurs actuelles:", errors);
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
@@ -65,9 +66,17 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
     //   commune: data.commune,
     // };
 
-    await mutationCreateCustomers.mutateAsync(payload);
-    await queryClient.invalidateQueries({ queryKey: ["customers"] });
-    onFormSuccess();
+    try {
+      // l'API renvoie le client créé, avec son id
+      const created = await mutationCreateCustomers.mutateAsync(payload);
+      // recharge toutes les requêtes "customers" (pages + liste complète) ;
+      // le await garantit que le nouveau "count" est arrivé avant de continuer
+      await queryClient.invalidateQueries({ queryKey: ["customers"] });
+      onFormSuccess(created);
+    } catch {
+      // le toast d'erreur est déjà affiché par onError dans useCreateCustomers ;
+      // on garde la fenêtre ouverte pour que l'utilisateur corrige
+    }
   };
 
   useEffect(() => {
@@ -246,14 +255,14 @@ const CreateFormClient = ({ onFormSuccess }: CreateFormClientProps) => {
         <Button
           type="button"
           className="w-fit bg-gray-600 hover:bg-gray-700 text-gray-100 px-5 py-2 h-auto text-sm font-medium"
-          onClick={onFormSuccess}
+          onClick={() => onFormSuccess()}
         >
           Annuler
         </Button>
         <Button
           type="submit"
           size="sm"
-          // disabled={mutationCreateCustomers.isPending}
+          disabled={mutationCreateCustomers.isPending}
           className="w-fit bg-blue-600 text-gray-200"
         >
           {mutationCreateCustomers.isPending
