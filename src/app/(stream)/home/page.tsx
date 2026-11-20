@@ -1,6 +1,6 @@
 "use client";
 
-import { useCustomers } from "@/hooks/useCustomer";
+import { useAllCustomers } from "@/hooks/useCustomer";
 import {
   useInfrastructureByAdresseLocation,
   useInfrastructureVolumeByDate,
@@ -209,7 +209,7 @@ const Dashboard: React.FC = () => {
     isSuccess: isDateIsSuccess,
   } = useInfrastructureVolumeByDate(dateFilters, runDateSearch);
 
-  const { data: clientData } = useCustomers();
+  const { data: clientData } = useAllCustomers();
   const uniqueCommunes = useLocationList(clientData, "commune");
   const uniqueQuartier = useLocationList(clientData, "quartier");
   const uniqueAvenue = useLocationList(clientData, "avenue");

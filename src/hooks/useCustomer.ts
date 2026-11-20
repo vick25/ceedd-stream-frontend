@@ -1,5 +1,9 @@
 import { serviceCustomer } from "@/services/customer";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 export const useCustomer = () => {
@@ -10,7 +14,9 @@ export const useCustomer = () => {
 };
 export const useGetCustomer = () => {
   return useMutation({
-    mutationFn: serviceCustomer.getCustomerAll,
+    // fonction fléchée : TanStack Query appelle mutationFn(variables, context),
+    // et ce "context" se retrouverait sinon dans le paramètre "limit"
+    mutationFn: () => serviceCustomer.getCustomerAll(),
     onSuccess: (response) => {
       // console.log(response);
     },
@@ -21,10 +27,35 @@ export const useGetCustomer = () => {
   });
 };
 
-export const useCustomers = () => {
+// Une page de clients (pagination côté serveur).
+// L'offset fait partie de la clé : chaque page a son propre cache.
+// La clé commence par "customers", donc invalidateQueries({ queryKey: ["customers"] })
+// rafraîchit toutes les pages d'un coup.
+export const useCustomers = (offset: number = 0) => {
   return useQuery({
-    queryKey: ["customers"],
-    queryFn: () => serviceCustomer.getCustomerAll(),
+    queryKey: ["customers", "page", offset],
+    queryFn: () => serviceCustomer.getCustomerAll(offset),
+    // garde la page précédente affichée pendant le chargement de la suivante
+    placeholderData: keepPreviousData,
+  });
+};
+
+// Tous les clients (toutes les pages), pour les listes déroulantes et la recherche.
+// Même forme de données { count, results } que useCustomers.
+export const useAllCustomers = (options: { enabled?: boolean } = {}) => {
+  return useQuery({
+    queryKey: ["customers", "all"],
+    queryFn: () => serviceCustomer.getAllCustomersPages(),
+    enabled: options.enabled ?? true,
+  });
+};
+// Détails d'un client. La clé commence par "customers" : quand EditCustomer
+// fait invalidateQueries(["customers"]), la fiche se met à jour toute seule.
+export const useGetCustomerById = (id: string) => {
+  return useQuery({
+    queryKey: ["customers", "detail", id],
+    queryFn: () => serviceCustomer.getCustomerId(id),
+    enabled: !!id, // pas de requête tant que l'id n'est pas connu
   });
 };
 export const useCreateCustomers = () => {

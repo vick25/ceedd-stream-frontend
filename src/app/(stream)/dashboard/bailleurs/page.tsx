@@ -42,9 +42,13 @@ const BailleurPage = (props: Props) => {
   }
 
   return (
-    <main className="container py-6 space-y-6 min-h-screen">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">{t.navigation.dashboard}</h1>
+    <main className="container h-full min-h-0 flex flex-col gap-5 py-6 sm:py-8">
+      <div className="flex shrink-0 flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-blue-600">Partenaires</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{t.navigation.dashboard}</h1>
+          <p className="mt-1 text-sm text-slate-500">Gérez les bailleurs et les organismes partenaires.</p>
+        </div>
         <div className="flex gap-2">
           {/* <button
                 onClick={() => setLocale(locale === "fr" ? "en" : "fr")}
@@ -57,9 +61,9 @@ const BailleurPage = (props: Props) => {
               <Button
                 size="lg"
                 variant="outline"
-                className="hover:bg-blue-50 px-3 py-2 flex gap-4 border border-gray-300"
+                className="h-11 rounded-xl border-blue-600 bg-blue-600 px-4 text-white shadow-sm shadow-blue-200 transition hover:border-blue-700 hover:bg-blue-700"
               >
-                <PlusCircle />Nouveau bailleur
+                <PlusCircle />&nbsp;Nouveau bailleur
               </Button>
             </DialogTrigger>
             <DialogContent className="bg-white z-9999 ">
@@ -77,7 +81,7 @@ const BailleurPage = (props: Props) => {
       </div>
 
       {/* KPI Cards */}
-      <div className="w-full bg-white rounded-lg shadow-xl p-6">
+      <div className="w-full min-h-0 flex-1 overflow-auto rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-950/[0.02] sm:p-6">
         <Table />
       </div>
     </main>

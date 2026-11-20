@@ -2,7 +2,7 @@ import OptionSelect from "@/components/OptionSelect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCustomers } from "@/hooks/useCustomer";
+import { useAllCustomers } from "@/hooks/useCustomer";
 import { useCreateInfrastructure } from "@/hooks/useInfrastructure";
 import { useTypeInfrastructures } from "@/hooks/useTypeInfrastructure";
 import { useZoneContributives } from "@/hooks/useZoneContributive";
@@ -49,7 +49,7 @@ const CreateFormInfrastructure = ({
   const mutationCreateInfrastructure = useCreateInfrastructure();
   // const [isOpen,setIsOpen]=useState(false)
   const { data: typeInfrastructure, isLoading } = useTypeInfrastructures();
-  const { data: customersData, isLoading: isCustomersLoading } = useCustomers();
+  const { data: customersData, isLoading: isCustomersLoading } = useAllCustomers();
   // const {data:zonesData,isLoading:isZonesLoading}=useZone()
   const { data: zoneData, isLoading: isLoandingZone } = useZoneContributives();
 

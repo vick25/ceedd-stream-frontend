@@ -4,6 +4,12 @@ import toast from "react-hot-toast";
 
 type FieldName = "url";
 
+// Ce que l'application accepte d'envoyer à Cloudinary.
+// (À doubler par les mêmes règles sur le preset dans la console Cloudinary :
+// ce contrôle-ci se contourne en appelant Cloudinary directement.)
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_SIZE_MB = 5;
+
 type ImageProps = {
   fieldName: FieldName;
 
@@ -18,14 +24,29 @@ export const useUplaoderImage = (CLOUDINARY_URL: any) => {
     { fieldName, setFormData }: ImageProps
   ) => {
     const { files }: any = e.target;
-    if (files.legnth == 0) return;
+    // "legnth" (faute de frappe) valait toujours undefined : le test ne
+    // protégeait de rien et files[0] pouvait être undefined.
+    if (!files || files.length === 0) return;
+
+    const file: File = files[0];
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      toast.error("Format non autorisé : JPG, PNG ou WEBP uniquement.");
+      e.target.value = ""; // vide le champ pour pouvoir choisir un autre fichier
+      return;
+    }
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+      toast.error(`Fichier trop lourd : ${MAX_SIZE_MB} Mo maximum.`);
+      e.target.value = "";
+      return;
+    }
 
     const setLoading = fieldName === "url" ? setLoadingUrl : () => {};
-    const resourceType = fieldName === "url" ? "auto" : "auto";
+    // "image" et non "auto" : Cloudinary refuse alors tout ce qui n'est pas une image
+    const resourceType = "image";
     try {
       setLoading(true);
       const formDataUpload = new FormData();
-      formDataUpload.append("file", files[0]);
+      formDataUpload.append("file", file);
       formDataUpload.append("upload_preset", "ceedd_upload");
       formDataUpload.append("resource_type", resourceType);
 

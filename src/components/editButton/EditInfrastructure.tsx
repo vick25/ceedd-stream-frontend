@@ -1,4 +1,4 @@
-import { useCustomers } from "@/hooks/useCustomer";
+import { useAllCustomers } from "@/hooks/useCustomer";
 import {
   useUpdateInfrastructure
 } from "@/hooks/useInfrastructure";
@@ -75,7 +75,7 @@ const EditInfrastructure = ({
 
   const updateMutationInfrastructure = useUpdateInfrastructure();
 
-  const { data: CustomerData, isLoading } = useCustomers();
+  const { data: CustomerData, isLoading } = useAllCustomers();
   const {
     data: typeInfrastructureData,
     isLoading: IsTypeInfrastructureLoading,

@@ -3,7 +3,15 @@ import {
   InfrastructureFilters,
   InfrastructureSearch,
 } from "@/types/infrastructure";
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { fetchAllPages } from "@/services/pagination";
+import { ceedd } from "@/utils/apiRoutes";
+import { API_ENDPOINTS } from "@/utils/constants";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDebounce } from "./useDebounce";
@@ -29,24 +37,49 @@ export const useGetAllInfrastructures = () => {
   });
 };
 
+// Toutes les infrastructures (toutes les pages de l'API), pour la table du
+// dashboard : recherche et pagination se font ensuite sur la liste complète.
+export const useAllInfrastructures = () => {
+  return useQuery({
+    queryKey: ["infrastructure", "all"],
+    queryFn: () => fetchAllPages(`${API_ENDPOINTS.api}${ceedd.infrastructure}`),
+  });
+};
+
+// Après une création / modification / suppression, on recharge tout ce qui
+// affiche des infrastructures : la table (["infrastructure", …]) et la
+// carte de l'accueil (["allInfrastructures"]).
+const useRefreshInfrastructures = () => {
+  const queryClient = useQueryClient();
+  return () => {
+    queryClient.invalidateQueries({ queryKey: ["infrastructure"] });
+    queryClient.invalidateQueries({ queryKey: ["allInfrastructures"] });
+    queryClient.invalidateQueries({ queryKey: ["infrastructureById"] });
+  };
+};
+
 export const useCreateInfrastructure = () => {
+  const refresh = useRefreshInfrastructures();
   return useMutation({
     mutationFn: (data: any) => serviceInfrastructure.createInfrastructure(data),
     onSuccess: (response) => {
+      refresh();
       toast.success("Infrastructure créée avec succès");
     },
     onError: (error) => {
-      toast.success("Impossible de créer l'infrastructure");
+      // était toast.success : l'échec s'affichait comme une réussite
+      toast.error("Impossible de créer l'infrastructure");
     },
   });
 };
 
 export const useUpdateInfrastructure = () => {
+  const refresh = useRefreshInfrastructures();
   return useMutation({
     mutationFn: ({ data, id }: { data: any; id: any }) =>
       serviceInfrastructure.updateInfrastructure(data, id),
     onSuccess: (response) => {
-      // console.log(response);
+      refresh();
       toast.success("Mise à jour de l'infrastructure réussie.");
     },
     onError: (error) => {
@@ -71,9 +104,11 @@ export const useGetInfrastructureById = (id: string) => {
 };
 
 export const useInfrastructureDeleted = () => {
+  const refresh = useRefreshInfrastructures();
   return useMutation({
     mutationFn: (id: string) => serviceInfrastructure.deleteInfrastructure(id),
     onSuccess: (response) => {
+      refresh();
       toast.success("Infrastructure supprimée avec succès");
     },
   });

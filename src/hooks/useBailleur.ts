@@ -1,7 +1,30 @@
+import { fetchAllPages } from "@/services/pagination";
+import { ceedd } from "@/utils/apiRoutes";
+import { API_ENDPOINTS } from "@/utils/constants";
 import { BailleurFormData } from "@/lib/schema";
 import { serviceBailleur } from "@/services/bailleur";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+
+// Tous les bailleurs (toutes les pages). Les invalidations existantes sur
+// ["bailleurs"] (création, modification, suppression) rafraîchissent aussi
+// cette liste, puisque sa clé commence par "bailleurs".
+export const useAllBailleurs = () => {
+  return useQuery({
+    queryKey: ["bailleurs", "all"],
+    queryFn: () => fetchAllPages(`${API_ENDPOINTS.api}${ceedd.bailleur}`),
+  });
+};
+
+// Détails d'un bailleur. Clé en "bailleurs" : EditBailleur invalide déjà
+// ["bailleurs"], la fiche se met donc à jour après une modification.
+export const useGetBailleurById = (id: string) => {
+  return useQuery({
+    queryKey: ["bailleurs", "detail", id],
+    queryFn: () => serviceBailleur.getBailleurById(id),
+    enabled: !!id,
+  });
+};
 
 export const useBailleurs = () => {
   return useQuery({

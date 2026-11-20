@@ -46,7 +46,10 @@ export const useAppStore = create<AppState>()(
         setUser: (user) =>
           set(
             {
-              user,
+              // Le store est copié en clair dans localStorage : on ne garde que
+              // id + username, jamais un mot de passe ou hash que l'API
+              // renverrait par erreur.
+              user: user ? { id: user.id, username: user.username } as User : null,
               isAuthenticated: !!user,
             },
             false,

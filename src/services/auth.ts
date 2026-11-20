@@ -2,6 +2,7 @@ import { User } from "@/types/infrastructure";
 import { auth, ceedd } from "@/utils/apiRoutes";
 import { API_ENDPOINTS } from "@/utils/constants";
 import API from "./api";
+import { clearSession } from "@/lib/session";
 
 interface LoginCredentials {
   username: string;
@@ -28,7 +29,8 @@ export const authService = {
     );
   },
   async logout() {
-    localStorage.removeItem("ceedd");
+    // Efface le user persisté ET le jeton (voir lib/session.ts)
+    clearSession();
     return Promise.resolve();
   },
 };

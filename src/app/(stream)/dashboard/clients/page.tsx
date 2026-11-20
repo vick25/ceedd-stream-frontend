@@ -26,6 +26,8 @@ const ClientPage = (props: Props) => {
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
   const [isClosed, setIsClosed] = useState(false);
+  // id du dernier client créé, transmis à la table pour l'afficher et le surligner
+  const [createdClientId, setCreatedClientId] = useState<string | null>(null);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -42,9 +44,13 @@ const ClientPage = (props: Props) => {
   }
 
   return (
-    <main className="container py-6 space-y-6 min-h-screen">
-      <div className="flex flex-col items-center gap-4 md:justify-between md:flex-row">
-        <h1 className="text-2xl font-semibold">{t.navigation.dashboard}</h1>
+    <main className="container h-full min-h-0 flex flex-col gap-5 py-6 sm:py-8">
+      <div className="flex shrink-0 flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-blue-600">Répertoire</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{t.navigation.dashboard}</h1>
+          <p className="mt-1 text-sm text-slate-500">Consultez et gérez les clients enregistrés.</p>
+        </div>
         <div className="flex gap-2">
           {/* <button
                 onClick={() => setLocale(locale === "fr" ? "en" : "fr")}
@@ -57,9 +63,9 @@ const ClientPage = (props: Props) => {
               <Button
                 size="lg"
                 variant="outline"
-                className="hover:bg-blue-50 px-3 py-2 flex gap-4 border border-gray-300"
+                className="h-11 rounded-xl border-blue-600 bg-blue-600 px-4 text-white shadow-sm shadow-blue-200 transition hover:border-blue-700 hover:bg-blue-700"
               >
-                <PlusCircle />Nouveau client
+                <PlusCircle />&nbsp;Nouveau client
               </Button>
             </DialogTrigger>
             <DialogContent className="bg-white z-9999 max-w-2xl md:max-w-4xl">
@@ -68,7 +74,14 @@ const ClientPage = (props: Props) => {
                 <DialogDescription>Renseigner les détails</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4 overflow-y-auto max-h-[80vh]">
-                <CreateFormClient onFormSuccess={() => setIsClosed(false)} />
+                <CreateFormClient
+                  onFormSuccess={(createdClient) => {
+                    setIsClosed(false);
+                    if (createdClient?.id) {
+                      setCreatedClientId(String(createdClient.id));
+                    }
+                  }}
+                />
               </div>
             </DialogContent>
           </Dialog>
@@ -77,9 +90,9 @@ const ClientPage = (props: Props) => {
       </div>
 
       {/* KPI Cards */}
-      <div className="w-full bg-white rounded-lg shadow-xl p-6">
-        <div className="overflow-x-auto w-full">
-          <Table />
+      <div className="w-full min-h-0 flex-1 overflow-auto rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-950/[0.02] sm:p-6">
+        <div className="w-full">
+          <Table createdClientId={createdClientId} />
         </div>
       </div>
     </main>

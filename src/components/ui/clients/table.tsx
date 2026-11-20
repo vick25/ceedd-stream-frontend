@@ -1,58 +1,96 @@
 import DeleteCustomer from "@/components/deleteButton/DeleteCustomer";
 import EditCustomer from "@/components/editButton/EditCustomer";
 import Loader from "@/components/Loader";
-import { useCustomers } from "@/hooks/useCustomer";
+import { useAllCustomers } from "@/hooks/useCustomer";
+import { CUSTOMERS_PAGE_SIZE } from "@/services/customer";
 import { useAppStore } from "@/store/appStore";
 import { Client } from "@/types/infrastructure";
-import { ChevronLeft, ChevronRight, Eye, Search, X } from "lucide-react";
-import { Locale, useTranslations } from "next-intl";
+import { Eye, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Button } from "../button";
+import { useEffect, useRef, useState } from "react";
+import { DataPagination } from "../data-pagination";
 
-export default function ClientTable() {
-  const { searchTerms, setSearchTerms } = useAppStore();
-  const [getClients, setGetClients] = useState<Client[]>([]);
+interface ClientTableProps {
+  // id du client qui vient d'être créé : la table revient en page 1 et le surligne
+  createdClientId?: string | null;
+}
+
+export default function ClientTable({ createdClientId }: ClientTableProps) {
+  // Recherche locale à la table (avant : partagée dans le store global avec la
+  // page infrastructures, donc un texte tapé là-bas filtrait aussi les clients)
+  const [searchTerms, setSearchTerms] = useState("");
   const [customerDelete, setCustomerDeleted] = useState<string>("");
-  const [clientNames, setClientNames] = useState<Record<string, string>>({});
-  const [typeInfras, setTypeInfras] = useState<Record<string, string>>({});
-  const [zones, setZones] = useState<Record<string, string>>({});
   const [currentPage, setCurrentPage] = useState(1);
-
-  const [infrastructureDeleted, setInfrastructureDeleted] =
-    useState<string>("");
-
-  const [isOpen, setIsOpen] = useState(false);
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
-  const [locale, setLocale] = useState<Locale>("fr");
-  const t = useTranslations(locale);
-  // initialize mutation
-  const { data: customers, isPending: customersIspending } = useCustomers();
-  const pageItems = 30;
-  //useEffect
-  const allResults = customers?.results || [];
+  // nombre de lignes par page, modifiable depuis la pagination
+  const [pageItems, setPageItems] = useState(CUSTOMERS_PAGE_SIZE);
+  // haut de la table : on y remonte quand on change de page
+  const topRef = useRef<HTMLDivElement>(null);
 
-  const filterData = allResults.filter((custom: any) => {
-    // 1. On prépare le terme de recherche
-    const term = searchTerms.toLowerCase().trim();
+  const term = searchTerms.toLowerCase().trim();
+  const offset = (currentPage - 1) * pageItems;
 
-    // 2. Si pas de recherche, on garde tout
-    if (term === "") return true;
+  // On charge tous les clients (toutes les pages de l'API) puis on trie ici.
+  // Ainsi l'ordre ne dépend pas du backend : on décide nous-mêmes que le
+  // plus récent (plus grand id) passe en premier.
+  const { data: allData, isPending } = useAllCustomers();
 
-    // 3. On sécurise l'accès au nom et on normalise la casse
-    // On transforme custom.nom en String au cas où ce serait un nombre ou autre
-    const customerName = String(custom.nom || "").toLowerCase();
-    const customerPrenom = term === "" || custom.prenom.toLowerCase();
-    const matchName =
-      customerName.includes(term) || customerPrenom.includes(term);
+  // 1. Tri : du plus récent au plus ancien.
+  //    [...] crée une copie : sort() modifie le tableau, et on ne doit jamais
+  //    modifier directement les données du cache TanStack Query.
+  const sortedCustomers = [...(allData?.results ?? [])].sort(
+    (a: Client, b: Client) => Number(b.id) - Number(a.id),
+  );
 
-    return matchName;
-  });
-  const totalPages = Math.ceil(filterData.length / pageItems);
-  const tabIndex = (currentPage - 1) * pageItems;
-  const pageCustomers = filterData.slice(tabIndex, tabIndex + pageItems);
+  // 2. Recherche sur nom / prénom (sur tous les clients, pas une seule page)
+  const filtered =
+    term === ""
+      ? sortedCustomers
+      : sortedCustomers.filter((custom: Client) => {
+          // String(... ?? "") évite un crash si nom ou prénom est null en base
+          const nom = String(custom.nom ?? "").toLowerCase();
+          const prenom = String(custom.prenom ?? "").toLowerCase();
+          return nom.includes(term) || prenom.includes(term);
+        });
+
+  // 3. Découpage en pages de 30
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageItems));
+  const pageCustomers = filtered.slice(offset, offset + pageItems);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // la zone qui défile est le <main> du dashboard, pas la fenêtre :
+    // scrollIntoView marche quel que soit le conteneur
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageItems(size);
+    setCurrentPage(1); // la page 5 en 30 lignes n'a plus de sens en 100 lignes
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchTerms(value);
+    setCurrentPage(1); // une nouvelle recherche repart de la page 1
+  };
+
+  // Après une création : le nouveau client a le plus grand id, il est donc
+  // tout en haut de la page 1. On y revient et on vide la recherche.
+  useEffect(() => {
+    if (!createdClientId) return;
+    setSearchTerms("");
+    setCurrentPage(1);
+  }, [createdClientId]);
+
+  // Après une suppression, la dernière page peut disparaître : on recule
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
+
+  const isCreated = (id: string | number) =>
+    createdClientId != null && String(id) === String(createdClientId);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -67,27 +105,27 @@ export default function ClientTable() {
   if (!isAuthenticated || !user) {
     return null;
   }
-  if (customersIspending) {
+  if (isPending) {
     return <Loader />;
   }
   return (
-    <div className="mt-6 flow-root">
+    <div ref={topRef} className="flow-root scroll-mt-6">
       <div className="inline-block min-w-full align-middle">
-        <div className="flex flex-col md:justify-between md:flex-row md:items-center  w-full  mb-6">
-          <div className="relative w-full mb-4 md:w-wull  md:p-3">
+        <div className="sticky top-0 z-10 flex w-full flex-col gap-3 border-b border-slate-100 bg-white py-2 md:flex-row md:items-center md:justify-between">
+          <div className="relative mb-2 w-full md:mb-0 md:w-1/2">
             <input
               placeholder="Recherchez par nom ou prenom"
               name="searchTerms"
               value={searchTerms}
-              onChange={(e) => setSearchTerms(e.target.value)}
-              className="w-full border p-4 rounded-xl"
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3.5 pr-12 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-50"
             />
             {/* <Search className="absolute top-7 right-5 text-gray-500 cursor-pointer" /> */}
-            <div className="absolute top-5 right-5 md:top-7 md:right-7 text-gray-500">
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
               {searchTerms ? (
                 <X
                   className="h-5 w-5 cursor-pointer hover:text-red-500"
-                  onClick={() => setSearchTerms("")}
+                  onClick={() => handleSearch("")}
                 />
               ) : (
                 <Search className="h-5 w-5" />
@@ -126,12 +164,21 @@ export default function ClientTable() {
                     </div> */}
           </div>
         </div>
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+        <div className="overflow-hidden rounded-xl border border-slate-100 bg-slate-50/70 p-2 md:pt-0">
           <div className="lg:hidden space-y-4 px-2">
+            {pageCustomers.length === 0 && (
+              <p className="text-center text-gray-500 py-6">
+                Aucun client trouvé
+              </p>
+            )}
             {pageCustomers.map((customer: any) => (
               <div
                 key={customer.id}
-                className="relative w-full rounded-xl bg-white p-5 shadow-sm border border-gray-100"
+                className={`relative w-full rounded-xl p-5 shadow-sm border ${
+                  isCreated(customer.id)
+                    ? "bg-green-50 border-green-300"
+                    : "bg-white border-gray-100"
+                }`}
               >
                 {/* Header : Nom et Prénom */}
                 <div className="flex items-start justify-between border-b border-gray-50 pb-3">
@@ -188,36 +235,6 @@ export default function ClientTable() {
                 </div>
               </div>
             ))}
-
-            {/* Pagination Mobile */}
-            <div className="flex flex-col items-center gap-4 py-6">
-              <span className="text-sm text-gray-500 font-medium">
-                Page <span className="text-blue-600">{currentPage}</span> sur{" "}
-                {totalPages}
-              </span>
-              <div className="flex gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                  className="flex-1 px-8 rounded-full border-blue-200 shadow-sm"
-                >
-                  <ChevronLeft className="mr-2 h-4 w-4" /> Précédent
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                  className="flex-1 px-8 rounded-full border-blue-200 shadow-sm"
-                >
-                  Suivant <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            </div>
           </div>
 
           <table className="hidden  min-w-full text-gray-900  lg:table">
@@ -250,7 +267,9 @@ export default function ClientTable() {
                   return (
                     <tr
                       key={infra.id}
-                      className="w-full border-b border-b-gray-300 py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                      className={`w-full border-b border-b-gray-300 py-3 text-sm last-of-type:border-none ${
+                        isCreated(infra.id) ? "bg-green-50" : ""
+                      }  [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg`}
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex items-center gap-3">
@@ -301,40 +320,25 @@ export default function ClientTable() {
                 })
               ) : (
                 <tr>
-                  <td className="w-full text-center">
-                    <p>il n'y a aucune infrastructure</p>
+                  <td colSpan={5} className="w-full text-center py-6">
+                    <p>
+                      Aucun client trouvé
+                    </p>
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-          <div className="hidden lg:flex justify-between items-center w-full px-6 py-8">
-            <div className="text-sm font-medium text-gray-500">
-              Page{" "}
-              <span className="text-blue-600 font-bold">{currentPage}</span> sur{" "}
-              {totalPages}
-            </div>
-            <div className="flex items-center gap-3 w-full max-w-xs">
-              <Button
-                variant="outline"
-                className="flex-1 rounded-full border-blue-200"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" /> Précédent
-              </Button>
-              <Button
-                variant="outline"
-                className="flex-1 rounded-full border-blue-200"
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-              >
-                Suivant <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </div>
-          </div>
+          {/* Une seule pagination pour mobile et ordinateur : le composant
+              s'adapte lui-même à la largeur de l'écran */}
+          <DataPagination
+            page={currentPage}
+            pageSize={pageItems}
+            totalItems={filtered.length}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            itemLabel={filtered.length > 1 ? "clients" : "client"}
+          />
         </div>
       </div>
     </div>
