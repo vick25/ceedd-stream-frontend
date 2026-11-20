@@ -1,7 +1,9 @@
 import Loader from "@/components/Loader";
 import DeleteInspection from "@/components/deleteButton/DeleteInspection";
 import EditInspection from "@/components/editButton/EditInspection";
-import { useGetInspections } from "@/hooks/useInspection";
+import { useAllInspections } from "@/hooks/useInspection";
+import { usePagination } from "@/hooks/usePagination";
+import { DataPagination } from "../data-pagination";
 import { displayDate } from "@/utils/utils";
 import { Eye } from "lucide-react";
 import Link from "next/link";
@@ -14,7 +16,19 @@ export default function InspectionTable() {
   const [inspstructureDeleted, setInspectionDeleted] = useState<string>("");
 
   // initialize mutation
-  const { data: inspections, isPending: inspectionsIspending } = useGetInspections();
+  // Toutes les inspections, la plus récente d'abord. Avant : seulement la
+  // 1re page de l'API, sans aucune pagination.
+  const { data: allInspections = [], isPending: inspectionsIspending } =
+    useAllInspections();
+  const sortedInspections = [...allInspections].sort(
+    (a: any, b: any) =>
+      new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+  const {
+    pageItems: pageInspections,
+    paginationProps,
+    topRef,
+  } = usePagination(sortedInspections);
   //   const mutationinspnstructure = useGetinspstructure();
   //   const mutationCustomer = useGetCustomer();
   //   const mutationTypeinspstructure = useAllTypeinspstructure();
@@ -25,11 +39,11 @@ export default function InspectionTable() {
   }
 
   return (
-    <div className="mt-6 flow-root">
+    <div ref={topRef} className="mt-6 flow-root scroll-mt-6">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden">
-            {inspections?.results.map((customer: any) => {
+            {pageInspections.map((customer: any) => {
               return (
                 // <Link
                 //   key={customer.id}
@@ -75,7 +89,12 @@ export default function InspectionTable() {
                         inspecteur={customer.inspecteur}
                         setInspectionDeleted={setInspectionDeleted}
                       />
-                      <Link href={`/dashboard/inspstructures/${customer?.id}`}>
+                      {/* la page /dashboard/inspstructures n'existe pas : l'œil ouvre la
+                          fiche de l'infrastructure, qui liste ses inspections */}
+                      <Link
+                        href={`/dashboard/shows/${customer?.infrastructure?.id ?? customer?.infrastructure}`}
+                        aria-label="Voir l'infrastructure inspectée"
+                      >
                         <Eye className="h-4" />
                       </Link>
                     </div>
@@ -114,8 +133,8 @@ export default function InspectionTable() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {inspections?.results.length > 0 ? (
-                inspections?.results.map((insp: any) => {
+              {pageInspections.length > 0 ? (
+                pageInspections.map((insp: any) => {
                   //jointure
 
                   // const zone = zones[insp?.zone?.toString()];
@@ -168,7 +187,10 @@ export default function InspectionTable() {
                             inspecteur={insp.inspecteur}
                             setInspectionDeleted={setInspectionDeleted}
                           />
-                          <Link href={`/dashboard/inspstructures/${insp.id}`}>
+                          <Link
+                            href={`/dashboard/shows/${insp.infrastructure?.id ?? insp.infrastructure}`}
+                            aria-label="Voir l'infrastructure inspectée"
+                          >
                             <Eye className="h-4" />
                           </Link>
                         </div>
@@ -178,13 +200,17 @@ export default function InspectionTable() {
                 })
               ) : (
                 <tr>
-                  <td className="w-full text-center">
-                    <p>il n'y a aucune inspstructure</p>
+                  <td colSpan={7} className="w-full text-center py-6">
+                    <p>Aucune inspection enregistrée</p>
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+          <DataPagination
+            {...paginationProps}
+            itemLabel={sortedInspections.length > 1 ? "inspections" : "inspection"}
+          />
         </div>
       </div>
     </div>

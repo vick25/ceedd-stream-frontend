@@ -2,15 +2,16 @@ import DeleteInfrastructure from "@/components/deleteButton/DeleteInfrastructure
 import EditInfrastructure from "@/components/editButton/EditInfrastructure";
 import Loader from "@/components/Loader";
 import { useGetCustomer } from "@/hooks/useCustomer";
-import { useGetInfrastructure } from "@/hooks/useInfrastructure";
+import { useAllInfrastructures } from "@/hooks/useInfrastructure";
+import { usePagination } from "@/hooks/usePagination";
 import { useAllTypeInfrastructure } from "@/hooks/useTypeInfrastructure";
 import { useZoneContributive } from "@/hooks/useZoneContributive";
 import { useAppStore } from "@/store/appStore";
 import { InfrastructureTypes } from "@/types/infrastructure";
-import { ChevronLeft, ChevronRight, Eye, Search, X } from "lucide-react";
+import { Eye, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Button } from "../button";
+import { DataPagination } from "../data-pagination";
 // import InfrastructureDetails from "@/components/shows/InfrastructuresDetails";
 
 export default function InfrastructureTable() {
@@ -26,13 +27,10 @@ export default function InfrastructureTable() {
   const [infrastructureDeleted, setInfrastructureDeleted] =
     useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  // const [searchTerms, setSearchTerms] = useState("");
-  const pageItems = 20;
-
-  const offset = (currentPage - 1) * pageItems;
-  // initialize mutation
-  const { data, isLoading, error } = useGetInfrastructure(offset);
+  // Toutes les infrastructures : avant, on chargeait une page de l'API à la
+  // fois (20 côté table mais 30 côté service : des lignes se chevauchaient)
+  // et la recherche ne portait que sur cette page.
+  const { data: allInfrastructures = [], isPending } = useAllInfrastructures();
   const mutationCustomer = useGetCustomer();
   const mutationTypeInfrastructure = useAllTypeInfrastructure();
   const mutationZone = useZoneContributive();
@@ -46,10 +44,11 @@ export default function InfrastructureTable() {
 
   //le donnees viennent directement de data
 
-  const getInfrastructure = data?.results || [];
-  const totatlCount = data?.count || 0;
-
-  const totalPages = Math.ceil(totatlCount / pageItems);
+  // Plus récente d'abord (plus grand id), comme la table des clients.
+  // [...] : copie, car sort() modifierait les données du cache.
+  const getInfrastructure = [...allInfrastructures].sort(
+    (a: any, b: any) => Number(b.id) - Number(a.id),
+  );
 
   const filterData = getInfrastructure.filter((infra: InfrastructureTypes) => {
     // 1. On prépare les termes (minuscules et sans espaces inutiles)
@@ -78,17 +77,22 @@ export default function InfrastructureTable() {
   //   startIndex + pageItems,
   // );
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerms, searchTypes]);
+  // découpe la liste filtrée en pages (voir hooks/usePagination.ts)
+  const { pageItems: pageInfrastructures, paginationProps, topRef, setPage } =
+    usePagination(filterData);
 
-  if (isLoading) {
+  // nouvelle recherche ou nouveau type → retour en page 1
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerms, searchTypes, setPage]);
+
+  if (isPending) {
     return <Loader />;
   }
 
   // console.log({ getInfrastructure });
   return (
-    <div className="mt-4 flow-root">
+    <div ref={topRef} className="mt-4 flow-root scroll-mt-6">
       <div className="inline-block min-w-full align-middle">
         <div className="flex flex-col md:justify-between md:flex-row md:items-center  w-full  mb-6">
           <div className="relative w-full mb-4 md:w-1/2  md:p-3">
@@ -145,7 +149,7 @@ export default function InfrastructureTable() {
         </div>
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="lg:hidden space-y-4 px-2">
-            {filterData?.map((infra: any) => (
+            {pageInfrastructures.map((infra: any) => (
               <div
                 key={infra.id}
                 className="relative w-full rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
@@ -216,36 +220,6 @@ export default function InfrastructureTable() {
               </div>
             ))}
 
-            {/* Pagination Mobile Améliorée */}
-            <div className="flex flex-col items-center gap-4 py-8">
-              <div className="text-sm font-medium text-gray-500">
-                Page{" "}
-                <span className="text-blue-600 font-bold">{currentPage}</span>{" "}
-                sur {totalPages}
-              </div>
-              <div className="flex items-center gap-3 w-full max-w-xs">
-                <Button
-                  variant="outline"
-                  className="flex-1 rounded-full border-blue-200"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                >
-                  <ChevronLeft className="h-4 w-4 mr-1" /> Précédent
-                </Button>
-                <Button
-                  variant="outline"
-                  className="flex-1 rounded-full border-blue-200"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                >
-                  Suivant <ChevronRight className="h-4 w-4 ml-1" />
-                </Button>
-              </div>
-            </div>
           </div>
 
           <table className="hidden  min-w-full text-gray-900  lg:table">
@@ -282,8 +256,8 @@ export default function InfrastructureTable() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {filterData.length > 0 ? (
-                filterData?.map((infra: any) => {
+              {pageInfrastructures.length > 0 ? (
+                pageInfrastructures.map((infra: any) => {
                   //jointure
 
                   // const zone = zones[infra?.zone?.toString()];
@@ -363,59 +337,10 @@ export default function InfrastructureTable() {
               )}
             </tbody>
           </table>
-          {/* <div className="hidden lg:flex justify-between items-center w-full px-6 py-4">
-            <div>
-              Page {currentPage} de {totalPages}
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setCurrentPage(currentPage - 1)}
-                className="cursor-pointer border border-blue-300 hover:bg-blue-300 hover:text-white"
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setCurrentPage(currentPage + 1)}
-                className="cursor-pointer border border-blue-300 hover:bg-blue-300 hover:text-white"
-                disabled={currentPage === totalPages}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div> */}
-          {/* Pagination Mobile Améliorée */}
-          <div className="hidden lg:flex justify-between items-center w-full px-6 py-8">
-            <div className="text-sm font-medium text-gray-500">
-              Page{" "}
-              <span className="text-blue-600 font-bold">{currentPage}</span> sur{" "}
-              {totalPages}
-            </div>
-            <div className="flex items-center gap-3 w-full max-w-xs">
-              <Button
-                variant="outline"
-                className="flex-1 rounded-full border-blue-200"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" /> Précédent
-              </Button>
-              <Button
-                variant="outline"
-                className="flex-1 rounded-full border-blue-200"
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-              >
-                Suivant <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </div>
-          </div>
+          <DataPagination
+            {...paginationProps}
+            itemLabel={filterData.length > 1 ? "infrastructures" : "infrastructure"}
+          />
         </div>
       </div>
     </div>

@@ -5,11 +5,11 @@ import { useAllCustomers } from "@/hooks/useCustomer";
 import { CUSTOMERS_PAGE_SIZE } from "@/services/customer";
 import { useAppStore } from "@/store/appStore";
 import { Client } from "@/types/infrastructure";
-import { ChevronLeft, ChevronRight, Eye, Search, X } from "lucide-react";
+import { Eye, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Button } from "../button";
+import { useEffect, useRef, useState } from "react";
+import { DataPagination } from "../data-pagination";
 
 interface ClientTableProps {
   // id du client qui vient d'être créé : la table revient en page 1 et le surligne
@@ -24,7 +24,10 @@ export default function ClientTable({ createdClientId }: ClientTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
   const router = useRouter();
-  const pageItems = CUSTOMERS_PAGE_SIZE;
+  // nombre de lignes par page, modifiable depuis la pagination
+  const [pageItems, setPageItems] = useState(CUSTOMERS_PAGE_SIZE);
+  // haut de la table : on y remonte quand on change de page
+  const topRef = useRef<HTMLDivElement>(null);
 
   const term = searchTerms.toLowerCase().trim();
   const offset = (currentPage - 1) * pageItems;
@@ -55,6 +58,18 @@ export default function ClientTable({ createdClientId }: ClientTableProps) {
   // 3. Découpage en pages de 30
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageItems));
   const pageCustomers = filtered.slice(offset, offset + pageItems);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // la zone qui défile est le <main> du dashboard, pas la fenêtre :
+    // scrollIntoView marche quel que soit le conteneur
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageItems(size);
+    setCurrentPage(1); // la page 5 en 30 lignes n'a plus de sens en 100 lignes
+  };
 
   const handleSearch = (value: string) => {
     setSearchTerms(value);
@@ -94,7 +109,7 @@ export default function ClientTable({ createdClientId }: ClientTableProps) {
     return <Loader />;
   }
   return (
-    <div className="mt-6 flow-root">
+    <div ref={topRef} className="mt-6 flow-root scroll-mt-6">
       <div className="inline-block min-w-full align-middle">
         <div className="flex flex-col md:justify-between md:flex-row md:items-center  w-full  mb-6">
           <div className="relative w-full mb-4 md:w-wull  md:p-3">
@@ -220,36 +235,6 @@ export default function ClientTable({ createdClientId }: ClientTableProps) {
                 </div>
               </div>
             ))}
-
-            {/* Pagination Mobile */}
-            <div className="flex flex-col items-center gap-4 py-6">
-              <span className="text-sm text-gray-500 font-medium">
-                Page <span className="text-blue-600">{currentPage}</span> sur{" "}
-                {totalPages}
-              </span>
-              <div className="flex gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                  className="flex-1 px-8 rounded-full border-blue-200 shadow-sm"
-                >
-                  <ChevronLeft className="mr-2 h-4 w-4" /> Précédent
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage >= totalPages}
-                  className="flex-1 px-8 rounded-full border-blue-200 shadow-sm"
-                >
-                  Suivant <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            </div>
           </div>
 
           <table className="hidden  min-w-full text-gray-900  lg:table">
@@ -344,33 +329,16 @@ export default function ClientTable({ createdClientId }: ClientTableProps) {
               )}
             </tbody>
           </table>
-          <div className="hidden lg:flex justify-between items-center w-full px-6 py-8">
-            <div className="text-sm font-medium text-gray-500">
-              Page{" "}
-              <span className="text-blue-600 font-bold">{currentPage}</span> sur{" "}
-              {totalPages}
-            </div>
-            <div className="flex items-center gap-3 w-full max-w-xs">
-              <Button
-                variant="outline"
-                className="flex-1 rounded-full border-blue-200"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" /> Précédent
-              </Button>
-              <Button
-                variant="outline"
-                className="flex-1 rounded-full border-blue-200"
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage >= totalPages}
-              >
-                Suivant <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </div>
-          </div>
+          {/* Une seule pagination pour mobile et ordinateur : le composant
+              s'adapte lui-même à la largeur de l'écran */}
+          <DataPagination
+            page={currentPage}
+            pageSize={pageItems}
+            totalItems={filtered.length}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            itemLabel={filtered.length > 1 ? "clients" : "client"}
+          />
         </div>
       </div>
     </div>

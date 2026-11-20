@@ -1,14 +1,15 @@
 import DeleteBailleur from "@/components/deleteButton/DeleteBailleur";
 import EditBailleur from "@/components/editButton/EditBailleur";
 import Loader from "@/components/Loader";
-import { useBailleurs } from "@/hooks/useBailleur";
+import { useAllBailleurs } from "@/hooks/useBailleur";
+import { usePagination } from "@/hooks/usePagination";
 import { useAppStore } from "@/store/appStore";
-import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { Eye } from "lucide-react";
 import { Locale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "../button";
+import { DataPagination } from "../data-pagination";
 
 export default function BailleurTable() {
   const { user, _hasHydrated, isAuthenticated } = useAppStore();
@@ -16,18 +17,18 @@ export default function BailleurTable() {
   const [locale, setLocale] = useState<Locale>("fr");
   const t = useTranslations(locale);
   const [bailleurDelete, setBailleurDelete] = useState<string>("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageItems = 25;
+
   // initialize mutation
   // const { data: customers, isPending: customersIspending } = useCustomers();
 
-  const { data: bailleurs, isPending: bailleurIspending } = useBailleurs();
-
-  //useEffect
-  const allResults = bailleurs?.results || [];
-  const totalPages = Math.ceil(allResults.length / pageItems);
-  const tabIndex = (currentPage - 1) * pageItems;
-  const pageBailleurs = allResults.slice(tabIndex, tabIndex + pageItems);
+  // tous les bailleurs (avant : seulement la 1re page de l'API)
+  const { data: allResults = [], isPending: bailleurIspending } =
+    useAllBailleurs();
+  const {
+    pageItems: pageBailleurs,
+    paginationProps,
+    topRef,
+  } = usePagination(allResults);
 
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
@@ -46,7 +47,7 @@ export default function BailleurTable() {
     return <Loader />;
   }
   return (
-    <div className="mt-6 flow-root">
+    <div ref={topRef} className="mt-6 flow-root scroll-mt-6">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           {/* <div className="lg:hidden space-y-4 px-2">
@@ -138,40 +139,6 @@ export default function BailleurTable() {
               </div>
             ))}
 
-            {/* Pagination Mobile */}
-            <div className="flex flex-col items-center gap-4 py-8">
-              <div className="text-sm font-medium text-gray-500">
-                Page{" "}
-                <span className="text-blue-600 font-bold">{currentPage}</span>{" "}
-                sur {totalPages}
-              </div>
-              <div className="flex items-center gap-3 w-full max-w-xs">
-                <Button
-                  variant="outline"
-                  className="flex-1 rounded-full border-blue-200 shadow-sm"
-                  onClick={() => {
-                    setCurrentPage((prev) => Math.max(prev - 1, 1));
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  disabled={currentPage === 1}
-                >
-                  <ChevronLeft className="h-4 w-4 mr-1" />
-                  Précédent
-                </Button>
-                <Button
-                  variant="outline"
-                  className="flex-1 rounded-full border-blue-200 shadow-sm"
-                  onClick={() => {
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  disabled={currentPage === totalPages}
-                >
-                  Suivant
-                  <ChevronRight className="h-4 w-4 ml-1" />
-                </Button>
-              </div>
-            </div>
           </div>
 
           <table className="hidden min-w-full text-gray-900 lg:table">
@@ -232,39 +199,11 @@ export default function BailleurTable() {
             </tbody>
           </table>
 
-          <div className="hidden lg:flex justify-between items-center w-full px-6 py-8">
-            <div className="text-sm font-medium text-gray-500">
-              Page{" "}
-              <span className="text-blue-600 font-bold">{currentPage}</span> sur{" "}
-              {totalPages}
-            </div>
-            <div className="flex items-center gap-3 w-full max-w-xs">
-              <Button
-                variant="outline"
-                className="flex-1 rounded-full border-blue-200 shadow-sm"
-                onClick={() => {
-                  setCurrentPage((prev) => Math.max(prev - 1, 1));
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                Précédent
-              </Button>
-              <Button
-                variant="outline"
-                className="flex-1 rounded-full border-blue-200 shadow-sm"
-                onClick={() => {
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                disabled={currentPage === totalPages}
-              >
-                Suivant
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </div>
-          </div>
+          <DataPagination
+            {...paginationProps}
+            itemLabel={allResults.length > 1 ? "bailleurs" : "bailleur"}
+          />
+
         </div>
       </div>
     </div>
