@@ -83,17 +83,17 @@ const Photosage = (props: Props) => {
   }
 
   return (
-    <main className="container h-full min-h-0 flex flex-col gap-8 py-6">
+    <main className="container h-full min-h-0 flex flex-col gap-5 py-6 sm:py-8">
       <div className="flex shrink-0 items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-800">
-          {t.navigation.dashboard}
-        </h1>
+        <div>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-blue-600">Médiathèque</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{t.navigation.dashboard}</h1>
+          <p className="mt-1 text-sm text-slate-500">Ajoutez une photo et associez-la à un élément.</p>
+        </div>
         <div className="flex gap-2"></div>
       </div>
 
-      <hr className="my-4 border border-gray-200" />
-
-      <div className="flex flex-col  md:flex-row  gap-8 p-4 sm:p-6 bg-white rounded-xl shadow-lg items-start">
+      <div className="flex min-h-0 flex-1 flex-col items-start gap-8 overflow-auto rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-950/[0.02] md:flex-row sm:p-6">
         {/* B. Zone d'Upload et de Soumission */}
         <form
           onSubmit={handleSubmit}

@@ -39,9 +39,9 @@ export default function InspectionTable() {
   }
 
   return (
-    <div ref={topRef} className="mt-6 flow-root scroll-mt-6">
+    <div ref={topRef} className="flow-root scroll-mt-6">
       <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+        <div className="overflow-hidden rounded-xl border border-slate-100 bg-slate-50/70 p-2 md:pt-0">
           <div className="lg:hidden">
             {pageInspections.map((customer: any) => {
               return (

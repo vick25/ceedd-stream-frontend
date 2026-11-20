@@ -21,9 +21,9 @@ export default function ZoneTable() {
     return <Loader />;
   }
   return (
-    <div className="mt-6 flow-root">
+    <div className="flow-root">
       <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+        <div className="overflow-hidden rounded-xl border border-slate-100 bg-slate-50/70 p-2 md:pt-0">
           <div className="lg:hidden">
             {zonesData?.results.map((zone: any) => {
               return (
@@ -156,7 +156,7 @@ export default function ZoneTable() {
               ) : (
                 <tr>
                   <td className="w-full text-center">
-                    <p>il n'y a aucune infrastructure</p>
+                    <p>il n'y a aucune zone contributive</p>
                   </td>
                 </tr>
               )}

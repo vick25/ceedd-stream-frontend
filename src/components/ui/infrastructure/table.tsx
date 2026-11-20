@@ -92,19 +92,19 @@ export default function InfrastructureTable() {
 
   // console.log({ getInfrastructure });
   return (
-    <div ref={topRef} className="mt-4 flow-root scroll-mt-6">
+    <div ref={topRef} className="flow-root scroll-mt-6">
       <div className="inline-block min-w-full align-middle">
-        <div className="sticky top-0 z-10 flex flex-col md:justify-between md:flex-row md:items-center w-full mb-6 bg-white">
-          <div className="relative w-full mb-4 md:w-1/2  md:p-3">
+        <div className="sticky top-0 z-10 flex w-full flex-col gap-3 border-b border-slate-100 bg-white py-2 md:flex-row md:items-center md:justify-between">
+          <div className="relative mb-2 w-full md:mb-0 md:w-1/2">
             <input
               placeholder="recherche par nom ou par nom du propriétaire"
               name="searchTerms"
               value={searchTerms}
               onChange={(e) => setSearchTerms(e.target.value)}
-              className="w-full border p-4 rounded-xl"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3.5 pr-12 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-50"
             />
             {/* <Search className="absolute top-7 right-5 text-gray-500 cursor-pointer" /> */}
-            <div className="absolute top-5 right-5 md:top-7 md:right-7 text-gray-500">
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
               {searchTerms ? (
                 <X
                   className="h-5 w-5 cursor-pointer hover:text-red-500"
@@ -127,7 +127,7 @@ export default function InfrastructureTable() {
               <select
                 value={searchTypes}
                 onChange={(e) => setSearchTypes(e.target.value)}
-                className="border border-gray-300 h-10 w-full rounded-md bg-background px-3 py-2 text-sm pr-8"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 pr-8 text-sm text-slate-700 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-50"
               >
                 <option value="">Tous les types</option>
                 {mutationTypeInfrastructure.data?.results.map((type: any) => (
@@ -147,7 +147,7 @@ export default function InfrastructureTable() {
             </div>
           </div>
         </div>
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+        <div className="overflow-hidden rounded-xl border border-slate-100 bg-slate-50/70 p-2 md:pt-0">
           <div className="lg:hidden space-y-4 px-2">
             {pageInfrastructures.map((infra: any) => (
               <div
